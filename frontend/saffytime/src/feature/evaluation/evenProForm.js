@@ -1,12 +1,12 @@
 import Header from "../../common/UI/header/header";
 
-const EvenPro = () => {
+const EvenProForm = () => {
   return (
     <div>
       <Header />
-      <h4>컨설턴트의 한명 정보</h4>
+      <h5>컨설턴트 평가 입력 페이지</h5>
     </div>
   );
 };
 
-export default EvenPro;
+export default EvenProForm;
