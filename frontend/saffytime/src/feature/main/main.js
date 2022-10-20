@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { freePreview } from "../../common/data/dummyData";
 import Header from "../../common/UI/header/header";
 import Articles from "./mainComponent/articles";
 import PopularText from "./mainComponent/popularText";
@@ -16,10 +17,14 @@ const Main = () => {
     // setArticles(response)
     // setPopularText(response1)
     // setStaffs(response2)
+    setArticles(freePreview);
+    setPopularText(freePreview);
     setIsLoading(false);
   }, []);
   return (
-    !isLoading && (
+    !isLoading &&
+    articles &&
+    popularText && (
       <div>
         <Header />
         <Articles articles={articles} />
