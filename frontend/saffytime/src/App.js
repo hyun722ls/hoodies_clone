@@ -19,10 +19,10 @@ function App() {
           <Route component={Main} exact path="/index" />
           <Route component={BoardMain} exact path="/board/free" />
           <Route component={ArticleDetail} exact path="/board/free/detail" />
-          <Route component={ArticleForm} exact path="/board/free/new" />
-          <Route component={EvaluationMain} exact path="/consultant" />
-          <Route component={EvenPro} exact path="/consultant/detail" />
-          <Route component={EvenProForm} exact path="/consultant/form" />
+          <Route component={ArticleForm} exact path="/board/free/form" />
+          <Route component={EvaluationMain} exact path="/pro" />
+          <Route component={EvenPro} exact path="/pro/detail" />
+          <Route component={EvenProForm} exact path="/pro/form" />
         </Switch>
       </BrowserRouter>
     </div>

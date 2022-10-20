@@ -1,10 +1,27 @@
+import { useHistory } from "react-router-dom";
 import classes from "./articles.module.css";
+import ReadMoreIcon from "@mui/icons-material/ReadMore";
 
 const Articles = (props) => {
+  const history = useHistory();
+
+  const freeBoardHandler = () => {
+    history.push("/board/free");
+  };
+  const detailPageHandler = (article) => {
+    history.push({ pathname: "/board/free/detail", state: article });
+  };
+
   return props.articles.length ? (
     <div>
       <div>
         <span className={classes.title}>자유게시판</span>
+        <ReadMoreIcon
+          fontSize="large"
+          onClick={() => {
+            freeBoardHandler();
+          }}
+        />
       </div>
       <table className={classes.table}>
         <thead>
@@ -18,7 +35,12 @@ const Articles = (props) => {
         <tbody>
           {props.articles.map((article) => {
             return (
-              <tr key={article.id}>
+              <tr
+                onClick={() => {
+                  detailPageHandler(article);
+                }}
+                key={article.id}
+              >
                 <td>{article.title}</td>
                 <td>{article.writer}</td>
                 <td>{article.createdAt}</td>

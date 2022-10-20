@@ -147,3 +147,82 @@ export const freePreview = [
     ],
   },
 ];
+
+export const previewPros = [
+  {
+    id: 1,
+    name: "김신일",
+    email: "mjgh0135@gmail.com",
+    description: "특화 2반 컨설턴트이며, 플러터 개발 잘하십니다.",
+    scores: [5, 5, 5, 5, 5],
+    comments: [
+      {
+        id: 1,
+        content: "감자는 멍청해요",
+        writer: "현규는똑똑해",
+      },
+      {
+        id: 2,
+        content: "감자는 멍청해요",
+        writer: "현규는똑똑해",
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: "이상현",
+    email: "dsdff5@gmail.com",
+    description: "자율 4반 컨설턴트이며, 킹갓 컨설턴트님",
+    scores: [5, 5, 5, 5, 5],
+    comments: [
+      {
+        id: 3,
+        content: "감자는 멍청해요",
+        writer: "현규는똑똑해",
+      },
+      {
+        id: 4,
+        content: "감자는 멍청해요",
+        writer: "현규는똑똑해",
+      },
+    ],
+  },
+  {
+    id: 3,
+    name: "박춘식",
+    email: "mjgh0135@gmail.com",
+    description: "특화 1반 컨설턴트이며, 플러터 개발 잘하십니다.",
+    scores: [5, 5, 5, 5, 5],
+    comments: [
+      {
+        id: 5,
+        content: "감자는 멍청해요",
+        writer: "현규는똑똑해",
+      },
+      {
+        id: 6,
+        content: "감자는 멍청해요",
+        writer: "현규는똑똑해",
+      },
+    ],
+  },
+  {
+    id: 4,
+    name: "박아영",
+    email: "mjgh0135@gmail.com",
+    description: "교육프로님이십니다.",
+    scores: [5, 5, 5, 5, 5],
+    comments: [
+      {
+        id: 5,
+        content: "감자는 멍청해요",
+        writer: "현규는똑똑해",
+      },
+      {
+        id: 6,
+        content: "감자는 멍청해요",
+        writer: "현규는똑똑해",
+      },
+    ],
+  },
+];
