@@ -1,24 +1,28 @@
 import { useHistory } from "react-router-dom";
-import classes from "./popularTexts.module.css";
-const PopularTexts = (props) => {
+import classes from "./boardTable.module.css";
+
+const BoardTable = (props) => {
   const history = useHistory();
+
   const detailPageHandler = (article) => {
     history.push({ pathname: "/board/free/detail", state: article });
   };
-  return props.popularTexts.length ? (
+
+  return props.articles.length ? (
     <div>
-      <div>
-        <span className={classes.title}>인기게시글</span>
-      </div>
       <table className={classes.table}>
         <thead>
           <tr>
             <th>번호</th>
             <th>제목</th>
+            <th>작성자</th>
+            <th>시간</th>
+            <th>조회수</th>
+            <th>추천수</th>
           </tr>
         </thead>
         <tbody>
-          {props.popularTexts.map((article) => {
+          {props.articles.map((article) => {
             return (
               <tr
                 onClick={() => {
@@ -28,6 +32,10 @@ const PopularTexts = (props) => {
               >
                 <td>{article.id}</td>
                 <td>{article.title}</td>
+                <td>{article.writer}</td>
+                <td>{article.createdAt}</td>
+                <td>{article.viewCnt}</td>
+                <td>{article.recommend}</td>
               </tr>
             );
           })}
@@ -39,6 +47,4 @@ const PopularTexts = (props) => {
   );
 };
 
-// 이거는 리스트 처리로
-
-export default PopularTexts;
+export default BoardTable;
