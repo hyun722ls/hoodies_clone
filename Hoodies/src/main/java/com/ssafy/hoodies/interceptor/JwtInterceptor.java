@@ -1,7 +1,7 @@
-package com.back.miru.interceptor;
+package com.ssafy.hoodies.interceptor;
 
-import com.back.miru.exception.UnauthorizedException;
-import com.back.miru.model.service.JwtService;
+import com.ssafy.hoodies.exception.UnauthorizedException;
+import com.ssafy.hoodies.model.service.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
-package com.back.miru.model.service;
+package com.ssafy.hoodies.model.service;
 
-import com.back.miru.exception.UnauthorizedException;
+import com.ssafy.hoodies.exception.UnauthorizedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -21,7 +21,7 @@ public class JwtServiceImpl implements JwtService {
 
     public static final Logger logger = LoggerFactory.getLogger(JwtServiceImpl.class);
 
-    private static final String SALT = "zizonMITYJS";
+    private static final String SALT = "zizonHoodies";
     private static final int EXPIRE_MINUTES = 60;
 
     @Override
@@ -51,13 +51,7 @@ public class JwtServiceImpl implements JwtService {
             Jws<Claims> claims = Jwts.parser().setSigningKey(this.generateKey()).parseClaimsJws(jwt);
             return true;
         } catch (Exception e) {
-//			if (logger.isInfoEnabled()) {
-//				e.printStackTrace();
-//			} else {
             logger.error(e.getMessage());
-//			}
-//			throw new UnauthorizedException();
-//			개발환경
             return false;
         }
     }
@@ -70,16 +64,8 @@ public class JwtServiceImpl implements JwtService {
         try {
             claims = Jwts.parser().setSigningKey(SALT.getBytes("UTF-8")).parseClaimsJws(jwt);
         } catch (Exception e) {
-//			if (logger.isInfoEnabled()) {
-//				e.printStackTrace();
-//			} else {
             logger.error(e.getMessage());
-//			}
             throw new UnauthorizedException();
-//			개발환경
-//			Map<String,Object> testMap = new HashMap<>();
-//			testMap.put("userid", userid);
-//			return testMap;
         }
         Map<String, Object> value = claims.getBody();
         logger.info("value : {}", value);

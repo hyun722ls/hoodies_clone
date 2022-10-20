@@ -1,4 +1,4 @@
-package com.back.miru.exception;
+package com.ssafy.hoodies.exception;
 
 public class UnauthorizedException extends RuntimeException {
     private static final long serialVersionUID = -2238030302650813813L;

@@ -1,4 +1,4 @@
-package com.back.miru.controller;
+package com.ssafy.hoodies.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,25 +1,16 @@
-package com.back.miru.model.service;
+package com.ssafy.hoodies.model.service;
 
-import com.back.miru.model.dao.UserDAO;
-import com.back.miru.model.dto.User;
-import org.springframework.beans.factory.annotation.Value;
+import com.ssafy.hoodies.model.dao.UserDAO;
+import com.ssafy.hoodies.model.dto.User;
 import org.springframework.stereotype.Service;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService {
     private final UserDAO userDao;
-
-    @Value("${external.email.username}")
-    String username;
-
-    @Value("${external.email.password}")
-    String password;
-
 
     private UserServiceImpl(UserDAO userDao) {
         this.userDao = userDao;
@@ -68,7 +59,6 @@ public class UserServiceImpl implements UserService {
             String newPassword = randomGenerateString(5);
             map.put("password", newPassword);
             userDao.updatePassword(map);
-            sendMail(email, newPassword);
         }
         return cnt;
     }
@@ -90,35 +80,4 @@ public class UserServiceImpl implements UserService {
         return generatedString;
     }
 
-
-    public void sendMail(String to, String newPassword) {
-        Properties prop = new Properties();
-        prop.put("mail.smtp.host", "smtp.gmail.com");
-        prop.put("mail.smtp.port", 465);
-        prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.ssl.enable", "true");
-        prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-
-        Session session = Session.getDefaultInstance(prop, new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
-            }
-        });
-        MimeMessage message = new MimeMessage(session);
-        try {
-            message.setFrom(new InternetAddress(username));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject("New message from Miru");
-
-            StringBuilder content = new StringBuilder();
-            content.append("<p>Hello ").append(to.split("@")[0]).append("</p>");
-            content.append("<p>You got a new message from Miru</p>");
-            content.append("<p style=\"padding:12px;border-left:4px solid #d0d0d0;font-style:italic\">").append(newPassword).append("</p>");
-            content.append("<p>Please log in with the password again. Thank you.</p>");
-            message.setContent(content.toString(), "text/html");
-            Transport.send(message);
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

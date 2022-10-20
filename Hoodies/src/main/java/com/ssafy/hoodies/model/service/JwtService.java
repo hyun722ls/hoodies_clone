@@ -1,4 +1,4 @@
-package com.back.miru.model.service;
+package com.ssafy.hoodies.model.service;
 
 import java.util.Map;
 
