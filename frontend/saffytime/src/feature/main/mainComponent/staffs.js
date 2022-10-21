@@ -9,13 +9,13 @@ const Staffs = (props) => {
   };
 
   const detailPageHandler = (staff) => {
-    history.push({ pathname: "/consultant/detail", state: staff });
+    history.push({ pathname: "/pro/detail", state: staff });
   };
 
   return props.staffs.length ? (
     <div>
       <div>
-        <span className={classes.title}>프로님들</span>
+        <span className={classes.title}>최신 평가</span>
         <PageviewIcon onClick={evaluationPageHandler} />
       </div>
       <div>

@@ -4,7 +4,10 @@ const UserMain = () => {
   return (
     <div>
       <Header />
-      <div>내 정보</div>
+      <div>
+        <h4>현규는 똑똑해</h4>
+        <h5>hunasd</h5>
+      </div>
       <div>
         <p>닉네임 변경</p>
         <p>비밀번호 변경</p>

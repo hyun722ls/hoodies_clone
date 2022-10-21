@@ -14,7 +14,9 @@ const Header = () => {
         {/* <Link to="/admin/form" state={null} className={classes.navbar__item}>
           Create
         </Link> */}
-        <span className={classes.navbar__item}>Logout</span>
+        <Link to="/login" className={classes.navbar__item}>
+          Logout
+        </Link>
       </ul>
     </nav>
   );
