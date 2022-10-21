@@ -15,7 +15,7 @@ const Articles = (props) => {
   return props.articles.length ? (
     <div>
       <div>
-        <span className={classes.title}>자유게시판</span>
+        <span className={classes.title}>최신글</span>
         <ReadMoreIcon
           fontSize="large"
           onClick={() => {

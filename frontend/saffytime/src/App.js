@@ -6,8 +6,8 @@ import ArticleForm from "./feature/board/article/articleForm";
 import BoardMain from "./feature/board/boardMain";
 import EvaluationMain from "./feature/evaluation/evaluationMain";
 import EvenPro from "./feature/evaluation/evenPro";
-import EvenProForm from "./feature/evaluation/evenProForm";
 import Main from "./feature/main/main";
+import UserMain from "./feature/user/userMain";
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
           <Route component={ArticleForm} exact path="/board/free/form" />
           <Route component={EvaluationMain} exact path="/pro" />
           <Route component={EvenPro} exact path="/pro/detail" />
-          <Route component={EvenProForm} exact path="/pro/form" />
+          <Route component={UserMain} exact path="/user" />
         </Switch>
       </BrowserRouter>
     </div>
