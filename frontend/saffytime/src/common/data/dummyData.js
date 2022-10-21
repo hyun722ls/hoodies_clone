@@ -154,6 +154,7 @@ export const previewPros = [
     name: "김신일",
     email: "mjgh0135@gmail.com",
     description: "특화 2반 컨설턴트이며, 플러터 개발 잘하십니다.",
+    flag: 1,
     scores: [5, 5, 5, 5, 5],
     comments: [
       {
@@ -172,6 +173,7 @@ export const previewPros = [
     id: 2,
     name: "이상현",
     email: "dsdff5@gmail.com",
+    flag: 1,
     description: "자율 4반 컨설턴트이며, 킹갓 컨설턴트님",
     scores: [5, 5, 5, 5, 5],
     comments: [
@@ -191,7 +193,8 @@ export const previewPros = [
     id: 3,
     name: "박춘식",
     email: "mjgh0135@gmail.com",
-    description: "특화 1반 컨설턴트이며, 플러터 개발 잘하십니다.",
+    flag: 3,
+    description: "특화 1반 실습코치이며, 플러터 개발 잘하십니다.",
     scores: [5, 5, 5, 5, 5],
     comments: [
       {
@@ -211,6 +214,7 @@ export const previewPros = [
     name: "박아영",
     email: "mjgh0135@gmail.com",
     description: "교육프로님이십니다.",
+    flag: 2,
     scores: [5, 5, 5, 5, 5],
     comments: [
       {
@@ -226,3 +230,17 @@ export const previewPros = [
     ],
   },
 ];
+
+export const CATEGORY_LIST = [
+  { id: 0, value: "분류를 선택하세요." },
+  { id: 1, value: "컨설턴트" },
+  { id: 2, value: "운영프로" },
+  { id: 3, value: "실습코치" },
+];
+
+export const MAPPING_FLAG = {
+  컨설턴트: 1,
+  "분류를 선택하세요.": 0,
+  운영프로: 2,
+  실습코치: 3,
+};

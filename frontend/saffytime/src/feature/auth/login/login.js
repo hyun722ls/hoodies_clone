@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import CustomModal from "../../../common/UI/modal/customModal";
 
 const Login = () => {
@@ -9,6 +9,7 @@ const Login = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isTransferEmail, setIsTransferEmail] = useState(false);
   const [authCode, setAuthCode] = useState("");
+  const history = useHistory();
 
   const passwordChangeHandler = (event) => {
     event.preventDefault();
@@ -17,6 +18,7 @@ const Login = () => {
 
   const LoginHandler = (event) => {
     event.preventDefault();
+    history.push("/index");
   };
 
   const closeModal = () => {
@@ -98,7 +100,12 @@ const Login = () => {
       <form onSubmit={LoginHandler}>
         <div>
           <h3>email</h3>
-          <input value={email} onChange={emailChangeHandler} type="text" />
+          <input
+            value={email}
+            onChange={emailChangeHandler}
+            type="text"
+            required
+          />
         </div>
         <div>
           <h4>password</h4>
@@ -106,6 +113,7 @@ const Login = () => {
             value={password}
             onChange={passwordChangeHandler}
             type="password"
+            required
           />
         </div>
         <div>

@@ -13,6 +13,7 @@ const ArticleDetail = () => {
   const backHandler = (event) => {
     history.go(-1);
   };
+  // 요청설개할것, 수정페이지에서 넘길때 새로운정보 필요
 
   const modifyHandler = (event) => {
     history.push({ pathname: "/board/free/form", state: article });
