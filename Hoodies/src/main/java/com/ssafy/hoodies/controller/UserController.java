@@ -9,9 +9,11 @@ import com.ssafy.hoodies.model.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @RestController
@@ -46,8 +48,9 @@ public class UserController {
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
-
-        userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).build());
+        Timestamp expireTime = new Timestamp(System.currentTimeMillis());
+        expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
+        userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).build());
         resultMap.put("statusCode", SUCCESS);
         return resultMap;
     }
@@ -64,6 +67,14 @@ public class UserController {
             return resultMap;
         }
 
+        Timestamp nowTime = new Timestamp(System.currentTimeMillis());
+        Timestamp time = userAuth.getTime();
+
+        // 제한시간이 만료되었을 경우
+        if(!nowTime.before(time)) {
+            resultMap.put("statusCode", FAIL);
+            return resultMap;
+        }
         resultMap.put("statusCode", SUCCESS);
         return resultMap;
     }
