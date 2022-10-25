@@ -11,17 +11,15 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "userauth")
+public class UserAuth {
     @Id
     private String email;
-    private String password;
-    private String nickname;
+    private String authcode;
 
     @Builder
-    public User(String email, String password, String nickname) {
+    public UserAuth(String email, String authcode) {
         this.email = email;
-        this.password = password;
-        this.nickname = nickname;
+        this.authcode = authcode;
     }
 }
