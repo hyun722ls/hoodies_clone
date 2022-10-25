@@ -1,9 +1,12 @@
 package com.ssafy.hoodies.model.dto;
 
-import com.ssafy.hoodies.model.model.Board;
-import com.ssafy.hoodies.model.model.Comment;
+import com.ssafy.hoodies.model.entity.Board;
+import com.ssafy.hoodies.model.entity.Comment;
 import com.ssafy.hoodies.util.util;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class BoardDto {
@@ -15,27 +18,36 @@ public class BoardDto {
     private int like;
     private String createdAt;
     private String modifiedAt;
-//    private Comment comment; // List<Comment> ?
+    private List<Comment> comments;
     // private ??? image;
 
     public Board toEntity(String usage) {
-        Board board = new Board();
-
-        board.setTitle(title);
-        board.setUserName(userName);
-        board.setContent(content);
-        if("save".equals(usage)){
-            String now = util.getTimeStamp();
-            board.setHit(0);
-            board.setLike(0);
-            board.setCreatedAt(now);
-            board.setModifiedAt(now);
-        }else if("update".equals(usage)){
-            board.setHit(hit);
-            board.setLike(like);
-            board.setCreatedAt(createdAt);
-            board.setModifiedAt( util.getTimeStamp() );
-//            board.setComment(comment);
+        String now = util.getTimeStamp();
+        Board board;
+        if("write board".equals(usage)){ // 게시글 등록
+            board = Board.builder()
+                    .title(title)
+                    .userName(userName)
+                    .content(content)
+                    .hit(0)
+                    .like(0)
+                    .createdAt(now)
+                    .modifiedAt(now)
+                    .comments(new ArrayList<>())
+                    .build();
+        }else if("update board".equals(usage)){ // 게시글 수정
+            board = Board.builder()
+                    .title(title)
+                    .userName(userName)
+                    .content(content)
+                    .hit(hit)
+                    .like(like)
+                    .createdAt(createdAt)
+                    .modifiedAt(now)
+                    .comments(comments)
+                    .build();
+        }else{
+            board = null;
         }
         // board.setImage(image);
 
