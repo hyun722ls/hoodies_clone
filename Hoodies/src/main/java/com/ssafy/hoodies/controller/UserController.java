@@ -26,13 +26,13 @@ public class UserController {
     private final UserRepository userRepository;
     private final UserAuthRepository userAuthRepository;
 
-    @GetMapping("/check/{id}")
-    public Map<String, Object> checkId(@PathVariable String id) throws Exception {
-        Optional<User> user = userRepository.findById(id);
+    @GetMapping("/check/{nickname}")
+    public Map<String, Object> checkNickname(@PathVariable String nickname) throws Exception {
+        User user = userRepository.findByNickname(nickname);
         Map<String, Object> resultMap = new HashMap<>();
 
         int cnt = 1;
-        cnt = user.isPresent() ? 1 : 0;
+        cnt = user == null ? 0 : 1;
 
         resultMap.put("cnt", cnt);
         resultMap.put("statusCode", SUCCESS);
@@ -71,7 +71,7 @@ public class UserController {
         Timestamp time = userAuth.getTime();
 
         // 제한시간이 만료되었을 경우
-        if(!nowTime.before(time)) {
+        if (!nowTime.before(time)) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
