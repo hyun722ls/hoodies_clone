@@ -1,6 +1,36 @@
 import { useEffect, useState } from "react";
+import styled from "styled-components";
 import Header from "../../common/UI/header/header";
 import CustomModal from "../../common/UI/modal/customModal";
+
+const StyledCard = styled.div`
+  margin: 8px auto 0 auto;
+  width: 480px;
+  padding: 12px 0;
+  box-sizing: border-box;
+  border: 1px solid #EDEDED;
+  border-radius: 12px;
+  &:first-of-type {
+    margin-top: 24px;
+  }
+`
+const StyledProfile = styled.div`
+  margin: 12px 24px;
+`
+
+const StyledP = styled.p`
+  padding: 12px 24px;
+  margin: 0;
+`
+
+const StyledH4 = styled.h4`
+  padding: 0;
+  margin: 0;
+`
+const StyledH5 = styled.h5`
+  padding: 0;
+  margin: 0;
+`
 
 const UserMain = () => {
   const [nickname, setNickname] = useState('')
@@ -12,7 +42,7 @@ const UserMain = () => {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isNewNicknameDuplicated, setIsNewNicknameDuplicated] = useState(false)
   const [newNickname, setNewNickname] = useState('')
-  
+
   useEffect(()=>{
     setNickname('현규는 똑똑해')
     setEmail('kms940125@hanmail.net')
@@ -23,6 +53,7 @@ const UserMain = () => {
   };
   const closeNicknameModal = () => {
     setNicknameModalOpen(false);
+    setIsNewNicknameDuplicated(false);
     setNewNickname("");
   };
 
@@ -110,7 +141,7 @@ const UserMain = () => {
       <p>기존 패스워드</p>
       <div>
         <input
-          type="textarea"
+          type="password"
           value={originalPassword}
           onChange={originiPasswordChangeHandler}
         />
@@ -118,7 +149,7 @@ const UserMain = () => {
       <span>변경 패스워드</span>
       <div>
         <input
-          type="textarea"
+          type="password"
           value={newPassword}
           onChange={newPasswordChangeHandler}
         />
@@ -126,7 +157,7 @@ const UserMain = () => {
       <span>변경 패스워드 확인</span>
       <div>
         <input
-          type="textarea"
+          type="password"
           value={confirmPassword}
           onChange={confirmPasswordChangeHandler}
         />
@@ -140,15 +171,17 @@ const UserMain = () => {
   return (
     <div>
       <Header />
-      <div>
-        <h4>{nickname}</h4>
-        <h5>{email}</h5>
-      </div>
-      <div>
-        <p onClick={openNicknameModal}>닉네임 변경</p>
-        <p onClick={openPasswordModal}>비밀번호 변경</p>
-        <p>내가 쓴 글</p>
-      </div>
+      <StyledCard>
+        <StyledProfile>
+          <StyledH4>{nickname}</StyledH4>
+          <StyledH5>{email}</StyledH5>
+        </StyledProfile>
+      </StyledCard>
+      <StyledCard>
+        <StyledP onClick={openNicknameModal}>닉네임 변경</StyledP>
+        <StyledP onClick={openPasswordModal}>비밀번호 변경</StyledP>
+        <StyledP>내가 쓴 글</StyledP>
+      </StyledCard>
       <CustomModal open={nicknameModalOpen} close={closeNicknameModal} header="">
         {modalNicknameForm}
       </CustomModal>
