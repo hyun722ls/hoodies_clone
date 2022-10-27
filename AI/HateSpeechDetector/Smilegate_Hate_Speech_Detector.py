@@ -151,7 +151,7 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route('/ai/comment', methods=['POST'])
+@app.route('/comment', methods=['POST'])
 def commentCheck():
     
     if request.method == 'POST':
@@ -180,7 +180,7 @@ def commentCheck():
             
         return {'commentResult': maxLabel}
 
-@app.route('/ai/article', methods=['POST'])
+@app.route('/article', methods=['POST'])
 def articleCheck():
     if request.method == 'POST':
         title = request.form['title']
