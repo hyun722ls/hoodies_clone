@@ -144,16 +144,85 @@ model_name = 'smilegate-ai/kor_unsmile'
 model = BertForSequenceClassification.from_pretrained(model_name)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-pipe = TextClassificationPipeline(
-    model=model,
-    tokenizer=tokenizer,
-    device=-1,     # cpu: -1, gpu: gpu number
-    return_all_scores=True,
-    function_to_apply='sigmoid'
-    )
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 
-for result in pipe("코치님 미친놈같고 멋있음")[0]:
-    print(result)
+app = Flask(__name__)
+CORS(app)
+
+
+@app.route('/ai/comment', methods=['POST'])
+def commentCheck():
+    
+    if request.method == 'POST':
+        comment = request.form['comment']
+        print(comment)
+        pipe = TextClassificationPipeline(
+            model=model,
+            tokenizer=tokenizer,
+            device=-1,     # cpu: -1, gpu: gpu number
+            return_all_scores=True,
+            function_to_apply='sigmoid'
+            )
+        
+        resultList = []
+        maxComment = 0
+        maxidx = 0
+        maxLabel = ''
+        for result in pipe(comment)[0]:
+            resultList.append(result)
+        
+        for idx, val in enumerate(resultList):
+            if maxComment < val['score']:
+                maxidx = idx
+                maxComment = val['score']
+                maxLabel = val['label']
+            
+        return {'commentResult': maxLabel}
+
+@app.route('/ai/article', methods=['POST'])
+def articleCheck():
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
+      
+        pipe = TextClassificationPipeline(
+            model=model,
+            tokenizer=tokenizer,
+            device=-1,     # cpu: -1, gpu: gpu number
+            return_all_scores=True,
+            function_to_apply='sigmoid'
+            )
+        
+        titleList = []
+        contentList = []
+        for result in pipe(title)[0]:
+            titleList.append(result)
+
+        for result in pipe(content)[0]:
+            contentList.append(result)
+        
+        maxTitle = 0
+        maxTitleLabel = '' 
+        for idx, val in enumerate(titleList):
+            if maxTitle < val['score']:
+                maxTitle = val['score']
+                maxTitleLabel = val['label']
+
+        maxContent = 0
+        maxContentLabel = '' 
+        for idx, val in enumerate(contentList):
+            if maxContent < val['score']:
+                maxContent = val['score']
+                maxContentLabel = val['label']
+            
+        
+        return {'contentResult': maxContentLabel, 'titleResuit': maxTitleLabel}
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8081, debug=True)
+
+
 
 """# 5. Model evaluation"""
 #
