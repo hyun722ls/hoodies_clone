@@ -1,6 +1,5 @@
 package com.ssafy.hoodies.controller;
 
-import com.mongodb.BasicDBObject;
 import com.ssafy.hoodies.model.dto.BoardDto;
 import com.ssafy.hoodies.model.dto.CommentDto;
 import com.ssafy.hoodies.model.entity.Board;
@@ -11,7 +10,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +18,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -119,9 +116,10 @@ public class BoardController {
     @ApiOperation(value = "댓글 등록")
     public void writeComment(@RequestBody CommentDto dto, @PathVariable String id){
         Comment comment = dto.toEntity();
-        Query commentQuery = new Query(Criteria.where("_id").is(id));;
+        Query commentQuery = new Query(Criteria.where("_id").is(id));
         Update commentUpdate = new Update();
         commentUpdate.push("comments", comment);
+
         mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
     }
 
@@ -129,22 +127,26 @@ public class BoardController {
     @PutMapping("board/{bid}/comment/{cid}")
     @ApiOperation(value = "댓글 수정")
     public void updateComment(@RequestBody CommentDto dto, @PathVariable String bid, @PathVariable String cid){
-        Query commentQuery = new Query(Criteria.where("_id").is(bid).and("comments.id").is(cid));
+        Query commentQuery = new Query();
+        commentQuery.addCriteria(Criteria.where("_id").is(bid));
+        commentQuery.addCriteria(Criteria.where("comments").elemMatch(Criteria.where("_id").is(cid)));
         Update commentUpdate = new Update();
         commentUpdate.set("comments.$.content", dto.getContent());
         commentUpdate.set("comments.$.modifiedAt", util.getTimeStamp());
-        System.out.println(commentQuery);
-        System.out.println(commentUpdate);
-        System.out.println(mongoTemplate.updateFirst(commentQuery, commentUpdate, "board"));
+
+        mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
     }
 
     // 댓글 삭제
     @DeleteMapping("board/{bid}/comment/{cid}")
     @ApiOperation(value = "댓글 삭제")
     public void deleteComment(@PathVariable String bid, @PathVariable String cid){
-        Query commentQuery = new Query(Criteria.where("_id").is(bid));
+        Query commentQuery = new Query();
+        commentQuery.addCriteria(Criteria.where("_id").is(bid));
+        commentQuery.addCriteria(Criteria.where("comments").elemMatch(Criteria.where("_id").is(cid)));
         Update commentUpdate = new Update();
-        commentUpdate.pull("comments", new BasicDBObject("id",cid));
+        commentUpdate.pull("comments", Query.query(Criteria.where("_id").is(cid)));
+
         mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
     }
 

@@ -14,7 +14,7 @@ import java.util.List;
 @ApiModel
 public class CommentDto {
     @ApiModelProperty(value="댓글 id", accessMode = ApiModelProperty.AccessMode.READ_ONLY)
-    private String id;
+    private String _id;
     @ApiModelProperty(value="작성자")
     private String writer;
 
@@ -33,7 +33,7 @@ public class CommentDto {
     public Comment toEntity(){
         String now = util.getTimeStamp();
         Comment comment = Comment.builder()
-                        .id(String.valueOf(new ObjectId()))
+                        ._id(String.valueOf(new ObjectId()))
                         .writer(writer)
                         .content(content)
                         .createdAt(now)
