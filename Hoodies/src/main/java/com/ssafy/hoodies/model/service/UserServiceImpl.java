@@ -17,10 +17,10 @@ import java.util.Random;
 @Service
 public class UserServiceImpl implements UserService {
     @Value("${external.mattermost.login_id}")
-    String login_id;
+    private String login_id;
 
     @Value("${external.mattermost.password}")
-    String password;
+    private String password;
 
     private static final String URL = "https://meeting.ssafy.com/api/v4/";
     private static final String POST = "POST";
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String sendMM(String email) {
+    public String sendMM(String email, int flag) {
         try {
             // 1. 발신자 인증
             HttpURLConnection conn = connInit("users/login", null);
@@ -133,17 +133,27 @@ public class UserServiceImpl implements UserService {
             sendInfo = new JSONObject();
             sendInfo.put("channel_id", channel_id);
 
-            String message = getRandomGenerateString(8);
-            sendInfo.put("message", message);
+            StringBuilder message = new StringBuilder();
+            message.append("#### Hoodies ");
+            if (flag == 1)
+                message.append("인증 코드입니다.\n");
+            else
+                message.append("초기화 된 비밀번호 입니다.\n");
+
+            String authcode = getRandomGenerateString(8);
+            message.append("```\n").append(authcode).append("\n```");
+            System.out.println(message);
+
+            sendInfo.put("message", message.toString());
             sendData = sendInfo.toString();
             response = getResponse(conn, sendData);
 
             // response 수신
             retData = (JSONObject) response.get("data");
             String response_message = (String) retData.get("message");
-
-            if (message.equals(response_message))
-                return message;
+            System.out.println(response_message);
+            if (message.toString().equals(response_message))
+                return authcode;
             else
                 return "fail";
         } catch (Exception e) {
