@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class UserController {
     private final UserAuthRepository userAuthRepository;
 
     @GetMapping("/check/{nickname}")
-    public Map<String, Object> checkNickname(@PathVariable String nickname) throws Exception {
+    public Map<String, Object> checkNickname(@PathVariable String nickname) {
         User user = userRepository.findByNickname(nickname);
         Map<String, Object> resultMap = new HashMap<>();
 
@@ -39,24 +38,29 @@ public class UserController {
         return resultMap;
     }
 
-    @GetMapping("/auth/{email}")
-    public Map<String, Object> sendMM(@PathVariable String email) throws Exception {
+    // 회원가입 및 패스워드 초기화 요청
+    @GetMapping({"/auth/{email}", "/resetPassword/{email}"})
+    public Map<String, Object> sendMM(@PathVariable String email) {
         Map<String, Object> resultMap = new HashMap<>();
-
-        String authcode = userService.sendMM(email);
-        if (authcode.equals("fail")) {
+        try {
+            String authcode = userService.sendMM(email, 1);
+            if (authcode.equals("fail")) {
+                resultMap.put("statusCode", FAIL);
+                return resultMap;
+            }
+            Timestamp expireTime = new Timestamp(System.currentTimeMillis());
+            expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
+            userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).build());
+            resultMap.put("statusCode", SUCCESS);
+            return resultMap;
+        } catch (Exception e) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
-        Timestamp expireTime = new Timestamp(System.currentTimeMillis());
-        expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
-        userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).build());
-        resultMap.put("statusCode", SUCCESS);
-        return resultMap;
     }
 
     @PostMapping("/auth")
-    public Map<String, Object> authMM(@RequestBody Map<String, String> map) throws Exception {
+    public Map<String, Object> authMM(@RequestBody Map<String, String> map) {
         String email = map.getOrDefault("email", "");
         String authcode = map.getOrDefault("authcode", "");
 
@@ -128,4 +132,108 @@ public class UserController {
         }
     }
 
+    @PostMapping("/resetPassword")
+    public Map<String, Object> authResetPassword(@RequestBody Map<String, String> map) {
+        String email = map.getOrDefault("email", "");
+        String authcode = map.getOrDefault("authcode", "");
+
+        UserAuth userAuth = userAuthRepository.findByEmailAndAuthcode(email, authcode);
+        Map<String, Object> resultMap = new HashMap<>();
+        if (userAuth == null) {
+            resultMap.put("statusCode", FAIL);
+            return resultMap;
+        }
+
+        Timestamp nowTime = new Timestamp(System.currentTimeMillis());
+        Timestamp time = userAuth.getTime();
+
+        // 제한시간이 만료되었을 경우
+        if (!nowTime.before(time)) {
+            resultMap.put("statusCode", FAIL);
+            return resultMap;
+        }
+
+        try {
+            User user = userRepository.findById(email).get();
+
+            String salt = user.getSalt();
+            String password = userService.sendMM(email, 2);
+            String encryptPassword = userService.getEncryptPassword(password, salt);
+
+            if (encryptPassword == null) {
+                resultMap.put("statusCode", FAIL);
+                return resultMap;
+            }
+
+            user.setPassword(encryptPassword);
+            userRepository.save(user);
+
+            resultMap.put("password", password);
+            resultMap.put("statusCode", SUCCESS);
+
+            return resultMap;
+        } catch (Exception e) {
+            resultMap.put("statusCode", FAIL);
+            return resultMap;
+        }
+    }
+
+    @PutMapping("/nickname")
+    public Map<String, Object> updateNickname(@RequestBody Map<String, String> map) {
+        String email = jwtService.getUserEmail();
+        String nickname = map.getOrDefault("nickname", "");
+
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            User user = userRepository.findById(email).get();
+
+            User nicknameUser = userRepository.findByNickname(nickname);
+            // 이미 닉네임이 있는 경우
+            if (nicknameUser != null) {
+                resultMap.put("statusCode", FAIL);
+                return resultMap;
+            }
+
+            user.setNickname(nickname);
+            userRepository.save(user);
+
+            resultMap.put("statusCode", SUCCESS);
+
+            return resultMap;
+        } catch (Exception e) {
+            resultMap.put("statusCode", FAIL);
+            return resultMap;
+        }
+    }
+
+    @PutMapping("/password")
+    public Map<String, Object> updatePassword(@RequestBody Map<String, String> map) {
+        String email = jwtService.getUserEmail();
+        String password = map.getOrDefault("password", "");
+
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            User user = userRepository.findById(email).get();
+
+            String salt = user.getSalt();
+            String encryptPassword = userService.getEncryptPassword(password, salt);
+            String beforePassword = user.getPassword();
+
+            // 이전 비밀번호와 동일한 경우
+            if (encryptPassword == null || encryptPassword.equals(beforePassword)) {
+                resultMap.put("statusCode", FAIL);
+                return resultMap;
+            }
+
+            user.setPassword(encryptPassword);
+            userRepository.save(user);
+
+            resultMap.put("statusCode", SUCCESS);
+
+            return resultMap;
+        } catch (Exception e) {
+            resultMap.put("statusCode", FAIL);
+            return resultMap;
+        }
+    }
 }
