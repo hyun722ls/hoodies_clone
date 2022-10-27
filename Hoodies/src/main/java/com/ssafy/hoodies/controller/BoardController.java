@@ -1,15 +1,26 @@
 package com.ssafy.hoodies.controller;
 
+import com.mongodb.BasicDBObject;
 import com.ssafy.hoodies.model.dto.BoardDto;
 import com.ssafy.hoodies.model.dto.CommentDto;
 import com.ssafy.hoodies.model.entity.Board;
 import com.ssafy.hoodies.model.entity.Comment;
 import com.ssafy.hoodies.model.repository.BoardRepository;
+import com.ssafy.hoodies.util.util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +32,8 @@ import java.util.List;
 public class BoardController {
 
     private final BoardRepository boardRepository;
+    private final MongoTemplate mongoTemplate;
+//    private static final int PAGE_SIZE = 10; // 한 페이지의 게시물 수
 
     /****************
      *  게시물 CRUD  *
@@ -29,37 +42,56 @@ public class BoardController {
     @PostMapping("board")
     @ApiOperation(value = "게시물 작성")
     public Board writeBoard(@RequestBody BoardDto dto){
-        return boardRepository.save(dto.toEntity("write board"));
+        return boardRepository.save(dto.toEntity());
     }
 
     // Retrieve
-    // 전체 게시물 조회 --> Pagenation 필요 --> PagingAndSortingRepository 참고
+    // 게시물 조회 --> https://~/api/board?page=0&size=5&sort=id.desc
     @GetMapping("board")
     @ApiOperation(value = "전체 게시물 조회")
-    public List<Board> findAllBoard(){
-        return boardRepository.findAll();
-    }
+    public Page<Board> findAllBoard(Pageable pageable){ return boardRepository.findAll(pageable); }
 
     // 특정 게시물 조회
     @GetMapping("board/{id}")
     @ApiOperation(value = "특정 게시물 조회")
-    public Board findCertainBoard(@PathVariable String id){
+    public Board findCertainBoard(
+            @ApiParam(
+            name =  "id",
+            type = "String",
+            value = "게시물의 DB상 id",
+            required = true)
+            @PathVariable String id){
         return boardRepository.findById(id).get();
     }
 
     // Update
     @PutMapping("board/{id}")
     @ApiOperation(value = "특정 게시물 수정")
-    public void updateBoard(@RequestBody BoardDto dto, @PathVariable String id){
-        Board board = dto.toEntity("update board");
-        board.set_id(id);
-        boardRepository.save(board);
+    public void updateBoard(@RequestBody BoardDto dto,
+                            @ApiParam(
+                                    name =  "id",
+                                    type = "String",
+                                    value = "게시물의 DB상 id",
+                                    required = true)
+                            @PathVariable String id){
+        Query boardQuery = new Query(Criteria.where("_id").is(id));
+        Update boardUpdate = new Update();
+        boardUpdate.set("title", dto.getTitle());
+        boardUpdate.set("content", dto.getContent());
+        boardUpdate.set("modifiedAt", util.getTimeStamp());
+        mongoTemplate.updateFirst(boardQuery, boardUpdate, "board");
     }
 
     // Delete
     @DeleteMapping("board/{id}")
     @ApiOperation(value = "특정 게시물 삭제")
-    public void deleteBoard(@PathVariable String id){
+    public void deleteBoard(
+            @ApiParam(
+                    name =  "id",
+                    type = "String",
+                    value = "게시물의 DB상 id",
+                    required = true)
+            @PathVariable String id){
         boardRepository.deleteById(id);
     }
     
@@ -85,49 +117,35 @@ public class BoardController {
     // 댓글 등록
     @PostMapping("board/{id}/comment")
     @ApiOperation(value = "댓글 등록")
-    public Board writeComment(@RequestBody CommentDto dto, @PathVariable String id){
-        Board board = boardRepository.findById(id).get();
-        List<Comment> comments = board.getComments();
-        Comment comment = dto.toEntity("write comment");
-        int newId = comments.size() > 0 ? Integer.parseInt(comments.get(comments.size()-1).getId()) : 0;
-        comment.setId(Integer.toString(newId+1));
-        comments.add(comment);
-        board.setComments(comments);
-        return boardRepository.save(board);
+    public void writeComment(@RequestBody CommentDto dto, @PathVariable String id){
+        Comment comment = dto.toEntity();
+        Query commentQuery = new Query(Criteria.where("_id").is(id));;
+        Update commentUpdate = new Update();
+        commentUpdate.push("comments", comment);
+        mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
     }
 
     // 댓글 수정
-    @PutMapping("board/{id}/comment")
+    @PutMapping("board/{bid}/comment/{cid}")
     @ApiOperation(value = "댓글 수정")
-    public void updateComment(@RequestBody CommentDto dto, @PathVariable String id){
-        Board board = boardRepository.findById(id).get();
-        List<Comment> comments = board.getComments();
-        Comment comment = dto.toEntity("update comment");
-        String cid = comment.getId();
-        for(int i=0; i<comments.size(); ++i){
-            if(cid.equals(comments.get(i).getId())){
-                comments.set(i, comment);
-                break;
-            }
-        }
-        board.setComments(comments);
-        boardRepository.save(board);
+    public void updateComment(@RequestBody CommentDto dto, @PathVariable String bid, @PathVariable String cid){
+        Query commentQuery = new Query(Criteria.where("_id").is(bid).and("comments.id").is(cid));
+        Update commentUpdate = new Update();
+        commentUpdate.set("comments.$.content", dto.getContent());
+        commentUpdate.set("comments.$.modifiedAt", util.getTimeStamp());
+        System.out.println(commentQuery);
+        System.out.println(commentUpdate);
+        System.out.println(mongoTemplate.updateFirst(commentQuery, commentUpdate, "board"));
     }
 
     // 댓글 삭제
     @DeleteMapping("board/{bid}/comment/{cid}")
     @ApiOperation(value = "댓글 삭제")
     public void deleteComment(@PathVariable String bid, @PathVariable String cid){
-        Board board = boardRepository.findById(bid).get();
-        List<Comment> comments = board.getComments();
-        for(int i=0; i<comments.size(); ++i){
-            if(cid.equals(comments.get(i).getId())){
-                comments.remove(i);
-                break;
-            }
-        }
-        board.setComments(comments);
-        boardRepository.save(board);
+        Query commentQuery = new Query(Criteria.where("_id").is(bid));
+        Update commentUpdate = new Update();
+        commentUpdate.pull("comments", new BasicDBObject("id",cid));
+        mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
     }
 
 
