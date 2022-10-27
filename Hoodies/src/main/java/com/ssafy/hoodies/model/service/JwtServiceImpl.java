@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -21,7 +22,8 @@ public class JwtServiceImpl implements JwtService {
 
     public static final Logger logger = LoggerFactory.getLogger(JwtServiceImpl.class);
 
-    private static final String SALT = "zizonHoodies";
+    @Value("${external.jwt.salt}")
+    private String SALT;
     private static final int EXPIRE_MINUTES = 60;
 
     @Override
@@ -57,9 +59,9 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public Map<String, Object> get(String key) {
+    public Map<String, Object> get() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String jwt = request.getHeader("access-token");
+        String jwt = request.getHeader("token");
         Jws<Claims> claims = null;
         try {
             claims = Jwts.parser().setSigningKey(SALT.getBytes("UTF-8")).parseClaimsJws(jwt);
@@ -68,12 +70,12 @@ public class JwtServiceImpl implements JwtService {
             throw new UnauthorizedException();
         }
         Map<String, Object> value = claims.getBody();
-        logger.info("value : {}", value);
+//        logger.info("value : {}", value);
         return value;
     }
 
     @Override
-    public String getUserId() {
-        return (String) this.get("user").get("userid");
+    public String getUserEmail() {
+        return (String) this.get().get("email");
     }
 }
