@@ -5,7 +5,7 @@ const Header = () => {
   return (
     <nav className={classes.navbar}>
       <Link to="/index" className={classes.navbar__logo}>
-        SSAFY
+        Hoodies
       </Link>
       <ul className={classes.navbar__menu}>
         <Link to="/user" className={classes.navbar__item}>
