@@ -78,4 +78,54 @@ public class UserController {
         resultMap.put("statusCode", SUCCESS);
         return resultMap;
     }
+
+    @PostMapping
+    public Map<String, Object> signup(@RequestBody User user) {
+        Map<String, Object> resultMap = new HashMap<>();
+        String salt = userService.getRandomGenerateString(8);
+        String encryptPassword = userService.getEncryptPassword(user.getPassword(), salt);
+        if (encryptPassword == null) {
+            resultMap.put("statusCode", FAIL);
+            return resultMap;
+        }
+
+        user.setSalt(salt);
+        user.setPassword(encryptPassword);
+        userRepository.save(user);
+
+        String token = jwtService.create("email", user.getEmail(), "token");
+        resultMap.put("nickname", user.getNickname());
+        resultMap.put("token", token);
+        resultMap.put("statusCode", SUCCESS);
+
+        return resultMap;
+    }
+
+    @PostMapping("/login")
+    public Map<String, Object> login(@RequestBody User user) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+
+        try {
+            User getUser = userRepository.findById(user.getEmail()).get();
+
+            // 비밀번호가 다른 경우
+            String hashPassword = userService.getEncryptPassword(user.getPassword(), getUser.getSalt());
+            if (!hashPassword.equals(getUser.getPassword())) {
+                resultMap.put("statusCode", FAIL);
+                return resultMap;
+            }
+
+            String token = jwtService.create("email", user.getEmail(), "token");
+            resultMap.put("nickname", getUser.getNickname());
+            resultMap.put("token", token);
+            resultMap.put("statusCode", SUCCESS);
+
+            return resultMap;
+        } catch (Exception e) {
+            resultMap.put("statusCode", FAIL);
+            return resultMap;
+        }
+    }
+
 }

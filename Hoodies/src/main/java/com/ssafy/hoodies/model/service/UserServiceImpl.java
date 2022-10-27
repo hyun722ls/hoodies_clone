@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -23,10 +24,8 @@ public class UserServiceImpl implements UserService {
 
     private static final String URL = "https://meeting.ssafy.com/api/v4/";
     private static final String POST = "POST";
-    private static final String USER_AGENT = "Mozilla/5.0";
     private static final String CONTENT_TYPE = "applicaiton/json;utf-8";
     private static final String Accept_TYPE = "application/json";
-    private static final String DATA = "test data";
 
     HttpURLConnection connInit(String subURL, String token) throws IOException {
         URL loginUrl = new URL(URL + subURL);
@@ -74,7 +73,8 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    String randomGenerateString(int targetStringLength) {
+    @Override
+    public String getRandomGenerateString(int targetStringLength) {
         int leftLimit = 48; // numeral '0'
         int rightLimit = 122; // letter 'z'
         Random random = new Random();
@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService {
             sendInfo = new JSONObject();
             sendInfo.put("channel_id", channel_id);
 
-            String message = randomGenerateString(8);
+            String message = getRandomGenerateString(8);
             sendInfo.put("message", message);
             sendData = sendInfo.toString();
             response = getResponse(conn, sendData);
@@ -150,4 +150,26 @@ public class UserServiceImpl implements UserService {
             return "fail";
         }
     }
+
+    private String bytesToHex(byte[] bytes) {
+        StringBuilder builder = new StringBuilder();
+        for (byte b : bytes) {
+            builder.append(String.format("%02x", b));
+        }
+        return builder.toString();
+    }
+
+    @Override
+    public String getEncryptPassword(String password, String salt) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            String text = password + salt;
+            md.update(text.getBytes());
+
+            return bytesToHex(md.digest());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }
