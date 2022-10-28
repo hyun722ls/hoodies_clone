@@ -37,12 +37,12 @@ const PopularText = (props) => {
                 onClick={() => {
                   detailPageHandler(article);
                 }}
-                key={article.id}
+                key={article._id}
               >
                 <td>{article.title}</td>
                 <td>{article.writer}</td>
                 <td>{article.createdAt}</td>
-                <td>{article.recommend}</td>
+                <td>{article.like}</td>
               </tr>
             );
           })}
