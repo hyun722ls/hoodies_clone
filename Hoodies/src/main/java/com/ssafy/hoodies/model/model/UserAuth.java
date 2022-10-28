@@ -18,11 +18,13 @@ public class UserAuth {
     private String email;
     private String authcode;
     private Timestamp time;
+    private boolean authflag;
 
     @Builder
-    public UserAuth(String email, String authcode, Timestamp time) {
+    public UserAuth(String email, String authcode, Timestamp time, boolean authflag) {
         this.email = email;
         this.authcode = authcode;
         this.time = time;
+        this.authflag = authflag;
     }
 }
