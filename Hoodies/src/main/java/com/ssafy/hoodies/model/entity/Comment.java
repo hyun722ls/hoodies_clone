@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 @Builder
 public class Comment {
-    private String id;
+    private String _id;
 
     private String writer;
 
