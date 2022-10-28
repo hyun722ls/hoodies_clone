@@ -89,11 +89,11 @@ const UserMain = () => {
     setPasswordModalOpen(false)
   }
 
-  const newNicknameChangeHandler = (event) => {
-    event.preventDefault()
-    setIsNewNicknameDuplicated(false)
-    setNewNickname(event.target.value)
-  }
+    const newNicknameChangeHandler = (event) => {
+        event.preventDefault()
+        setIsNewNicknameDuplicated(false)
+        setNewNickname(event.target.value)
+    }
 
   const newNicknameDuplicatedHandler = async (event) => {
     event.preventDefault();
@@ -147,6 +147,7 @@ const UserMain = () => {
 
   }
 
+    }
 
   const passwordModifyHandler = async (event) => {
     event.preventDefault()
@@ -167,9 +168,28 @@ const UserMain = () => {
 
 
 
-  let modalNicknameForm = (
-    <form onSubmit={nicknameModifyHandler}>
-      <span>변경할 닉네임을 입력하세요!</span>
+    let modalNicknameForm = (
+        <form onSubmit={nicknameModifyHandler}>
+            <span>변경할 닉네임을 입력하세요!</span>
+            <div>
+                <input
+                    type="textarea"
+                    value={newNickname}
+                    onChange={newNicknameChangeHandler}
+                />
+                <button onClick={newNicknameDuplicatedHandler}>
+                    {isNewNicknameDuplicated ? "사용 가능" : "중복 확인"}
+                </button>
+            </div>
+            <div>
+                <button type="submit">전송</button>
+            </div>
+        </form>
+    );
+
+    let modalPasswordForm = (
+        <form onSubmit={passwordModifyHandler}>
+            {/* <p>기존 패스워드</p>
       <div>
         <input
           type="textarea"
