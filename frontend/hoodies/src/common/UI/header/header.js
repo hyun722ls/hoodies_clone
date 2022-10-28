@@ -1,7 +1,14 @@
 import classes from "./header.module.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const Header = () => {
+  const history = useHistory()
+  const logout = (event) => {
+    event.preventDefault()
+    localStorage.clear()
+    history.push('/login')
+  }
+
   return (
     <nav className={classes.navbar}>
       <Link to="/index" className={classes.navbar__logo}>
@@ -14,9 +21,9 @@ const Header = () => {
         {/* <Link to="/admin/form" state={null} className={classes.navbar__item}>
           Create
         </Link> */}
-        <Link to="/login" className={classes.navbar__item}>
+        <span onClick={logout} className={classes.navbar__item}>
           Logout
-        </Link>
+        </span>
       </ul>
     </nav>
   );
