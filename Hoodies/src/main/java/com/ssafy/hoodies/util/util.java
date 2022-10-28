@@ -35,7 +35,6 @@ public class util {
                 entity, // {요청할 때 보낼 데이터}
                 String.class //{요청시 반환되는 데이터 타입}
         );
-        System.out.println(res);
         return res;
     }
 }
