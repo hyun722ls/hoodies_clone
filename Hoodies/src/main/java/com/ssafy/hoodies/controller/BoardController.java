@@ -25,7 +25,6 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
 @Api(tags = {"게시판 API"})
 public class BoardController {
 
