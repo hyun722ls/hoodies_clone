@@ -38,34 +38,45 @@ public class UserController {
         return resultMap;
     }
 
-    // 회원가입 및 패스워드 초기화 요청
-    @GetMapping({"/auth/{email}", "/resetPassword/{email}"})
+    // 회원가입 MM 인증 메시지 전송
+    @GetMapping("/auth/{email}")
     public Map<String, Object> sendMM(@PathVariable String email) {
         Map<String, Object> resultMap = new HashMap<>();
-        try {
-            String authcode = userService.sendMM(email, 1);
-            if (authcode.equals("fail")) {
-                resultMap.put("statusCode", FAIL);
-                return resultMap;
-            }
-            Timestamp expireTime = new Timestamp(System.currentTimeMillis());
-            expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
-            userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).build());
-            resultMap.put("statusCode", SUCCESS);
-            return resultMap;
-        } catch (Exception e) {
+
+        // 기존 user가 있는 경우
+        if (userRepository.findById(email).isPresent()) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
+
+        String authcode = userService.sendMM(email, 1);
+        if (authcode.equals("fail")) {
+            resultMap.put("statusCode", FAIL);
+            return resultMap;
+        }
+
+        Timestamp expireTime = new Timestamp(System.currentTimeMillis());
+        expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
+        userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).authflag(false).build());
+        resultMap.put("statusCode", SUCCESS);
+
+        return resultMap;
     }
+
 
     @PostMapping("/auth")
     public Map<String, Object> authMM(@RequestBody Map<String, String> map) {
+        Map<String, Object> resultMap = new HashMap<>();
         String email = map.getOrDefault("email", "");
         String authcode = map.getOrDefault("authcode", "");
 
+        // 기존 user가 있는 경우
+        if (userRepository.findById(email).isPresent()) {
+            resultMap.put("statusCode", FAIL);
+            return resultMap;
+        }
+
         UserAuth userAuth = userAuthRepository.findByEmailAndAuthcode(email, authcode);
-        Map<String, Object> resultMap = new HashMap<>();
         if (userAuth == null) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
@@ -79,6 +90,11 @@ public class UserController {
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
+
+        // 인증 성공
+        userAuth.setAuthflag(true);
+        userAuthRepository.save(userAuth);
+
         resultMap.put("statusCode", SUCCESS);
         return resultMap;
     }
@@ -86,30 +102,48 @@ public class UserController {
     @PostMapping
     public Map<String, Object> signup(@RequestBody User user) {
         Map<String, Object> resultMap = new HashMap<>();
-        String salt = userService.getRandomGenerateString(8);
-        String encryptPassword = userService.getEncryptPassword(user.getPassword(), salt);
-        if (encryptPassword == null) {
+
+        // 기존 user가 있는 경우
+        if (userRepository.findById(user.getEmail()).isPresent()) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
 
-        user.setSalt(salt);
-        user.setPassword(encryptPassword);
-        userRepository.save(user);
+        try {
+            UserAuth userAuth = userAuthRepository.findById(user.getEmail()).get();
 
-        String token = jwtService.create("email", user.getEmail(), "token");
-        resultMap.put("nickname", user.getNickname());
-        resultMap.put("token", token);
-        resultMap.put("statusCode", SUCCESS);
+            // 인증되지 않은 경우
+            if (!userAuth.isAuthflag()) {
+                resultMap.put("statusCode", FAIL);
+                return resultMap;
+            }
 
-        return resultMap;
+            String salt = userService.getRandomGenerateString(8);
+            String encryptPassword = userService.getEncryptPassword(user.getPassword(), salt);
+            if (encryptPassword == null) {
+                resultMap.put("statusCode", FAIL);
+                return resultMap;
+            }
+
+            user.setSalt(salt);
+            user.setPassword(encryptPassword);
+            userRepository.save(user);
+
+            String token = jwtService.create("email", user.getEmail(), "token");
+            resultMap.put("nickname", user.getNickname());
+            resultMap.put("token", token);
+            resultMap.put("statusCode", SUCCESS);
+
+            return resultMap;
+        } catch (Exception e) {
+            resultMap.put("statusCode", FAIL);
+            return resultMap;
+        }
     }
 
     @PostMapping("/login")
     public Map<String, Object> login(@RequestBody User user) {
-
         Map<String, Object> resultMap = new HashMap<>();
-
         try {
             User getUser = userRepository.findById(user.getEmail()).get();
 
@@ -132,13 +166,44 @@ public class UserController {
         }
     }
 
+    @GetMapping("/resetPassword/{email}")
+    public Map<String, Object> sendResetPassword(@PathVariable String email) {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        // 기존 user가 없는 경우
+        if (!userRepository.findById(email).isPresent()) {
+            resultMap.put("statusCode", FAIL);
+            return resultMap;
+        }
+
+        String authcode = userService.sendMM(email, 1);
+        if (authcode.equals("fail")) {
+            resultMap.put("statusCode", FAIL);
+            return resultMap;
+        }
+
+        Timestamp expireTime = new Timestamp(System.currentTimeMillis());
+        expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
+        userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).authflag(false).build());
+        resultMap.put("statusCode", SUCCESS);
+
+        return resultMap;
+    }
+
     @PostMapping("/resetPassword")
     public Map<String, Object> authResetPassword(@RequestBody Map<String, String> map) {
         String email = map.getOrDefault("email", "");
         String authcode = map.getOrDefault("authcode", "");
 
-        UserAuth userAuth = userAuthRepository.findByEmailAndAuthcode(email, authcode);
         Map<String, Object> resultMap = new HashMap<>();
+
+        // 기존 user가 없는 경우
+        if (!userRepository.findById(email).isPresent()) {
+            resultMap.put("statusCode", FAIL);
+            return resultMap;
+        }
+
+        UserAuth userAuth = userAuthRepository.findByEmailAndAuthcode(email, authcode);
         if (userAuth == null) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
