@@ -42,7 +42,7 @@ public class BoardController {
         ResponseEntity<String> res = util.checkExpression(dto.getTitle(), dto.getContent(), "article");
         Board board = dto.toEntity();
         board.setCategory(res.getBody().trim());
-        return boardRepository.save(dto.toEntity());
+        return boardRepository.save(board);
     }
 
     // Retrieve
