@@ -1,5 +1,6 @@
 package com.ssafy.hoodies.controller;
 
+import com.ssafy.hoodies.config.security.JwtTokenProvider;
 import com.ssafy.hoodies.model.model.User;
 import com.ssafy.hoodies.model.model.UserAuth;
 import com.ssafy.hoodies.model.repository.UserAuthRepository;
@@ -20,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class UserController {
     private static final String SUCCESS = "200";
     private static final String FAIL = "403";
-    private final JwtService jwtService;
+//    private final JwtService jwtService;
     private final UserService userService;
     private final UserRepository userRepository;
     private final UserAuthRepository userAuthRepository;
@@ -129,9 +130,9 @@ public class UserController {
             user.setPassword(encryptPassword);
             userRepository.save(user);
 
-            String token = jwtService.create("email", user.getEmail(), "token");
+//            String token = jwtService.create("email", user.getEmail(), "token");
             resultMap.put("nickname", user.getNickname());
-            resultMap.put("token", token);
+//            resultMap.put("token", token);
             resultMap.put("statusCode", SUCCESS);
 
             return resultMap;
@@ -154,9 +155,9 @@ public class UserController {
                 return resultMap;
             }
 
-            String token = jwtService.create("email", user.getEmail(), "token");
+//            String token = jwtService.create("email", user.getEmail(), "token");
             resultMap.put("nickname", getUser.getNickname());
-            resultMap.put("token", token);
+//            resultMap.put("token", token);
             resultMap.put("statusCode", SUCCESS);
 
             return resultMap;
@@ -245,7 +246,8 @@ public class UserController {
 
     @PutMapping("/nickname")
     public Map<String, Object> updateNickname(@RequestBody Map<String, String> map) {
-        String email = jwtService.getUserEmail();
+//        String email = jwtService.getUserEmail();
+        String email = "ororwnstlr@naver.com";
         String nickname = map.getOrDefault("nickname", "");
 
         Map<String, Object> resultMap = new HashMap<>();
@@ -273,7 +275,8 @@ public class UserController {
 
     @PutMapping("/password")
     public Map<String, Object> updatePassword(@RequestBody Map<String, String> map) {
-        String email = jwtService.getUserEmail();
+        //        String email = jwtService.getUserEmail();
+        String email = "ororwnstlr@naver.com";
         String password = map.getOrDefault("password", "");
 
         Map<String, Object> resultMap = new HashMap<>();
@@ -301,4 +304,14 @@ public class UserController {
             return resultMap;
         }
     }
+
+    private final JwtTokenProvider jwtTokenProvider;
+
+    @GetMapping("/token")
+    public Map<String, Object> getToken() {
+        System.out.println(jwtTokenProvider.generateToken("email", "ororwnstlr@naver.com", "token"));
+
+        return null;
+    }
+
 }
