@@ -1,7 +1,7 @@
 package com.ssafy.hoodies.model.repository;
 
 
-import com.ssafy.hoodies.model.model.Board;
+import com.ssafy.hoodies.model.entity.Board;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
