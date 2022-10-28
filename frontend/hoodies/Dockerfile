@@ -8,7 +8,7 @@ ENV PATH /usr/src/app/node_modules/.bin:$PATH
 
 COPY package*.json ./
 
-RUN npm install --force
+RUN npm install --legacy-peer-deps
 
 COPY ./ ./
 
