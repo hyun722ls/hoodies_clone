@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../../common/UI/header/header";
+import { createComment, deleteComment, fetchArticle, modifyComment } from "../boardAPI";
 import CommentList from "./commentList";
 
 const ArticleDetail = () => {
@@ -19,26 +20,51 @@ const ArticleDetail = () => {
     history.push({ pathname: "/board/free/form", state: article });
   };
 
-  const deleteCommentHandler = (commentId) => {
-    const newComments = [...comments];
-    const index = comments.findIndex((comment) => comment.id === commentId);
-    newComments.splice(index, 1);
-    setComments(newComments);
+  const deleteCommentHandler = async (commentId) => {
+    const response = await deleteComment(article._id, commentId)
+    if (response){
+      const response1 = await fetchArticle(article._id)
+      setArticle(response1)
+      setComments(response1.comments)
+    } else {
+      const response1 = await fetchArticle(article._id)
+      setArticle(response1)
+      setComments(response1.comments)
+    }
   };
 
-  const modifyCommentHandler = (commentId, newContent) => {
-    const newComments = [...comments];
-    const index = comments.findIndex((comment) => comment.id === commentId);
-    newComments[index].content = newContent;
-    setComments(newComments);
+  const modifyCommentHandler = async (commentId, newContent) => {
+    const response = await modifyComment(article._id, commentId, newContent)
+    if (response){
+      const response1 = await fetchArticle(location.state._id)
+      setArticle(response1)
+      setComments(response1.comments)
+    }
+    else {
+      const response1 = await fetchArticle(location.state._id)
+      setArticle(response1)
+      setComments(response1.comments)
+     
+    }
+    // const newComments = [...comments];
+    // const index = comments.findIndex((comment) => comment.id === commentId);
+    // newComments[index].content = newContent;
+    // setComments(newComments);
   };
 
-  const createCommentHandler = (newContent) => {
-    const newComments = [
-      { content: newContent, writer: "현규는 똑똑해" },
-      ...comments,
-    ];
-    setComments(newComments);
+  const createCommentHandler = async (newContent) => {
+    const response = await createComment(article._id, newContent)
+    if (response){
+      const response1 = await fetchArticle(location.state._id)
+      setArticle(response1)
+      setComments(response1.comments)
+    }
+    else {
+      const response1 = await fetchArticle(location.state._id)
+      setArticle(response1)
+      setComments(response1.comments)
+     
+    }
   };
 
   useEffect(() => {
@@ -59,17 +85,20 @@ const ArticleDetail = () => {
         <h4>{article.title}</h4>
         <div>
           <p>작성시간 : {article.createdAt}</p>
-          <p>조회수 : {article.viewCnt}</p>
-          <p>추천수 : {article.recommend}</p>
+          <p>조회수 : {article.hit}</p>
+          <p>추천수 : {article.like}</p>
           <p>작성자 : {article.writer}</p>
         </div>
         <p>{article.content}</p>
         <div>
           <button onClick={backHandler}>뒤로 가기</button>
-          <button onClick={modifyHandler}>수정</button>
+          
+          {article.writer === localStorage.getItem('nickname') && <button onClick={modifyHandler}>수정</button>}
         </div>
         <CommentList
           comments={comments}
+          setArticle={setArticle}
+          setComments={setComments}
           deleteCommentHandler={deleteCommentHandler}
           modifyCommentHandler={modifyCommentHandler}
           createCommentHandler={createCommentHandler}
