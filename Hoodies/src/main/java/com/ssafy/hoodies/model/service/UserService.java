@@ -4,7 +4,7 @@ public interface UserService {
 
     public String getRandomGenerateString(int targetStringLength);
 
-    public String sendMM(String email, int flag) throws Exception;
+    public String sendMM(String email, int flag);
 
     public String getEncryptPassword(String password, String salt);
 }
