@@ -40,17 +40,17 @@ const CommentList = (props) => {
     <div>
       {props.comments.map((comment) => {
         return (
-          <ul key={comment._id}>
+          <ul key={comment.id}>
             <li>
               {comment.content}, {comment.writer}
             </li>
-            <button onClick={() => props.deleteCommentHandler(comment._id)}>
+            <button onClick={() => props.deleteCommentHandler(comment.id)}>
               삭제
             </button>
-            {comment.writer === localStorage.getItem('nickname') && <button onClick={() => openModifyForm(comment._id, comment.content)}>
+            <button onClick={() => openModifyForm(comment.id, comment.content)}>
               수정
-            </button>}
-            {modifyForm && commentId === comment._id && (
+            </button>
+            {modifyForm && commentId === comment.id && (
               <form onSubmit={modifyHandler}>
                 <input
                   type="text"
