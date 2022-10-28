@@ -18,6 +18,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +40,9 @@ public class BoardController {
     @PostMapping("board")
     @ApiOperation(value = "게시물 작성")
     public Board writeBoard(@RequestBody BoardDto dto){
+        ResponseEntity<String> res = util.checkExpression(dto.getTitle(), dto.getContent(), "article");
+        Board board = dto.toEntity();
+        board.setCategory(res.getBody().trim());
         return boardRepository.save(dto.toEntity());
     }
 
@@ -71,10 +75,12 @@ public class BoardController {
                                     value = "게시물의 DB상 id",
                                     required = true)
                             @PathVariable String id){
+        ResponseEntity<String> res = util.checkExpression(dto.getTitle(), dto.getContent(), "article");
         Query boardQuery = new Query(Criteria.where("_id").is(id));
         Update boardUpdate = new Update();
         boardUpdate.set("title", dto.getTitle());
         boardUpdate.set("content", dto.getContent());
+        boardUpdate.set("category", res.getBody().trim());
         boardUpdate.set("modifiedAt", util.getTimeStamp());
         mongoTemplate.updateFirst(boardQuery, boardUpdate, "board");
     }
@@ -115,7 +121,9 @@ public class BoardController {
     @PostMapping("board/{id}/comment")
     @ApiOperation(value = "댓글 등록")
     public void writeComment(@RequestBody CommentDto dto, @PathVariable String id){
+        ResponseEntity<String> res = util.checkExpression("", dto.getContent(), "comment");
         Comment comment = dto.toEntity();
+        comment.setCategory(res.getBody().trim());
         Query commentQuery = new Query(Criteria.where("_id").is(id));
         Update commentUpdate = new Update();
         commentUpdate.push("comments", comment);
@@ -127,12 +135,14 @@ public class BoardController {
     @PutMapping("board/{bid}/comment/{cid}")
     @ApiOperation(value = "댓글 수정")
     public void updateComment(@RequestBody CommentDto dto, @PathVariable String bid, @PathVariable String cid){
+        ResponseEntity<String> res = util.checkExpression("", dto.getContent(), "comment");
         Query commentQuery = new Query();
         commentQuery.addCriteria(Criteria.where("_id").is(bid));
         commentQuery.addCriteria(Criteria.where("comments").elemMatch(Criteria.where("_id").is(cid)));
         Update commentUpdate = new Update();
         commentUpdate.set("comments.$.content", dto.getContent());
         commentUpdate.set("comments.$.modifiedAt", util.getTimeStamp());
+        commentUpdate.set("comments.$.category", res.getBody().trim());
 
         mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
     }

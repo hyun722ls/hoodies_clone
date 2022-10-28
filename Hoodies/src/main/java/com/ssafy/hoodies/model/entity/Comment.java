@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 @Builder
 public class Comment {
-    private String _id;
+    private String id;
 
     private String writer;
 
@@ -19,4 +19,6 @@ public class Comment {
     private String modifiedAt;
 
     private List<Comment> replies;
+
+    private String category;
 }

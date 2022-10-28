@@ -30,5 +30,7 @@ public class Board {
 
     private List<Comment> comments;
 
+    private String category;
+
     // private ??? image;
 }
