@@ -6,17 +6,13 @@ import PopularTexts from "./boardComponent/popularTexts";
 import classes from "./boardMain.module.css";
 import CreateIcon from "@mui/icons-material/Create";
 import { useHistory } from "react-router-dom";
-import Pagination from "react-js-pagination";
-import { fetchArticles, fetchPopularArticles } from "./boardAPI";
-import "./boardMain.css";
 
 const BoardMain = () => {
   const [articles, setArticles] = useState([]);
-  const [activePage, setActivePage] = useState(1);
+  const [page, setPage] = useState(1);
   const [popularTexts, setPopularTexts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchText, setSearchText] = useState("");
-  const [totalItemsCount, setTotalItemCount] = useState(0)
   const history = useHistory();
 
   useEffect(() => {
@@ -24,15 +20,10 @@ const BoardMain = () => {
     // const response1 = 인기 게시글(제목, 날짜)
     // setArticles(response)
     // setPopularText(response1
-    (async () => {
-      const response = await fetchArticles(activePage)
-      const response1 = await fetchPopularArticles()
-    setTotalItemCount(response.totalElements)
-    setArticles(response.content);
-    setPopularTexts(response1);
+    setArticles(freePreview);
+    setPopularTexts(freePreview);
     setIsLoading(false);
-    })()
-  }, [activePage]);
+  });
 
   const createArticle = () => {
     history.push("free/form");
@@ -46,13 +37,6 @@ const BoardMain = () => {
   const searchHandler = (event) => {
     event.preventDefault();
   };
-
-  const handlePageChange = (pageNumber) => {
-    console.log(`active page is ${pageNumber}`);
-    setActivePage(pageNumber);
-  };
-
-
   return (
     !isLoading &&
     articles &&
@@ -76,16 +60,6 @@ const BoardMain = () => {
           </form>
         </div>
         <BoardTable articles={articles} />
-        <div>
-          <Pagination
-            activePage={activePage}
-            itemsCountPerPage={20}
-            totalItemsCount={totalItemsCount}
-            pageRangeDisplayed={5}
-            onChange={handlePageChange}
-          />
-        </div>
-
         <PopularTexts popularTexts={popularTexts} />
       </div>
     )

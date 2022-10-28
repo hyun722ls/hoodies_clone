@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../../common/UI/header/header";
-import { createArticle, modifyArticle } from "../boardAPI";
 
 const ArticleForm = () => {
   const [article, setArticle] = useState(null);
@@ -35,32 +34,14 @@ const ArticleForm = () => {
     setContent(event.target.value);
   };
 
-  const modifyRequestHandler = async (event) => {
+  const modifyRequestHandler = (event) => {
     event.preventDefault();
-    const id = location.state?._id
-    const response = await modifyArticle(title, content, id)
-    if (response) {
-      alert('등록완료')
-      history.go(-1);
-      
-
-    } else {
-      alert('등록실패')
-    }
-   
+    history.go(-1);
   };
 
-  const createRequestHandler = async (event) => {
+  const createRequestHandler = (event) => {
     event.preventDefault();
-    const response = await createArticle(title, content)
-    if (response) {
-      alert('등록완료')
-      history.push("/board/free");
-      
-
-    } else {
-      alert('등록실패')
-    }
+    history.push("/board/free");
   };
   return (
     !isLoading &&
