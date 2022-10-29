@@ -1,5 +1,5 @@
 
-EXIST_A=$(docker-compose -p blink-green -f docker-compose.green.yml ps | grep blink-green)
+EXIST_A=$(docker-compose -p blink-a -f docker-compose.green.yml ps | grep blink-green)
 if [ -z "${EXIST_A}" ] # -z는 문자열 길이가 0이면 true. A가 실행 중이지 않다는 의미.
 then
         # B가 실행 중인 경우
@@ -44,7 +44,7 @@ docker-compose -p blink-${TERMINATE_CONTAINER} -f docker-compose.${TERMINATE_CON
 # 도커 쓸대없는 Image제거
 docker rmi $(docker images -f "dangling=true" -q)
 
-# 도커 캐시 제거
-echo y | sudo docker system prune --volumes
+# # 도커 캐시 제거
+# echo y | sudo docker system prune --volumes
 
 echo "################ end of deployment #################"
