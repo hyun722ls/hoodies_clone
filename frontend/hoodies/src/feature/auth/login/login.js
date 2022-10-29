@@ -125,7 +125,6 @@ const Login = () => {
     <div>
       <form onSubmit={LoginHandler}>
         <div>
-          <h3>배포 제대로 되었나?</h3>
           <h3>email</h3>
           <input
             value={email}
