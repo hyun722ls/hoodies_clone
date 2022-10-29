@@ -22,7 +22,7 @@ echo "###################### current container ${TERMINATE_CONTAINER} ##########
 echo "################ blink-${START_CONTAINER} up ####################"
 docker-compose -p blink-${START_CONTAINER} -f docker-compose.${START_CONTAINER}.yml up -d --build || exit 1
 
-sleep 5 # 실행되었으면 5초 대기
+#sleep 5 # 실행되었으면 5초 대기
 
 echo "############### change nginx server port #################"
 # sed 명령어를 이용해서 아까 지정해줬던 service-url.inc의 url값을 변경해줍니다.
