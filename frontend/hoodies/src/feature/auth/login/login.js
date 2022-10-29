@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import CustomModal from "../../../common/UI/modal/customModal";
 import { login, passworAuthMM, passwordSendMM } from "../authApi";
+import './login.css'
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -125,7 +126,6 @@ const Login = () => {
     <div>
       <form onSubmit={LoginHandler}>
         <div>
-        <h3>테스트</h3>
           <h3>email</h3>
           <input
             value={email}
