@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import CustomModal from "../../../common/UI/modal/customModal";
 import { login, passworAuthMM, passwordSendMM } from "../authApi";
-import './login.css'
 
 const Login = () => {
   const [email, setEmail] = useState("");
