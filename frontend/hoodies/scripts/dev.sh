@@ -41,5 +41,10 @@ sudo service nginx reload
 echo "##################### blink-${TERMINATE_CONTAINER} container down ##################"
 docker-compose -p blink-${TERMINATE_CONTAINER} -f docker-compose.${TERMINATE_CONTAINER}.yml down
 
+# 도커 쓸대없는 Image제거
+docker rmi $(docker images -f "dangling=true" -q)
+
+# 도커 캐시 제거
+echo y | sudo docker system prune --volumes
 
 echo "################ end of deployment #################"
