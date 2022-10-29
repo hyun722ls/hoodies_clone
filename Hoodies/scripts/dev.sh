@@ -22,7 +22,7 @@ echo "###################### current container ${TERMINATE_CONTAINER} ##########
 echo "################ blink-${START_CONTAINER} up ####################"
 docker-compose -p blink-${START_CONTAINER} -f docker-compose.${START_CONTAINER}.yml up -d --build || exit 1
 
-#sleep 5 # 실행되었으면 5초 대기
+sleep 5 # 실행되었으면 5초 대기
 
 echo "############### change nginx server port #################"
 # sed 명령어를 이용해서 아까 지정해줬던 service-url.inc의 url값을 변경해줍니다.
@@ -33,7 +33,7 @@ sed -i.bak "s/${TERMINATE_PORT}/${START_PORT}/" /etc/nginx/conf.d/service-url.in
 echo "################## ${TERMINATE_PORT} down and ${START_PORT} up ##################"
 
 echo "################ nginx reload.. #########################"
-service nginx reload
+#service nginx reload
 
 
 # 기존에 실행 중이었던 docker-compose는 종료시켜줍니다.
