@@ -1,15 +1,15 @@
-EXIST_A=$(docker-compose -p blink-a -f docker-compose.green.yml ps | grep blink-green)
+EXIST_A=$(docker-compose -p blink-a -f docker-compose.left.yml ps | grep blink-left)
 if [ -z "${EXIST_A}" ] # -z는 문자열 길이가 0이면 true. A가 실행 중이지 않다는 의미.
 then
         # B가 실행 중인 경우
-        START_CONTAINER=green
-        TERMINATE_CONTAINER=blue
+        START_CONTAINER=left
+        TERMINATE_CONTAINER=right
         START_PORT=8080
         TERMINATE_PORT=8082
 else
         # A가 실행 중인 경우
-        START_CONTAINER=blue
-        TERMINATE_CONTAINER=green
+        START_CONTAINER=right
+        TERMINATE_CONTAINER=left
         START_PORT=8082
         TERMINATE_PORT=8080
 fi
