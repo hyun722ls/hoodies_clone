@@ -30,11 +30,11 @@ echo "############### change nginx server port #################"
 # sed -i "s/기존문자열/변경할문자열" 파일경로 입니다.
 # 종료되는 포트를 새로 시작되는 포트로 값을 변경해줍니다.  
 # -i.bak 는 백업파일을 만들겠다는 의미입니다.(그래야 변경값이 저장됨)
-sudo sed -i.bak "s/${TERMINATE_PORT}/${START_PORT}/" /etc/nginx/conf.d/service-url.inc
+sed -i.bak "s/${TERMINATE_PORT}/${START_PORT}/" /etc/nginx/conf.d/service-url.inc
 echo "################## ${TERMINATE_PORT} down and ${START_PORT} up ##################"
 
 echo "################ nginx reload.. #########################"
-sudo service nginx reload
+service nginx reload
 
 
 # 기존에 실행 중이었던 docker-compose는 종료시켜줍니다.
