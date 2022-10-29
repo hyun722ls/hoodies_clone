@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../../common/UI/header/header";
-import { createComment, deleteComment, fetchArticle, modifyComment } from "../boardAPI";
+import {createComment, deleteArticle, deleteComment, fetchArticle, modifyComment} from "../boardAPI";
 import CommentList from "./commentList";
 
 const ArticleDetail = () => {
@@ -19,6 +19,13 @@ const ArticleDetail = () => {
   const modifyHandler = (event) => {
     history.push({ pathname: "/board/free/form", state: article });
   };
+
+  const deleteHandler = async (event) => {
+    const response = await deleteArticle(article._id)
+    if (response) {
+      history.push('/board/free');
+    }
+  }
 
   const deleteCommentHandler = async (commentId) => {
     const response = await deleteComment(article._id, commentId)
@@ -84,16 +91,17 @@ const ArticleDetail = () => {
         <Header />
         <h4>{article.title}</h4>
         <div>
-          <p>작성시간 : {article.createdAt}</p>
+          <p>작성시간 : {article.createdAt} {article.createdAt !== article.modifiedAt && <span>(수정됨 {article.modifiedAt})</span>} </p>
           <p>조회수 : {article.hit}</p>
           <p>추천수 : {article.like}</p>
           <p>작성자 : {article.writer}</p>
         </div>
         <p>{article.content}</p>
         <div>
-          <button onClick={backHandler}>뒤로 가기</button>
+          <button onClick={backHandler}>목록보기</button>
           
           {article.writer === localStorage.getItem('nickname') && <button onClick={modifyHandler}>수정</button>}
+          {article.writer === localStorage.getItem('nickname') && <button onClick={deleteHandler}>삭제</button>}
         </div>
         <CommentList
           comments={comments}

@@ -22,7 +22,8 @@ const ArticleForm = () => {
   }, []);
 
   const backHandler = (event) => {
-    history.go(-1);
+    // history.go(-1);
+    history.push("/board/free");
   };
 
   const titleChangeHandler = (event) => {
@@ -41,7 +42,7 @@ const ArticleForm = () => {
     const response = await modifyArticle(title, content, id)
     if (response) {
       alert('등록완료')
-      history.go(-1);
+      history.push({ pathname: "/board/free/detail", state: response });
       
 
     } else {

@@ -16,8 +16,8 @@ export const createArticle = async (title, content) => {
 }
 
 export const modifyArticle = async (title, content, articleId) => {
-    const writer = localStorage.getItem('nickname')
-    const formData = {'title': title, 'writer': writer, 'content': content }
+    // const writer = localStorage.getItem('nickname')
+    const formData = {'title': title, 'content': content, 'articleId': articleId }
     try {
         const response = await axios.put(API_URL + `board/${articleId}`, formData)
         return response.data
@@ -50,6 +50,16 @@ export const fetchArticle = async (articleId) => {
     try {
         const response = await axios.get(API_URL + `board/${articleId}`)
         return response.data
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+export const deleteArticle = async (articleId) => {
+    try {
+        const response = await axios.delete(API_URL + `board/${articleId}` )
+        console.log(response.data)
+        return response
     } catch (err) {
         console.log(err)
     }

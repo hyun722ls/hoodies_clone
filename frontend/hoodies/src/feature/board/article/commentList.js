@@ -44,11 +44,14 @@ const CommentList = (props) => {
             <li>
               {comment.content}, {comment.writer}
             </li>
-            <button onClick={() => props.deleteCommentHandler(comment._id)}>
-              삭제
-            </button>
+            {/*<button onClick={() => props.deleteCommentHandler(comment._id)}>*/}
+            {/*  삭제*/}
+            {/*</button>*/}
             {comment.writer === localStorage.getItem('nickname') && <button onClick={() => openModifyForm(comment._id, comment.content)}>
               수정
+            </button>}
+            {comment.writer === localStorage.getItem('nickname') && <button onClick={() => props.deleteCommentHandler(comment._id)}>
+              삭제
             </button>}
             {modifyForm && commentId === comment._id && (
               <form onSubmit={modifyHandler}>
