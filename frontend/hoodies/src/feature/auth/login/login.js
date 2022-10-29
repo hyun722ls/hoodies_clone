@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import CustomModal from "../../../common/UI/modal/customModal";
 import { login, passworAuthMM, passwordSendMM } from "../authApi";
+import "login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -19,12 +20,12 @@ const Login = () => {
 
   const LoginHandler = async (event) => {
     event.preventDefault();
-    if (email && password){
-      const response = await login(email, password)
-      if (response.statusCode === '200'){
-        localStorage.setItem('token', response.token)
-        localStorage.setItem('nickname', response.nickname)
-        localStorage.setItem('email', email)
+    if (email && password) {
+      const response = await login(email, password);
+      if (response.statusCode === "200") {
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("nickname", response.nickname);
+        localStorage.setItem("email", email);
         history.push("/index");
       }
       // 오류 제어 코드 필요
@@ -58,8 +59,8 @@ const Login = () => {
   const authCodeTransferHandler = async (event) => {
     event.preventDefault();
     if (authCode.trim()) {
-      const response = await passworAuthMM(seekEmail, authCode)
-      if (response.statusCode === '200'){
+      const response = await passworAuthMM(seekEmail, authCode);
+      if (response.statusCode === "200") {
         setSeekEmail("");
         setAuthCode("");
         setIsTransferEmail(false);
@@ -70,7 +71,7 @@ const Login = () => {
         setAuthCode("");
         setIsTransferEmail(false);
         setModalOpen(false);
-        alert('인증코드를 잘못 입력하셨습니다.')
+        alert("인증코드를 잘못 입력하셨습니다.");
       }
     }
   };
@@ -78,13 +79,13 @@ const Login = () => {
   const emailTransferHandler = async (event) => {
     event.preventDefault();
     if (seekEmail.trim()) {
-      const response = await passwordSendMM(seekEmail)
-      if (response.statusCode === '200'){
+      const response = await passwordSendMM(seekEmail);
+      if (response.statusCode === "200") {
         setIsTransferEmail(true);
       } else {
-        setSeekEmail('')
-        alert('이메일 형식이 아닙니다.')
-        closeModal()
+        setSeekEmail("");
+        alert("이메일 형식이 아닙니다.");
+        closeModal();
       }
     }
   };
