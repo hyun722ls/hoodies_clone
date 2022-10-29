@@ -9,7 +9,7 @@ public class MainController {
 
     @GetMapping("/")
     public String index() throws Exception {
-        return "index2";
+        return "index3";
     }
 
 }
