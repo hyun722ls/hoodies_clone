@@ -75,14 +75,17 @@ const ArticleDetail = () => {
   };
 
   useEffect(() => {
-    if (location.state) {
-      setArticle(location.state);
-      setComments(location.state.comments);
-    } else {
-      alert("잘못된 접근입니다.");
-      history.push("/index");
-    }
-    setIsLoading(false);
+    (async () => {
+      if (location.state) {
+        const response = await fetchArticle(location.state)
+        setArticle(response);
+        setComments(response.comments);
+      } else {
+        alert("잘못된 접근입니다.");
+        history.push("/index");
+      }
+      setIsLoading(false);
+    })()
   }, []);
   return (
     !isLoading &&
