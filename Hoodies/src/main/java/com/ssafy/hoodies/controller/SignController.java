@@ -133,7 +133,7 @@ public class SignController {
     }
 
     @GetMapping("/reissue")
-    public Map<String, Object> reIssue(HttpServletRequest request, HttpServletResponse response, @CookieValue("refreshToken") String refreshToken) {
+    public Map<String, Object> reissue(HttpServletRequest request, HttpServletResponse response, @CookieValue("refreshToken") String refreshToken) {
         Map<String, Object> resultMap = new HashMap<>();
 
         try {
