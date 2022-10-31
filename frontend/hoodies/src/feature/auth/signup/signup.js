@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useHistory, Link, Route } from "react-router-dom";
 import CustomModal from "../../../common/UI/modal/customModal";
+import { authMM, checkNickname, sendMM, signup } from "../authApi";
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [emailCheck, setEmailCheck] = useState(false);
@@ -34,10 +35,14 @@ const Signup = () => {
     setConfirmPassword(event.target.value);
   };
 
-  const checkEmailHandler = (event) => {
+  const checkEmailHandler = async (event) => {
     event.preventDefault();
-    // 요청
-    setModalOpen(true);
+    const response = await sendMM(email) 
+    if (response.statusCode === '200'){
+      setModalOpen(true);
+    } else {
+      alert('이메일을 잘못 입력하셨습니다.')
+    }
   };
 
   const closeModal = () => {
@@ -50,23 +55,38 @@ const Signup = () => {
     setAuthCode(event.target.value);
   };
 
-  const authCodeTransferHandler = (event) => {
+  const authCodeTransferHandler = async (event) => {
     event.preventDefault();
-    if (authCode) {
-      setAuthCode("");
-      setEmail(email);
-      setEmailCheck(true);
-      alert("인증됨");
-      setModalOpen(false);
+    if (authCode.trim()) {
+      const response = await authMM(email, authCode)
+      if (response.statusCode === '200'){
+        setAuthCode("");
+        setEmail(email);
+        setEmailCheck(true);
+        alert("인증됨");
+        setModalOpen(false);
+      } else {
+        setAuthCode("");
+        setEmail('');
+        setEmailCheck(false);
+        alert("잘못된 유효코드입니다.");
+        setModalOpen(false);
+      }
     }
   };
 
-  const NicknameDuplicatedHandler = (event) => {
+  const NicknameDuplicatedHandler = async (event) => {
     event.preventDefault();
     if (nickname.trim()) {
-      setIsNicknameDuplicated(true);
-      setNickname(nickname);
-      alert("닉네임 사용가능");
+      const response = await checkNickname(nickname)
+      if (response.cnt === 0 && response.statusCode === "200"){
+        setIsNicknameDuplicated(true);
+        setNickname(nickname);
+        alert("닉네임 사용가능");
+
+      } else {
+        alert("서버 에러")
+      }
     }
   };
 
@@ -86,7 +106,7 @@ const Signup = () => {
     </form>
   );
 
-  const signupHandler = (event) => {
+  const signupHandler = async (event) => {
     event.preventDefault();
     if (
       nickname &&
@@ -95,8 +115,15 @@ const Signup = () => {
       isNicknameDuplicated &&
       emailCheck
     ) {
+      const response = await signup(email, password, nickname)
+      if (response.statusCode === '200'){
+        localStorage.setItem('token', response.token)
+        localStorage.setItem('nickname', response.nickname)
+        localStorage.setItem('email', email)
+        history.push("/index");
+      } 
       // 요청감
-      history.push("/index");
+    
     }
   };
 
