@@ -1,15 +1,21 @@
 package com.ssafy.hoodies.controller;
 
 import com.ssafy.hoodies.config.security.JwtTokenProvider;
-import com.ssafy.hoodies.model.model.User;
-import com.ssafy.hoodies.model.model.UserAuth;
+import com.ssafy.hoodies.model.Role;
+import com.ssafy.hoodies.model.entity.Token;
+import com.ssafy.hoodies.model.entity.User;
+import com.ssafy.hoodies.model.entity.UserAuth;
 import com.ssafy.hoodies.model.repository.UserAuthRepository;
 import com.ssafy.hoodies.model.repository.UserRepository;
-import com.ssafy.hoodies.model.service.JwtService;
 import com.ssafy.hoodies.model.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 public class UserController {
     private static final String SUCCESS = "200";
     private static final String FAIL = "403";
-//    private final JwtService jwtService;
+    private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
     private final UserRepository userRepository;
     private final UserAuthRepository userAuthRepository;
@@ -57,7 +63,7 @@ public class UserController {
         }
 
         Timestamp expireTime = new Timestamp(System.currentTimeMillis());
-        expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
+        expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(300));
         userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).authflag(false).build());
         resultMap.put("statusCode", SUCCESS);
 
@@ -101,7 +107,7 @@ public class UserController {
     }
 
     @PostMapping
-    public Map<String, Object> signup(@RequestBody User user) {
+    public Map<String, Object> signup(@RequestBody User user, HttpServletResponse response) {
         Map<String, Object> resultMap = new HashMap<>();
 
         // 기존 user가 있는 경우
@@ -128,11 +134,23 @@ public class UserController {
 
             user.setSalt(salt);
             user.setPassword(encryptPassword);
+            user.setRole(Role.ROLE_USER);
             userRepository.save(user);
 
-//            String token = jwtService.create("email", user.getEmail(), "token");
+            Token tokenInfo = jwtTokenProvider.generateToken("email", user.getEmail(), "token");
+            String accessToken = tokenInfo.getAccessToken();
+            String refreshToken = tokenInfo.getRefreshToken();
+
+            // refresh token response 설정
+            Cookie cookie = new Cookie("refreshToken", refreshToken);
+            cookie.setMaxAge(14 * 24 * 60 * 60);
+            cookie.setSecure(true);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+
             resultMap.put("nickname", user.getNickname());
-//            resultMap.put("token", token);
+            resultMap.put("accessToken", accessToken);
             resultMap.put("statusCode", SUCCESS);
 
             return resultMap;
@@ -143,8 +161,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody User user) {
+    public Map<String, Object> login(@RequestBody User user, HttpServletResponse response) {
         Map<String, Object> resultMap = new HashMap<>();
+
         try {
             User getUser = userRepository.findById(user.getEmail()).get();
 
@@ -155,9 +174,20 @@ public class UserController {
                 return resultMap;
             }
 
-//            String token = jwtService.create("email", user.getEmail(), "token");
+            Token tokenInfo = jwtTokenProvider.generateToken("email", user.getEmail(), "token");
+            String accessToken = tokenInfo.getAccessToken();
+            String refreshToken = tokenInfo.getRefreshToken();
+
+            // refresh token response 설정
+            Cookie cookie = new Cookie("refreshToken", refreshToken);
+            cookie.setMaxAge(14 * 24 * 60 * 60);
+            cookie.setSecure(true);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+
             resultMap.put("nickname", getUser.getNickname());
-//            resultMap.put("token", token);
+            resultMap.put("accessToken", accessToken);
             resultMap.put("statusCode", SUCCESS);
 
             return resultMap;
@@ -246,8 +276,9 @@ public class UserController {
 
     @PutMapping("/nickname")
     public Map<String, Object> updateNickname(@RequestBody Map<String, String> map) {
-//        String email = jwtService.getUserEmail();
-        String email = "ororwnstlr@naver.com";
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
         String nickname = map.getOrDefault("nickname", "");
 
         Map<String, Object> resultMap = new HashMap<>();
@@ -275,8 +306,9 @@ public class UserController {
 
     @PutMapping("/password")
     public Map<String, Object> updatePassword(@RequestBody Map<String, String> map) {
-        //        String email = jwtService.getUserEmail();
-        String email = "ororwnstlr@naver.com";
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
         String password = map.getOrDefault("password", "");
 
         Map<String, Object> resultMap = new HashMap<>();
@@ -303,15 +335,6 @@ public class UserController {
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
-    }
-
-    private final JwtTokenProvider jwtTokenProvider;
-
-    @GetMapping("/token")
-    public Map<String, Object> getToken() {
-        System.out.println(jwtTokenProvider.generateToken("email", "ororwnstlr@naver.com", "token"));
-
-        return null;
     }
 
 }

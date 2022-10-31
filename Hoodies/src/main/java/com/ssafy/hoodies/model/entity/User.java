@@ -1,5 +1,6 @@
-package com.ssafy.hoodies.model.model;
+package com.ssafy.hoodies.model.entity;
 
+import com.ssafy.hoodies.model.Role;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

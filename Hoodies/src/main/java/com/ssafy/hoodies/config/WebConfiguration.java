@@ -12,19 +12,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @ComponentScan({"com.ssafy.hoodies"})
 public class WebConfiguration implements WebMvcConfigurer {
 
-//    private JwtInterceptor jwtInterceptor;
-
-//    @Autowired
-//    public WebConfiguration(JwtInterceptor jwtInterceptor) {
-//        this.jwtInterceptor = jwtInterceptor;
-//    }
-
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(jwtInterceptor).addPathPatterns("/user/nickname").addPathPatterns("/user/password");
-////                .addPathPatterns("/board/**").addPathPatterns("/preview/**");
-//    }
-
     // CORS Setting
     @Override
     public void addCorsMappings(CorsRegistry registry) {

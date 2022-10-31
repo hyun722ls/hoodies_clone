@@ -1,7 +1,6 @@
 package com.ssafy.hoodies.model.dto;
 
-import com.ssafy.hoodies.model.model.Board;
-import com.ssafy.hoodies.model.model.Comment;
+import com.ssafy.hoodies.model.entity.Board;
 import com.ssafy.hoodies.util.util;
 import lombok.Data;
 

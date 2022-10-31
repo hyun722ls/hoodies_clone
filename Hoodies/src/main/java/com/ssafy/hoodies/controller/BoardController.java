@@ -1,7 +1,7 @@
 package com.ssafy.hoodies.controller;
 
 import com.ssafy.hoodies.model.dto.BoardDto;
-import com.ssafy.hoodies.model.model.Board;
+import com.ssafy.hoodies.model.entity.Board;
 import com.ssafy.hoodies.model.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;

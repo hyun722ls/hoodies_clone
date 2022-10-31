@@ -1,7 +1,7 @@
 package com.ssafy.hoodies.config.security;
 
-import com.ssafy.hoodies.model.model.Role;
-import com.ssafy.hoodies.model.model.TokenInfo;
+import com.ssafy.hoodies.model.Role;
+import com.ssafy.hoodies.model.entity.Token;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
-
     private final Key secretKey;
     private final Long accessTokenValidMillisecond = 60 * 60 * 1000L;            //  1 hour
     private final Long refreshTokenValidMillisecond = 14 * 24 * 60 * 60 * 1000L; // 2 weeks
@@ -32,22 +31,10 @@ public class JwtTokenProvider {
         this.secretKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
-//    public <T> String create(String key, T data, String subject) {
-//        String jwt = Jwts.builder().setHeaderParam("typ", "JWT").setHeaderParam("regDate", System.currentTimeMillis()).setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * EXPIRE_MINUTES)).setSubject(subject).claim(key, data).signWith(SignatureAlgorithm.HS256, this.generateKey()).compact();
-//        return jwt;
-//    }
-
     // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
-    public TokenInfo generateToken(String key, String data, String subject) {
-//        // 권한 가져오기
-//        String authorities = authentication.getAuthorities().stream()
-//                .map(GrantedAuthority::getAuthority)
-//                .collect(Collectors.joining(","));
+    public Token generateToken(String key, String data, String subject) {
+        Date now = new Date(System.currentTimeMillis() + accessTokenValidMillisecond);
 
-//        long now = (new Date()).getTime();
-        Date now =new Date(System.currentTimeMillis() + accessTokenValidMillisecond);
-
-        System.out.println(now);
         // Access Token 생성
         Date accessTokenExpiresIn = now;
         String accessToken = Jwts.builder()
@@ -58,14 +45,8 @@ public class JwtTokenProvider {
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
-//        Jwts.builder()
-//                .setHeaderParam("typ", "JWT")
-//                .setHeaderParam("regDate", System.currentTimeMillis())
-//                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * EXPIRE_MINUTES))
-//                .setSubject(subject).claim(key, data).
-//                signWith(SignatureAlgorithm.HS256, this.generateKey()).compact();
 
-        now =new Date(System.currentTimeMillis() + refreshTokenValidMillisecond);
+        now = new Date(System.currentTimeMillis() + refreshTokenValidMillisecond);
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
@@ -73,8 +54,7 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
 
-        return TokenInfo.builder()
-                .grantType("Bearer")
+        return Token.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
@@ -84,8 +64,6 @@ public class JwtTokenProvider {
     public Authentication getAuthentication(String accessToken) {
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
-
-        System.out.println("claims : " + claims.toString());
 
         if (claims.get("role") == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
@@ -98,7 +76,7 @@ public class JwtTokenProvider {
                         .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication 리턴
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
+        UserDetails principal = new User((String) claims.get("email"), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
