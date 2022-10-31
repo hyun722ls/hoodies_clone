@@ -12,7 +12,7 @@ export default function PublicRoute({
     <Route
       {...rest}
       render={(props) =>
-        isLogin() && restricted ? <Redirect to="/login" /> : <Component {...props} />
+        isLogin() && restricted ? <Redirect to="/index" /> : <Component {...props} />
       }
     />
   );
