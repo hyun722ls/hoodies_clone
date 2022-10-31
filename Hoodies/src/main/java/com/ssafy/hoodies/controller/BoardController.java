@@ -39,7 +39,7 @@ public class BoardController {
      *  게시물 CRUD  *
      ****************/
     // Create
-    @PostMapping("board")
+    @PostMapping("/board")
     @ApiOperation(value = "게시물 작성")
     public Board writeBoard(@RequestBody BoardDto dto){
         ResponseEntity<String> res = util.checkExpression(dto.getTitle(), dto.getContent(), "article");
@@ -50,7 +50,7 @@ public class BoardController {
 
     // Retrieve
     // 게시물 조회 --> https://~/api/board?page=0&size=5&sort=id.desc
-    @GetMapping("board")
+    @GetMapping("/board")
     @ApiOperation(value = "전체 게시물 조회")
     public Page<Board> findAllBoard(Pageable pageable){
         Sort sort = Sort.by("createdAt").descending();
@@ -58,7 +58,7 @@ public class BoardController {
     }
 
     // 특정 게시물 조회
-    @GetMapping("board/{id}")
+    @GetMapping("/board/{id}")
     @ApiOperation(value = "특정 게시물 조회")
     public Board findCertainBoard(
             @ApiParam(
@@ -71,7 +71,7 @@ public class BoardController {
     }
 
     // Update
-    @PutMapping("board/{id}")
+    @PutMapping("/board/{id}")
     @ApiOperation(value = "특정 게시물 수정")
     public JSONObject updateBoard(@RequestBody BoardDto dto,
                             @ApiParam(
@@ -96,7 +96,7 @@ public class BoardController {
     }
 
     // Delete
-    @DeleteMapping("board/{id}")
+    @DeleteMapping("/board/{id}")
     @ApiOperation(value = "특정 게시물 삭제")
     public JSONObject deleteBoard(
             @ApiParam(
@@ -116,14 +116,14 @@ public class BoardController {
     
     // 게시물 10개 조회
     // 최근 게시물 조회
-    @GetMapping("preview/free")
+    @GetMapping("/preview/free")
     @ApiOperation(value = "최근 게시물 10개 조회")
     public List<Board> findRecentBoard(){
         return boardRepository.findBy(PageRequest.of(0, 10, Sort.by("createdAt").descending()));
     }
     
     // 인기 게시물 조회
-    @GetMapping("preview/popular")
+    @GetMapping("/preview/popular")
     @ApiOperation(value = "인기 게시물 10개 조회")
     public List<Board> findPopularBoard(){
         return boardRepository.findBy(PageRequest.of(0, 10, Sort.by("like").descending()
@@ -134,7 +134,7 @@ public class BoardController {
      * 댓글 CRUD *
      ************/
     // 댓글 등록
-    @PostMapping("board/{id}/comment")
+    @PostMapping("/board/{id}/comment")
     @ApiOperation(value = "댓글 등록")
     public JSONObject writeComment(@RequestBody CommentDto dto, @PathVariable String id){
         ResponseEntity<String> res = util.checkExpression("", dto.getContent(), "comment");
@@ -153,7 +153,7 @@ public class BoardController {
     }
 
     // 댓글 수정
-    @PutMapping("board/{bid}/comment/{cid}")
+    @PutMapping("/board/{bid}/comment/{cid}")
     @ApiOperation(value = "댓글 수정")
     public JSONObject updateComment(@RequestBody CommentDto dto, @PathVariable String bid, @PathVariable String cid){
         ResponseEntity<String> res = util.checkExpression("", dto.getContent(), "comment");
@@ -174,7 +174,7 @@ public class BoardController {
     }
 
     // 댓글 삭제
-    @DeleteMapping("board/{bid}/comment/{cid}")
+    @DeleteMapping("/board/{bid}/comment/{cid}")
     @ApiOperation(value = "댓글 삭제")
     public JSONObject deleteComment(@PathVariable String bid, @PathVariable String cid){
         Query commentQuery = new Query();
