@@ -1,12 +1,16 @@
 package com.ssafy.hoodies.controller;
 
-import com.ssafy.hoodies.model.model.User;
-import com.ssafy.hoodies.model.model.UserAuth;
+import com.ssafy.hoodies.config.security.JwtTokenProvider;
+import com.ssafy.hoodies.model.entity.User;
+import com.ssafy.hoodies.model.entity.UserAuth;
+import com.ssafy.hoodies.model.repository.TokenRepository;
 import com.ssafy.hoodies.model.repository.UserAuthRepository;
 import com.ssafy.hoodies.model.repository.UserRepository;
-import com.ssafy.hoodies.model.service.JwtService;
 import com.ssafy.hoodies.model.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -14,13 +18,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
 public class UserController {
     private static final String SUCCESS = "200";
     private static final String FAIL = "403";
-    private final JwtService jwtService;
     private final UserService userService;
     private final UserRepository userRepository;
     private final UserAuthRepository userAuthRepository;
@@ -56,7 +60,7 @@ public class UserController {
         }
 
         Timestamp expireTime = new Timestamp(System.currentTimeMillis());
-        expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
+        expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(300));
         userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).authflag(false).build());
         resultMap.put("statusCode", SUCCESS);
 
@@ -97,73 +101,6 @@ public class UserController {
 
         resultMap.put("statusCode", SUCCESS);
         return resultMap;
-    }
-
-    @PostMapping
-    public Map<String, Object> signup(@RequestBody User user) {
-        Map<String, Object> resultMap = new HashMap<>();
-
-        // 기존 user가 있는 경우
-        if (userRepository.findById(user.getEmail()).isPresent()) {
-            resultMap.put("statusCode", FAIL);
-            return resultMap;
-        }
-
-        try {
-            UserAuth userAuth = userAuthRepository.findById(user.getEmail()).get();
-
-            // 인증되지 않은 경우
-            if (!userAuth.isAuthflag()) {
-                resultMap.put("statusCode", FAIL);
-                return resultMap;
-            }
-
-            String salt = userService.getRandomGenerateString(8);
-            String encryptPassword = userService.getEncryptPassword(user.getPassword(), salt);
-            if (encryptPassword == null) {
-                resultMap.put("statusCode", FAIL);
-                return resultMap;
-            }
-
-            user.setSalt(salt);
-            user.setPassword(encryptPassword);
-            userRepository.save(user);
-
-            String token = jwtService.create("email", user.getEmail(), "token");
-            resultMap.put("nickname", user.getNickname());
-            resultMap.put("token", token);
-            resultMap.put("statusCode", SUCCESS);
-
-            return resultMap;
-        } catch (Exception e) {
-            resultMap.put("statusCode", FAIL);
-            return resultMap;
-        }
-    }
-
-    @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody User user) {
-        Map<String, Object> resultMap = new HashMap<>();
-        try {
-            User getUser = userRepository.findById(user.getEmail()).get();
-
-            // 비밀번호가 다른 경우
-            String hashPassword = userService.getEncryptPassword(user.getPassword(), getUser.getSalt());
-            if (!hashPassword.equals(getUser.getPassword())) {
-                resultMap.put("statusCode", FAIL);
-                return resultMap;
-            }
-
-            String token = jwtService.create("email", user.getEmail(), "token");
-            resultMap.put("nickname", getUser.getNickname());
-            resultMap.put("token", token);
-            resultMap.put("statusCode", SUCCESS);
-
-            return resultMap;
-        } catch (Exception e) {
-            resultMap.put("statusCode", FAIL);
-            return resultMap;
-        }
     }
 
     @GetMapping("/resetPassword/{email}")
@@ -235,17 +172,17 @@ public class UserController {
 
             resultMap.put("password", password);
             resultMap.put("statusCode", SUCCESS);
-
-            return resultMap;
         } catch (Exception e) {
             resultMap.put("statusCode", FAIL);
-            return resultMap;
         }
+        return resultMap;
     }
 
     @PutMapping("/nickname")
     public Map<String, Object> updateNickname(@RequestBody Map<String, String> map) {
-        String email = jwtService.getUserEmail();
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
         String nickname = map.getOrDefault("nickname", "");
 
         Map<String, Object> resultMap = new HashMap<>();
@@ -263,17 +200,17 @@ public class UserController {
             userRepository.save(user);
 
             resultMap.put("statusCode", SUCCESS);
-
-            return resultMap;
         } catch (Exception e) {
             resultMap.put("statusCode", FAIL);
-            return resultMap;
         }
+        return resultMap;
     }
 
     @PutMapping("/password")
     public Map<String, Object> updatePassword(@RequestBody Map<String, String> map) {
-        String email = jwtService.getUserEmail();
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
         String password = map.getOrDefault("password", "");
 
         Map<String, Object> resultMap = new HashMap<>();
@@ -294,11 +231,10 @@ public class UserController {
             userRepository.save(user);
 
             resultMap.put("statusCode", SUCCESS);
-
-            return resultMap;
         } catch (Exception e) {
             resultMap.put("statusCode", FAIL);
-            return resultMap;
         }
+        return resultMap;
     }
+
 }

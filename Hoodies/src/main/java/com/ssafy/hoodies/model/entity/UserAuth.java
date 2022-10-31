@@ -1,4 +1,4 @@
-package com.ssafy.hoodies.model.model;
+package com.ssafy.hoodies.model.entity;
 
 import lombok.Builder;
 import lombok.Data;

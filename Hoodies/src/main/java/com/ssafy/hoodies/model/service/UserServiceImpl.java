@@ -142,7 +142,6 @@ public class UserServiceImpl implements UserService {
 
             String authcode = getRandomGenerateString(8);
             message.append("```\n").append(authcode).append("\n```");
-            System.out.println(message);
 
             sendInfo.put("message", message.toString());
             sendData = sendInfo.toString();
@@ -151,7 +150,7 @@ public class UserServiceImpl implements UserService {
             // response 수신
             retData = (JSONObject) response.get("data");
             String response_message = (String) retData.get("message");
-            System.out.println(response_message);
+
             if (message.toString().equals(response_message))
                 return authcode;
             else
