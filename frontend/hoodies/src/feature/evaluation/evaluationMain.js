@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
 import {
   CATEGORY_LIST,
   MAPPING_FLAG,
@@ -7,10 +9,12 @@ import {
 } from "../../common/data/dummyData";
 import Header from "../../common/UI/header/header";
 import classes from "./evaluation.module.css";
+import { Box } from "@mui/material";
 
 const EvaluationMain = () => {
   const [selectedData, setSelectedData] = useState([]);
   const [data, setData] = useState([]);
+  const [selectedTab, setSelectedTab] = useState(1);
   const history = useHistory();
 
   useEffect(() => {
@@ -22,15 +26,17 @@ const EvaluationMain = () => {
     history.push({ pathname: "/pro/detail", state: staff });
   };
 
-  const handleDropProduct = (event) => {
+  const handleDropProduct = (event, newValue) => {
     event.preventDefault();
-    const { value } = event.target;
-    const flag = MAPPING_FLAG[value];
-    console.log(flag);
+    const { value } = newValue;
+    console.log('newvalue: ', newValue)
+    const flag = newValue;
+    setSelectedTab(newValue)
+    console.log('selectedTab:',selectedTab)
+    console.log('flag:',flag);
     if (flag === 0) {
       setSelectedData(data);
     } else {
-      console.log("이리로감?");
       const tmpData = data.filter((el) => el.flag === flag);
       setSelectedData(tmpData);
     }
@@ -40,6 +46,13 @@ const EvaluationMain = () => {
   return (
     <div>
       <Header />
+      <Box sx={{borderBottom: 1, borderColor:'gray'}}>
+        <Tabs sx={{fontFamily:'IBM Sans Plex KR', color:'red'}} value={selectedTab} onChange={handleDropProduct}>
+          {CATEGORY_LIST.map((option) => (
+            <Tab key={option.value} label={option.value} value={option.id}></Tab>
+          ))}
+        </Tabs>
+      </Box>
       <h4>컨설턴트, 프로 평가 메인페이지</h4>
       <select onChange={handleDropProduct}>
         {CATEGORY_LIST.map((option) => (
