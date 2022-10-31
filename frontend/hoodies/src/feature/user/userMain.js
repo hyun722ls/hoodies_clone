@@ -48,7 +48,7 @@ const UserMain = () => {
     const [email, setEmail] = useState('')
     const [nicknameModalOpen, setNicknameModalOpen] = useState(false);
     const [passwordModalOpen, setPasswordModalOpen] = useState(false);
-    // const [originalPassword, setOriginalPassword] = useState('')
+    const [originalPassword, setOriginalPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [isNewNicknameDuplicated, setIsNewNicknameDuplicated] = useState(false)
@@ -83,7 +83,7 @@ const UserMain = () => {
 
     const closePasswordModal = () => {
         setConfirmPassword('')
-        // setOriginalPassword('')
+        setOriginalPassword('')
         setNewPassword('')
         setIsPasswordDuplicated(false)
         setPasswordModalOpen(false)
@@ -129,10 +129,10 @@ const UserMain = () => {
         }
     }
 
-    // const originiPasswordChangeHandler = (event) => {
-    //   event.preventDefault()
-    //   setOriginalPassword(event.target.value)
-    // }
+    const originiPasswordChangeHandler = (event) => {
+      event.preventDefault()
+      setOriginalPassword(event.target.value)
+    }
 
     const newPasswordChangeHandler = (event) => {
         event.preventDefault()
@@ -155,7 +155,7 @@ const UserMain = () => {
             if (response.statusCode === '200') {
                 setConfirmPassword('')
                 setNewPassword('')
-                // setOriginalPassword('')
+                setOriginalPassword('')
                 alert('변경성공')
             } else {
                 alert('변경실패')
@@ -188,14 +188,14 @@ const UserMain = () => {
 
     let modalPasswordForm = (
         <form onSubmit={passwordModifyHandler}>
-            {/* <p>기존 패스워드</p>
-      <div>
-        <input
-          type="password"
-          value={originalPassword}
-          onChange={originiPasswordChangeHandler}
-        />
-      </div> */}
+            <span>기존 패스워드</span>
+            <div>
+                <input
+                type="password"
+                value={originalPassword}
+                onChange={originiPasswordChangeHandler}
+                />
+            </div>
             <span>변경 패스워드</span>
             <div>
                 <input
