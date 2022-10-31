@@ -25,7 +25,7 @@ import java.util.Map;
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/user")
+@RequestMapping("user")
 public class SignController {
     private static final String SUCCESS = "200";
     private static final String FAIL = "403";
