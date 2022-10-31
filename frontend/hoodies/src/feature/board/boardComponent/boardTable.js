@@ -1,31 +1,16 @@
 import { useHistory } from "react-router-dom";
+import { blockArticle } from "../../../common/refineData/blockArticle";
 import classes from "./boardTable.module.css";
+import {timeConventer} from "../../../common/refineData/refineTime"
 
 const BoardTable = (props) => {
   const history = useHistory();
 
   const detailPageHandler = (article) => {
-    history.push({ pathname: "/board/free/detail", state: article });
+    history.push({ pathname: "/board/free/detail", state: article._id });
   };
 
 
-  const blockingArticle = (article, tmpCategory) => {
-    const category = JSON.parse(tmpCategory)
-    console.log(category['titleResuit'])
-    if (category.titleResuit === 'clean' && category.contentResult === 'clean'){
-      return article.title
-    } else if(category.titleResuit !== 'clean' && category.contentResult === 'clean'){
-      return `제목에서 ${category.titleResuit}가 감지되었습니다.`
-    } else if(category.titleResuit === 'clean' && category.contentResult !== 'clean'){
-      if (category.contentResult === '악플/욕설'){
-        return '게시글에서 욕설이 감지되었습니다.'
-      } else{
-        return `게시글에서 ${category.contentResult} 혐오 표현이 감지되었습니다.`
-      }
-    } else {
-      return `제목에서 ${category.titleResuit} 혐오 표현이, 게시글에서 ${category.contentResult} 혐오 표현이 감지되었습니다.`
-    }   
-  }
   return props.articles.length ? (
     <div>
       <table className={classes.table}>
@@ -47,9 +32,9 @@ const BoardTable = (props) => {
                 }}
                 key={article._id}
               >
-                <td>{blockingArticle(article, article.category)}</td>
+                <td>{blockArticle(article, article.category)}</td>
                 <td>{article.writer}</td>
-                <td>{article.createdAt}</td>
+                <td>{timeConventer(article.createdAt)}</td>
                 <td>{article.hit}</td>
                 <td>{article.like}</td>
               </tr>

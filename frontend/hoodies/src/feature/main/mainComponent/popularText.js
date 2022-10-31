@@ -1,6 +1,8 @@
 import { useHistory } from "react-router-dom";
 import classes from "./articles.module.css";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
+import { blockArticle } from "../../../common/refineData/blockArticle";
+import { timeConventer } from "../../../common/refineData/refineTime";
 
 const PopularText = (props) => {
   const history = useHistory();
@@ -8,7 +10,7 @@ const PopularText = (props) => {
     history.push("/board/free");
   };
   const detailPageHandler = (article) => {
-    history.push({ pathname: "/board/free/detail", state: article });
+    history.push({ pathname: "/board/free/detail", state: article._id });
   };
   return props.popularText.length ? (
     <div>
@@ -39,9 +41,9 @@ const PopularText = (props) => {
                 }}
                 key={article._id}
               >
-                <td>{article.title}</td>
+                <td>{blockArticle(article, article.category)}</td>
                 <td>{article.writer}</td>
-                <td>{article.createdAt}</td>
+                <td>{timeConventer(article.createdAt)}</td>
                 <td>{article.like}</td>
               </tr>
             );
