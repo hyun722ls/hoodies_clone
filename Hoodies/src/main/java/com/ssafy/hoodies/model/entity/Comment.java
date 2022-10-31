@@ -1,29 +1,24 @@
 package com.ssafy.hoodies.model.entity;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.sql.Timestamp;
+import java.util.List;
 
-@NoArgsConstructor
 @Data
-@Document(collection = "comment")
+@Builder
 public class Comment {
-    @Id
     private String _id;
 
-    private String userName;
+    private String writer;
+
     private String content;
-    private Timestamp timestamp;
 
-    @Builder
-    public Comment(String userName, String content){
-        this.userName = userName;
-        this.content = content;
-        this.timestamp = new Timestamp(System.currentTimeMillis());
-    }
+    private String createdAt;
 
+    private String modifiedAt;
+
+    private List<Comment> replies;
+
+    private String category;
 }

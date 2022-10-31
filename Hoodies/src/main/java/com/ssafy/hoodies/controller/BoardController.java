@@ -1,68 +1,195 @@
 package com.ssafy.hoodies.controller;
 
+import com.mongodb.client.result.UpdateResult;
 import com.ssafy.hoodies.model.dto.BoardDto;
+import com.ssafy.hoodies.model.dto.CommentDto;
 import com.ssafy.hoodies.model.entity.Board;
+import com.ssafy.hoodies.model.entity.Comment;
 import com.ssafy.hoodies.model.repository.BoardRepository;
+import com.ssafy.hoodies.util.util;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONObject;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@Api(tags = {"게시판 API"})
+@CrossOrigin(origins = "*")
 public class BoardController {
 
     private final BoardRepository boardRepository;
+    private final MongoTemplate mongoTemplate;
+//    private static final int PAGE_SIZE = 10; // 한 페이지의 게시물 수
 
-    // 게시물 CRUD
-    // create
-    @PostMapping("/board")
-    public Board save(@RequestBody BoardDto dto){
-        return boardRepository.save(dto.toEntity("save"));
+    /****************
+     *  게시물 CRUD  *
+     ****************/
+    // Create
+    @PostMapping("board")
+    @ApiOperation(value = "게시물 작성")
+    public Board writeBoard(@RequestBody BoardDto dto){
+        ResponseEntity<String> res = util.checkExpression(dto.getTitle(), dto.getContent(), "article");
+        Board board = dto.toEntity();
+        board.setCategory(res.getBody().trim());
+        return boardRepository.save(board);
     }
 
-    // retrieve
-    // 전체 게시물 조회 --> Pagenation 필요 --> PagingAndSortingRepository 참고
-    @GetMapping("/board")
-    public List<Board> findAll(){
-        return boardRepository.findAll();
+    // Retrieve
+    // 게시물 조회 --> https://~/api/board?page=0&size=5&sort=id.desc
+    @GetMapping("board")
+    @ApiOperation(value = "전체 게시물 조회")
+    public Page<Board> findAllBoard(Pageable pageable){
+        Sort sort = Sort.by("createdAt").descending();
+        return boardRepository.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort));
     }
 
     // 특정 게시물 조회
-    @GetMapping("/board/{id}")
-    public Board findById(@PathVariable String id){
+    @GetMapping("board/{id}")
+    @ApiOperation(value = "특정 게시물 조회")
+    public Board findCertainBoard(
+            @ApiParam(
+            name =  "id",
+            type = "String",
+            value = "게시물의 DB상 id",
+            required = true)
+            @PathVariable String id){
         return boardRepository.findById(id).get();
     }
 
-    // update
-    @PutMapping("/board/{id}")
-    public void update(@RequestBody BoardDto dto, @PathVariable String id){
-        Board board = dto.toEntity("update");
-        board.set_id(id);
-        boardRepository.save(board);
+    // Update
+    @PutMapping("board/{id}")
+    @ApiOperation(value = "특정 게시물 수정")
+    public JSONObject updateBoard(@RequestBody BoardDto dto,
+                            @ApiParam(
+                                    name =  "id",
+                                    type = "String",
+                                    value = "게시물의 DB상 id",
+                                    required = true)
+                            @PathVariable String id){
+        ResponseEntity<String> res = util.checkExpression(dto.getTitle(), dto.getContent(), "article");
+        Query boardQuery = new Query(Criteria.where("_id").is(id));
+        Update boardUpdate = new Update();
+        boardUpdate.set("title", dto.getTitle());
+        boardUpdate.set("content", dto.getContent());
+        boardUpdate.set("category", res.getBody().trim());
+        boardUpdate.set("modifiedAt", util.getTimeStamp());
+        UpdateResult ur = mongoTemplate.updateFirst(boardQuery, boardUpdate, "board");
+
+        int statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
+        JSONObject json = new JSONObject();
+        json.put("statusCode", statusCode);
+        return json;
     }
 
-    // delete
-    @DeleteMapping("/board/{id}")
-    public void deleteById(@PathVariable String id){
+    // Delete
+    @DeleteMapping("board/{id}")
+    @ApiOperation(value = "특정 게시물 삭제")
+    public JSONObject deleteBoard(
+            @ApiParam(
+                    name =  "id",
+                    type = "String",
+                    value = "게시물의 DB상 id",
+                    required = true)
+            @PathVariable String id){
+        boolean isExist = boardRepository.existsById(id);
         boardRepository.deleteById(id);
-    }
 
+        int statusCode = isExist ? 200 : 400;
+        JSONObject json = new JSONObject();
+        json.put("statusCode", statusCode);
+        return json;
+    }
     
     // 게시물 10개 조회
     // 최근 게시물 조회
-    @GetMapping("/preview/free")
-    public List<Board> findByRecent(){
-        return boardRepository.findBy(PageRequest.of(0, 10, Sort.by("_id").descending()));
+    @GetMapping("preview/free")
+    @ApiOperation(value = "최근 게시물 10개 조회")
+    public List<Board> findRecentBoard(){
+        return boardRepository.findBy(PageRequest.of(0, 10, Sort.by("createdAt").descending()));
     }
     
     // 인기 게시물 조회
-    @GetMapping("/preview/popular")
-    public List<Board> findByPopular(){
+    @GetMapping("preview/popular")
+    @ApiOperation(value = "인기 게시물 10개 조회")
+    public List<Board> findPopularBoard(){
         return boardRepository.findBy(PageRequest.of(0, 10, Sort.by("like").descending()
-                                                                 .and(Sort.by("_id").descending())
+                                                                 .and(Sort.by("createdAt").descending())
                                     ));
     }
+    /************
+     * 댓글 CRUD *
+     ************/
+    // 댓글 등록
+    @PostMapping("board/{id}/comment")
+    @ApiOperation(value = "댓글 등록")
+    public JSONObject writeComment(@RequestBody CommentDto dto, @PathVariable String id){
+        ResponseEntity<String> res = util.checkExpression("", dto.getContent(), "comment");
+        Comment comment = dto.toEntity();
+        comment.setCategory(res.getBody().trim());
+        Query commentQuery = new Query(Criteria.where("_id").is(id));
+        Update commentUpdate = new Update();
+        commentUpdate.push("comments", comment);
+
+        UpdateResult ur = mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
+
+        int statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
+        JSONObject json = new JSONObject();
+        json.put("statusCode", statusCode);
+        return json;
+    }
+
+    // 댓글 수정
+    @PutMapping("board/{bid}/comment/{cid}")
+    @ApiOperation(value = "댓글 수정")
+    public JSONObject updateComment(@RequestBody CommentDto dto, @PathVariable String bid, @PathVariable String cid){
+        ResponseEntity<String> res = util.checkExpression("", dto.getContent(), "comment");
+        Query commentQuery = new Query();
+        commentQuery.addCriteria(Criteria.where("_id").is(bid));
+        commentQuery.addCriteria(Criteria.where("comments").elemMatch(Criteria.where("_id").is(cid)));
+        Update commentUpdate = new Update();
+        commentUpdate.set("comments.$.content", dto.getContent());
+        commentUpdate.set("comments.$.modifiedAt", util.getTimeStamp());
+        commentUpdate.set("comments.$.category", res.getBody().trim());
+
+        UpdateResult ur = mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
+
+        int statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
+        JSONObject json = new JSONObject();
+        json.put("statusCode", statusCode);
+        return json;
+    }
+
+    // 댓글 삭제
+    @DeleteMapping("board/{bid}/comment/{cid}")
+    @ApiOperation(value = "댓글 삭제")
+    public JSONObject deleteComment(@PathVariable String bid, @PathVariable String cid){
+        Query commentQuery = new Query();
+        commentQuery.addCriteria(Criteria.where("_id").is(bid));
+        commentQuery.addCriteria(Criteria.where("comments").elemMatch(Criteria.where("_id").is(cid)));
+        Update commentUpdate = new Update();
+        commentUpdate.pull("comments", Query.query(Criteria.where("_id").is(cid)));
+
+        UpdateResult ur = mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
+
+        int statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
+        JSONObject json = new JSONObject();
+        json.put("statusCode", statusCode);
+        return json;
+    }
+
+
 }
