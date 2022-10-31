@@ -1,10 +1,9 @@
 package com.ssafy.hoodies.controller;
 
 import com.ssafy.hoodies.config.security.JwtTokenProvider;
-import com.ssafy.hoodies.model.Role;
-import com.ssafy.hoodies.model.entity.Token;
 import com.ssafy.hoodies.model.entity.User;
 import com.ssafy.hoodies.model.entity.UserAuth;
+import com.ssafy.hoodies.model.repository.TokenRepository;
 import com.ssafy.hoodies.model.repository.UserAuthRepository;
 import com.ssafy.hoodies.model.repository.UserRepository;
 import com.ssafy.hoodies.model.service.UserService;
@@ -14,20 +13,18 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
 public class UserController {
     private static final String SUCCESS = "200";
     private static final String FAIL = "403";
-    private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
     private final UserRepository userRepository;
     private final UserAuthRepository userAuthRepository;
@@ -106,97 +103,6 @@ public class UserController {
         return resultMap;
     }
 
-    @PostMapping
-    public Map<String, Object> signup(@RequestBody User user, HttpServletResponse response) {
-        Map<String, Object> resultMap = new HashMap<>();
-
-        // 기존 user가 있는 경우
-        if (userRepository.findById(user.getEmail()).isPresent()) {
-            resultMap.put("statusCode", FAIL);
-            return resultMap;
-        }
-
-        try {
-            UserAuth userAuth = userAuthRepository.findById(user.getEmail()).get();
-
-            // 인증되지 않은 경우
-            if (!userAuth.isAuthflag()) {
-                resultMap.put("statusCode", FAIL);
-                return resultMap;
-            }
-
-            String salt = userService.getRandomGenerateString(8);
-            String encryptPassword = userService.getEncryptPassword(user.getPassword(), salt);
-            if (encryptPassword == null) {
-                resultMap.put("statusCode", FAIL);
-                return resultMap;
-            }
-
-            user.setSalt(salt);
-            user.setPassword(encryptPassword);
-            user.setRole(Role.ROLE_USER);
-            userRepository.save(user);
-
-            Token tokenInfo = jwtTokenProvider.generateToken("email", user.getEmail(), "token");
-            String accessToken = tokenInfo.getAccessToken();
-            String refreshToken = tokenInfo.getRefreshToken();
-
-            // refresh token response 설정
-            Cookie cookie = new Cookie("refreshToken", refreshToken);
-            cookie.setMaxAge(14 * 24 * 60 * 60);
-            cookie.setSecure(true);
-            cookie.setHttpOnly(true);
-            cookie.setPath("/");
-            response.addCookie(cookie);
-
-            resultMap.put("nickname", user.getNickname());
-            resultMap.put("accessToken", accessToken);
-            resultMap.put("statusCode", SUCCESS);
-
-            return resultMap;
-        } catch (Exception e) {
-            resultMap.put("statusCode", FAIL);
-            return resultMap;
-        }
-    }
-
-    @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody User user, HttpServletResponse response) {
-        Map<String, Object> resultMap = new HashMap<>();
-
-        try {
-            User getUser = userRepository.findById(user.getEmail()).get();
-
-            // 비밀번호가 다른 경우
-            String hashPassword = userService.getEncryptPassword(user.getPassword(), getUser.getSalt());
-            if (!hashPassword.equals(getUser.getPassword())) {
-                resultMap.put("statusCode", FAIL);
-                return resultMap;
-            }
-
-            Token tokenInfo = jwtTokenProvider.generateToken("email", user.getEmail(), "token");
-            String accessToken = tokenInfo.getAccessToken();
-            String refreshToken = tokenInfo.getRefreshToken();
-
-            // refresh token response 설정
-            Cookie cookie = new Cookie("refreshToken", refreshToken);
-            cookie.setMaxAge(14 * 24 * 60 * 60);
-            cookie.setSecure(true);
-            cookie.setHttpOnly(true);
-            cookie.setPath("/");
-            response.addCookie(cookie);
-
-            resultMap.put("nickname", getUser.getNickname());
-            resultMap.put("accessToken", accessToken);
-            resultMap.put("statusCode", SUCCESS);
-
-            return resultMap;
-        } catch (Exception e) {
-            resultMap.put("statusCode", FAIL);
-            return resultMap;
-        }
-    }
-
     @GetMapping("/resetPassword/{email}")
     public Map<String, Object> sendResetPassword(@PathVariable String email) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -266,12 +172,10 @@ public class UserController {
 
             resultMap.put("password", password);
             resultMap.put("statusCode", SUCCESS);
-
-            return resultMap;
         } catch (Exception e) {
             resultMap.put("statusCode", FAIL);
-            return resultMap;
         }
+        return resultMap;
     }
 
     @PutMapping("/nickname")
@@ -296,12 +200,10 @@ public class UserController {
             userRepository.save(user);
 
             resultMap.put("statusCode", SUCCESS);
-
-            return resultMap;
         } catch (Exception e) {
             resultMap.put("statusCode", FAIL);
-            return resultMap;
         }
+        return resultMap;
     }
 
     @PutMapping("/password")
@@ -329,12 +231,10 @@ public class UserController {
             userRepository.save(user);
 
             resultMap.put("statusCode", SUCCESS);
-
-            return resultMap;
         } catch (Exception e) {
             resultMap.put("statusCode", FAIL);
-            return resultMap;
         }
+        return resultMap;
     }
 
 }

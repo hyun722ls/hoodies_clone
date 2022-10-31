@@ -23,8 +23,10 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenProvider {
     private final Key secretKey;
-    private final Long accessTokenValidMillisecond = 60 * 60 * 1000L;            //  1 hour
-    private final Long refreshTokenValidMillisecond = 14 * 24 * 60 * 60 * 1000L; // 2 weeks
+    //    private final Long accessTokenValidMillisecond = 60 * 60 * 1000L;            //  1 hour
+//    private final Long refreshTokenValidMillisecond = 14 * 24 * 60 * 60 * 1000L; // 2 weeks
+    private final Long accessTokenValidMillisecond = 3 * 60 * 1000L;            //  1 hour
+    private final Long refreshTokenValidMillisecond = 5 * 60 * 1000L; // 2 weeks
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
@@ -33,6 +35,24 @@ public class JwtTokenProvider {
 
     // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
     public Token generateToken(String key, String data, String subject) {
+        Date now = new Date(System.currentTimeMillis() + refreshTokenValidMillisecond);
+
+        // Access Token 생성
+        String accessToken = generateAccessToken(key, data, subject);
+
+        // Refresh Token 생성
+        String refreshToken = Jwts.builder()
+                .setExpiration(now)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+
+        return Token.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    public String generateAccessToken(String key, String data, String subject) {
         Date now = new Date(System.currentTimeMillis() + accessTokenValidMillisecond);
 
         // Access Token 생성
@@ -46,18 +66,7 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
 
-        now = new Date(System.currentTimeMillis() + refreshTokenValidMillisecond);
-
-        // Refresh Token 생성
-        String refreshToken = Jwts.builder()
-                .setExpiration(now)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
-
-        return Token.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
+        return accessToken;
     }
 
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
@@ -94,6 +103,7 @@ public class JwtTokenProvider {
         } catch (IllegalArgumentException e) {
             System.out.println("JWT claims string is empty.");
         }
+
         return false;
     }
 
