@@ -151,7 +151,7 @@ const UserMain = () => {
     const passwordModifyHandler = async (event) => {
         event.preventDefault()
         if (newPassword === confirmPassword) {
-            const response = await updatePassword(newPassword)
+            const response = await updatePassword({originalPassword,newPassword})
             if (response.statusCode === '200') {
                 setConfirmPassword('')
                 setNewPassword('')
