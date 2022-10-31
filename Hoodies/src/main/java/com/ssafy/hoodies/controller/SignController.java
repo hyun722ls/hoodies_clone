@@ -75,7 +75,7 @@ public class SignController {
             // refresh token response 설정
             Cookie cookie = new Cookie("refreshToken", refreshToken);
 //            cookie.setMaxAge(14 * 24 * 60 * 60);
-            cookie.setMaxAge(1 * 60);
+            cookie.setMaxAge(14 * 60 * 60);
             
             cookie.setSecure(true);
             cookie.setHttpOnly(true);
@@ -141,7 +141,9 @@ public class SignController {
             Authentication authentication = context.getAuthentication();
             String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
             Token tokenInfo = tokenRepository.findById(email).get();
-
+            System.out.println(refreshToken);
+            System.out.println(jwtTokenProvider.validateToken(refreshToken));
+            
             // 토큰이 다른 경우
             if (!tokenInfo.getRefreshToken().equals(refreshToken)) {
                 resultMap.put("statusCode", FAIL);
