@@ -1,10 +1,12 @@
 import { useHistory } from "react-router-dom";
+import { blockArticle } from "../../../common/refineData/blockArticle";
 import classes from "./popularTexts.module.css";
 const PopularTexts = (props) => {
   const history = useHistory();
   const detailPageHandler = (article) => {
-    history.push({ pathname: "/board/free/detail", state: article });
+    history.push({ pathname: "/board/free/detail", state: article._id });
   };
+ 
   return props.popularTexts.length ? (
     <div>
       <div>
@@ -13,8 +15,9 @@ const PopularTexts = (props) => {
       <table className={classes.table}>
         <thead>
           <tr>
-            <th>번호</th>
+            
             <th>제목</th>
+            <th>작성자</th>
           </tr>
         </thead>
         <tbody>
@@ -24,10 +27,10 @@ const PopularTexts = (props) => {
                 onClick={() => {
                   detailPageHandler(article);
                 }}
-                key={article.id}
+                key={article._id}
               >
-                <td>{article.id}</td>
-                <td>{article.title}</td>
+                <td>{blockArticle(article, article.category)}</td>
+                <td>{article.writer}</td>
               </tr>
             );
           })}

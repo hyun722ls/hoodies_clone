@@ -1,8 +1,15 @@
 import classes from "./header.module.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Fragment } from "react";
 
 const Header = () => {
+  const history = useHistory()
+  const logout = (event) => {
+    event.preventDefault()
+    localStorage.clear()
+    history.push('/login')
+  }
+
   return (
     <Fragment>
       <div className={classes.navbar__wrapper}>
@@ -36,9 +43,9 @@ const Header = () => {
             Create
           </Link> */}
           <li>
-            <Link to="/login" className={classes.navbar__item}>
+            <span onClick={logout} className={classes.navbar__item}>
               Logout
-            </Link>
+            </span>
           </li>
         </ul>
       </nav>
