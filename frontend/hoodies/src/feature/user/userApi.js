@@ -1,9 +1,12 @@
 import axios from "axios"
 import { API_URL } from "../../common/api/url"
+import axios1 from "../../common/customAxios/customAxios"
 
 export const checkNickname = async (nickname) => {
     try {
-        const response = await axios.get(API_URL + `user/check/${nickname}`)
+        const response = await axios1.get(API_URL + `user/check/${nickname}`,  {headers: {
+            'accessToken': localStorage.getItem('token')
+        }})
         return response.data
     } catch (err) {
         console.log(err)
@@ -12,12 +15,12 @@ export const checkNickname = async (nickname) => {
 
 export const updateNickname = async (nickname) => {
     try {
-        const response = await axios.put(API_URL + 'user/nickname', {
+        const response = await axios1.put(API_URL + 'user/nickname', {
                 nickname
             },
             {
                 headers: {
-                    token : localStorage.getItem('token')
+                    'accesstoken' : localStorage.getItem('token')
                 }
             })
         return response.data
@@ -28,7 +31,9 @@ export const updateNickname = async (nickname) => {
 
 export const updatePassword = async (data) => {
     try {
-        const response = await axios.put(API_URL + 'user/password', data)
+        const response = await axios1.put(API_URL + 'user/password', data,  {headers: {
+            'accessToken': localStorage.getItem('token')
+        }})
         return response.data
     } catch (err) {
         console.log(err)

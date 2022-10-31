@@ -6,7 +6,7 @@ export default function PrivateRoute({ component: Component, ...rest }) {
     <Route
       {...rest}
       render={(props) =>
-        isLogin() ? <Component {...props} /> : <Redirect to="/" />
+        isLogin() ? <Component {...props} /> : <Redirect to="/login" />
       }
     />
   );
