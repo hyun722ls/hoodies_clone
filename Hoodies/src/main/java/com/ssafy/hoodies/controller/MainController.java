@@ -1,15 +1,15 @@
-package com.ssafy.hoodies.controller;
+// package com.ssafy.hoodies.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+// import org.springframework.stereotype.Controller;
+// import org.springframework.web.bind.annotation.GetMapping;
+// import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-public class MainController {
+// @RestController
+// public class MainController {
 
-    @GetMapping("/")
-    public String index() throws Exception {
-        return "index";
-    }
+//     @GetMapping("/")
+//     public String index() throws Exception {
+//         return "index";
+//     }
 
-}
+// }
