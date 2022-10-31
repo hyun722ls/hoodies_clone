@@ -40,7 +40,7 @@ axios1.interceptors.response.use(
         console.log("reissue 전");
         const token = localStorage.getItem("token");
         axios
-          .get(API_URL + "user/reIssue", { withCredentials: true })
+          .get(API_URL + "user/reIssue")
           .then((response) => {
             console.log("reissue 정상");
             localStorage.setItem("token", response.data.accessToken);
