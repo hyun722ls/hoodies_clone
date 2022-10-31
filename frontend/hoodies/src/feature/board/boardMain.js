@@ -9,6 +9,30 @@ import { useHistory } from "react-router-dom";
 import Pagination from "react-js-pagination";
 import { fetchArticles, fetchPopularArticles } from "./boardAPI";
 import "./boardMain.css";
+import styled from "styled-components";
+
+const Container = styled.div`
+  position: relative;
+  margin: 0 auto 24px auto;
+  width: 1180px;
+`
+const Wrap = styled.div`
+  position: relative;
+  float: none;
+  left: 24px;
+  margin-top: 24px;
+  width: 780px;
+`
+const Title = styled(Wrap)`
+  margin-bottom: -20px;
+  padding: 16px;
+  border: 1px solid #EAE3D2;
+  box-sizing: border-box;
+`
+
+const H1 = styled.h1`
+  margin: 0;
+`
 
 const BoardMain = () => {
   const [articles, setArticles] = useState([]);
@@ -59,32 +83,36 @@ const BoardMain = () => {
     popularTexts && (
       <div>
         <Header />
-        <h3>자유게시판</h3>
+        <Container>
+          <Title>
+            <H1>자유게시판</H1>
+          </Title>
 
-        <div className={classes.searchDiv}>
-          <form onSubmit={searchHandler}>
-            <input
-              type="text"
-              value={searchText}
-              onChange={searchTextChangeHandler}
-              placeholder="검색어를 입력하세요"
+          <div className={classes.searchDiv}>
+            <form onSubmit={searchHandler}>
+              <input
+                type="text"
+                value={searchText}
+                onChange={searchTextChangeHandler}
+                placeholder="검색어를 입력하세요"
+              />
+              <button className={classes.btn} type="submit">
+                검색
+              </button>
+              <CreateIcon onClick={createArticle} />
+            </form>
+          </div>
+          <BoardTable articles={articles} />
+          <div>
+            <Pagination
+              activePage={activePage}
+              itemsCountPerPage={20}
+              totalItemsCount={totalItemsCount}
+              pageRangeDisplayed={5}
+              onChange={handlePageChange}
             />
-            <button className={classes.btn} type="submit">
-              검색
-            </button>
-            <CreateIcon onClick={createArticle} />
-          </form>
-        </div>
-        <BoardTable articles={articles} />
-        <div>
-          <Pagination
-            activePage={activePage}
-            itemsCountPerPage={20}
-            totalItemsCount={totalItemsCount}
-            pageRangeDisplayed={5}
-            onChange={handlePageChange}
-          />
-        </div>
+          </div>
+        </Container>
 
         <PopularTexts popularTexts={popularTexts} />
       </div>
