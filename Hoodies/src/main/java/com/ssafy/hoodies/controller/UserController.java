@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("user")
+@RequestMapping("/user")
 public class UserController {
     private static final String SUCCESS = "200";
     private static final String FAIL = "403";
