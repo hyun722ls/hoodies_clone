@@ -3,7 +3,9 @@ import { API_URL } from "../../common/api/url"
 
 export const checkNickname = async (nickname) => {
     try {
-        const response = await axios.get(API_URL + `user/check/${nickname}`)
+        const response = await axios.get(API_URL + `user/check/${nickname}`, {headers: {
+            'accessToken': localStorage.getItem('token')
+        }})
         return response.data
     } catch (err) {
         console.log(err)
