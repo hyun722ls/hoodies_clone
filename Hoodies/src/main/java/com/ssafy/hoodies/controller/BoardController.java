@@ -39,7 +39,7 @@ public class BoardController {
      *  게시물 CRUD  *
      ****************/
     // Create
-    @PostMapping("/board")
+    @PostMapping("board")
     @ApiOperation(value = "게시물 작성")
     public Board writeBoard(@RequestBody BoardDto dto){
         ResponseEntity<String> res = util.checkExpression(dto.getTitle(), dto.getContent(), "article");
