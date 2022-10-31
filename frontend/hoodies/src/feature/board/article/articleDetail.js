@@ -42,13 +42,13 @@ const ArticleDetail = () => {
 
   const modifyCommentHandler = async (commentId, newContent) => {
     const response = await modifyComment(article._id, commentId, newContent)
-    if (response){
-      const response1 = await fetchArticle(location.state._id)
+    if (response.statusCode === 200){
+      const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
     }
     else {
-      const response1 = await fetchArticle(location.state._id)
+      const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
      
@@ -61,13 +61,13 @@ const ArticleDetail = () => {
 
   const createCommentHandler = async (newContent) => {
     const response = await createComment(article._id, newContent)
-    if (response){
-      const response1 = await fetchArticle(location.state._id)
+    if (response.statusCode === 200){
+      const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
     }
     else {
-      const response1 = await fetchArticle(location.state._id)
+      const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
      
