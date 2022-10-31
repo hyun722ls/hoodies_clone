@@ -43,7 +43,7 @@ public class MentorController {
 
     // 타입별 평가 페이지 조회
     @GetMapping("mentor/{type}")
-    @ApiOperation(value = "전체 게시물 조회")
+    @ApiOperation(value = "타입별 전체 평가 페이지 조회")
     public Page<Mentor> findMentorByType(Pageable pageable, @PathVariable String type){
         Sort sort = Sort.by("modifiedAt").descending();
         return mentorRepository.findAllByType(type, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort));
@@ -51,7 +51,7 @@ public class MentorController {
 
     // 특정 평가페이지 조회
     @GetMapping("mentor/detail/{id}")
-    @ApiOperation(value = "특정 게시물 조회")
+    @ApiOperation(value = "특정 평가 페이지 조회")
     public Mentor findCertainBoard(
             @ApiParam(
                     name =  "id",
@@ -64,14 +64,14 @@ public class MentorController {
 
     // 최근 게시물 조회
     @GetMapping("preview/mentor")
-    @ApiOperation(value = "최근 게시물 8개 조회")
+    @ApiOperation(value = "최근 평가 8개 조회")
     public List<Mentor> findRecentBoard(){
         return mentorRepository.findBy(PageRequest.of(0, 8, Sort.by("modifiedAt").descending()));
     }
 
     // 댓글 등록
     @PostMapping("mentor/{id}/evaluation")
-    @ApiOperation(value = "댓글 등록")
+    @ApiOperation(value = "평가 등록")
     public JSONObject writeEvaluation(@RequestBody EvaluationDto dto, @PathVariable String id){
         ResponseEntity<String> res = util.checkExpression("", dto.getContent(), "comment");
         Evaluation evaluation = dto.toEntity();
