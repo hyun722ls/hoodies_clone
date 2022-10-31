@@ -1,4 +1,6 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import PrivateRoute from "./common/routes/privateRoute";
+import PublicRoute from "./common/routes/publicRoute";
 import Login from "./feature/auth/login/login";
 import Signup from "./feature/auth/signup/signup";
 import ArticleDetail from "./feature/board/article/articleDetail";
@@ -14,15 +16,15 @@ function App() {
     <div>
       <BrowserRouter>
         <Switch>
-          <Route component={Login} exact path="/login" />
-          <Route component={Signup} exact path="/signup" />
-          <Route component={Main} exact path="/index" />
-          <Route component={BoardMain} exact path="/board/free" />
-          <Route component={ArticleDetail} exact path="/board/free/detail" />
-          <Route component={ArticleForm} exact path="/board/free/form" />
-          <Route component={EvaluationMain} exact path="/pro" />
-          <Route component={EvenPro} exact path="/pro/detail" />
-          <Route component={UserMain} exact path="/user" />
+          <PublicRoute restricted component={Login} exact path="/login" />
+          <PublicRoute restricted component={Signup} exact path="/signup" />
+          <PrivateRoute component={Main} exact path="/index" />
+          <PrivateRoute component={BoardMain} exact path="/board/free" />
+          <PrivateRoute component={ArticleDetail} exact path="/board/free/detail" />
+          <PrivateRoute component={ArticleForm} exact path="/board/free/form" />
+          <PrivateRoute component={EvaluationMain} exact path="/pro" />
+          <PrivateRoute component={EvenPro} exact path="/pro/detail" />
+          <PrivateRoute component={UserMain} exact path="/user" />
         </Switch>
       </BrowserRouter>
     </div>
