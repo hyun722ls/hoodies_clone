@@ -75,7 +75,7 @@ public class SignController {
             // refresh token response 설정
             Cookie cookie = new Cookie("refreshToken", refreshToken);
 //            cookie.setMaxAge(14 * 24 * 60 * 60);
-            cookie.setMaxAge(5 * 60);
+            cookie.setMaxAge(1 * 60);
             
             cookie.setSecure(true);
             cookie.setHttpOnly(true);
@@ -113,7 +113,9 @@ public class SignController {
 
             // refresh token response 설정
             Cookie cookie = new Cookie("refreshToken", refreshToken);
-            cookie.setMaxAge(14 * 24 * 60 * 60);
+//            cookie.setMaxAge(14 * 24 * 60 * 60);
+            cookie.setMaxAge(1 * 60);
+            
             cookie.setSecure(true);
             cookie.setHttpOnly(true);
             cookie.setPath("/");
@@ -151,7 +153,7 @@ public class SignController {
             // accessToken이 만료되지 않은 경우, 부정한 요청으로 판단
             if (jwtTokenProvider.validateToken(accessToken)) {
                 tokenRepository.deleteById(email);
-                resultMap.put("statusCode", EXPIRED);
+                resultMap.put("statusCode", FAIL);
                 return resultMap;
             }
 
