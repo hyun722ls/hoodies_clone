@@ -40,11 +40,10 @@ const ArticleForm = () => {
     event.preventDefault();
     const id = location.state?._id
     const response = await modifyArticle(title, content, id)
-    if (response) {
+    if (response){
       alert('등록완료')
-      history.push({ pathname: "/board/free/detail", state: response });
+      history.push({ pathname: "/board/free/detail", state: article._id });
       
-
     } else {
       alert('등록실패')
     }
