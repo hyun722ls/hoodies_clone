@@ -25,7 +25,7 @@ import java.util.Map;
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("user")
+@RequestMapping("/user")
 public class SignController {
     private static final String SUCCESS = "200";
     private static final String FAIL = "403";
@@ -132,7 +132,7 @@ public class SignController {
         return resultMap;
     }
 
-    @PostMapping("/reIssue")
+    @GetMapping("/reIssue")
     public Map<String, Object> reIssue(HttpServletRequest request, HttpServletResponse response, @CookieValue("refreshToken") String refreshToken) {
         Map<String, Object> resultMap = new HashMap<>();
 
@@ -140,12 +140,10 @@ public class SignController {
             SecurityContext context = SecurityContextHolder.getContext();
             Authentication authentication = context.getAuthentication();
             String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
-            String accessToken = request.getHeader("accessToken");
-
             Token tokenInfo = tokenRepository.findById(email).get();
 
             // 토큰이 다른 경우
-            if (!tokenInfo.getAccessToken().equals(accessToken) || !tokenInfo.getRefreshToken().equals(refreshToken)) {
+            if (!tokenInfo.getRefreshToken().equals(refreshToken)) {
                 resultMap.put("statusCode", FAIL);
                 return resultMap;
             }
