@@ -1,6 +1,6 @@
 package com.ssafy.hoodies.model.repository;
 
-import com.ssafy.hoodies.model.model.User;
+import com.ssafy.hoodies.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
