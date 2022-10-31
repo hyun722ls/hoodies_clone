@@ -40,7 +40,7 @@ axios1.interceptors.response.use(
         console.log("reissue 전");
         const token = localStorage.getItem("token");
         axios
-          .post(API_URL + "user/reIssue", {'accessToken': token}, { withCredentials: true })
+          .get(API_URL + "user/reIssue", { withCredentials: true })
           .then((response) => {
             console.log("reissue 정상");
             localStorage.setItem("token", response.data.accessToken);
@@ -65,15 +65,11 @@ axios1.interceptors.response.use(
             ...originalRequest.headers,
             accessToken: accessToken,
           };
-          resolve(axios1(originalRequest));
+          resolve(axios(originalRequest));
         });
       });
       return retryOriginalRequest;
       // }
-    }
-    else {
-        localStorage.clear();
-        window.location.href = "/login";
     }
     return Promise.reject(error)
   } 
