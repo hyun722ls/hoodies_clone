@@ -14,7 +14,7 @@ code {
 
 @font-face {
   font-family: 'Milky Honey';
-  src: url('../public/fonts/Milky\ Honey.ttf')format('woff2');
+  src: url('../public/fonts/Milky\ Honey.woff2')format('woff2');
 }
 
 @font-face {
