@@ -46,15 +46,15 @@ const EvaluationMain = () => {
   return (
     <div>
       <Header />
-      <Box sx={{borderBottom: 1, borderColor:'gray'}}>
-        <Tabs sx={{fontFamily:'IBM Sans Plex KR', color:'red'}} value={selectedTab} onChange={handleDropProduct}>
+      <Box sx={{width:'100%', borderBottom: 1, borderColor:'gray'}}>
+        <Tabs value={selectedTab} onChange={handleDropProduct}>
           {CATEGORY_LIST.map((option) => (
-            <Tab key={option.value} label={option.value} value={option.id}></Tab>
+            <Tab sx={{fontFamily:'IBM Plex Sans KR', justifyContent:'center'}} key={option.value} label={option.value} value={option.id}></Tab>
           ))}
         </Tabs>
       </Box>
-      <h4>컨설턴트, 프로 평가 메인페이지</h4>
-      <select onChange={handleDropProduct}>
+      <h4 style={{display:'flex', justifyContent:'center'}}>컨설턴트, 프로 평가 메인페이지</h4>
+      {/* <select onChange={handleDropProduct}>
         {CATEGORY_LIST.map((option) => (
           <option
             key={option.id}
@@ -64,8 +64,8 @@ const EvaluationMain = () => {
             {option.value}
           </option>
         ))}
-      </select>
-      <div>
+      </select> */}
+      <div style={{display:'flex', flexWrap:'wrap'}}>
         {selectedData.map((staff) => {
           return (
             <div

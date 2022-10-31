@@ -229,6 +229,46 @@ export const previewPros = [
       },
     ],
   },
+  {
+    id: 5,
+    name: "박아영",
+    email: "mjgh0135@gmail.com",
+    description: "교육프로님이십니다.",
+    flag: 2,
+    scores: [5, 5, 5, 5, 5],
+    comments: [
+      {
+        id: 5,
+        content: "감자는 멍청해요",
+        writer: "현규는똑똑해",
+      },
+      {
+        id: 6,
+        content: "감자는 멍청해요",
+        writer: "현규는똑똑해",
+      },
+    ],
+  },
+  {
+    id: 6,
+    name: "박아영",
+    email: "mjgh0135@gmail.com",
+    description: "교육프로님이십니다.",
+    flag: 2,
+    scores: [5, 5, 5, 5, 5],
+    comments: [
+      {
+        id: 5,
+        content: "감자는 멍청해요",
+        writer: "현규는똑똑해",
+      },
+      {
+        id: 6,
+        content: "감자는 멍청해요",
+        writer: "현규는똑똑해",
+      },
+    ],
+  },
 ];
 
 export const CATEGORY_LIST = [
