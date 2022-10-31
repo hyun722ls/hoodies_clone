@@ -26,9 +26,9 @@ export const updateNickname = async (nickname) => {
     }
 }
 
-export const updatePassword = async (password) => {
+export const updatePassword = async (data) => {
     try {
-        const response = await axios.put(API_URL + 'user/password', {password})
+        const response = await axios.put(API_URL + 'user/password', data)
         return response.data
     } catch (err) {
         console.log(err)
