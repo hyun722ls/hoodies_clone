@@ -22,7 +22,7 @@ const Login = () => {
     if (email && password) {
       const response = await login(email, password);
       if (response.statusCode === "200") {
-        localStorage.setItem("token", response.token);
+        localStorage.setItem("token", response.accessToken);
         localStorage.setItem("nickname", response.nickname);
         localStorage.setItem("email", email);
         history.push("/index");
