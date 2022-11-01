@@ -3,6 +3,7 @@ import classes from "./articles.module.css";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import { blockArticle } from "../../../common/refineData/blockArticle";
 import { timeConventer } from "../../../common/refineData/refineTime";
+import Grid from '@mui/material/Grid';
 
 const Articles = (props) => {
 const history = useHistory();
@@ -15,7 +16,7 @@ const detailPageHandler = (article) => {
 };
 
 return props.articles.length ? (
-  <div>
+  <Grid item xs={12} md={6}>
     <div>
       <span className={classes.title}>최신글</span>
       <ReadMoreIcon
@@ -52,9 +53,9 @@ return props.articles.length ? (
         })}
       </tbody>
     </table>
-  </div>
+  </Grid>
 ) : (
-    <p>작성된 글이 없습니다.</p>
+    <Grid item xs={12} md={6}>작성된 글이 없습니다.</Grid>
   );
 };
 

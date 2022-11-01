@@ -3,6 +3,7 @@ import classes from "./articles.module.css";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import { blockArticle } from "../../../common/refineData/blockArticle";
 import { timeConventer } from "../../../common/refineData/refineTime";
+import Grid from '@mui/material/Grid';
 
 const PopularText = (props) => {
   const history = useHistory();
@@ -13,7 +14,7 @@ const PopularText = (props) => {
     history.push({ pathname: "/board/free/detail", state: article._id });
   };
   return props.popularText.length ? (
-    <div>
+    <Grid item xs={12} md={6}>
       <div>
         <span className={classes.title}>인기글</span>
         <ReadMoreIcon
@@ -50,9 +51,9 @@ const PopularText = (props) => {
           })}
         </tbody>
       </table>
-    </div>
+    </Grid>
   ) : (
-    <p>작성된 글이 없습니다.</p>
+    <Grid item xs={12} md={6}>작성된 글이 없습니다.</Grid>
   );
 };
 
