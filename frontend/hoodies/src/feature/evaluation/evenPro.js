@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../common/UI/header/header";
 import EvaulationComment from "./evaluationComment";
+import EvaluationPentagon from "./evaluationPentagon";
 
 const EvenPro = () => {
   const history = useHistory();
@@ -40,13 +41,13 @@ const EvenPro = () => {
   useEffect(() => {
     if (location.state) {
       setStaff(location.state);
-      setComments(location.state.comments);
-      if (location.state.flag === 1) {
-        setStaffType("컨설턴트");
-      } else if (location.state.flag === 2) {
-        setStaffType("운영프로");
+      setComments(location.state.evaluations);
+      if (location.state.type === 'consultant') {
+        setStaffType("consultant");
+      } else if (location.state.type === 'pro') {
+        setStaffType("pro");
       } else {
-        setStaffType("실습코치");
+        setStaffType("coach");
       }
     } else {
       alert("잘못된 접근입니다.");
@@ -60,10 +61,10 @@ const EvenPro = () => {
       <div>
         <Header />
         <h4>
-          {staff.name} {staffType}
+          {staff.writer} {staffType}
         </h4>
         <p>이메일 : {staff.email}</p>
-        <p>설명 : {staff.description}</p>
+        <p>설명 : {staff.etc}</p>
         <p>점수 : {staff.scores}</p>
         <div>
           <button onClick={backHandler}>뒤로 가기</button>
@@ -74,6 +75,9 @@ const EvenPro = () => {
           modifyCommentHandler={modifyCommentHandler}
           createCommentHandler={createCommentHandler}
         />
+        <div style={{height:'500px'}}>
+          <EvaluationPentagon></EvaluationPentagon>
+        </div>
       </div>
     )
   );
