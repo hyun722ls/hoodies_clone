@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+// import mainCss from "./main.module.css";
 import { previewPros } from "../../common/data/dummyData";
 // import { previewPros } from "../../common/data/dummyData";
+import Grid from '@mui/material/Grid';
 import Header from "../../common/UI/header/header";
 import WeeklyMenu from "./mainComponent/weeklyMenu"
 import JobInfo from "./mainComponent/jobInfo"
@@ -12,7 +14,7 @@ import { fetchPopularview, fetchPreview } from "./mainAPI";
 import {tempJobInfo} from "../../common/data/dummyJobData";
 
 const Main = () => {
-  const [weeklyMenu, setWeeklyMenu] = useState([]);
+  // const [weeklyMenu, setWeeklyMenu] = useState([]);
   const [jobInfo, setJobInfo] = useState([]);
   const [articles, setArticles] = useState([]);
   const [popularText, setPopularText] = useState([]);
@@ -25,7 +27,6 @@ const Main = () => {
       const response = await fetchPreview()
       const response1 = await fetchPopularview()
 
-    // setWeeklyMenu(info)
     setJobInfo(tempJobInfo)
     setArticles(response)    
     setPopularText(response1)
@@ -56,14 +57,16 @@ const Main = () => {
     articles &&
     popularText &&
     staffs && (
-      <div>
-        <Header />
-        <WeeklyMenu weeklyMenu={weeklyMenu}/>
-        <JobInfo jobInfo={jobInfo}/>
-        <Articles articles={articles} />
-        <PopularText popularText={popularText} />
-        <Staffs staffs={staffs} />
-      </div>
+        <div>
+          <Header />
+              <Grid container>
+                <WeeklyMenu />
+                <JobInfo jobInfo={jobInfo}/>
+                <Articles articles={articles} />
+                <PopularText popularText={popularText} />
+                <Staffs staffs={staffs} />
+              </Grid>
+        </div>
     )
   );
 };
