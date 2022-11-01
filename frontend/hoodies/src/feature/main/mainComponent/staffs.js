@@ -1,6 +1,7 @@
 import { useHistory } from "react-router-dom";
 import classes from "./card.module.css";
 import PageviewIcon from "@mui/icons-material/Pageview";
+import Grid from '@mui/material/Grid';
 
 const Staffs = (props) => {
   const history = useHistory();
@@ -13,7 +14,7 @@ const Staffs = (props) => {
   };
 
   return props.staffs.length ? (
-    <div>
+    <Grid container>
       <div>
         <span className={classes.title}>최신 평가</span>
         <PageviewIcon onClick={evaluationPageHandler} />
@@ -41,9 +42,9 @@ const Staffs = (props) => {
           );
         })}
       </div>
-    </div>
+    </Grid>
   ) : (
-    <p>작성된 글이 없습니다.</p>
+    <Grid item xs={12} md={12}>작성된 글이 없습니다.</Grid>
   );
 };
 
