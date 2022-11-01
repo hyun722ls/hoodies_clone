@@ -117,7 +117,7 @@ const Signup = () => {
     ) {
       const response = await signup(email, password, nickname)
       if (response.statusCode === '200'){
-        localStorage.setItem('token', response.token)
+        localStorage.setItem('token', response.accessToken)
         localStorage.setItem('nickname', response.nickname)
         localStorage.setItem('email', email)
         history.push("/index");
