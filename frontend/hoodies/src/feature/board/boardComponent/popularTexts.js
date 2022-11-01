@@ -1,6 +1,72 @@
 import { useHistory } from "react-router-dom";
 import { blockArticle } from "../../../common/refineData/blockArticle";
-import classes from "./popularTexts.module.css";
+import styled from "styled-components";
+
+const RightArticles = styled.div`
+  position: absolute;
+  right: 24px;
+  top: 0;
+  width: 320px;
+  margin: 0;
+  background-color: #F9F5EB;
+`
+const Article = styled.article`
+  margin-bottom: -1px;
+  box-sizing: border-box;
+  border: 1px solid #EAE3D2;
+  cursor: pointer;
+`
+
+const ArticleA = styled.a`
+  margin: 0;
+  padding: 14px;
+  display: block;
+`
+
+const ArticleH2 = styled.h2`
+  margin: 0;
+  margin-bottom: 5px;
+  line-height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  font-weight: normal;
+`
+
+const ArticleH3 = styled.h3`
+  margin: 0;
+  padding: 0;
+  float: left;
+  max-width: 90px;
+  height: 15px;
+  line-height: 15px;
+  font-size: 11px;
+  font-weight: normal;
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
+const Title = styled.div`
+  padding: 16px;
+  border: 1px solid #EAE3D2;
+  box-sizing: border-box;
+`
+
+const H2 = styled.h2`
+  color: #1D3979;
+  margin: 0;
+`
+const ArticleHr = styled.hr`
+  margin: 0;
+  padding: 0;
+  clear: both;
+  height: 0;
+  border: 0;
+  width: 100%;
+`
+
 const PopularTexts = (props) => {
   const history = useHistory();
   const detailPageHandler = (article) => {
@@ -8,35 +74,27 @@ const PopularTexts = (props) => {
   };
  
   return props.popularTexts.length ? (
-    <div>
-      <div>
-        <span className={classes.title}>인기게시글</span>
-      </div>
-      <table className={classes.table}>
-        <thead>
-          <tr>
-            
-            <th>제목</th>
-            <th>작성자</th>
-          </tr>
-        </thead>
-        <tbody>
-          {props.popularTexts.map((article) => {
-            return (
-              <tr
+    <RightArticles>
+      <Title>
+        <H2>인기게시글</H2>
+      </Title>
+        {props.popularTexts.map((article) => {
+          return (
+            <Article>
+              <ArticleA
                 onClick={() => {
                   detailPageHandler(article);
                 }}
                 key={article._id}
               >
-                <td>{blockArticle(article, article.category)}</td>
-                <td>{article.writer}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+                <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
+                <ArticleH3>{article.writer}</ArticleH3>
+                <ArticleHr />
+              </ArticleA>
+            </Article>
+          );
+        })}
+    </RightArticles>
   ) : (
     <p>작성된 글이 없습니다.</p>
   );
