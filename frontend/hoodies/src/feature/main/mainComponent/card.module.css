@@ -4,19 +4,20 @@
 }
 
 .card {
-  width: 300px;
+  display: inline-grid;
+  width: 320px;
   text-align: center;
   margin: 0 1rem;
   position: relative;
   cursor: pointer;
-  padding: 2rem 1.5rem;
+  /*padding: 2rem 1.5rem;*/
   overflow: hidden;
   border-radius: 2rem;
 }
 
-.card h2 {
-  margin-bottom: 1rem;
-}
+/*.card h2 {*/
+/*  margin-bottom: 1rem;*/
+/*}*/
 .card p {
   opacity: 0.8;
 }
