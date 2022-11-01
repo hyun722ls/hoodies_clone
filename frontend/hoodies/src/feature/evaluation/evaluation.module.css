@@ -4,7 +4,7 @@
 }
 
 .card {
-  width: 27%;
+  width: 25%;
   text-align: center;
   margin: 0 1rem;
   position: relative;
@@ -27,7 +27,7 @@
   left: 50%;
   transform: translateX(-50%);
   border-radius: 50%;
-  background-color: rgba(0, 102, 255, 0.2);
+  background-color: #EAE3D2;
   height: 120px;
   width: 120px;
   -webkit-font-smoothing: antialiased;
@@ -42,5 +42,5 @@
 }
 .card:hover::before {
   transform: translateX(-50%) translateY(30%) scale(8);
-  background-color: rgba(0, 102, 255, 1);
+  background-color: #617EAA;
 }

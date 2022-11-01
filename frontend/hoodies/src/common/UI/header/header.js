@@ -40,6 +40,11 @@ const Header = () => {
             </Link>
           </li>
           <li>
+            <Link to="/board/free" className={classes.navbar__item}>
+              취업 게시판
+            </Link>
+          </li>
+          <li>
             <Link to="/pro" className={classes.navbar__item}>
               평가 게시판
             </Link>

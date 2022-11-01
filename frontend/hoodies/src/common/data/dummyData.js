@@ -272,15 +272,15 @@ export const previewPros = [
 ];
 
 export const CATEGORY_LIST = [
-  { id: 0, value: "분류를 선택하세요." },
-  { id: 1, value: "컨설턴트" },
-  { id: 2, value: "운영프로" },
-  { id: 3, value: "실습코치" },
+  { id: 0, label:'전체', value: "all" },
+  { id: 1, label:'컨설턴트', value: "consultant" },
+  { id: 2, label:'운영프로', value: "pro" },
+  { id: 3, label:'실습코치', value: "coach" },
 ];
 
 export const MAPPING_FLAG = {
-  컨설턴트: 1,
   "분류를 선택하세요.": 0,
-  운영프로: 2,
-  실습코치: 3,
+  consultant: 1,
+  pro: 2,
+  coach: 3,
 };
