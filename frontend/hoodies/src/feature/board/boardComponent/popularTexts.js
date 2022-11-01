@@ -80,12 +80,11 @@ const PopularTexts = (props) => {
       </Title>
         {props.popularTexts.map((article) => {
           return (
-            <Article>
+            <Article key={article._id}>
               <ArticleA
                 onClick={() => {
                   detailPageHandler(article);
                 }}
-                key={article._id}
               >
                 <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
                 <ArticleH3>{article.writer}</ArticleH3>
