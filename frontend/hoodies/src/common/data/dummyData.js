@@ -229,18 +229,58 @@ export const previewPros = [
       },
     ],
   },
+  {
+    id: 5,
+    name: "박아영",
+    email: "mjgh0135@gmail.com",
+    description: "교육프로님이십니다.",
+    flag: 2,
+    scores: [5, 5, 5, 5, 5],
+    comments: [
+      {
+        id: 5,
+        content: "감자는 멍청해요",
+        writer: "현규는똑똑해",
+      },
+      {
+        id: 6,
+        content: "감자는 멍청해요",
+        writer: "현규는똑똑해",
+      },
+    ],
+  },
+  {
+    id: 6,
+    name: "박아영",
+    email: "mjgh0135@gmail.com",
+    description: "교육프로님이십니다.",
+    flag: 2,
+    scores: [5, 5, 5, 5, 5],
+    comments: [
+      {
+        id: 5,
+        content: "감자는 멍청해요",
+        writer: "현규는똑똑해",
+      },
+      {
+        id: 6,
+        content: "감자는 멍청해요",
+        writer: "현규는똑똑해",
+      },
+    ],
+  },
 ];
 
 export const CATEGORY_LIST = [
-  { id: 0, value: "분류를 선택하세요." },
-  { id: 1, value: "컨설턴트" },
-  { id: 2, value: "운영프로" },
-  { id: 3, value: "실습코치" },
+  { id: 0, label:'전체', value: "all" },
+  { id: 1, label:'컨설턴트', value: "consultant" },
+  { id: 2, label:'운영프로', value: "pro" },
+  { id: 3, label:'실습코치', value: "coach" },
 ];
 
 export const MAPPING_FLAG = {
-  컨설턴트: 1,
   "분류를 선택하세요.": 0,
-  운영프로: 2,
-  실습코치: 3,
+  consultant: 1,
+  pro: 2,
+  coach: 3,
 };
