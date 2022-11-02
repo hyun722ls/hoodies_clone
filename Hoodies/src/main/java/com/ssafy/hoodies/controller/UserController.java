@@ -254,16 +254,16 @@ public class UserController {
         return resultMap;
     }
 
-    @GetMapping("/article/{writer}")
-    @ApiOperation(value = "사용자가 쓴 글 조회")
-    public Page<Board> findUserBoard(@ApiParam(
-            name = "writer",
-            type = "String",
-            value = "게시물의 DB상 writer, 닉네임",
-            required = true) @PathVariable String writer, Pageable pageable) {
-
-        Sort sort = Sort.by("createdAt").descending();
-        return boardRepository.findByWriter(writer, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort));
-    }
+//    @GetMapping("/article/{writer}")
+//    @ApiOperation(value = "사용자가 쓴 글 조회")
+//    public Page<Board> findUserBoard(  @ApiParam(
+//            name =  "writer",
+//            type = "String",
+//            value = "게시물의 DB상 writer, 닉네임",
+//            required = true) @PathVariable String writer, Pageable pageable){
+//        String ewriter = writer; // 인코딩 필요
+//        Sort sort = Sort.by("createdAt").descending();
+//        return boardRepository.findAllByWriterOrEwriter(writer, ewriter, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort));
+//    }
 
 }
