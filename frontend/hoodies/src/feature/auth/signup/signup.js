@@ -2,6 +2,25 @@ import { useState } from "react";
 import { useHistory, Link, Route } from "react-router-dom";
 import CustomModal from "../../../common/UI/modal/customModal";
 import { authMM, checkNickname, sendMM, signup } from "../authApi";
+import styled from "styled-components";
+
+const Container = styled.div`
+  position: relative;
+  margin: auto;
+  text-align: center;
+`
+const Form = styled.form`
+  margin-top: 10vh;
+  display: inline-block;
+`
+
+
+
+
+
+
+
+
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [emailCheck, setEmailCheck] = useState(false);
@@ -128,58 +147,60 @@ const Signup = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={signupHandler}>
-        <div>
-          <h3>nickname</h3>
-          <input
-            value={nickname}
-            onChange={nicknameChangeHandler}
-            type="text"
-          />
-          <button onClick={NicknameDuplicatedHandler}>
-            {isNicknameDuplicated ? "사용 가능" : "중복 확인"}
-          </button>
-        </div>
-        <div>
-          <h3>email</h3>
-          <input
-            value={email}
-            disabled={emailCheck}
-            onChange={emailChangeHandler}
-            type="text"
-          />
-          <button onClick={checkEmailHandler}>
-            {emailCheck ? "승인 완료" : "승인 요청"}
-          </button>
-        </div>
-        <div>
-          <h4>password</h4>
-          <input
-            value={password}
-            onChange={passwordChangeHandler}
-            type="password"
-          />
-        </div>
-        <div>
-          <h4>Confirm password</h4>
-          <input
-            value={confirmPassword}
-            onChange={confirmPasswordChangeHandler}
-            type="password"
-          />
-        </div>
-        <div>
-          <button type="submit">회원가입</button>
-        </div>
-      </form>
+    <Container>
       <div>
-        <Link to="/login">뒤로</Link>
+        <Form onSubmit={signupHandler}>
+          <div>
+            <h3>nickname</h3>
+            <input
+              value={nickname}
+              onChange={nicknameChangeHandler}
+              type="text"
+            />
+            <button onClick={NicknameDuplicatedHandler}>
+              {isNicknameDuplicated ? "사용 가능" : "중복 확인"}
+            </button>
+          </div>
+          <div>
+            <h3>email</h3>
+            <input
+              value={email}
+              disabled={emailCheck}
+              onChange={emailChangeHandler}
+              type="text"
+            />
+            <button onClick={checkEmailHandler}>
+              {emailCheck ? "승인 완료" : "승인 요청"}
+            </button>
+          </div>
+          <div>
+            <h4>password</h4>
+            <input
+              value={password}
+              onChange={passwordChangeHandler}
+              type="password"
+            />
+          </div>
+          <div>
+            <h4>Confirm password</h4>
+            <input
+              value={confirmPassword}
+              onChange={confirmPasswordChangeHandler}
+              type="password"
+            />
+          </div>
+          <div>
+            <button type="submit">회원가입</button>
+          </div>
+        </Form>
+        <div>
+          <Link to="/login">뒤로</Link>
+        </div>
       </div>
       <CustomModal open={modalOpen} close={closeModal} header="">
         {modalAuthCodeForm}
       </CustomModal>
-    </div>
+    </Container>
   );
 };
 
