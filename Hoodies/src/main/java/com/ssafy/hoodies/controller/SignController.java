@@ -154,7 +154,7 @@ public class SignController {
                 resultMap.put("statusCode", FAIL);
                 return resultMap;
             }
-
+            System.out.println("받아온 refreshToken : " + refreshToken);
             // refreshToken이 만료되었을 경우
             if (!jwtTokenProvider.validateToken(refreshToken)) {
                 resultMap.put("statusCode", EXPIRED);
