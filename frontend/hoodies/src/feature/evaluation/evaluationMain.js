@@ -58,7 +58,7 @@ const EvaluationMain = () => {
           ))}
         </Tabs>
       </Box>
-      <h4 style={{display:'flex', justifyContent:'center'}}>컨설턴트, 프로 평가 메인페이지</h4>
+      <h4 style={{display:'flex', justifyContent:'center'}}>PRO 페이지</h4>
       <div style={{display:'flex', flexWrap:'wrap'}}>
         {selectedData.map((staff) => {
           return (

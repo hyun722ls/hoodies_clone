@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-// import mainCss from "./main.module.css";
 import { previewPros } from "../../common/data/dummyData";
-// import { previewPros } from "../../common/data/dummyData";
 import Grid from '@mui/material/Grid';
 import Header from "../../common/UI/header/header";
 import WeeklyMenu from "./mainComponent/weeklyMenu"
@@ -10,10 +8,11 @@ import Articles from "./mainComponent/articles";
 import PopularText from "./mainComponent/popularText";
 import Staffs from "./mainComponent/staffs";
 // import axios from 'axios';
-import { fetchPopularview, fetchPreview } from "./mainAPI";
+import { fetchPopularview, fetchPreview, fetchStaffview } from "./mainAPI";
 import {tempJobInfo} from "../../common/data/dummyJobData";
 import axios from "axios";
 import { API_URL } from "../../common/api/url";
+import GRID from "./main.module.css";
 
 const Main = () => {
   // const [weeklyMenu, setWeeklyMenu] = useState([]);
@@ -39,31 +38,15 @@ const Main = () => {
       // const info1 = await fetchJobInfo()
       const response = await fetchPreview()
       const response1 = await fetchPopularview()
+      const responseStaffs = await fetchStaffview()
 
     setJobInfo(tempJobInfo)
     setArticles(response)    
     setPopularText(response1)
-    setStaffs(previewPros)
+    setStaffs(responseStaffs)
+    // setStaffs(previewPros)
     setIsLoading(false);
     })()
-    // const response = axios.get('/preview/free');
-    // const response1 = axios.get('/preview/popular');
-    // const response2 = axios.get(??) api 만들어지면 스웨거에서 주소 확인
-    
-    // const response = 자유게시글 최근 5개 요청
-    // const response1 = 추천 많은 글 5개 요청
-    // const response2 = 많은 평가 받은 컨설턴트, 프로 정보(향후는 최근)
-    // setArticles(response)
-
-
-    // setArticles(response);
-    // setPopularText(response1);
-    // setStaffs(response2); api 만들어지면 넣기 line33 끄기
-    
-    // setArticles(freePreview);
-    // setPopularText(freePreview);
-    // setStaffs(previewPros);
-    // setIsLoading(false);
   }, []);
   return (
     !isLoading &&
@@ -72,11 +55,13 @@ const Main = () => {
     staffs && (
         <div>
           <Header />
-              <Grid container>
+              <Grid>
                 <WeeklyMenu />
                 <JobInfo jobInfo={jobInfo}/>
-                <Articles articles={articles} />
-                <PopularText popularText={popularText} />
+                <Grid container spacing={3} className={GRID.container}>
+                  <Articles articles={articles} />
+                  <PopularText popularText={popularText} />
+                </Grid>
                 <Staffs staffs={staffs} />
               </Grid>
               <button onClick={reissueToken}>토큰 재발행</button>
