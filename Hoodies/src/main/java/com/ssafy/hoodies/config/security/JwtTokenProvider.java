@@ -92,6 +92,7 @@ public class JwtTokenProvider {
     // 토큰 정보를 검증하는 메서드
     public boolean validateToken(String token) {
         try {
+            System.out.println("token : " + token);
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
