@@ -177,7 +177,11 @@ const BoardTable = (props) => {
       })}
     </Articles>
   ) : (
-    <p>작성된 글이 없습니다.</p>
+    <Articles>
+      <Title>
+        <H1>작성된 글이 없습니다.</H1>
+      </Title>
+    </Articles>
   );
 };
 
