@@ -40,7 +40,7 @@ axios1.interceptors.response.use(
         console.log("reissue 전");
         const token = localStorage.getItem("token");
         axios
-          .get(API_URL + "user/reissue", { withCredentials: true })
+          .get(API_URL + "token/reissue", { withCredentials: true })
           .then((response) => {
             console.log("reissue 정상");
             localStorage.setItem("token", response.data.accessToken);
@@ -54,9 +54,9 @@ axios1.interceptors.response.use(
             onTokenRefreshed(newAccessToken);
           })
           .catch((err) => {
-            console.log("reissue 마무리");
+            // console.log("reissue 마무리");
             // localStorage.clear();
-            // window.location.href = "/login";
+            // window.location.href = "/";
           });
       }
       const retryOriginalRequest = new Promise((resolve) => {
@@ -71,8 +71,8 @@ axios1.interceptors.response.use(
       return retryOriginalRequest;
       // }
     }
-    return Promise.reject(error)
-  } 
+    return Promise.reject(error);
+  }
 );
 
 export default axios1;
