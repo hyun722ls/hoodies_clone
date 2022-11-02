@@ -5,6 +5,10 @@ import EvaulationComment from "./evaluationComment";
 import EvaluationPentagon from "./evaluationPentagon";
 import styled from "styled-components";
 import Shit from './guaca.png'
+import LeftTop from './lefttopsquare.svg'
+import RightTop from './righttop.svg'
+import BottomLeft from './bottomleft.svg'
+import bottomright from './bottomright.svg'
 
 
 
@@ -72,7 +76,7 @@ const EvenPro = () => {
     comments && (
       <div>
         <Header />
-        <h4>
+        {/* <h4>
           {staff.writer} {staffType}
         </h4>
         <p>이메일 : {staff.email}</p>
@@ -86,15 +90,23 @@ const EvenPro = () => {
           deleteCommentHandler={deleteCommentHandler}
           modifyCommentHandler={modifyCommentHandler}
           createCommentHandler={createCommentHandler}
-        />
-        <div style={{display:'flex', 'justifyContent':'center', height:'500px', width:'70%'}}>
-          <EvaluationPentagon></EvaluationPentagon>
+        /> */}
+        <div style={{position:'relative'}}> 
+          <div style={{display:'flex', flexWrap:'wrap', marginLeft:'7vw'}}>
+            <img src={LeftTop} style={{height:'20%', width:'45%', margin:'15px'}} alt=''></img>
+            <img src={RightTop} style={{height:'20%', width:'45%',margin:'15px'}} alt=''></img>
+            <img src={BottomLeft} style={{height:'20%', width:'45%',margin:'15px'}} alt=''></img>
+            <img src={bottomright} style={{height:'20%', width:'45%',margin:'15px'}} alt=''></img>
+          </div>
+          <div style={{display:'flex', position:'absolute',left:'4.5%' ,top:'25%' ,'justifyContent':'center', height:'70vh', width:'70%'}}>
+            <EvaluationPentagon></EvaluationPentagon>
+          </div>
         </div>
-        <BoxOne style={{position:'relative'}}>
+        {/* <BoxOne style={{position:'relative'}}>
           <div style={{position:'absolute', top:'30%', right:'60%'}}>
             hello
           </div>
-        </BoxOne>
+        </BoxOne> */}
       </div>
     )
   );

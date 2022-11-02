@@ -11,23 +11,23 @@ import { ResponsiveRadar } from '@nivo/radar'
 const evaluationPentagon = () => {
     const data = [
         {
-          "taste": "teaching skill",
+          "taste": "인품",
           "chardonay": 10
         },
         {
-          "taste": "mentoring skill",
+          "taste": "프로젝트 지도력",
           "chardonay": 90
         },
         {
-          "taste": "class atmosphere",
+          "taste": "상담",
           "chardonay": 73
         },
         {
-          "taste": "strong",
+          "taste": "강의 전달력",
           "chardonay": 97
         },
         {
-          "taste": "sunny",
+          "taste": "반 분위기",
           "chardonay": 95
         }
       ]
@@ -39,16 +39,22 @@ const evaluationPentagon = () => {
             // valueFormat=">-.2f"
             margin={{ top: 70, right: 80, bottom: 40, left: 400 }}
             borderColor={{ from: 'color' }}
+            borderWidth='4px'
             gridShape='linear'
-            gridLabelOffset={30}
-            dotSize={30}
+            gridLabelOffset={20}
+            dotSize={15}
             dotColor={{ theme: 'background' }}
             dotBorderWidth={2}
-            colors={{ scheme: 'nivo' }}
+            colors='#617EAA'
             blendMode="multiply"
             motionConfig="wobbly"
-            theme={{'fontSize':20,
-                    'fontFamily':'IBM Plex Sans KR'
+            theme={{'fontSize':15,
+                    'fontFamily':'IBM Plex Sans KR',
+                    'grid' : {
+                      'line':{
+                        'stroke':'#EAE3D2'
+                      }
+                    }
                   }}
             // legends={[
             //     {
