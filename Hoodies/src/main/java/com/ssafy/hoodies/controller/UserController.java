@@ -34,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 public class UserController {
     private static final String SUCCESS = "200";
     private static final String FAIL = "403";
+    private static final String BAD_REQUEST = "400";
     private final UserService userService;
     private final UserRepository userRepository;
     private final UserAuthRepository userAuthRepository;
@@ -239,7 +240,7 @@ public class UserController {
 
             // 이전 비밀번호와 동일한 경우
             if (encryptPassword == null || encryptPassword.equals(beforePassword)) {
-                resultMap.put("statusCode", FAIL);
+                resultMap.put("statusCode", BAD_REQUEST);
                 return resultMap;
             }
 
