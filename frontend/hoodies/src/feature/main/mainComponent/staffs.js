@@ -1,5 +1,5 @@
 import { useHistory } from "react-router-dom";
-import classes from "./card.module.css";
+import staffs from "./staff.module.css";
 import PageviewIcon from "@mui/icons-material/Pageview";
 import Grid from '@mui/material/Grid';
 
@@ -16,14 +16,14 @@ const Staffs = (props) => {
   return props.staffs.length ? (
     <Grid container>
       <div>
-        <span className={classes.title}>최신 평가</span>
+        <span className={staffs.title}>최신 평가</span>
         <PageviewIcon onClick={evaluationPageHandler} />
       </div>
       <div>
         {props.staffs.map((staff) => {
           return (
             <div
-              className={classes.card}
+              className={staffs.card}
               key={staff.id}
               onClick={() => {
                 detailPageHandler(staff);

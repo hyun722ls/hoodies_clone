@@ -73,7 +73,6 @@ const NewArticle = styled.a`
   line-height: 46px;
   border: 2px solid #EAE3D2;
   box-sizing: border-box;
-  cursor: text;
   color: #a6a6a6;
   font-size: 14px;
   cursor: pointer;
