@@ -2,6 +2,85 @@ import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import CustomModal from "../../../common/UI/modal/customModal";
 import { login, passworAuthMM, passwordSendMM } from "../authApi";
+import styled from "styled-components";
+
+const Container = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -280px 0 24px -180px;
+  height: 560px;
+  width: 360px;
+
+`
+const Form = styled.form`
+  margin: 0;
+  padding: 0;
+`
+const InputDiv = styled.div`
+  margin-bottom: 32px;
+  padding: 4px 10px;
+  border: 1px solid #d6d6d6;
+  background-color: #fff;
+`
+const Input = styled.input`
+  margin: 0;
+  padding: 0;
+  border: 0;
+  width: 100%;
+  height: 28px;
+  line-height: 28px;
+  font-size: 16px;
+  background-color: transparent;
+  outline: none;
+  vertical-align: middle;
+`
+
+const InputBtn = styled.button`
+  position: absolute;
+  right: 4px;
+  margin: 0 4px;
+  min-width: 80px;
+  height: 28px;
+  border: 1px solid #F9F5EB;
+  background-color: #EAE3D2;
+  color: #1D3979;
+  border-radius: 5px;
+  font-weight: bold;
+  &:hover {
+    background-color: #D9D2C3;
+    cursor: pointer;
+  }
+`
+const StyledLink = styled(Link)`
+  margin: 0 4px;
+  color: inherit;
+  text-decoration: none;
+  text-align: center;
+  font-size: 12px;
+  &:hover {
+    cursor: pointer;
+  }
+`
+const StyledSpan = styled.span`
+  margin: 0 4px;
+  color: inherit;
+  text-decoration: none;
+  text-align: center;
+  font-size: 12px;
+  &:hover {
+    cursor: pointer;
+  }
+`
+const Logo = styled.p`
+  text-decoration: none;
+  font-size: 40px;
+  color: #1D3979;
+  cursor: pointer;
+  text-align: center;
+  font-family: 'Milky Honey';
+`
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -122,38 +201,41 @@ const Login = () => {
   );
 
   return (
-    <div>
-      <form onSubmit={LoginHandler}>
-        <div>
-          <h3>email</h3>
-          <input
+    <Container>
+      <Logo>
+        Hoodies
+      </Logo>
+      <Form onSubmit={LoginHandler}>
+        <InputDiv>
+          <Input
             value={email}
             onChange={emailChangeHandler}
             type="text"
             required
+            placeholder="이메일"
           />
-        </div>
-        <div>
-          <h4>password</h4>
-          <input
+        </InputDiv>
+        <InputDiv>
+          <Input
             value={password}
             onChange={passwordChangeHandler}
             type="password"
             required
+            placeholder="패스워드"
           />
-        </div>
+        </InputDiv>
         <div>
-          <button type="submit">로그인</button>
+          <InputBtn type="submit">로그인</InputBtn>
         </div>
-      </form>
+      </Form>
       <div>
-        <Link to="/signup">회원가입</Link>
-        <span onClick={openModal}>비밀번호 초기화</span>
+        <StyledLink to="/signup">회원가입</StyledLink>
+        <StyledSpan onClick={openModal}>비밀번호 초기화</StyledSpan>
       </div>
       <CustomModal open={modalOpen} close={closeModal} header="">
         {isTransferEmail ? modalAuthCodeForm : modalEmailForm}
       </CustomModal>
-    </div>
+    </Container>
   );
 };
 
