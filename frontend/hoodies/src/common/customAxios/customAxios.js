@@ -54,9 +54,9 @@ axios1.interceptors.response.use(
             onTokenRefreshed(newAccessToken);
           })
           .catch((err) => {
-            // console.log("reissue 마무리");
-            // localStorage.clear();
-            // window.location.href = "/";
+            console.log("reissue 마무리");
+            localStorage.clear();
+            window.location.href = "/login";
           });
       }
       const retryOriginalRequest = new Promise((resolve) => {
