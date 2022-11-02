@@ -143,18 +143,15 @@ public class SignController {
         Map<String, Object> resultMap = new HashMap<>();
 
         try {
-            SecurityContext context = SecurityContextHolder.getContext();
-            Authentication authentication = context.getAuthentication();
-            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
-            Token tokenInfo = tokenRepository.findById(email).get();
             String refreshToken = cookieRefreshToken.getValue();
 
-            // 토큰이 다른 경우
-            if (!tokenInfo.getRefreshToken().equals(refreshToken)) {
+            Token tokenInfo = tokenRepository.findByRefreshToken(refreshToken);
+            if (tokenInfo == null) {
                 resultMap.put("statusCode", FAIL);
                 return resultMap;
             }
-            System.out.println("받아온 refreshToken : " + refreshToken);
+            String email = tokenInfo.getEmail();
+
             // refreshToken이 만료되었을 경우
             if (!jwtTokenProvider.validateToken(refreshToken)) {
                 resultMap.put("statusCode", EXPIRED);
