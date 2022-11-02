@@ -56,7 +56,7 @@ const WeeklyMenu = () => {
 
 
     return (
-        <div>
+        <div className={weekly.container}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label="20th" {...a11yProps(0)} />

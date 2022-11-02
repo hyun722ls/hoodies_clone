@@ -1,6 +1,17 @@
+.spacing {
+  margin: 10px;
+  width: 100%;
+}
+
 .title {
   font-weight: bold;
   font-size: larger;
+}
+
+.array {
+  justify-content: space-around;
+  margin: auto;
+  display: flex;
 }
 
 .card {
