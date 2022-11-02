@@ -9,10 +9,9 @@ import { useState, useEffect } from "react";
 
 const Articles = styled.div`
   position: relative;
-  float: none;
-  left: 24px;
-  margin-top: 24px;
-  width: 780px;
+  grid-column: 1/3;
+  grid-row: 1;
+  margin-left: 90px;
 `
 
 const Article = styled.article`
@@ -66,7 +65,6 @@ const NewArticle = styled.a`
   position: relative;
   float: none;
   margin-top: 24px;
-  width: 780px;
   display: block;
   padding: 0 10px;
   height: 50px;
