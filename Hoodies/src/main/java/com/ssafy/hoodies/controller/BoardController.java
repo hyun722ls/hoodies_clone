@@ -164,6 +164,8 @@ public class BoardController {
         int statusCode = isExist ? 200 : 400;
         JSONObject json = new JSONObject();
         json.put("statusCode", statusCode);
+        map
+                map.put("jsonObjec")
         return json;
     }
     
@@ -223,6 +225,7 @@ public class BoardController {
         int statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
         JSONObject json = new JSONObject();
         json.put("statusCode", statusCode);
+        json.put("viewFlag", true);
         return json;
     }
 
