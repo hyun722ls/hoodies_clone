@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../../common/UI/header/header";
-import { createArticle, modifyArticle } from "../boardAPI";
+import { createArticle, modifyArticle } from "../anonymousBoardAPI";
 import styled from "styled-components";
 import { style } from "@mui/system";
 
