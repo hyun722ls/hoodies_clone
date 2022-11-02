@@ -5,7 +5,7 @@ import axios1 from "../../common/customAxios/customAxios"
 
 export const createArticle = async (title, content) => {
     const writer = localStorage.getItem('nickname')
-    const formData = {'title': title, 'writer': writer, 'content': content, 'type': 1 }
+    const formData = {'title': title, 'writer': writer, 'content': content, type:'2' }
     try {
         const response = await axios1.post(API_URL + 'board', formData, {headers: {
             'accessToken': localStorage.getItem('token')
@@ -35,7 +35,7 @@ export const modifyArticle = async (title, content, articleId) => {
 
 export const fetchArticles = async (page) => {
     try {
-        const response = await axios1.get(API_URL + `board/1?page=${page}&size=20`, {headers: {
+        const response = await axios1.get(API_URL + `board/2?page=${page}&size=20`, {headers: {
             'accessToken': localStorage.getItem('token')
         }})
         return response.data
@@ -117,5 +117,4 @@ export const modifyComment = async (articleId, commentId, content) => {
         console.log(err)
     }
 }
-
 

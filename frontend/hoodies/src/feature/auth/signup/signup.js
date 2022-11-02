@@ -2,6 +2,89 @@ import { useState } from "react";
 import { useHistory, Link, Route } from "react-router-dom";
 import CustomModal from "../../../common/UI/modal/customModal";
 import { authMM, checkNickname, sendMM, signup } from "../authApi";
+import styled from "styled-components";
+
+const Container = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -280px 0 24px -180px;
+  height: 560px;
+  width: 360px;
+
+`
+const Form = styled.form`
+  margin: 0;
+  padding: 0;
+`
+const InputDiv = styled.div`
+  margin-bottom: 32px;
+  padding: 4px 10px;
+  border: 1px solid #d6d6d6;
+  background-color: #fff;
+`
+const Input = styled.input`
+  margin: 0;
+  padding: 0;
+  border: 0;
+  width: auto;
+  height: 28px;
+  line-height: 28px;
+  font-size: 16px;
+  background-color: transparent;
+  outline: none;
+  vertical-align: middle;
+`
+const InputPassword = styled(Input)`
+  width: 100%;
+`
+
+const InputBtn = styled.button`
+  position: absolute;
+  right: 4px;
+  margin: 0 4px;
+  min-width: 80px;
+  height: 28px;
+  border: 1px solid #F9F5EB;
+  background-color: #EAE3D2;
+  color: #1D3979;
+  border-radius: 5px;
+  font-weight: bold;
+  &:hover {
+    background-color: #D9D2C3;
+    cursor: pointer;
+  }
+`
+const BtnCancle = styled(Link)`
+  position: absolute;
+  left: 4px;
+  margin: 0 4px;
+  min-width: 80px;
+  height: 28px;
+  line-height: 28px;
+  border: 1px solid #F9F5EB;
+  background-color: #F9F5EB;
+  color: #1D3979;
+  border-radius: 5px;
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
+  font-size: 16px;
+  &:hover {
+    background-color: #EAE3D2;
+  }
+`
+const Logo = styled.p`
+  text-decoration: none;
+  font-size: 40px;
+  color: #1D3979;
+  cursor: pointer;
+  text-align: center;
+  font-family: 'Milky Honey';
+`
+
+
+
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [emailCheck, setEmailCheck] = useState(false);
@@ -128,58 +211,59 @@ const Signup = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={signupHandler}>
-        <div>
-          <h3>nickname</h3>
-          <input
+    <Container>
+      <Logo>
+        Hoodies
+      </Logo>
+      <Form onSubmit={signupHandler}>
+        <InputDiv>
+          <Input
             value={nickname}
             onChange={nicknameChangeHandler}
             type="text"
+            placeholder="닉네임"
           />
-          <button onClick={NicknameDuplicatedHandler}>
+          <InputBtn onClick={NicknameDuplicatedHandler}>
             {isNicknameDuplicated ? "사용 가능" : "중복 확인"}
-          </button>
-        </div>
-        <div>
-          <h3>email</h3>
-          <input
+          </InputBtn>
+        </InputDiv>
+        <InputDiv>
+          <Input
             value={email}
             disabled={emailCheck}
             onChange={emailChangeHandler}
             type="text"
+            placeholder="이메일"
           />
-          <button onClick={checkEmailHandler}>
+          <InputBtn onClick={checkEmailHandler}>
             {emailCheck ? "승인 완료" : "승인 요청"}
-          </button>
-        </div>
-        <div>
-          <h4>password</h4>
-          <input
+          </InputBtn>
+        </InputDiv>
+        <InputDiv>
+          <InputPassword
             value={password}
             onChange={passwordChangeHandler}
             type="password"
+            placeholder="패스워드"
           />
-        </div>
-        <div>
-          <h4>Confirm password</h4>
-          <input
+        </InputDiv>
+        <InputDiv>
+          <InputPassword
             value={confirmPassword}
             onChange={confirmPasswordChangeHandler}
             type="password"
+            placeholder="패스워드 확인"
           />
-        </div>
+        </InputDiv>
         <div>
-          <button type="submit">회원가입</button>
+          <InputBtn type="submit">회원가입</InputBtn>
         </div>
-      </form>
-      <div>
-        <Link to="/login">뒤로</Link>
-      </div>
+      </Form>
+      <BtnCancle to="/login">뒤로</BtnCancle>
       <CustomModal open={modalOpen} close={closeModal} header="">
         {modalAuthCodeForm}
       </CustomModal>
-    </div>
+    </Container>
   );
 };
 

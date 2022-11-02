@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { freePreview } from "../../common/data/dummyData";
 import Pagination from "react-js-pagination";
-import { fetchArticles, fetchPopularArticles } from "./boardAPI";
+import { fetchArticles, fetchPopularArticles } from "./anonymousBoardAPI";
 import Header from "../../common/UI/header/header";
-import BoardTable from "./boardComponent/boardTable";
-import PopularTexts from "./boardComponent/popularTexts";
+import BoardTable from "./anonymousBoardComponent/boardTable";
+import PopularTexts from "./anonymousBoardComponent/popularTexts";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import "./boardMain.css";
@@ -17,7 +17,7 @@ const Container = styled.div`
   margin: 24px auto 24px auto;
 `
 
-const BoardMain = () => {
+const AnonymousBoardMain = () => {
   const [articles, setArticles] = useState([]);
   const [activePage, setActivePage] = useState(1);
   const [popularTexts, setPopularTexts] = useState([]);
@@ -76,4 +76,4 @@ const BoardMain = () => {
   );
 };
 
-export default BoardMain;
+export default AnonymousBoardMain;

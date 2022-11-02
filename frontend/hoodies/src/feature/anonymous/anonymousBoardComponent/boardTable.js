@@ -1,7 +1,7 @@
 import { useHistory } from "react-router-dom";
 import { blockArticle } from "../../../common/refineData/blockArticle";
 import {timeConventer} from "../../../common/refineData/refineTime"
-import { fetchArticles } from "../boardAPI";
+import { fetchArticles } from "../anonymousBoardAPI";
 import CreateIcon from "@mui/icons-material/Create";
 import Pagination from "react-js-pagination";
 import styled from "styled-components";
@@ -141,17 +141,17 @@ const BoardTable = (props) => {
   const history = useHistory();
 
   const detailPageHandler = (article) => {
-    history.push({ pathname: "/board/free/detail", state: article._id });
+    history.push({ pathname: "/board/annoymous/detail", state: article._id });
   };
 
   const createArticle = () => {
-    history.push("free/form");
+    history.push("annoymous/form");
   };
 
   return props.articles.length ? (
     <Articles>
       <Title>
-        <H1>자유게시판</H1>
+        <H1>익명게시판</H1>
       </Title>
       <NewArticle onClick={createArticle}>
         새로운 게시글 작성

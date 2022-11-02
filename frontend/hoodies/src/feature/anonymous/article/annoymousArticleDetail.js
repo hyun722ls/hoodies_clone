@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../../common/UI/header/header";
-import {createComment, deleteArticle, deleteComment, fetchArticle, modifyComment} from "../boardAPI";
+import {createComment, deleteArticle, deleteComment, fetchArticle, modifyComment} from "../anonymousBoardAPI";
 import CommentList from "./commentList";
 import styled from "styled-components";
 
@@ -121,7 +121,7 @@ const BtnCancle = styled(RightButton)`
   }
 `
 
-const ArticleDetail = () => {
+const AnnoymousArticleDetail = () => {
   const location = useLocation();
   const [article, setArticle] = useState([]);
   const [comments, setComments] = useState([]);
@@ -134,7 +134,7 @@ const ArticleDetail = () => {
   // 요청설개할것, 수정페이지에서 넘길때 새로운정보 필요
 
   const modifyHandler = (event) => {
-    history.push({ pathname: "/board/free/form", state: article });
+    history.push({ pathname: "/board/annoymous/form", state: article });
   };
 
   const deleteHandler = async (event) => {
@@ -209,7 +209,7 @@ const ArticleDetail = () => {
     comments && (
       <div>
         <Header />
-        <Articles>
+        <Articles>ㄴ
           <ArticleHead>
             <ArticleH2>{article.title}</ArticleH2>
             <ArticleH3>{article.writer}</ArticleH3>
@@ -243,4 +243,4 @@ const ArticleDetail = () => {
   );
 };
 
-export default ArticleDetail;
+export default AnnoymousArticleDetail;

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../../common/UI/header/header";
-import { createArticle, modifyArticle } from "../boardAPI";
+import { createArticle, modifyArticle } from "../anonymousBoardAPI";
 import styled from "styled-components";
 import { style } from "@mui/system";
 
@@ -69,7 +69,7 @@ const BtnCancle = styled(Btn)`
   }
 `
 
-const ArticleForm = () => {
+const AnnoymousArticleForm = () => {
   const [article, setArticle] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");
@@ -88,7 +88,7 @@ const ArticleForm = () => {
 
   const backHandler = (event) => {
     // history.go(-1);
-    history.push("/board/free");
+    history.push("/board/annoymous");
   };
 
   const titleChangeHandler = (event) => {
@@ -107,7 +107,7 @@ const ArticleForm = () => {
     const response = await modifyArticle(title, content, id)
     if (response){
       alert('등록완료')
-      history.push({ pathname: "/board/free/detail", state: article._id });
+      history.push({ pathname: "/board/annoymous/detail", state: article._id });
       
     } else {
       alert('등록실패')
@@ -120,7 +120,7 @@ const ArticleForm = () => {
     const response = await createArticle(title, content)
     if (response) {
       alert('등록완료')
-      history.push("/board/free");
+      history.push("/board/annonymous");
       
 
     } else {
@@ -201,4 +201,4 @@ const ArticleForm = () => {
   );
 };
 
-export default ArticleForm;
+export default AnnoymousArticleForm;
