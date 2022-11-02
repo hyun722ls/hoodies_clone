@@ -31,7 +31,7 @@ const Header = () => {
           </li>
           <li>
             <Link to="/board/annonymous" className={classes.navbar__item}>
-              익명 구직
+              익명 게시판
             </Link>
           </li>
           <li>
