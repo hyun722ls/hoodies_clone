@@ -54,7 +54,7 @@ axios1.interceptors.response.use(
               accessToken: newAccessToken,
             };
             // return axios(originalRequest)
-            onTokenRefreshed(newAccessToken);
+            // onTokenRefreshed(newAccessToken);
           })
           .catch((err) => {
             console.log("reissue 마무리");
@@ -62,19 +62,20 @@ axios1.interceptors.response.use(
             // window.location.href = "/login";
           });
       }
-      const retryOriginalRequest = new Promise((resolve) => {
-        addRefreshSubscriber((accessToken) => {
-          originalRequest.headers = {
-            ...originalRequest.headers,
-            accessToken: accessToken,
-          };
-          resolve(axios(originalRequest));
-        });
-      });
-      return retryOriginalRequest;
-      // }
     }
-    return Promise.reject(error)
+    //   const retryOriginalRequest = new Promise((resolve) => {
+    //     addRefreshSubscriber((accessToken) => {
+    //       originalRequest.headers = {
+    //         ...originalRequest.headers,
+    //         accessToken: accessToken,
+    //       };
+    //       resolve(axios(originalRequest));
+    //     });
+    //   });
+    //   return retryOriginalRequest;
+    //   // }
+    // }
+    // return Promise.reject(error)
   } 
 );
 
