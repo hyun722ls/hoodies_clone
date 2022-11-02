@@ -1,5 +1,6 @@
 package com.ssafy.hoodies.model.service;
 
+import com.ssafy.hoodies.util.util;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -9,10 +10,8 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -74,15 +73,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getRandomGenerateString(int targetStringLength) {
-        int leftLimit = 48; // numeral '0'
-        int rightLimit = 122; // letter 'z'
-        Random random = new Random();
-        String generatedString = random.ints(leftLimit, rightLimit + 1).filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)).limit(targetStringLength).collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
-        return generatedString;
-    }
-
-    @Override
     public String sendMM(String email, int flag) {
         try {
             // 1. 발신자 인증
@@ -140,7 +130,7 @@ public class UserServiceImpl implements UserService {
             else
                 message.append("초기화 된 비밀번호 입니다.\n");
 
-            String authcode = getRandomGenerateString(8);
+            String authcode = util.getRandomGenerateString(8);
             message.append("```\n").append(authcode).append("\n```");
 
             sendInfo.put("message", message.toString());
@@ -157,27 +147,6 @@ public class UserServiceImpl implements UserService {
                 return "fail";
         } catch (Exception e) {
             return "fail";
-        }
-    }
-
-    private String bytesToHex(byte[] bytes) {
-        StringBuilder builder = new StringBuilder();
-        for (byte b : bytes) {
-            builder.append(String.format("%02x", b));
-        }
-        return builder.toString();
-    }
-
-    @Override
-    public String getEncryptPassword(String password, String salt) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            String text = password + salt;
-            md.update(text.getBytes());
-
-            return bytesToHex(md.digest());
-        } catch (Exception e) {
-            return null;
         }
     }
 
