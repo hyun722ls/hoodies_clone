@@ -1,8 +1,4 @@
 import * as React from 'react';
-import classes from "./articles.module.css";
-import Grid from '@mui/material/Grid';
-import Weekly from './jobInfo.module.css'
-// import {styled} from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, {tableCellClasses} from '@mui/material/TableCell';
@@ -62,7 +58,7 @@ const JobInfo = (props) => {
         setPage(0);
     };
     return (
-        <Paper sx={{ width: '100%' , margin: '30px'}}>
+        <Paper sx={{ width: '100%' , margin: '15px'}}>
             <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
