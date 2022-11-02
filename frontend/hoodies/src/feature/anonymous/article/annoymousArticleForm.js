@@ -120,7 +120,7 @@ const AnnoymousArticleForm = () => {
     const response = await createArticle(title, content)
     if (response) {
       alert('등록완료')
-      history.push("/board/free");
+      history.push("/board/annoymous");
       
 
     } else {
