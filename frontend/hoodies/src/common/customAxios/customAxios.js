@@ -62,20 +62,20 @@ axios1.interceptors.response.use(
             // window.location.href = "/login";
           });
       }
+    
+      const retryOriginalRequest = new Promise((resolve) => {
+        addRefreshSubscriber((accessToken) => {
+          originalRequest.headers = {
+            ...originalRequest.headers,
+            accessToken: accessToken,
+          };
+          resolve(axios(originalRequest));
+        });
+      });
+      return retryOriginalRequest;
+      // }
     }
-    //   const retryOriginalRequest = new Promise((resolve) => {
-    //     addRefreshSubscriber((accessToken) => {
-    //       originalRequest.headers = {
-    //         ...originalRequest.headers,
-    //         accessToken: accessToken,
-    //       };
-    //       resolve(axios(originalRequest));
-    //     });
-    //   });
-    //   return retryOriginalRequest;
-    //   // }
-    // }
-    // return Promise.reject(error)
+    return Promise.reject(error)
   } 
 );
 
