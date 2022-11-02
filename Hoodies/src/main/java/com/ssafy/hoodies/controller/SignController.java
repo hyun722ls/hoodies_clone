@@ -9,20 +9,16 @@ import com.ssafy.hoodies.model.repository.TokenRepository;
 import com.ssafy.hoodies.model.repository.UserAuthRepository;
 import com.ssafy.hoodies.model.repository.UserRepository;
 import com.ssafy.hoodies.model.service.UserService;
+import com.ssafy.hoodies.util.util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,8 +58,8 @@ public class SignController {
                 return resultMap;
             }
 
-            String salt = userService.getRandomGenerateString(8);
-            String encryptPassword = userService.getEncryptPassword(user.getPassword(), salt);
+            String salt = util.getRandomGenerateString(8);
+            String encryptPassword = util.getEncryptPassword(user.getPassword(), salt);
             if (encryptPassword == null) {
                 resultMap.put("statusCode", FAIL);
                 return resultMap;
@@ -106,7 +102,7 @@ public class SignController {
             User getUser = userRepository.findById(user.getEmail()).get();
 
             // 비밀번호가 다른 경우
-            String hashPassword = userService.getEncryptPassword(user.getPassword(), getUser.getSalt());
+            String hashPassword = util.getEncryptPassword(user.getPassword(), getUser.getSalt());
             if (!hashPassword.equals(getUser.getPassword())) {
                 resultMap.put("statusCode", FAIL);
                 return resultMap;

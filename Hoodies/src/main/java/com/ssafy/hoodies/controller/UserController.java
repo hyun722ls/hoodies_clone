@@ -7,6 +7,7 @@ import com.ssafy.hoodies.model.repository.BoardRepository;
 import com.ssafy.hoodies.model.repository.UserAuthRepository;
 import com.ssafy.hoodies.model.repository.UserRepository;
 import com.ssafy.hoodies.model.service.UserService;
+import com.ssafy.hoodies.util.util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -173,7 +174,7 @@ public class UserController {
 
             String salt = user.getSalt();
             String password = userService.sendMM(email, 2);
-            String encryptPassword = userService.getEncryptPassword(password, salt);
+            String encryptPassword = util.getEncryptPassword(password, salt);
 
             if (encryptPassword == null) {
                 resultMap.put("statusCode", FAIL);
@@ -233,7 +234,7 @@ public class UserController {
             User user = userRepository.findById(email).get();
 
             String salt = user.getSalt();
-            String encryptPassword = userService.getEncryptPassword(password, salt);
+            String encryptPassword = util.getEncryptPassword(password, salt);
             String beforePassword = user.getPassword();
 
             // 이전 비밀번호와 동일한 경우
