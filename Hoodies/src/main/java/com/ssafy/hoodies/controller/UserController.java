@@ -1,12 +1,13 @@
 package com.ssafy.hoodies.controller;
 
-import com.ssafy.hoodies.config.security.JwtTokenProvider;
 import com.ssafy.hoodies.model.entity.Board;
-
 import com.ssafy.hoodies.model.entity.User;
 import com.ssafy.hoodies.model.entity.UserAuth;
-import com.ssafy.hoodies.model.repository.*;
+import com.ssafy.hoodies.model.repository.BoardRepository;
+import com.ssafy.hoodies.model.repository.UserAuthRepository;
+import com.ssafy.hoodies.model.repository.UserRepository;
 import com.ssafy.hoodies.model.service.UserService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+@Api(tags = {"유저 API"})
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
@@ -35,12 +37,9 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final UserAuthRepository userAuthRepository;
-
     private final BoardRepository boardRepository;
 
-
-    private final MongoTemplate mongoTemplate;
-
+    @ApiOperation(value = "닉네임 중복 체크")
     @GetMapping("/check/{nickname}")
     public Map<String, Object> checkNickname(@PathVariable String nickname) {
         User user = userRepository.findByNickname(nickname);
@@ -54,7 +53,7 @@ public class UserController {
         return resultMap;
     }
 
-    // 회원가입 MM 인증 메시지 전송
+    @ApiOperation(value = "회원가입 MM 인증 메시지 전송")
     @GetMapping("/auth/{email}")
     public Map<String, Object> sendMM(@PathVariable String email) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -72,7 +71,7 @@ public class UserController {
         }
 
         Timestamp expireTime = new Timestamp(System.currentTimeMillis());
-        expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(300));
+        expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
         userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).authflag(false).build());
         resultMap.put("statusCode", SUCCESS);
 
@@ -80,6 +79,7 @@ public class UserController {
     }
 
 
+    @ApiOperation(value = "회원가입 MM 인증 메시지 검증")
     @PostMapping("/auth")
     public Map<String, Object> authMM(@RequestBody Map<String, String> map) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -115,6 +115,7 @@ public class UserController {
         return resultMap;
     }
 
+    @ApiOperation(value = "비밀번호 초기화 인증 메시지 전송")
     @GetMapping("/resetPassword/{email}")
     public Map<String, Object> sendResetPassword(@PathVariable String email) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -139,6 +140,7 @@ public class UserController {
         return resultMap;
     }
 
+    @ApiOperation(value = "비밀번호 초기화 인증 메시지 검증")
     @PostMapping("/resetPassword")
     public Map<String, Object> authResetPassword(@RequestBody Map<String, String> map) {
         String email = map.getOrDefault("email", "");
@@ -190,6 +192,7 @@ public class UserController {
         return resultMap;
     }
 
+    @ApiOperation(value = "닉네임 변경")
     @PutMapping("/nickname")
     public Map<String, Object> updateNickname(@RequestBody Map<String, String> map) {
         SecurityContext context = SecurityContextHolder.getContext();
@@ -218,6 +221,7 @@ public class UserController {
         return resultMap;
     }
 
+    @ApiOperation(value = "비밀번호 변경")
     @PutMapping("/password")
     public Map<String, Object> updatePassword(@RequestBody Map<String, String> map) {
         SecurityContext context = SecurityContextHolder.getContext();
@@ -251,17 +255,14 @@ public class UserController {
 
     @GetMapping("/article/{writer}")
     @ApiOperation(value = "사용자가 쓴 글 조회")
-    public Page<Board> findUserBoard(  @ApiParam(
-            name =  "writer",
+    public Page<Board> findUserBoard(@ApiParam(
+            name = "writer",
             type = "String",
             value = "게시물의 DB상 writer, 닉네임",
-            required = true) @PathVariable String writer, Pageable pageable){
+            required = true) @PathVariable String writer, Pageable pageable) {
 
         Sort sort = Sort.by("createdAt").descending();
         return boardRepository.findByWriter(writer, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort));
     }
-
-
-
-
+    
 }

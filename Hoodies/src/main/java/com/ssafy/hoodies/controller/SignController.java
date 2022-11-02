@@ -9,6 +9,8 @@ import com.ssafy.hoodies.model.repository.TokenRepository;
 import com.ssafy.hoodies.model.repository.UserAuthRepository;
 import com.ssafy.hoodies.model.repository.UserRepository;
 import com.ssafy.hoodies.model.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -22,6 +24,7 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
+@Api(tags = {"인증 API"})
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
@@ -37,6 +40,7 @@ public class SignController {
     private final TokenRepository tokenRepository;
 
 
+    @ApiOperation(value = "회원가입")
     @PostMapping
     public Map<String, Object> signup(@RequestBody User user, HttpServletResponse response) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -93,6 +97,7 @@ public class SignController {
         return resultMap;
     }
 
+    @ApiOperation(value = "로그인")
     @PostMapping("/login")
     public Map<String, Object> login(@RequestBody User user, HttpServletResponse response) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -132,6 +137,7 @@ public class SignController {
         return resultMap;
     }
 
+    @ApiOperation(value = "토근 재발급")
     @GetMapping("/reissue")
     public Map<String, Object> reissue(HttpServletRequest request, HttpServletResponse response, @CookieValue("refreshToken") String refreshToken) {
         Map<String, Object> resultMap = new HashMap<>();
