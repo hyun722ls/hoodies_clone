@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.Map;
 
 @Builder
 @Data
@@ -31,6 +32,10 @@ public class Board {
     private List<Comment> comments;
 
     private String category;
+
+    private int type;
+
+    private Map<String, Boolean> contributor;
 
     // private ??? image;
 }
