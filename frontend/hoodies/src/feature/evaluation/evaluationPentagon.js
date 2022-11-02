@@ -12,71 +12,65 @@ const evaluationPentagon = () => {
     const data = [
         {
           "taste": "teaching skill",
-          "chardonay": 27,
-          "carmenere": 66,
-          "syrah": 55
+          "chardonay": 10
         },
         {
-          "taste": "인성",
-          "chardonay": 113,
-          "carmenere": 100,
-          "syrah": 40
+          "taste": "mentoring skill",
+          "chardonay": 90
         },
         {
-          "taste": "heavy",
-          "chardonay": 73,
-          "carmenere": 28,
-          "syrah": 91
+          "taste": "class atmosphere",
+          "chardonay": 73
         },
         {
           "taste": "strong",
-          "chardonay": 97,
-          "carmenere": 68,
-          "syrah": 86
+          "chardonay": 97
         },
         {
           "taste": "sunny",
-          "chardonay": 70,
-          "carmenere": 69,
-          "syrah": 60
+          "chardonay": 95
         }
       ]
     return (
         <ResponsiveRadar
             data={data}
-            keys={[ 'chardonay', 'carmenere', 'syrah' ]}
+            keys={[ 'chardonay' ]}
             indexBy="taste"
             // valueFormat=">-.2f"
-            margin={{ top: 70, right: 80, bottom: 40, left: 80 }}
+            margin={{ top: 70, right: 80, bottom: 40, left: 400 }}
             borderColor={{ from: 'color' }}
-            gridLabelOffset={36}
-            dotSize={10}
+            gridShape='linear'
+            gridLabelOffset={30}
+            dotSize={30}
             dotColor={{ theme: 'background' }}
             dotBorderWidth={2}
             colors={{ scheme: 'nivo' }}
             blendMode="multiply"
             motionConfig="wobbly"
-            legends={[
-                {
-                    anchor: 'top-left',
-                    direction: 'column',
-                    translateX: -50,
-                    translateY: -40,
-                    itemWidth: 80,
-                    itemHeight: 20,
-                    itemTextColor: '#999',
-                    symbolSize: 12,
-                    symbolShape: 'circle',
-                    effects: [
-                        {
-                            on: 'hover',
-                            style: {
-                                itemTextColor: '#000'
-                            }
-                        }
-                    ]
-                }
-            ]}
+            theme={{'fontSize':20,
+                    'fontFamily':'IBM Plex Sans KR'
+                  }}
+            // legends={[
+            //     {
+            //         anchor: 'top-left',
+            //         direction: 'column',
+            //         translateX: -50,
+            //         translateY: -40,
+            //         itemWidth: 80,
+            //         itemHeight: 20,
+            //         itemTextColor: '#999',
+            //         symbolSize: 12,
+            //         symbolShape: 'circle',
+            //         effects: [
+            //             {
+            //                 on: 'hover',
+            //                 style: {
+            //                     itemTextColor: '#000'
+            //                 }
+            //             }
+            //         ]
+            //     }
+            // ]}
         />
     )
     }

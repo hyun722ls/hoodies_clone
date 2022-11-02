@@ -3,8 +3,20 @@ import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../common/UI/header/header";
 import EvaulationComment from "./evaluationComment";
 import EvaluationPentagon from "./evaluationPentagon";
+import styled from "styled-components";
+import Shit from './guaca.png'
+
+
 
 const EvenPro = () => {
+
+  const BoxOne = styled.div`
+  background-image: url(${Shit});
+  height: 1000px;
+  width: 1000px;
+  background-repeat: no-repeat;
+  `
+
   const history = useHistory();
   const location = useLocation();
   const [staff, setStaff] = useState([]);
@@ -75,9 +87,14 @@ const EvenPro = () => {
           modifyCommentHandler={modifyCommentHandler}
           createCommentHandler={createCommentHandler}
         />
-        <div style={{height:'500px'}}>
+        <div style={{display:'flex', 'justifyContent':'center', height:'500px', width:'70%'}}>
           <EvaluationPentagon></EvaluationPentagon>
         </div>
+        <BoxOne style={{position:'relative'}}>
+          <div style={{position:'absolute', top:'30%', right:'60%'}}>
+            hello
+          </div>
+        </BoxOne>
       </div>
     )
   );
