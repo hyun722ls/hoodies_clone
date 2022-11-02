@@ -10,6 +10,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
@@ -23,9 +24,19 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
         // 1. Request Header 에서 JWT 토큰 추출
         String accessToken = resolveToken((HttpServletRequest) request);
+        Cookie[] cookies = ((HttpServletRequest) request).getCookies();
+        String refreshToken = "";
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("refreshToken")) {
+                    refreshToken = cookie.getValue();
+                    break;
+                }
+            }
+        }
 
         // 2. validateToken 으로 토큰 유효성 검사
-        if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
+        if (accessToken != null && jwtTokenProvider.validateToken(accessToken) && jwtTokenProvider.validateToken(refreshToken)) {
             // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext 에 저장
             Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
