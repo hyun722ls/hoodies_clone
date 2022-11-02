@@ -181,6 +181,10 @@ const BoardTable = (props) => {
       <Title>
         <H1>작성된 글이 없습니다.</H1>
       </Title>
+      <NewArticle onClick={createArticle}>
+        새로운 게시글 작성
+        <NewIcon />
+      </NewArticle>
     </Articles>
   );
 };
