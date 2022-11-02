@@ -6,7 +6,6 @@ import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import styled from "styled-components";
 
 const Title = styled.div`
-  width: 95.28vw;
   font-size: 1em;
   margin-bottom: 10px;
   padding: 12px;
@@ -16,10 +15,6 @@ const Title = styled.div`
   text-align: center;
   justify-content: center;
   background-color: #e4ffc5;
-`
-
-const DIV = styled.div`
-  margin-left: 10px;
 `
 
 const H1 = styled.h1`
@@ -34,30 +29,33 @@ const Staffs = (props) => {
 
   const detailPageHandler = (staff) => {
     history.push({ pathname: "/pro/detail", state: staff });
+    console.log(staff)
   };
 
   return props.staffs.length ? (
     <Grid container>
-      <DIV>
-          <Title>
+          <Title className={staffs.spacing}>
               <H1 className={staffs.title}>최신 평가&nbsp;&nbsp;&nbsp;</H1>
               <PageviewIcon onClick={evaluationPageHandler} />
           </Title>
-      </DIV>
       <div>
         {props.staffs.map((staff) => {
           return (
-            <div
+            <Grid
               className={staffs.card}
-              key={staff.id}
+              key={staff._id}
               onClick={() => {
                 detailPageHandler(staff);
               }}
             >
-              <h3>{staff.name}</h3>
-              <p>{staff.email}</p>
-              <p>{staff.description}</p>
-            </div>
+                <span>{staff.writer}</span>
+                <span>{staff.email}</span> {/*a태그 걸기*/}
+                <p>{staff.career}&nbsp;&nbsp;&nbsp;{staff.etc}</p>
+                <p></p>
+                <span>{staff.evaluations[0].writer}</span>
+                <span>{staff.evaluations[0].content}</span>
+                <span>{staff.evaluations[0].createdAt}</span>
+            </Grid>
             // <tr key={article.id}>
             //   <td>{article.title}</td>
             //   <td>{article.writer}</td>

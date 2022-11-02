@@ -8,10 +8,11 @@ import Articles from "./mainComponent/articles";
 import PopularText from "./mainComponent/popularText";
 import Staffs from "./mainComponent/staffs";
 // import axios from 'axios';
-import { fetchPopularview, fetchPreview } from "./mainAPI";
+import { fetchPopularview, fetchPreview, fetchStaffview } from "./mainAPI";
 import {tempJobInfo} from "../../common/data/dummyJobData";
 import axios from "axios";
 import { API_URL } from "../../common/api/url";
+import GRID from "./main.module.css";
 
 const Main = () => {
   // const [weeklyMenu, setWeeklyMenu] = useState([]);
@@ -37,11 +38,13 @@ const Main = () => {
       // const info1 = await fetchJobInfo()
       const response = await fetchPreview()
       const response1 = await fetchPopularview()
+      const responseStaffs = await fetchStaffview()
 
     setJobInfo(tempJobInfo)
     setArticles(response)    
     setPopularText(response1)
-    setStaffs(previewPros)
+    setStaffs(responseStaffs)
+    // setStaffs(previewPros)
     setIsLoading(false);
     })()
   }, []);
@@ -52,11 +55,13 @@ const Main = () => {
     staffs && (
         <div>
           <Header />
-              <Grid container>
+              <Grid>
                 <WeeklyMenu />
                 <JobInfo jobInfo={jobInfo}/>
-                <Articles articles={articles} />
-                <PopularText popularText={popularText} />
+                <Grid container spacing={3} className={GRID.container}>
+                  <Articles articles={articles} />
+                  <PopularText popularText={popularText} />
+                </Grid>
                 <Staffs staffs={staffs} />
               </Grid>
               <button onClick={reissueToken}>토큰 재발행</button>

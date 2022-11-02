@@ -48,7 +48,6 @@ const ArticleH2_filter = styled.h2`
   margin: 0;
   margin-bottom: 5px;
   line-height: 18px;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 14px;
@@ -134,10 +133,10 @@ const isFilter = (article) => {
 }
 
 return props.articles.length ? (
-  <Grid item sx={{ margin: '10px'}} xs={11.9} md={5.7}>
+  <Grid item sx={{ margin: '0px', marginRight: '0px'}} xs={12} md={6}>
     <div>
         <Title>
-            <H1 item xs={11.9}>자유게시판 최신글</H1>
+            <H1 item>자유게시판 최신글</H1>
             <ReadMoreIcon
                 fontSize="large"
                 onClick={() => {
