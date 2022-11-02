@@ -18,3 +18,12 @@ export const fetchPopularview = async () => {
         console.log(err)
     }
 }
+
+export const fetchStaffview = async () => {
+    try {
+        const response = await axios.get(API_URL + 'preview/mentor')
+        return response.data
+    } catch (err){
+        console.log(err)
+    }
+}

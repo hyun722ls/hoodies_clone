@@ -16,7 +16,11 @@ img {
 
 .menuLocation10 {
     height: 40vmax;
-    overflow: scroll;
+    overflow: auto;
     display: flex;
     justify-content: center;
+}
+
+.container {
+    margin: 20px;
 }
