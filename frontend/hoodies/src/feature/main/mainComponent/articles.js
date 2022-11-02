@@ -5,8 +5,7 @@ import { blockArticle } from "../../../common/refineData/blockArticle";
 import { timeConventer } from "../../../common/refineData/refineTime";
 import Grid from '@mui/material/Grid';
 
-const Articles = (props) => {
-const history = useHistory();
+git const history = useHistory();
 
 const freeBoardHandler = () => {
   history.push("/board/free");
