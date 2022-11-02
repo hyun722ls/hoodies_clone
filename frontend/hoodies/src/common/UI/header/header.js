@@ -26,12 +26,12 @@ const Header = () => {
           </li>
           <li>
             <Link to="/board/free" className={classes.navbar__item}>
-              익명 게시판
+              자유 게시판
             </Link>
           </li>
           <li>
-            <Link to="/board/free" className={classes.navbar__item}>
-              구인 구직
+            <Link to="/board/annonymous" className={classes.navbar__item}>
+              익명 구직
             </Link>
           </li>
           <li>
