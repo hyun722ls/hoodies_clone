@@ -32,11 +32,8 @@ axios1.interceptors.response.use(
     console.log(error);
     const code = data.status;
     const originalRequest = config;
-    if (code === 401){
-       localStorage.clear();
-       window.location.href = "/login";
-    }
-    else if (code === 403) {
+
+    if (code === 403) {
       // if (error.response.data.message === "") {
       if (!isTokenRefreshing) {
         isTokenRefreshing = true;
@@ -54,15 +51,14 @@ axios1.interceptors.response.use(
               accessToken: newAccessToken,
             };
             // return axios(originalRequest)
-            // onTokenRefreshed(newAccessToken);
+            onTokenRefreshed(newAccessToken);
           })
           .catch((err) => {
             console.log("reissue 마무리");
             // localStorage.clear();
             // window.location.href = "/login";
           });
-      
-    
+      }
       const retryOriginalRequest = new Promise((resolve) => {
         addRefreshSubscriber((accessToken) => {
           originalRequest.headers = {
@@ -73,7 +69,7 @@ axios1.interceptors.response.use(
         });
       });
       return retryOriginalRequest;
-      }
+      // }
     }
     return Promise.reject(error)
   } 
