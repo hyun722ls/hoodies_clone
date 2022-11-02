@@ -12,6 +12,8 @@ import com.ssafy.hoodies.model.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,7 +34,7 @@ import java.util.Map;
 public class SignController {
     private static final String SUCCESS = "200";
     private static final String FAIL = "403";
-    private static final String EXPIRED = "401";
+    private static final String EXPIRED = "400";
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
     private final UserRepository userRepository;
@@ -139,35 +141,34 @@ public class SignController {
 
     @ApiOperation(value = "토근 재발급")
     @GetMapping("/reissue")
-    public Map<String, Object> reissue(@CookieValue("refreshToken") Cookie cookieRefreshToken) {
+    public ResponseEntity<Map<String, Object>> reissue(@CookieValue("refreshToken") Cookie cookieRefreshToken) {
         Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
 
-        try {
-            String refreshToken = cookieRefreshToken.getValue();
+        String refreshToken = cookieRefreshToken.getValue();
 
-            Token tokenInfo = tokenRepository.findByRefreshToken(refreshToken);
-            if (tokenInfo == null) {
-                resultMap.put("statusCode", FAIL);
-                return resultMap;
-            }
-            String email = tokenInfo.getEmail();
-
-            // refreshToken이 만료되었을 경우
-            if (!jwtTokenProvider.validateToken(refreshToken)) {
-                resultMap.put("statusCode", EXPIRED);
-                return resultMap;
-            }
-
-            String newAccessToken = jwtTokenProvider.generateAccessToken("email", email, "token");
-
-            tokenRepository.save(Token.builder().email(email).accessToken(newAccessToken).refreshToken(refreshToken).build());
-
-            resultMap.put("accessToken", newAccessToken);
-            resultMap.put("statusCode", SUCCESS);
-        } catch (Exception e) {
+        Token tokenInfo = tokenRepository.findByRefreshToken(refreshToken);
+        if (tokenInfo == null) {
             resultMap.put("statusCode", FAIL);
+            status = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<Map<String, Object>>(resultMap, status);
         }
-        return resultMap;
+        String email = tokenInfo.getEmail();
+
+        // refreshToken이 만료되었을 경우
+        if (!jwtTokenProvider.validateToken(refreshToken)) {
+            resultMap.put("statusCode", EXPIRED);
+            status = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        }
+
+        String newAccessToken = jwtTokenProvider.generateAccessToken("email", email, "token");
+
+        tokenRepository.save(Token.builder().email(email).accessToken(newAccessToken).refreshToken(refreshToken).build());
+
+        resultMap.put("accessToken", newAccessToken);
+        resultMap.put("statusCode", SUCCESS);
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
 }
