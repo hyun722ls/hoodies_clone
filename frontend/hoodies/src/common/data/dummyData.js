@@ -284,3 +284,8 @@ export const MAPPING_FLAG = {
   pro: 2,
   coach: 3,
 };
+
+export const WEEKLY_MENU = [
+  { id: 0, label: '20th', value: '20th'},
+  { id: 1, label: '10th', value: '10th'},
+];

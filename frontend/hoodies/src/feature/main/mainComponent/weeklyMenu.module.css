@@ -4,7 +4,7 @@ img {
 
 .hd_style {
     position: sticky;
-    width: 15%;
+    width: 7%;
     margin-left: 95%;
     margin-top: -90%;
 }
@@ -12,4 +12,11 @@ img {
 .menuLocation {
     display: grid;
     place-items: center;
+}
+
+.menuLocation10 {
+    height: 40vmax;
+    overflow: scroll;
+    display: flex;
+    justify-content: center;
 }
