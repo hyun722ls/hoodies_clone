@@ -15,6 +15,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -124,6 +127,23 @@ public class SignController {
 
             resultMap.put("nickname", getUser.getNickname());
             resultMap.put("accessToken", accessToken);
+            resultMap.put("statusCode", SUCCESS);
+        } catch (Exception e) {
+            resultMap.put("statusCode", FAIL);
+        }
+        return resultMap;
+    }
+
+    @ApiOperation(value = "로그아웃")
+    @GetMapping("/logout")
+    public Map<String, Object> login() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
+
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            tokenRepository.deleteById(email);
             resultMap.put("statusCode", SUCCESS);
         } catch (Exception e) {
             resultMap.put("statusCode", FAIL);
