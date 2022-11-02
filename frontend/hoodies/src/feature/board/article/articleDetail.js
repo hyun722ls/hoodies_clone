@@ -3,6 +3,123 @@ import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../../common/UI/header/header";
 import {createComment, deleteArticle, deleteComment, fetchArticle, modifyComment} from "../boardAPI";
 import CommentList from "./commentList";
+import styled from "styled-components";
+
+const Articles = styled.div`
+  position: relative;
+  float: none;
+  left: 24px;
+  margin: 24px auto;
+  width: 780px;
+`
+const ArticleHead = styled.div`
+  margin-bottom: -1px;
+  box-sizing: border-box;
+  border-bottom: 2px solid #EAE3D2;
+  background-color: #fff;
+`
+const ArticleH2 = styled.h2`
+  margin: 0;
+  margin-bottom: 5px;
+  line-height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: bold;
+  font-size: 16px;
+`
+const ArticleH3 = styled.h3`
+  margin: 0;
+  margin-right: 5px;
+  padding: 0;
+  float: left;
+  max-width: 90px;
+  height: 15px;
+  line-height: 15px;
+  font-size: 11px;
+  font-weight: normal;
+  letter-spacing: 0;
+  white-space: nowrap;
+`
+const ArticleTime = styled.time`
+  margin: 0;
+  padding: 0;
+  float: left;
+  margin-right: 5px;
+  height: 15px;
+  line-height: 15px;
+  font-size: 11px;
+  color: #a6a6a6;
+`
+const ArticleHr = styled.hr`
+  margin: 0;
+  padding: 0;
+  clear: both;
+  height: 0;
+  border: 0;
+  width: 100%;
+`
+const Score = styled.ul`
+  margin: 0;
+  padding: 0;
+  float: right;
+  list-style: none;
+`
+const Item = styled.li`
+  margin: 0;
+  float: left;
+  margin-left: 8px;
+  padding: 0 2px;
+  padding-left: 15px;
+  height: 20px;
+  line-height: 20px;
+  font-size: 12px;
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 11px 11px;
+`
+const ArticleBody= styled.div`
+  min-height: 320px;
+  box-sizing: border-box;
+  border-bottom: 2px solid #EAE3D2;
+  background-color: #fff;
+`
+
+const StyledButton = styled.button`
+  margin: 0 4px;
+  min-width: 80px;
+  height: 32px;
+  border: 1px solid #F9F5EB;
+  background-color: #EAE3D2;
+  color: #1D3979;
+  border-radius: 8px;
+  font-weight: bold;
+  &:hover {
+    background-color: #D9D2C3;
+    cursor: pointer;
+  }
+`
+const RightButton = styled.button`
+  float: right;
+  margin: 0 4px;
+  min-width: 80px;
+  height: 32px;
+  border: 1px solid #F9F5EB;
+  background-color: #EAE3D2;
+  color: #1D3979;
+  border-radius: 8px;
+  font-weight: bold;
+  &:hover {
+    background-color: #D9D2C3;
+    cursor: pointer;
+  }
+`
+const BtnCancle = styled(RightButton)`
+  background-color: #F9F5EB;
+  &:hover {
+    background-color: #EAE3D2;
+  }
+`
 
 const ArticleDetail = () => {
   const location = useLocation();
@@ -92,20 +209,20 @@ const ArticleDetail = () => {
     comments && (
       <div>
         <Header />
-        <h4>{article.title}</h4>
-        <div>
-          <p>작성시간 : {article.createdAt} {article.createdAt !== article.modifiedAt && <span>(수정됨 {article.modifiedAt})</span>} </p>
-          <p>조회수 : {article.hit}</p>
-          <p>추천수 : {article.like}</p>
-          <p>작성자 : {article.writer}</p>
-        </div>
-        <p>{article.content}</p>
-        <div>
-          <button onClick={backHandler}>목록보기</button>
-          
-          {article.writer === localStorage.getItem('nickname') && <button onClick={modifyHandler}>수정</button>}
-          {article.writer === localStorage.getItem('nickname') && <button onClick={deleteHandler}>삭제</button>}
-        </div>
+        <Articles>
+          <ArticleHead>
+            <ArticleH2>{article.title}</ArticleH2>
+            <ArticleH3>{article.writer}</ArticleH3>
+            <ArticleTime>{article.createdAt} {article.createdAt !== article.modifiedAt && <span>(수정됨 {article.modifiedAt})</span>} </ArticleTime>
+            <Score>
+              <Item>추천수 : {article.like}</Item>
+              <Item>조회수 : {article.hit}</Item>
+            </Score>
+            <ArticleHr />
+          </ArticleHead>
+          <ArticleBody>
+            <p>{article.content}</p>
+          </ArticleBody>
         <CommentList
           comments={comments}
           setArticle={setArticle}
@@ -114,6 +231,13 @@ const ArticleDetail = () => {
           modifyCommentHandler={modifyCommentHandler}
           createCommentHandler={createCommentHandler}
         />
+        <div>
+          <StyledButton onClick={backHandler}>목록보기</StyledButton>
+          
+          {article.writer === localStorage.getItem('nickname') && <RightButton onClick={modifyHandler}>수정</RightButton>}
+          {article.writer === localStorage.getItem('nickname') && <BtnCancle onClick={deleteHandler}>삭제</BtnCancle>}
+        </div>
+        </Articles>
       </div>
     )
   );

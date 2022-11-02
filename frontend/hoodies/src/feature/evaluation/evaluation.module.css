@@ -4,7 +4,7 @@
 }
 
 .card {
-  width: 300px;
+  width: 25%;
   text-align: center;
   margin: 0 1rem;
   position: relative;
@@ -20,6 +20,7 @@
 .card p {
   opacity: 0.8;
 }
+
 .card::before {
   content: "";
   position: absolute;
@@ -27,11 +28,11 @@
   left: 50%;
   transform: translateX(-50%);
   border-radius: 50%;
-  background-color: rgba(0, 102, 255, 0.2);
+  background-color: #EAE3D2;
   height: 120px;
   width: 120px;
   -webkit-font-smoothing: antialiased;
-  transition: all 200ms ease-out;
+  transition: all 600ms ease-out;
   z-index: -1;
 }
 .card:hover {
@@ -42,5 +43,5 @@
 }
 .card:hover::before {
   transform: translateX(-50%) translateY(30%) scale(8);
-  background-color: rgba(0, 102, 255, 1);
+  background-color: #617EAA;
 }

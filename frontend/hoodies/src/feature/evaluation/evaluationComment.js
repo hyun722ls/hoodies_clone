@@ -40,7 +40,7 @@ const EvaulationComment = (props) => {
     <div>
       {props.comments.map((comment) => {
         return (
-          <ul key={comment.id}>
+          <ul key={comment._id}>
             <li>
               {comment.content}, {comment.writer}
             </li>

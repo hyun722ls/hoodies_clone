@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import PrivateRoute from "./common/routes/privateRoute";
 import PublicRoute from "./common/routes/publicRoute";
+import ErrorPage from "./common/UI/error/errorPage";
 import Login from "./feature/auth/login/login";
 import Signup from "./feature/auth/signup/signup";
 import ArticleDetail from "./feature/board/article/articleDetail";
@@ -25,6 +26,7 @@ function App() {
           <PrivateRoute component={EvaluationMain} exact path="/pro" />
           <PrivateRoute component={EvenPro} exact path="/pro/detail" />
           <PrivateRoute component={UserMain} exact path="/user" />
+          <PrivateRoute component={ErrorPage} path="*" />
         </Switch>
       </BrowserRouter>
     </div>

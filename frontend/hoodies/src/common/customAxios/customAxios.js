@@ -55,8 +55,8 @@ axios1.interceptors.response.use(
           })
           .catch((err) => {
             console.log("reissue 마무리");
-            // localStorage.clear();
-            // window.location.href = "/login";
+            localStorage.clear();
+            window.location.href = "/login";
           });
       }
       const retryOriginalRequest = new Promise((resolve) => {
@@ -71,8 +71,8 @@ axios1.interceptors.response.use(
       return retryOriginalRequest;
       // }
     }
-    return Promise.reject(error)
-  } 
+    return Promise.reject(error);
+  }
 );
 
 export default axios1;
