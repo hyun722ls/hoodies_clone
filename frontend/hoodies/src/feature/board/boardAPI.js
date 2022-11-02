@@ -35,7 +35,7 @@ export const modifyArticle = async (title, content, articleId) => {
 
 export const fetchArticles = async (page) => {
     try {
-        const response = await axios1.get(API_URL + `board?pageNumber=${page}&pageSize=20`, {headers: {
+        const response = await axios1.get(API_URL + `board?page=${page}&size=20`, {headers: {
             'accessToken': localStorage.getItem('token')
         }})
         return response.data
