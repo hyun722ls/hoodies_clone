@@ -230,6 +230,8 @@ public class UserController {
         String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
         String password = map.getOrDefault("password", "");
 
+        System.out.println("전달 받은 pw : " + password);
+
         Map<String, Object> resultMap = new HashMap<>();
         try {
             User user = userRepository.findById(email).get();
@@ -238,12 +240,17 @@ public class UserController {
             String encryptPassword = util.getEncryptPassword(password, salt);
             String beforePassword = user.getPassword();
 
+            System.out.println("hash pw : " + encryptPassword);
+            System.out.println("before pw : " + beforePassword);
+
             // 이전 비밀번호와 동일한 경우
             if (encryptPassword == null || encryptPassword.equals(beforePassword)) {
+                System.out.println("이전 비밀번호와 동일합니다.");
                 resultMap.put("statusCode", BAD_REQUEST);
                 return resultMap;
             }
 
+            System.out.println("비밀번호 변경 : " + encryptPassword);
             user.setPassword(encryptPassword);
             userRepository.save(user);
 
