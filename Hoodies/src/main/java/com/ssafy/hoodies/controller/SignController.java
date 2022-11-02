@@ -80,9 +80,7 @@ public class SignController {
 
             // refresh token response 설정
             Cookie cookie = new Cookie("refreshToken", refreshToken);
-//            cookie.setMaxAge(14 * 24 * 60 * 60);
-            cookie.setMaxAge(3 * 60);
-
+            cookie.setMaxAge(24 * 60 * 60); // 1 day
             cookie.setSecure(true);
             cookie.setHttpOnly(true);
             cookie.setPath("/");
@@ -120,9 +118,7 @@ public class SignController {
 
             // refresh token response 설정
             Cookie cookie = new Cookie("refreshToken", refreshToken);
-//            cookie.setMaxAge(14 * 24 * 60 * 60); // 2 week
-            cookie.setMaxAge(3 * 60); // 3 minute
-
+            cookie.setMaxAge(24 * 60 * 60); // 1 day
             cookie.setSecure(true);
             cookie.setHttpOnly(true);
             cookie.setPath("/");

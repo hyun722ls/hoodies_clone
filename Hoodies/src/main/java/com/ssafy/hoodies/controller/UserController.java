@@ -15,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -264,5 +263,5 @@ public class UserController {
         Sort sort = Sort.by("createdAt").descending();
         return boardRepository.findByWriter(writer, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort));
     }
-    
+
 }
