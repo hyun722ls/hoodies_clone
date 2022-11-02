@@ -8,8 +8,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Random;
 import java.util.TimeZone;
 
 public class util {
@@ -38,5 +40,33 @@ public class util {
                 String.class //{요청시 반환되는 데이터 타입}
         );
         return res;
+    }
+
+    public static String getRandomGenerateString(int targetStringLength) {
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        Random random = new Random();
+        String generatedString = random.ints(leftLimit, rightLimit + 1).filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)).limit(targetStringLength).collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
+        return generatedString;
+    }
+
+    public static String bytesToHex(byte[] bytes) {
+        StringBuilder builder = new StringBuilder();
+        for (byte b : bytes) {
+            builder.append(String.format("%02x", b));
+        }
+        return builder.toString();
+    }
+
+    public static String getEncryptPassword(String password, String salt) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            String text = password + salt;
+            md.update(text.getBytes());
+
+            return bytesToHex(md.digest());
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
