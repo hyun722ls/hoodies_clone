@@ -3,11 +3,10 @@ import { blockArticle } from "../../../common/refineData/blockArticle";
 import styled from "styled-components";
 
 const RightArticles = styled.div`
-  position: absolute;
-  right: 24px;
-  top: 0;
+  grid-column: 3/4;
+  grid-row: 1;
   width: 320px;
-  margin: 0;
+  margin-bottom: auto;
   background-color: #F9F5EB;
 `
 const Article = styled.article`

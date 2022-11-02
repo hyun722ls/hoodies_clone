@@ -9,7 +9,7 @@ const Articles = styled.div`
   position: relative;
   float: none;
   left: 24px;
-  margin-top: 24px;
+  margin: 24px auto;
   width: 780px;
 `
 const ArticleHead = styled.div`
@@ -87,10 +87,38 @@ const ArticleBody= styled.div`
 
 const StyledButton = styled.button`
   margin: 0 4px;
+  min-width: 80px;
+  height: 32px;
+  border: 1px solid #F9F5EB;
+  background-color: #EAE3D2;
+  color: #1D3979;
+  border-radius: 8px;
+  font-weight: bold;
+  &:hover {
+    background-color: #D9D2C3;
+    cursor: pointer;
+  }
 `
 const RightButton = styled.button`
   float: right;
   margin: 0 4px;
+  min-width: 80px;
+  height: 32px;
+  border: 1px solid #F9F5EB;
+  background-color: #EAE3D2;
+  color: #1D3979;
+  border-radius: 8px;
+  font-weight: bold;
+  &:hover {
+    background-color: #D9D2C3;
+    cursor: pointer;
+  }
+`
+const BtnCancle = styled(RightButton)`
+  background-color: #F9F5EB;
+  &:hover {
+    background-color: #EAE3D2;
+  }
 `
 
 const ArticleDetail = () => {
@@ -207,7 +235,7 @@ const ArticleDetail = () => {
           <StyledButton onClick={backHandler}>목록보기</StyledButton>
           
           {article.writer === localStorage.getItem('nickname') && <RightButton onClick={modifyHandler}>수정</RightButton>}
-          {article.writer === localStorage.getItem('nickname') && <RightButton onClick={deleteHandler}>삭제</RightButton>}
+          {article.writer === localStorage.getItem('nickname') && <BtnCancle onClick={deleteHandler}>삭제</BtnCancle>}
         </div>
         </Articles>
       </div>

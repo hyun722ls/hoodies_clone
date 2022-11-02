@@ -10,9 +10,11 @@ import styled from "styled-components";
 import "./boardMain.css";
 
 const Container = styled.div`
+  display: grid;
+  grid-template-columns: auto;
+  column-gap: 20px;
   position: relative;
-  margin: 0 auto 24px auto;
-  width: 1180px;
+  margin: 24px auto 24px auto;
 `
 
 const BoardMain = () => {
@@ -56,15 +58,17 @@ const BoardMain = () => {
     <div>
       <Header />
       <Container>
-        <BoardTable articles={articles} />
         <div>
-          <Pagination
-            activePage={activePage}
-            itemsCountPerPage={20}
-            totalItemsCount={totalItemsCount}
-            pageRangeDisplayed={5}
-            onChange={handlePageChange}
-          />
+          <BoardTable articles={articles} />
+          <div>
+            <Pagination
+              activePage={activePage}
+              itemsCountPerPage={20}
+              totalItemsCount={totalItemsCount}
+              pageRangeDisplayed={5}
+              onChange={handlePageChange}
+            />
+          </div>
         </div>
         <PopularTexts popularTexts={popularTexts} />
       </Container>
