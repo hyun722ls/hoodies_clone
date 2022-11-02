@@ -5,9 +5,9 @@ import TableCell, {tableCellClasses} from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import TablePagination from '@mui/material/TablePagination';
 import Paper from '@mui/material/Paper';
-
+import TableTitle from './jobInfo.module.css'
+import HomeIcon from '../../../common/data/user-home-symbolic.svg'
 
 const JobInfo = (props) => {
     const getName = (info) => {
@@ -44,19 +44,15 @@ const JobInfo = (props) => {
             minWidth: 170,
             align: 'center'
         },
+        {
+            id: 'home',
+            label: '',
+            minWidth: 30,
+            align: 'center'
+        },
     ];
 
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
     return (
         <Paper sx={{ width: '100%' , margin: '15px'}}>
             <TableContainer sx={{ maxHeight: 440 }}>
@@ -64,7 +60,7 @@ const JobInfo = (props) => {
                     <TableHead>
                         <TableRow>
                             {columns.map((column) => (
-                                <TableCell
+                                <TableCell className={TableTitle.label}
                                     key={column.id}
                                     align={column.align}
                                     style={{ minWidth: column.minWidth }}
@@ -79,30 +75,25 @@ const JobInfo = (props) => {
                             .map((row) => {
                                 return (
                                     <TableRow sx={{width:'100%'}} key={row.id}>
-                                        <TableCell align="center" component="th" scope="row">{row.name.replace(getName(row), '')}</TableCell>
-                                        <TableCell align="left">{row.job}</TableCell>
-                                        <TableCell align="right">{row.period}</TableCell>
-                                        <TableCell align="left">{row.method.replace(getEmail(row), '')}
-                                            <a href="mailto:{getEmail(info).substr(1,getEmail(info).length-2)}}">{getEmail(row).substr(0,getEmail(row).length)}</a>
+                                        <TableCell className={TableTitle.content} align="center" component="th" scope="row">{row.name.replace(getName(row), '')}</TableCell>
+                                        <TableCell className={TableTitle.content} align="left">{row.job}</TableCell>
+                                        <TableCell className={TableTitle.content} align="right">{row.period}</TableCell>
+                                        <TableCell className={TableTitle.content} align="left">{row.method.replace(getEmail(row), '')} -&nbsp; <br/>
+                                            <a className={TableTitle.none} href="mailto:{getEmail(info).substr(1,getEmail(info).length-2)}}">{getEmail(row).substr(0,getEmail(row).length)}</a>
                                             <br/>
-                                            <a href={getName(row).substr(1, getName(row).length-2)}>{getName(row).substr(1, getName(row).length-2)}</a>
                                         </TableCell>
-                                        <TableCell align="center">{row.favor}</TableCell>
+                                        <TableCell className={TableTitle.content} align="center">{row.favor}</TableCell>
+                                        <TableCell className={TableTitle.content}>
+                                            <a href={row.url}>
+                                                <img src={HomeIcon} alt=""/>
+                                            </a>
+                                        </TableCell>
                                     </TableRow>
                                 );
                             })}
                     </TableBody>
                 </Table>
             </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
-                component="div"
-                count={props.jobInfo.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />
         </Paper>
     );
 };

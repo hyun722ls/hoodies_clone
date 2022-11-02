@@ -115,7 +115,8 @@ const ArticleHr = styled.hr`
   width: 100%;
 `
 
-git const history = useHistory();
+const Articles = (props) => {
+const history = useHistory();
 
 const freeBoardHandler = () => {
   history.push("/board/free");
@@ -136,7 +137,7 @@ return props.articles.length ? (
   <Grid item sx={{ margin: '10px'}} xs={11.9} md={5.7}>
     <div>
         <Title>
-            <H1>자유게시판 최신글</H1>
+            <H1 item xs={11.9}>자유게시판 최신글</H1>
             <ReadMoreIcon
                 fontSize="large"
                 onClick={() => {
@@ -163,13 +164,6 @@ return props.articles.length ? (
                       <ArticleHr/>
                   </ArticleA>
               </Article>
-
-            //     { isFilter(article) ? <td>{article.title}</td> : <td_filter>{blockArticle(article, article.category)}</td_filter>}
-            //     <td>{article.writer}</td>
-            //     <td>{timeConventer(article.createdAt)}</td>
-            //     <td>{article.hit}</td>
-            //
-            // </tr>
           );
         })}
   </Grid>
