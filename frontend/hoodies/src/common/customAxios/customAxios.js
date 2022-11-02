@@ -32,8 +32,11 @@ axios1.interceptors.response.use(
     console.log(error);
     const code = data.status;
     const originalRequest = config;
-
-    if (code === 403) {
+    if (code === 401){
+       localStorage.clear();
+       window.location.href = "/login";
+    }
+    else if (code === 403) {
       // if (error.response.data.message === "") {
       if (!isTokenRefreshing) {
         isTokenRefreshing = true;
