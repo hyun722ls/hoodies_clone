@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory, Link, Route } from "react-router-dom";
 import CustomModal from "../../../common/UI/modal/customModal";
 import { authMM, checkNickname, sendMM, signup } from "../authApi";
@@ -18,7 +18,7 @@ const Form = styled.form`
   padding: 0;
 `
 const InputDiv = styled.div`
-  margin-bottom: 32px;
+  margin-bottom: 4px;
   padding: 4px 10px;
   border: 1px solid #d6d6d6;
   background-color: #fff;
@@ -82,7 +82,14 @@ const Logo = styled.p`
   text-align: center;
   font-family: 'Milky Honey';
 `
-
+const StyledSmall = styled.div`
+  text-align: left;
+  font-size: smaller;
+  color: #dd6b55;
+`
+const EmptyDiv = styled.div`
+  height: 25px;
+`
 
 
 const Signup = () => {
@@ -94,6 +101,15 @@ const Signup = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [authCode, setAuthCode] = useState("");
   const [isNicknameDuplicated, setIsNicknameDuplicated] = useState(false);
+  const [isPasswordDuplicated, setIsPasswordDuplicated] = useState(false);
+
+  useEffect(()=>{
+    if (password.trim() === confirmPassword.trim() | !confirmPassword){
+        setIsPasswordDuplicated(false)
+    } else {
+        setIsPasswordDuplicated(true)
+    }
+  }, [password, confirmPassword])
 
   const history = useHistory();
 
@@ -255,6 +271,9 @@ const Signup = () => {
             placeholder="패스워드 확인"
           />
         </InputDiv>
+        <EmptyDiv>
+          {isPasswordDuplicated && <StyledSmall>암호가 일치하지 않습니다</StyledSmall>}
+        </EmptyDiv>
         <div>
           <InputBtn type="submit">회원가입</InputBtn>
         </div>
