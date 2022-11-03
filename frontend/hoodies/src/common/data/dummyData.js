@@ -290,6 +290,38 @@ export const WEEKLY_MENU = [
   { id: 1, label: '10th', value: '10th'},
 ];
 
+export const DUMMY_STAFF = [
+  {
+    "_id": "김탁구",
+    "averageScores": [
+        3,
+        2,
+        5,
+        4,
+        3
+    ],
+    "career": "삼성전자 무선사업부",
+    "email": "abcdef@samsung.com",
+    "etc": "리액트를 잘하고 리액션은 못합니다.",
+    "evaluations": [
+      {
+        "_id": "제빵왕",
+        "content": "탁구를 너무 잘 치십니다.",
+        "createdAt": "2022.11.11 20:20",
+        "score": [
+            4,
+            4,
+            3,
+            5,
+            5
+        ],
+        "writer": "제빵킹"
+      },
+    ],
+    "writer":"outside writer"
+  }
+]
+
 export const PRO_EVAL = [
   {
     "item": "인품",
