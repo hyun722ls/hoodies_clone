@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface MentorRepository extends MongoRepository<Mentor, String> {
     List<Mentor> findBy(Pageable pageable);
-    Page<Mentor> findAllByType(String type, Pageable pageable);
+    Page<Mentor> findAllByType(int type, Pageable pageable);
 }

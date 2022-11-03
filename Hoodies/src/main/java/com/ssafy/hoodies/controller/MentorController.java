@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,20 +34,23 @@ public class MentorController {
     private final MentorRepository mentorRepository;
     private final MongoTemplate mongoTemplate;
 
+    @Value("${nickname.salt}")
+    private String salt;
+
     // 전체 평가 페이지 조회
     @GetMapping("mentor")
     @ApiOperation(value = "전체 평가페이지 조회")
     public Page<Mentor> findAllMentor(Pageable pageable){
         Sort sort = Sort.by("modifiedAt").descending();
-        return mentorRepository.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort));
+        return mentorRepository.findAll(PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(), sort));
     }
 
     // 타입별 평가 페이지 조회
     @GetMapping("mentor/{type}")
     @ApiOperation(value = "타입별 전체 평가 페이지 조회")
-    public Page<Mentor> findMentorByType(Pageable pageable, @PathVariable String type){
+    public Page<Mentor> findMentorByType(Pageable pageable, @PathVariable int type){
         Sort sort = Sort.by("modifiedAt").descending();
-        return mentorRepository.findAllByType(type, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort));
+        return mentorRepository.findAllByType(type, PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(), sort));
     }
 
     // 특정 평가페이지 조회
@@ -69,33 +73,75 @@ public class MentorController {
         return mentorRepository.findBy(PageRequest.of(0, 8, Sort.by("modifiedAt").descending()));
     }
 
-    // 댓글 등록
+    // 평가 등록
     @PostMapping("mentor/{id}/evaluation")
     @ApiOperation(value = "평가 등록")
     public JSONObject writeEvaluation(@RequestBody EvaluationDto dto, @PathVariable String id){
-        ResponseEntity<String> res = util.checkExpression("", dto.getContent(), "comment");
-        Evaluation evaluation = dto.toEntity();
-        evaluation.setCategory(res.getBody().trim());
-
         Mentor mentor = mentorRepository.findById(id).get();
-        double[] avgscore = mentor.getScores();
-        int length = mentor.getEvaluations().size();
+        List<String> contributors = mentor.getContributor();
+        String ewriter = util.getEncryptPassword(dto.getWriter(), salt);
 
-        if(length == 0) avgscore = Arrays.stream(dto.getScore()).asDoubleStream().toArray();
-        else {
-            for (int i = 0; i < avgscore.length; ++i) {
-                avgscore[i] = (avgscore[i] * length + dto.getScore()[i]) / (length + 1);
+        int statusCode = 400;
+
+        if(!contributors.contains(ewriter)){ // 평가를 처음하는 사람
+            contributors.add(ewriter);
+
+            ResponseEntity<String> res = util.checkExpression("", dto.getContent(), "comment");
+            Evaluation evaluation = dto.toEntity();
+            evaluation.setCategory(res.getBody().trim());
+
+            double[] avgscore = mentor.getAverageScores();
+            int length = mentor.getEvaluations().size();
+
+            if(length == 0) avgscore = Arrays.stream(dto.getScore()).asDoubleStream().toArray();
+            else {
+                for (int i = 0; i < avgscore.length; ++i) {
+                    avgscore[i] = (avgscore[i] * length + dto.getScore()[i]) / (length + 1);
+                }
+            }
+
+            Query evaluationQuery = new Query(Criteria.where("_id").is(id));
+            Update evaluationUpdate = new Update();
+            evaluationUpdate.set("modifiedAt", util.getTimeStamp());
+            evaluationUpdate.set("averageScores", avgscore);
+            evaluationUpdate.push("contributor", ewriter);
+            evaluationUpdate.push("evaluations", evaluation);
+
+            UpdateResult ur = mongoTemplate.updateFirst(evaluationQuery, evaluationUpdate, "mentor");
+
+            statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
+        }
+
+        JSONObject json = new JSONObject();
+        json.put("statusCode", statusCode);
+        return json;
+    }
+
+    // 평가 삭제 --> 관리자 전용 기능
+    @DeleteMapping("mentor/{mid}/evaluation/{eid}")
+    @ApiOperation(value = "평가 삭제")
+    public JSONObject deleteEvaluation(@PathVariable String mid, @PathVariable String eid){
+        int statusCode = 400;
+        String target = "";
+
+        for(Evaluation evaluation : mentorRepository.findById(mid).get().getEvaluations()){
+            if(eid.equals(evaluation.get_id())){
+                target = evaluation.getWriter();
             }
         }
-        Query evaluationQuery = new Query(Criteria.where("_id").is(id));
-        Update evaluationUpdate = new Update();
-        evaluationUpdate.set("modifiedAt", util.getTimeStamp());
-        evaluationUpdate.set("scores", avgscore);
-        evaluationUpdate.push("evaluations", evaluation);
 
-        UpdateResult ur = mongoTemplate.updateFirst(evaluationQuery, evaluationUpdate, "mentor");
+        if(!"".equals(target)){
+            Query evaluationQuery = new Query();
+            evaluationQuery.addCriteria(Criteria.where("_id").is(mid));
+            evaluationQuery.addCriteria(Criteria.where("evaluations").elemMatch(Criteria.where("_id").is(eid)));
+            Update evaluationUpdate = new Update();
+            evaluationUpdate.pull("evaluations", Query.query(Criteria.where("_id").is(eid)));
+            evaluationUpdate.pull("contributor", target);
 
-        int statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
+            UpdateResult ur = mongoTemplate.updateFirst(evaluationQuery, evaluationUpdate, "board");
+            statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
+        }
+
         JSONObject json = new JSONObject();
         json.put("statusCode", statusCode);
         return json;
