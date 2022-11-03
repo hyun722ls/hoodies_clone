@@ -120,7 +120,7 @@ const CommentList = (props) => {
             <li key={comment._id}>
               <StyledComment>
                 <Nickname>
-                  {confirmWriter(props.articleWriter, comment.writer, props.commentsMap[comment.writer])}
+                  {confirmWriter(props.articleWriter, comment.writer, props.commentsMap)}
                 </Nickname>
                 <StyledContent>
                   {modifyForm && commentId === comment._id ? (
