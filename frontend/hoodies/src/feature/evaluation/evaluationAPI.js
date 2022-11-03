@@ -26,7 +26,7 @@ export const getStaffListByType = async(type) => {
 
 export const getStaff = async(id) => {
     try {
-        const response = await axios1.get(API_URL + `mentor/coach/${id}`,  {headers: {
+        const response = await axios1.get(API_URL + `mentor/detail/${id}`,  {headers: {
             'accessToken': localStorage.getItem('token')
         }})
         console.log(response.data)
