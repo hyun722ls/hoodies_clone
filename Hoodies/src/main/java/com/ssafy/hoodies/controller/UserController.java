@@ -4,7 +4,6 @@ import com.mongodb.client.result.UpdateResult;
 import com.ssafy.hoodies.model.entity.Board;
 import com.ssafy.hoodies.model.entity.User;
 import com.ssafy.hoodies.model.entity.UserAuth;
-import com.ssafy.hoodies.model.repository.BoardRepository;
 import com.ssafy.hoodies.model.repository.UserAuthRepository;
 import com.ssafy.hoodies.model.repository.UserRepository;
 import com.ssafy.hoodies.model.service.UserService;
@@ -14,9 +13,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -49,7 +45,8 @@ public class UserController {
     private final UserAuthRepository userAuthRepository;
     private final MongoTemplate mongoTemplate;
 
-    @Value("${nickname.salt}") private String salt;
+    @Value("${nickname.salt}")
+    private String salt;
 
     @ApiOperation(value = "닉네임 중복 체크")
     @GetMapping("/check/{nickname}")
@@ -279,8 +276,6 @@ public class UserController {
         String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
         String password = map.getOrDefault("password", "");
 
-        System.out.println("전달 받은 pw : " + password);
-
         Map<String, Object> resultMap = new HashMap<>();
         try {
             User user = userRepository.findById(email).get();
@@ -289,17 +284,12 @@ public class UserController {
             String encryptPassword = util.getEncryptPassword(password, salt);
             String beforePassword = user.getPassword();
 
-            System.out.println("hash pw : " + encryptPassword);
-            System.out.println("before pw : " + beforePassword);
-
             // 이전 비밀번호와 동일한 경우
             if (encryptPassword == null || encryptPassword.equals(beforePassword)) {
-                System.out.println("이전 비밀번호와 동일합니다.");
                 resultMap.put("statusCode", BAD_REQUEST);
                 return resultMap;
             }
 
-            System.out.println("비밀번호 변경 : " + encryptPassword);
             user.setPassword(encryptPassword);
             userRepository.save(user);
 
@@ -312,14 +302,15 @@ public class UserController {
 
     @GetMapping("/article/{writer}")
     @ApiOperation(value = "사용자가 쓴 글 조회")
-    public List<Board> findUserBoard(  @ApiParam(
-            name =  "writer",
+    public List<Board> findUserBoard(@ApiParam(
+            name = "writer",
             type = "String",
             value = "게시물의 DB상 writer, 닉네임",
-            required = true) @PathVariable String writer){
+            required = true) @PathVariable String writer) {
         String ewriter = util.getEncryptPassword(writer, salt);
         List<String> names = new ArrayList<>();
-        names.add(writer); names.add(ewriter);
+        names.add(writer);
+        names.add(ewriter);
         Sort sort = Sort.by("createdAt").descending();
 
         Query query = new Query();
