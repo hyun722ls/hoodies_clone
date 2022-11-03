@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Builder
 @Data
@@ -39,5 +40,6 @@ public class Board {
 
     private String filePath;
 
-    // private ??? image;
+    private Set<String> reporter;
+
 }

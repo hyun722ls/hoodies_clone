@@ -28,9 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -245,7 +243,7 @@ public class BoardController {
         Query commentQuery = new Query(Criteria.where("_id").is(id));
         Update commentUpdate = new Update();
         commentUpdate.inc("hit", -1);
-        commentUpdate.push("comments", comment);
+        commentUpdate.push("comment", comment);
 
         UpdateResult ur = mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
 
@@ -292,6 +290,59 @@ public class BoardController {
 
         int statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
         JSONObject json = new JSONObject();
+        json.put("statusCode", statusCode);
+        return json;
+    }
+
+    // 게시물 신고
+    @PutMapping("/board/detail/{id}/report/{user}")
+    @ApiOperation(value = "게시물 신고")
+    public JSONObject reportBoard(@PathVariable String id, @PathVariable String user) {
+        JSONObject json = new JSONObject();
+        int statusCode = 400;
+        try {
+            Set<String> reporter = boardRepository.findById(id).get().getReporter();
+            String euser = util.getEncryptPassword(user, salt);
+            reporter.add(euser);
+
+            Query boardQuery = new Query(Criteria.where("_id").is(id));
+            Update boardUpdate = new Update();
+            boardUpdate.set("reporter", reporter);
+            UpdateResult ur = mongoTemplate.updateFirst(boardQuery, boardUpdate, "board");
+            statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
+        } catch (Exception e) {
+        }
+        json.put("statusCode", statusCode);
+        return json;
+    }
+
+    // 댓글 신고
+    @PutMapping("/board/{bid}/comment/{cid}/report/{user}")
+    @ApiOperation(value = "댓글 신고")
+    public JSONObject reportBoard(@PathVariable String bid, @PathVariable String cid, @PathVariable String user) {
+        JSONObject json = new JSONObject();
+        int statusCode = 400;
+        try {
+            Query commentQuery = new Query();
+            commentQuery.addCriteria(Criteria.where("_id").is(bid));
+            commentQuery.addCriteria(Criteria.where("comments").elemMatch(Criteria.where("_id").is(cid)));
+
+            Set<String> reporter = new HashSet<>();
+            for (Comment comment : boardRepository.findById(bid).get().getComments()) {
+                if (comment.get_id().equals(cid)) {
+                    reporter = comment.getReporter();
+                    break;
+                }
+            }
+            String euser = util.getEncryptPassword(user, salt);
+            reporter.add(euser);
+
+            Update commentUpdate = new Update();
+            commentUpdate.set("comments.$.reporter", reporter);
+            UpdateResult ur = mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
+            statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
+        } catch (Exception e) {
+        }
         json.put("statusCode", statusCode);
         return json;
     }
