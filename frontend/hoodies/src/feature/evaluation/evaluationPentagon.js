@@ -8,75 +8,80 @@ import { ResponsiveRadar } from '@nivo/radar'
 // website examples showcase many properties,
 // you'll often use just a few of them.
 
-const evaluationPentagon = () => {
+const evaluationPentagon = (props) => {
+
+    const name = props.staff.writer
+    const scores = props.staff.scores
+
     const data = [
         {
-          "taste": "teaching skill",
-          "chardonay": 27,
-          "carmenere": 66,
-          "syrah": 55
+          "criteria": "인품",
+          [`${name}`]: scores[0]
         },
         {
-          "taste": "인성",
-          "chardonay": 113,
-          "carmenere": 100,
-          "syrah": 40
+          "criteria": "프로젝트 지도력",
+          [`${name}`]: scores[1]
         },
         {
-          "taste": "heavy",
-          "chardonay": 73,
-          "carmenere": 28,
-          "syrah": 91
+          "criteria": "상담",
+          [`${name}`]: scores[2]
         },
         {
-          "taste": "strong",
-          "chardonay": 97,
-          "carmenere": 68,
-          "syrah": 86
+          "criteria": "강의 전달력",
+          [`${name}`]: scores[3]
         },
         {
-          "taste": "sunny",
-          "chardonay": 70,
-          "carmenere": 69,
-          "syrah": 60
+          "criteria": "반 분위기",
+          [`${name}`]: scores[4]
         }
       ]
     return (
         <ResponsiveRadar
             data={data}
-            keys={[ 'chardonay', 'carmenere', 'syrah' ]}
-            indexBy="taste"
+            keys={[ `${props.staff.writer}` ]}
+            indexBy="criteria"
             // valueFormat=">-.2f"
-            margin={{ top: 70, right: 80, bottom: 40, left: 80 }}
+            margin={{ top: 70, right: 80, bottom: 40, left: 400 }}
+            maxValue={5}
             borderColor={{ from: 'color' }}
-            gridLabelOffset={36}
-            dotSize={10}
+            borderWidth='4px'
+            gridShape='linear'
+            gridLabelOffset={20}
+            dotSize={15}
             dotColor={{ theme: 'background' }}
             dotBorderWidth={2}
-            colors={{ scheme: 'nivo' }}
+            colors='#617EAA'
             blendMode="multiply"
             motionConfig="wobbly"
-            legends={[
-                {
-                    anchor: 'top-left',
-                    direction: 'column',
-                    translateX: -50,
-                    translateY: -40,
-                    itemWidth: 80,
-                    itemHeight: 20,
-                    itemTextColor: '#999',
-                    symbolSize: 12,
-                    symbolShape: 'circle',
-                    effects: [
-                        {
-                            on: 'hover',
-                            style: {
-                                itemTextColor: '#000'
-                            }
-                        }
-                    ]
-                }
-            ]}
+            theme={{'fontSize':15,
+                    'fontFamily':'IBM Plex Sans KR',
+                    'grid' : {
+                      'line':{
+                        'stroke':'#EAE3D2'
+                      }
+                    }
+                  }}
+            // legends={[
+            //     {
+            //         anchor: 'top-left',
+            //         direction: 'column',
+            //         translateX: -50,
+            //         translateY: -40,
+            //         itemWidth: 80,
+            //         itemHeight: 20,
+            //         itemTextColor: '#999',
+            //         symbolSize: 12,
+            //         symbolShape: 'circle',
+            //         effects: [
+            //             {
+            //                 on: 'hover',
+            //                 style: {
+            //                     itemTextColor: '#000'
+            //                 }
+            //             }
+            //         ]
+            //     }
+            // ]}
         />
     )
     }
