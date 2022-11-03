@@ -27,8 +27,8 @@ const CreateEvaluation = (props) => {
 
     async function handleSubmit(event) {
         event.preventDefault();
-        const scores = [personality, atmosphere, project, lecture, consultation]
-        const response = await postEvaluation(id, scores, studentComment)
+        const score = [personality, atmosphere, project, lecture, consultation]
+        const response = await postEvaluation(id, score, studentComment)
         if (response) {
             alert('게시!')
             history.push({pathname: '/pro/detail', state:props.staff})

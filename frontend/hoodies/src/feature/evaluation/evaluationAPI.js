@@ -35,9 +35,9 @@ export const getStaff = async(id) => {
     }
 }
 
-export const postEvaluation = async (id, scores, content) => {
+export const postEvaluation = async (id, score, content) => {
     const writer = localStorage.getItem('nickname')
-    const formData = {'writer': writer, 'scores':scores, 'content': content }
+    const formData = {'writer': writer, 'score':score, 'content': content }
     console.log(formData)
     try {
         const response = await axios1.post(API_URL + `mentor/${id}/evaluation`, formData, {headers: {
