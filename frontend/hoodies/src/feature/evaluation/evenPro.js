@@ -83,7 +83,7 @@ const EvenPro = () => {
             <img src={bottomright} style={{height:'20%', width:'45%',margin:'15px'}} alt=''></img>
           </div>
         </div> */}
-          <div style={{display:'flex', position:'absolute',left:'4.5%' ,top:'25%' ,'justifyContent':'center', height:'70vh', width:'70%'}}>
+          <div style={{display:'flex','justifyContent':'center', height:'70vh', width:'70%'}}>
             <EvaluationPentagon staff={staff}></EvaluationPentagon>
           </div>
         {/* <BoxOne style={{position:'relative'}}>
