@@ -1,9 +1,10 @@
 package com.ssafy.hoodies.model.entity;
 
-import lombok.*;
-import org.springframework.data.annotation.Id;
+import lombok.Builder;
+import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -23,4 +24,6 @@ public class Comment {
     private String category;
 
     private int type;
+
+    private Set<String> reporter;
 }
