@@ -201,7 +201,7 @@ const ArticleDetail = () => {
   const likeHandler = async (event) => {
     event.preventDefault()
     const response = await fetchLike(location.state)
-    if (response.statusCode === 200){
+    if (response){
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
