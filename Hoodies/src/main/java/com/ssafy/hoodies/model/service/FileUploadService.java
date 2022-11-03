@@ -18,11 +18,12 @@ import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 @Service
 @NoArgsConstructor
-public class S3Service {
-    private AmazonS3 s3Client;
+public class FileUploadService {
+    private AmazonS3 fileUploadClient;
 
     @Value("${cloud.aws.credentials.accessKey}")
     private String accessKey;
@@ -36,29 +37,29 @@ public class S3Service {
     @Value("${cloud.aws.region.static}")
     private String region;
 
+    private final String URL = "https://seoulhoodies.s3.ap-northeast-2.amazonaws.com/";
+
     @PostConstruct
-    public void setS3Client() {
+    public void setFileUploadClient() {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
 
-        s3Client = AmazonS3ClientBuilder.standard()
+        fileUploadClient = AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
                 .withRegion(this.region)
                 .build();
     }
 
     public String upload(MultipartFile file) throws IOException {
-        String fileName = file.getOriginalFilename();
-        InputStream getInputStream = file.getInputStream();
-        byte[] bytes = IOUtils.toByteArray(getInputStream);
+        StringBuilder fileName = new StringBuilder().append(UUID.randomUUID()).append("_").append(file.getOriginalFilename());
+        InputStream getFileInputStream = file.getInputStream();
+        byte[] bytes = IOUtils.toByteArray(getFileInputStream);
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(bytes.length);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 
-        s3Client.putObject(new PutObjectRequest(bucket, fileName, byteArrayInputStream, objectMetadata)
+        fileUploadClient.putObject(new PutObjectRequest(bucket, fileName.toString(), byteArrayInputStream, objectMetadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-//        return s3Client.getUrl(bucket, fileName).toString();
-        String URL = "https://seoulhoodies.s3.ap-northeast-2.amazonaws.com/";
         return URL + fileName;
     }
 }
