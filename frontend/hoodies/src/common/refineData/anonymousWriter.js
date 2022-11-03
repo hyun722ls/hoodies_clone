@@ -8,13 +8,13 @@ export const annonymousWriter = (comments, writer) => {
         return commentsWriters.indexOf(element) === index ;
     });
     
-    console.log(uniqueWriters)
-    const writerIndex = uniqueWriters?.indexOf(writer)
+    
+    const writerIndex = uniqueWriters?.findIndex(writer)
+    console.log(writerIndex)
     if (writerIndex > -1){
         uniqueWriters?.splice(writerIndex, 1)
     }
  
-    console.log(uniqueWriters)
 
     const commentsMap = {}
     
