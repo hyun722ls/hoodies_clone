@@ -120,8 +120,9 @@ export const modifyComment = async (articleId, commentId, content) => {
 
 export const fetchLike = async (articleId) => {
     const writer = localStorage.getItem('nickname')
+    const tmpData = []
     try {
-        const response = await axios1.patch(API_URL + `board/detail/${articleId}/like/${writer}`, {headers: {
+        const response = await axios1.patch(API_URL + `board/detail/${articleId}/like/${writer}`, tmpData, {headers: {
             'accessToken': localStorage.getItem('token')
         }} )
         console.log(response.data)
