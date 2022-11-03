@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import CustomModal from "../../../common/UI/modal/customModal";
 import { login, passworAuthMM, passwordSendMM } from "../authApi";
 import styled from "styled-components";
+import Swal from "sweetalert2";
 
 const Container = styled.div`
   position: absolute;
@@ -87,7 +87,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [seekEmail, setSeekEmail] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  const [isTransferEmail, setIsTransferEmail] = useState(false);
   const [authCode, setAuthCode] = useState("");
   const history = useHistory();
 
@@ -135,73 +134,62 @@ const Login = () => {
     setAuthCode(event.target.value);
   };
 
-  const authCodeTransferHandler = async (event) => {
+  const resetPasswordHandler = async (event) => {
     event.preventDefault();
-    if (authCode.trim()) {
-      const response = await passworAuthMM(seekEmail, authCode);
-      if (response.statusCode === "200") {
-        setSeekEmail("");
-        setAuthCode("");
-        setIsTransferEmail(false);
-        setModalOpen(false);
-        alert(`패스워드는 ${response.password}입니다.`);
-      } else {
-        setSeekEmail("");
-        setAuthCode("");
-        setIsTransferEmail(false);
-        setModalOpen(false);
-        alert("인증코드를 잘못 입력하셨습니다.");
+    Swal.fire({
+      title: '이메일주소를 입력해주세요',
+      input: 'email',
+      inputPlaceholder: '이메일',
+      validationMessage: '올바른 이메일 형식이 아닙니다.',
+      allowOutsideClick: false,
+      showCancelButton: true,
+      reverseButtons: true,
+      cancelButtonText: '닫기',
+      confirmButtonText: '다음',
+      confirmButtonColor: '#EAE3D2',
+      preConfirm: async (value) => {
+        const response = await passwordSendMM(value);
+        if (response.statusCode === "200") {
+        } else {
+          Swal.showValidationMessage('올바른 이메일 형식이 아닙니다.')
+        }
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Mattermost에서 코드 확인 후 입력해주세요.',
+          input: 'text',
+          inputPlaceholder: '코드',
+          allowOutsideClick: false,
+          showCancelButton: true,
+          reverseButtons: true,
+          cancelButtonText: '닫기',
+          confirmButtonText: '확인',
+          confirmButtonColor: '#EAE3D2',
+          preConfirm: async (value) => {
+            const response = await passworAuthMM(result.value, value)
+            if (response.statusCode === "200") {
+              
+            } else {
+              Swal.showValidationMessage('잘못된 코드를 입력하였습니다.')
+            }
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              icon: 'success',
+              title: '비밀번호가 성공적으로 초기화 되었습니다.',
+              html: 'Mattermost에서 확인해 주세요.',
+              timer: '3000',
+              confirmButtonText: '확인',
+              confirmButtonColor: '#EAE3D2',
+            })
+          }
+        })
       }
-    }
-  };
-
-  const emailTransferHandler = async (event) => {
-    event.preventDefault();
-    if (seekEmail.trim()) {
-      const response = await passwordSendMM(seekEmail);
-      if (response.statusCode === "200") {
-        setIsTransferEmail(true);
-      } else {
-        setSeekEmail("");
-        alert("이메일 형식이 아닙니다.");
-        closeModal();
-      }
-    }
-  };
-
+    })
+  }
   
-  let modalEmailForm = (
-    <form onSubmit={emailTransferHandler}>
-      <span>이메일을 입력하세요!</span>
-      <div>
-        <input
-          type="textarea"
-          value={seekEmail}
-          onChange={seekEmailChangeHandler}
-        />
-      </div>
-      <div>
-        <button type="submit">전송</button>
-      </div>
-    </form>
-  );
-
-  let modalAuthCodeForm = (
-    <form onSubmit={authCodeTransferHandler}>
-      <span>보낸 코드을 확인하세요!</span>
-      <div>
-        <input
-          type="textarea"
-          value={authCode}
-          onChange={authCodeChangeHandler}
-        />
-      </div>
-      <div>
-        <button type="submit">전송</button>
-      </div>
-    </form>
-  );
-
   return (
     <Container>
       <Logo>
@@ -232,11 +220,8 @@ const Login = () => {
       </Form>
       <div>
         <StyledLink to="/signup">회원가입</StyledLink>
-        <StyledSpan onClick={openModal}>비밀번호 초기화</StyledSpan>
+        <StyledSpan onClick={resetPasswordHandler}>비밀번호 초기화</StyledSpan>
       </div>
-      <CustomModal open={modalOpen} close={closeModal} header="">
-        {isTransferEmail ? modalAuthCodeForm : modalEmailForm}
-      </CustomModal>
     </Container>
   );
 };
