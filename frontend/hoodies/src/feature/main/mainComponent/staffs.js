@@ -4,9 +4,17 @@ import { useHistory } from "react-router-dom";
 import staffs from "./staff.module.css";
 import PageviewIcon from "@mui/icons-material/Pageview";
 import Grid from '@mui/material/Grid';
-import ReadMoreIcon from "@mui/icons-material/ReadMore";
+// import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import styled from "styled-components";
 import { PRO_EVAL } from "../../../common/data/dummyData"
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Rating from '@mui/material/Rating';
+import StarIcon from '@mui/icons-material/Star';
 
 const Title = styled.div`
   font-size: 1em;
@@ -24,6 +32,19 @@ const H1 = styled.h1`
   margin: 0;
 `
 
+const H2 = styled.h2`
+  font-size: small;
+  color: #999999;
+`
+
+const labels = {
+    1: '저와는 맞지 않았어요 ;<',
+    2: '저에게는 보통이었어요 :O',
+    3: '저에게는 좋았어요! :)',
+    4: '저에게는 매우 좋았습니다!! :>',
+    5: '최고의 PRO.',
+};
+
 const Staffs = (props) => {
     const history = useHistory();
     const evaluationPageHandler = () => {history.push("/pro");
@@ -40,97 +61,127 @@ const Staffs = (props) => {
                 <PageviewIcon onClick={evaluationPageHandler} />
             </Title>
             <div>
-        {props.staffs.map((staff) => {
-            return (
-              <Grid
-                className={staffs.card}
-                key={staff._id}
-                onClick={() => {
-                  detailPageHandler(staff);
-                }}
-              >
+                {props.staffs.map((staff) => {
+                    const array = staff.evaluations[0].score
+                    const average = arr => arr.reduce((p, c) => p + c, 0) / arr.length;
+                    const value = Math.round(average(array))
 
-                  <span>{staff.writer}</span>
-                  <p>{staff.career}</p>
-                  <p>{staff.etc}</p>
-                  <div style={{height:'320px'}}>
-                      <ResponsiveRadar
-                          data={[
-                              {
-                                  "item": "인품",
-                                  "평균": 3.5,
-                                  "작성자": staff.evaluations[0].score[0]
-                              },
-                              {
-                                  "item": "프로젝트 지도력",
-                                  "평균": 3.5,
-                                  "작성자": staff.evaluations[0].score[1]
-                              },
-                              {
-                                  "item": "상담",
-                                  "평균": 3.5,
-                                  "작성자": staff.evaluations[0].score[2]
-                              },
-                              {
-                                  "item": "강의 전달력",
-                                  "평균": 3.5,
-                                  "작성자": staff.evaluations[0].score[3]
-                              },
-                              {
-                                  "item": "반 분위기",
-                                  "평균": 3.5,
-                                  "작성자": staff.evaluations[0].score[4]
-                              }
-                          ]}
-                          keys={[ '작성자' ]}
-                          indexBy="item"
-                          // valueFormat=">-.2f"
-                          margin={{ top: 0, right: 100, bottom: -100, left: 100 }}
-                          gridShape='circular'
-                          maxValue={5}
-                          borderColor={{ from: 'color' }}
-                          gridLabelOffset={4}
-                          isInteractive={false}
-                          dotSize={0}
-                          dotColor={{ theme: 'background' }}
-                          dotBorderWidth={1}
-                          colors={{ scheme: 'accent' }}
-                          blendMode="overlay"
-                          motionConfig="wobbly"
-                          legends={[
-                              {
-                                  anchor: 'top-right',
-                                  direction: 'column',
-                                  translateX: -70,
-                                  translateY: 100,
-                                  itemWidth: 80,
-                                  itemHeight: 20,
-                                  itemTextColor: '#999',
-                                  symbolSize: 8,
-                                  symbolShape: 'circle',
-                                  effects: [
-                                      {
-                                          on: 'hover',
-                                          style: {
-                                              itemTextColor: '#000'
-                                          }
-                                      }
-                                  ]
-                              }
-                          ]}
-                      />
-                  </div>
-                  <span>{staff.evaluations[0].writer}</span>
-                  <span>{staff.evaluations[0].content}</span>
-                  <span>{staff.evaluations[0].createdAt}</span>
-              </Grid>
-          );
-        })}
-      </div>
-    </Grid>
-  ) : (
-    <Grid item xs={12} md={12}>작성된 글이 없습니다.</Grid>
-  );
+                    return (
+                        <Grid
+                            className={staffs.card}
+                            key={staff._id}
+                            onClick={() => {
+                                detailPageHandler(staff);
+                            }}
+                        >
+
+
+                            <div sx={{ minWidth: 275}}>
+                                <Typography variant="h5" component="div">
+                                    {staff.writer}
+                                </Typography>
+                                <Typography color="text.secondary">
+                                    {staff.etc}
+                                </Typography>
+                                {/*<Grid item sx={{ margin: '0px', marginRight: '0px'}} xs={12} md={6}>*/}
+                                <div style={{height:'240px', width: '25vw'}}>
+                                    <ResponsiveRadar
+                                        data={[
+                                            {
+                                                "item": "인품",
+                                                "평균": 3.5,
+                                                "작성자": staff.evaluations[0].score[0]
+                                            },
+                                            {
+                                                "item": "프로젝트 지도력",
+                                                "평균": 3.5,
+                                                "작성자": staff.evaluations[0].score[1]
+                                            },
+                                            {
+                                                "item": "상담",
+                                                "평균": 3.5,
+                                                "작성자": staff.evaluations[0].score[2]
+                                            },
+                                            {
+                                                "item": "강의 전달력",
+                                                "평균": 3.5,
+                                                "작성자": staff.evaluations[0].score[3]
+                                            },
+                                            {
+                                                "item": "반 분위기",
+                                                "평균": 3.5,
+                                                "작성자": staff.evaluations[0].score[4]
+                                            }
+                                        ]}
+                                        keys={[ '작성자' ]}
+                                        indexBy="item"
+                                        // valueFormat=">-.2f"
+                                        margin={{ top: 0, right: 85, left: 85 }}
+                                        gridShape='circular'
+                                        maxValue={5}
+                                        borderColor={{ from: 'color' }}
+                                        gridLabelOffset={4}
+                                        isInteractive={false}
+                                        dotSize={0}
+                                        dotColor={{ theme: 'background' }}
+                                        dotBorderWidth={1}
+                                        colors={{ scheme: 'accent' }}
+                                        blendMode="overlay"
+                                        motionConfig="wobbly"
+                                        legends={[
+                                            {
+                                                anchor: 'top-right',
+                                                direction: 'column',
+                                                translateX: -70,
+                                                translateY: 100,
+                                                itemWidth: 80,
+                                                itemHeight: 20,
+                                                itemTextColor: '#999',
+                                                symbolSize: 8,
+                                                symbolShape: 'circle',
+                                                effects: [
+                                                    {
+                                                        on: 'hover',
+                                                        style: {
+                                                            itemTextColor: '#000'
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]}
+                                    />
+                                </div>
+
+                                <Typography variant="body2">
+                                    {staff.evaluations[0].writer}님의 한줄평 : {staff.evaluations[0].content}
+                                    <br />
+                                    <Box
+                                        sx={{
+                                            width: 200,
+                                            // display: 'flex',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        <Rating
+                                            name="text-feedback"
+                                            value={value}
+                                            readOnly
+                                            precision={0.5}
+                                            emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+                                        />
+                                        <Box sx={{ ml: 2 }}>{labels[value]}</Box>
+                                        <H2>{staff.evaluations[0].createdAt}</H2>
+                                    </Box>
+                                </Typography>
+                            </div>
+                        </Grid>
+                    );
+                })}
+            </div>
+        </Grid>
+    ) : (
+        <Grid item xs={12} md={12}>작성된 글이 없습니다.</Grid>
+    );
 };
 
 export default Staffs;
