@@ -289,3 +289,31 @@ export const WEEKLY_MENU = [
   { id: 0, label: '20th', value: '20th'},
   { id: 1, label: '10th', value: '10th'},
 ];
+
+export const PRO_EVAL = [
+  {
+    "item": "인품",
+    "average": 90,
+    "writer": 51
+  },
+  {
+    "item": "프로젝트 지도력",
+    "average": 100,
+    "writer": 91
+  },
+  {
+    "item": "상담",
+    "average": 111,
+    "writer": 60
+  },
+  {
+    "item": "강의 전달력",
+    "average": 76,
+    "writer": 69
+  },
+  {
+    "item": "반 분위기",
+    "average": 113,
+    "writer": 51
+  }
+]

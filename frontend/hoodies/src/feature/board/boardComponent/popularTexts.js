@@ -33,6 +33,18 @@ const ArticleH2 = styled.h2`
   font-weight: normal;
 `
 
+const ArticleH2_filter = styled.h2`
+  margin: 0;
+  margin-bottom: 5px;
+  line-height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  font-weight: normal;
+  color: #ff5f5f;
+`
+
 const ArticleH3 = styled.h3`
   margin: 0;
   padding: 0;
@@ -76,7 +88,15 @@ const PopularTexts = (props) => {
       history.push({ pathname: "/board/annoymous/detail", state: article._id });
     }
   };
- 
+
+  const isFilter = (article) => {
+    if (blockArticle(article, article.category) === article.title) {
+      return 1
+    } else {
+      return 0
+    }
+  };
+
   return props.popularTexts.length ? (
     <RightArticles>
       <Title>
@@ -88,9 +108,11 @@ const PopularTexts = (props) => {
               <ArticleA
                 onClick={() => {
                   detailPageHandler(article);
-                }}
-              >
-                <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
+                }}>
+                {isFilter(article) ?
+                    <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
+                    : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
+                <ArticleH3>{article.type}</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
                 <ArticleH3>{article.writer}</ArticleH3>
                 <ArticleHr />
               </ArticleA>
