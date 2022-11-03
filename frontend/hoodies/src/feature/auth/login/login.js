@@ -3,7 +3,6 @@ import { Link, useHistory } from "react-router-dom";
 import CustomModal from "../../../common/UI/modal/customModal";
 import { login, passworAuthMM, passwordSendMM } from "../authApi";
 import styled from "styled-components";
-import Swal from "sweetalert2";
 
 const Container = styled.div`
   position: absolute;

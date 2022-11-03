@@ -135,7 +135,8 @@ const ArticleDetail = () => {
   const history = useHistory();
 
   const backHandler = (event) => {
-    history.go(-1);
+    // history.go(-1);
+    history.push({ pathname: "/board/free"})
   };
   // 요청설개할것, 수정페이지에서 넘길때 새로운정보 필요
 
