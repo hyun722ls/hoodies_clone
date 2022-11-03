@@ -1,5 +1,6 @@
 package com.ssafy.hoodies.controller;
 
+import com.mongodb.client.result.UpdateResult;
 import com.ssafy.hoodies.model.entity.Board;
 import com.ssafy.hoodies.model.entity.User;
 import com.ssafy.hoodies.model.entity.UserAuth;
@@ -24,6 +25,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -227,14 +229,24 @@ public class UserController {
 
             // 이전 닉네임으로 작성한 글이나 댓글의 작성자 변경
             // 이전 닉네임으로 자유 게시판에 작성한 부분
+            // 이전 닉네임으로 자유 게시판에 작성한 글
             Query query = new Query();
             query.addCriteria(Criteria.where("writer").is(writer));
             Update update = new Update();
             update.set("writer", user.getNickname());
 
             mongoTemplate.findAndModify(query, update, Board.class);
+            
+            // 이전 닉네임으로 자유 게시판에 작성한 댓글
+            Query commentQuery = new Query();
+            commentQuery.addCriteria(Criteria.where("comments").elemMatch(Criteria.where("writer").is(writer)));
+            Update commentUpdate = new Update();
+            commentUpdate.set("comments.$.writer", user.getNickname());
 
+            mongoTemplate.findAndModify(commentQuery, commentUpdate, Board.class);
+            
             // 이전 닉네임으로 익명 게시판에 작성한 부분
+            // 이전 닉네임으로 익명 게시판에 작성한 글
             String ewriter = util.getEncryptPassword(writer, salt);
             String enickname = util.getEncryptPassword(user.getNickname(), salt);
 
@@ -244,6 +256,14 @@ public class UserController {
             eupdate.set("writer", enickname);
             mongoTemplate.findAndModify(equery, eupdate, Board.class);
 
+            // 이전 닉네임으로 익명 게시판에 작성한 댓글
+            Query ecommentQuery = new Query();
+            ecommentQuery.addCriteria(Criteria.where("comments").elemMatch(Criteria.where("writer").is(ewriter)));
+            Update ecommentUpdate = new Update();
+            ecommentUpdate.set("comments.$.writer", enickname);
+
+            mongoTemplate.findAndModify(ecommentQuery, ecommentUpdate, Board.class);
+            
             resultMap.put("statusCode", SUCCESS);
         } catch (Exception e) {
             resultMap.put("statusCode", FAIL);
