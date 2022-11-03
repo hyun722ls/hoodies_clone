@@ -4,6 +4,10 @@ import Header from "../../../common/UI/header/header";
 import {createComment, deleteArticle, deleteComment, fetchArticle, modifyComment} from "../boardAPI";
 import CommentList from "./commentList";
 import styled from "styled-components";
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import TouchAppIcon from '@mui/icons-material/TouchApp';
 
 const Articles = styled.div`
   position: relative;
@@ -216,7 +220,19 @@ const ArticleDetail = () => {
             <ArticleTime>{article.createdAt} {article.createdAt !== article.modifiedAt && <span>(수정됨 {article.modifiedAt})</span>} </ArticleTime>
             <Score>
               <Item>추천수 : {article.like}</Item>
+                <Tooltip title="추천!">
+                  <IconButton>
+                    <ThumbUpIcon />
+                  </IconButton>
+                </Tooltip>
               <Item>조회수 : {article.hit}</Item>
+              <Item>|</Item>
+                <Tooltip title="신고하기">
+                  <IconButton>
+                    <TouchAppIcon />
+                  </IconButton>
+                </Tooltip>
+
             </Score>
             <ArticleHr />
           </ArticleHead>
