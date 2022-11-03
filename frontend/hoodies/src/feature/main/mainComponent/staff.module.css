@@ -42,7 +42,7 @@
 .card::before {
   content: "";
   position: absolute;
-  top: 110.5px;
+  top: 111px;
   left: 50%;
   transform: translateX(-50%);
   border-radius: 50%;
