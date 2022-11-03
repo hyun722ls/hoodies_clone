@@ -53,7 +53,7 @@ const ArticleH2_filter = styled.h2`
   text-overflow: ellipsis;
   font-size: 13px;
   font-weight: normal;
-  color: #ffadad;
+  color: #ff5f5f;
 `
 
 const ArticleH3 = styled.h3`
@@ -121,6 +121,7 @@ const freeBoardHandler = () => {
 };
 const detailPageHandler = (article) => {
   history.push({ pathname: "/board/free/detail", state: article._id });
+  console.log(article)
 };
 
 const isFilter = (article) => {
@@ -135,7 +136,7 @@ return props.articles.length ? (
   <Grid item sx={{ margin: '0px', marginRight: '0px'}} xs={12} md={6}>
     <div>
         <Title>
-            <H1 item>자유게시판 최신글</H1>
+            <H1 item>최신글</H1>
             <ReadMoreIcon
                 fontSize="large"
                 onClick={() => {
@@ -153,6 +154,7 @@ return props.articles.length ? (
                       {isFilter(article) ?
                           <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
                           : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
+                      <ArticleH3>{article.type}</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
                       <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
                       <ArticleH3>{article.writer}</ArticleH3>
                       <Score>
