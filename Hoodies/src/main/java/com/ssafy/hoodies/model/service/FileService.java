@@ -6,9 +6,12 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
+import com.j256.simplemagic.ContentInfo;
+import com.j256.simplemagic.ContentInfoUtil;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,8 +25,8 @@ import java.util.UUID;
 
 @Service
 @NoArgsConstructor
-public class FileUploadService {
-    private AmazonS3 fileUploadClient;
+public class FileService {
+    private AmazonS3 amazonS3;
 
     @Value("${cloud.aws.credentials.accessKey}")
     private String accessKey;
@@ -40,10 +43,10 @@ public class FileUploadService {
     private final String URL = "https://seoulhoodies.s3.ap-northeast-2.amazonaws.com/";
 
     @PostConstruct
-    public void setFileUploadClient() {
+    public void setAmazonS3() {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
 
-        fileUploadClient = AmazonS3ClientBuilder.standard()
+        amazonS3 = AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
                 .withRegion(this.region)
                 .build();
@@ -52,14 +55,25 @@ public class FileUploadService {
     public String upload(MultipartFile file) throws IOException {
         StringBuilder fileName = new StringBuilder().append(UUID.randomUUID()).append("_").append(file.getOriginalFilename());
         InputStream getFileInputStream = file.getInputStream();
+        ContentInfoUtil contentInfoUtil = new ContentInfoUtil();
+        ContentInfo fileInfo = contentInfoUtil.findMatch(getFileInputStream);
+        System.out.println("파일 정보 : " + fileInfo);
+        System.out.println(fileInfo.getFileExtensions());
+        System.out.println(fileInfo.getName());
+        System.out.println(fileInfo.getContentType());
+
         byte[] bytes = IOUtils.toByteArray(getFileInputStream);
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(bytes.length);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 
-        fileUploadClient.putObject(new PutObjectRequest(bucket, fileName.toString(), byteArrayInputStream, objectMetadata)
+        amazonS3.putObject(new PutObjectRequest(bucket, fileName.toString(), byteArrayInputStream, objectMetadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        return URL + fileName;
+        return fileName.toString();
+    }
+
+    public void deleteFile(String fileName) throws Exception {
+        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
 }
