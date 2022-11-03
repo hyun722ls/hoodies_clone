@@ -133,9 +133,10 @@ public class BoardController {
         // 목록에 있으면 -1, 목록에 없거나 취소한 인원이면 +1
         // 작성자 인코딩 필요
         Map<String, Boolean> contributor = boardRepository.findById(id).get().getContributor();
-        boolean value = contributor.getOrDefault(user, false);
+        String euser = util.getEncryptPassword(user, salt);
+        boolean value = contributor.getOrDefault(euser, false);
         int diff = value ? -1 : +1;
-        contributor.put(user, !value);
+        contributor.put(euser, !value);
 
         Query boardQuery = new Query(Criteria.where("_id").is(id));
         Update boardUpdate = new Update();
