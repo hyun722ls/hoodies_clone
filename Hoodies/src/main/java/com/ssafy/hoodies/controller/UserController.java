@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -212,6 +213,7 @@ public class UserController {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             User user = userRepository.findById(email).get();
+            String writer = user.getNickname();
 
             User nicknameUser = userRepository.findByNickname(nickname);
             // 이미 닉네임이 있는 경우
@@ -222,6 +224,25 @@ public class UserController {
 
             user.setNickname(nickname);
             userRepository.save(user);
+
+            // 이전 닉네임으로 작성한 글이나 댓글의 작성자 변경
+            // 이전 닉네임으로 자유 게시판에 작성한 부분
+            Query query = new Query();
+            query.addCriteria(Criteria.where("writer").is(writer));
+            Update update = new Update();
+            update.set("writer", user.getNickname());
+
+            mongoTemplate.findAndModify(query, update, Board.class);
+
+            // 이전 닉네임으로 익명 게시판에 작성한 부분
+            String ewriter = util.getEncryptPassword(writer, salt);
+            String enickname = util.getEncryptPassword(user.getNickname(), salt);
+
+            Query equery = new Query();
+            equery.addCriteria(Criteria.where("writer").is(ewriter));
+            Update eupdate = new Update();
+            eupdate.set("writer", enickname);
+            mongoTemplate.findAndModify(equery, eupdate, Board.class);
 
             resultMap.put("statusCode", SUCCESS);
         } catch (Exception e) {
