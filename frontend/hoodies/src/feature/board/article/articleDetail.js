@@ -206,6 +206,7 @@ const ArticleDetail = () => {
       setArticle(response1)
       setComments(response1.comments)
       let tmpLike = Object.keys(response1.contributor).includes(localStorage.getItem('hashNickname'))
+      console.log(response1.contributor[localStorage.getItem('hashNickname')])
       if (tmpLike === true && response1.contributor[localStorage.getItem('hashNickname')]){
         setIsLike(true)
       } else {
