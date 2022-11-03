@@ -128,6 +128,7 @@ const AnnoymousArticleDetail = () => {
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [commentsMap, setCommentsMap] = useState({})
+  const [articleWriter, setArticleWriter] = useState('')
   const history = useHistory();
 
   const backHandler = (event) => {
@@ -153,11 +154,13 @@ const AnnoymousArticleDetail = () => {
       setArticle(response1)
       setComments(response1.comments)
       setCommentsMap(annonymousWriter(response.comments))
+      setArticleWriter(response.writer)
     } else {
       const response1 = await fetchArticle(article._id)
       setArticle(response1)
       setComments(response1.comments)
       setCommentsMap(annonymousWriter(response.comments))
+      setArticleWriter(response.writer)
     }
   };
 
@@ -168,12 +171,14 @@ const AnnoymousArticleDetail = () => {
       setArticle(response1)
       setComments(response1.comments)
       setCommentsMap(annonymousWriter(response.comments))
+      setArticleWriter(response.writer)
     }
     else {
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
       setCommentsMap(annonymousWriter(response.comments))
+      setArticleWriter(response.writer)
      
     }
     // const newComments = [...comments];
@@ -189,12 +194,14 @@ const AnnoymousArticleDetail = () => {
       setArticle(response1)
       setComments(response1.comments)
       setCommentsMap(annonymousWriter(response.comments))
+      setArticleWriter(response.writer)
     }
     else {
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
       setCommentsMap(annonymousWriter(response.comments))
+      setArticleWriter(response.writer)
     }
   };
 
@@ -205,6 +212,7 @@ const AnnoymousArticleDetail = () => {
         setArticle(response);
         setComments(response.comments);
         setCommentsMap(annonymousWriter(response.comments))
+        setArticleWriter(response.writer)
 
       } else {
         alert("잘못된 접근입니다.");
@@ -221,7 +229,7 @@ const AnnoymousArticleDetail = () => {
         <Articles>
           <ArticleHead>
             <ArticleH2>{article.title}</ArticleH2>
-            <ArticleH3>{confirmWriter(article.writer, commentsMap[article.writer])}</ArticleH3>
+            <ArticleH3>{'익명'}</ArticleH3>
             <ArticleTime>{article.createdAt} {article.createdAt !== article.modifiedAt && <span>(수정됨 {article.modifiedAt})</span>} </ArticleTime>
             <Score>
               <Item>추천수 : {article.like}</Item>
@@ -237,6 +245,7 @@ const AnnoymousArticleDetail = () => {
           commentsMap={commentsMap}
           setArticle={setArticle}
           setComments={setComments}
+          articleWriter={articleWriter}
           deleteCommentHandler={deleteCommentHandler}
           modifyCommentHandler={modifyCommentHandler}
           createCommentHandler={createCommentHandler}
