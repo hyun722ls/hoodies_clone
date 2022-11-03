@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import PrivateRoute from "./common/routes/privateRoute";
 import PublicRoute from "./common/routes/publicRoute";
 import ErrorPage from "./common/UI/error/errorPage";
+import RedirectComponent from "./common/UI/error/redirectComponent";
 import AnonymousBoardMain from "./feature/anonymous/anonymousBoardMain";
 import AnnoymousArticleDetail from "./feature/anonymous/article/annoymousArticleDetail";
 import AnnoymousArticleForm from "./feature/anonymous/article/annoymousArticleForm";
@@ -13,6 +14,7 @@ import BoardMain from "./feature/board/boardMain";
 import EvaluationMain from "./feature/evaluation/evaluationMain";
 import EvenPro from "./feature/evaluation/evenPro";
 import Main from "./feature/main/main";
+import ImageUpload from "./feature/test/imageUpload";
 import UserMain from "./feature/user/userMain";
 
 function App() {
@@ -22,6 +24,8 @@ function App() {
         <Switch>
           <PublicRoute restricted component={Login} exact path="/login" />
           <PublicRoute restricted component={Signup} exact path="/signup" />
+          <PublicRoute restricted component={ImageUpload} exact path="/test" />
+          <PrivateRoute component={RedirectComponent} exact path="/" />
           <PrivateRoute component={Main} exact path="/index" />
           <PrivateRoute component={BoardMain} exact path="/board/free" />
           <PrivateRoute component={ArticleDetail} exact path="/board/free/detail" />
