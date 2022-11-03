@@ -4,6 +4,7 @@ import Header from "../../../common/UI/header/header";
 import {createComment, deleteArticle, deleteComment, fetchArticle, modifyComment} from "../anonymousBoardAPI";
 import CommentList from "./commentList";
 import styled from "styled-components";
+import { annonymousWriter, confirmWriter } from "../../../common/refineData/anonymousWriter";
 
 const Articles = styled.div`
   position: relative;
@@ -126,6 +127,8 @@ const AnnoymousArticleDetail = () => {
   const [article, setArticle] = useState([]);
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [commentsMap, setCommentsMap] = useState({})
+  const [articleWriter, setArticleWriter] = useState('')
   const history = useHistory();
 
   const backHandler = (event) => {
@@ -140,7 +143,7 @@ const AnnoymousArticleDetail = () => {
   const deleteHandler = async (event) => {
     const response = await deleteArticle(article._id)
     if (response) {
-      history.push('/board/annoymous');
+      history.push('/board/annonymous');
     }
   }
 
@@ -150,10 +153,14 @@ const AnnoymousArticleDetail = () => {
       const response1 = await fetchArticle(article._id)
       setArticle(response1)
       setComments(response1.comments)
+      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+      setArticleWriter(response1.writer)
     } else {
       const response1 = await fetchArticle(article._id)
       setArticle(response1)
       setComments(response1.comments)
+      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+      setArticleWriter(response1.writer)
     }
   };
 
@@ -163,11 +170,15 @@ const AnnoymousArticleDetail = () => {
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
+      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+      setArticleWriter(response1.writer)
     }
     else {
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
+      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+      setArticleWriter(response1.writer)
      
     }
     // const newComments = [...comments];
@@ -182,12 +193,15 @@ const AnnoymousArticleDetail = () => {
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
+      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+      setArticleWriter(response1.writer)
     }
     else {
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
-     
+      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+      setArticleWriter(response1.writer)
     }
   };
 
@@ -197,6 +211,9 @@ const AnnoymousArticleDetail = () => {
         const response = await fetchArticle(location.state)
         setArticle(response);
         setComments(response.comments);
+        setCommentsMap(annonymousWriter(response.comments, response.writer))
+        setArticleWriter(response.writer)
+
       } else {
         alert("잘못된 접근입니다.");
         history.push("/index");
@@ -212,7 +229,7 @@ const AnnoymousArticleDetail = () => {
         <Articles>
           <ArticleHead>
             <ArticleH2>{article.title}</ArticleH2>
-            <ArticleH3>{article.writer}</ArticleH3>
+            <ArticleH3>{'익명'}</ArticleH3>
             <ArticleTime>{article.createdAt} {article.createdAt !== article.modifiedAt && <span>(수정됨 {article.modifiedAt})</span>} </ArticleTime>
             <Score>
               <Item>추천수 : {article.like}</Item>
@@ -225,8 +242,10 @@ const AnnoymousArticleDetail = () => {
           </ArticleBody>
         <CommentList
           comments={comments}
+          commentsMap={commentsMap}
           setArticle={setArticle}
           setComments={setComments}
+          articleWriter={articleWriter}
           deleteCommentHandler={deleteCommentHandler}
           modifyCommentHandler={modifyCommentHandler}
           createCommentHandler={createCommentHandler}
@@ -234,8 +253,8 @@ const AnnoymousArticleDetail = () => {
         <div>
           <StyledButton onClick={backHandler}>목록보기</StyledButton>
           
-          {article.writer === localStorage.getItem('nickname') && <RightButton onClick={modifyHandler}>수정</RightButton>}
-          {article.writer === localStorage.getItem('nickname') && <BtnCancle onClick={deleteHandler}>삭제</BtnCancle>}
+          {article.writer === localStorage.getItem('hashNickname') && <RightButton onClick={modifyHandler}>수정</RightButton>}
+          {article.writer === localStorage.getItem('hashNickname') && <BtnCancle onClick={deleteHandler}>삭제</BtnCancle>}
         </div>
         </Articles>
       </div>

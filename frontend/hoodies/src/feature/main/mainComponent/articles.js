@@ -120,8 +120,12 @@ const freeBoardHandler = () => {
   history.push("/board/free");
 };
 const detailPageHandler = (article) => {
-  history.push({ pathname: "/board/free/detail", state: article._id });
-  console.log(article)
+  if (article.type === 1){
+    history.push({ pathname: "/board/free/detail", state: article._id });
+
+  } else {
+    history.push({ pathname: "/board/annoymous/detail", state: article._id });
+  }
 };
 
 const isFilter = (article) => {

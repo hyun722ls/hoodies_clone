@@ -34,3 +34,19 @@ export const getStaff = async(id) => {
         console.log(err)
     }
 }
+
+export const postEvaluation = async (id, score, content) => {
+    const writer = localStorage.getItem('nickname')
+    const formData = {'writer': writer, 'score':score, 'content': content }
+    console.log(formData)
+    try {
+        const response = await axios1.post(API_URL + `mentor/${id}/evaluation`, formData, {headers: {
+            'accessToken': localStorage.getItem('token')
+        }})
+        return response.data
+
+    } catch (err){
+        console.log(err)
+    }
+    
+}
