@@ -205,8 +205,8 @@ const ArticleDetail = () => {
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
-      let isLike = Object.keys(response1.contributor).includes(localStorage.getItem('hashNickname'))
-      if (isLike === true){
+      let tmpLike = Object.keys(response1.contributor).includes(localStorage.getItem('hashNickname'))
+      if (tmpLike === true){
         setIsLike(response1.contributor[localStorage.getItem('hashNickname')])
       } else {
         setIsLike(false)
@@ -226,8 +226,8 @@ const ArticleDetail = () => {
         const response = await fetchArticle(location.state)
         setArticle(response);
         setComments(response.comments);
-        let isLike = Object.keys(response.contributor).includes(localStorage.getItem('hashNickname'))
-        if (isLike === true){
+        let tmpLike = Object.keys(response.contributor).includes(localStorage.getItem('hashNickname'))
+        if (tmpLike === true){
           setIsLike(response.contributor[localStorage.getItem('hashNickname')])
         } else {
           setIsLike(false)
