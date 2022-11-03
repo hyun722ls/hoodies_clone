@@ -140,7 +140,7 @@ const AnnoymousArticleDetail = () => {
   const deleteHandler = async (event) => {
     const response = await deleteArticle(article._id)
     if (response) {
-      history.push('/board/free');
+      history.push('/board/annoymous');
     }
   }
 
@@ -209,7 +209,7 @@ const AnnoymousArticleDetail = () => {
     comments && (
       <div>
         <Header />
-        <Articles>ㄴ
+        <Articles>
           <ArticleHead>
             <ArticleH2>{article.title}</ArticleH2>
             <ArticleH3>{article.writer}</ArticleH3>

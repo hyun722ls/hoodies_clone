@@ -87,8 +87,8 @@ const ArticleForm = () => {
   }, []);
 
   const backHandler = (event) => {
-    // history.go(-1);
-    history.push("/board/free");
+    history.go(-1);
+    // history.push("/board/free");
   };
 
   const titleChangeHandler = (event) => {

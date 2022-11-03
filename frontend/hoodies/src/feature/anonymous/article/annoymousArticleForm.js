@@ -87,8 +87,8 @@ const AnnoymousArticleForm = () => {
   }, []);
 
   const backHandler = (event) => {
-    // history.go(-1);
-    history.push("/board/annoymous");
+    history.go(-1);
+    // history.push("/board/annoymous");
   };
 
   const titleChangeHandler = (event) => {
