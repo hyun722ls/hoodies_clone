@@ -301,6 +301,12 @@ export const DUMMY_STAFF = [
         3
     ],
     "career": "삼성전자 무선사업부",
+    "contributor": [
+        "한놈",
+        "두놈",
+        "석삼",
+        "너구리"
+    ],
     "email": "abcdef@samsung.com",
     "etc": "리액트를 잘하고 리액션은 못합니다.",
     "evaluations": [
@@ -331,6 +337,12 @@ export const DUMMY_STAFF = [
       3
     ],
     "career": "삼성전자 무선사업부",
+    "contributor": [
+        "한놈",
+        "두놈",
+        "석삼",
+        "너구리"
+    ],
     "email": "abcdef@samsung.com",
     "etc": "리액트를 잘하고 리액션은 못합니다.",
     "evaluations": [
@@ -360,6 +372,12 @@ export const DUMMY_STAFF = [
       2
     ],
     "career": "삼성전자 무선사업부",
+    "contributor": [
+        "한놈",
+        "두놈",
+        "석삼",
+        "너구리"
+    ],
     "email": "abcdef@samsung.com",
     "etc": "리액트를 잘하고 리액션은 못합니다.",
     "evaluations": [
@@ -389,6 +407,12 @@ export const DUMMY_STAFF = [
       2
     ],
     "career": "삼성전자 무선사업부",
+    "contributor": [
+        "한놈",
+        "두놈",
+        "석삼",
+        "너구리"
+    ],
     "email": "abcdef@samsung.com",
     "etc": "리액트를 잘하고 리액션은 못합니다.",
     "evaluations": [
@@ -418,7 +442,13 @@ export const DUMMY_STAFF = [
       2
     ],
     "career": "삼성전자 무선사업부",
-    "email": "abcdef@samsung.com",
+    "contributor": [
+        "한놈",
+        "두놈",
+        "석삼",
+        "너구리"
+    ],
+    "email": "abcdef@sasung.com",
     "etc": "리액트를 잘하고 리액션은 못합니다.",
     "evaluations": [
       {
@@ -447,6 +477,12 @@ export const DUMMY_STAFF = [
       2
     ],
     "career": "삼성전자 무선사업부",
+    "contributor": [
+        "한놈",
+        "두놈",
+        "석삼",
+        "너구리"
+    ],
     "email": "abcdef@samsung.com",
     "etc": "리액트를 잘하고 리액션은 못합니다.",
     "evaluations": [
@@ -476,6 +512,12 @@ export const DUMMY_STAFF = [
       3
     ],
     "career": "삼성전자 무선사업부",
+    "contributor": [
+        "한놈",
+        "두놈",
+        "석삼",
+        "너구리"
+    ],
     "email": "abcdef@samsung.com",
     "etc": "리액트를 잘하고 리액션은 못합니다.",
     "evaluations": [
@@ -505,6 +547,12 @@ export const DUMMY_STAFF = [
       2
     ],
     "career": "삼성전자 무선사업부",
+    "contributor": [
+        "한놈",
+        "두놈",
+        "석삼",
+        "너구리"
+    ],
     "email": "abcdef@samsung.com",
     "etc": "리액트를 잘하고 리액션은 못합니다.",
     "evaluations": [
