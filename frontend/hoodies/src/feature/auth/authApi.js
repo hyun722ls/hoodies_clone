@@ -77,3 +77,13 @@ export const passworAuthMM = async (email, authcode ) => {
     }
 }
 
+export const logOut = async () => {
+    try {
+        const response = await axios.get(API_URL + 'user/logout', {headers: {
+            'accessToken': localStorage.getItem('token')
+        }})
+        return response.data
+    } catch (err) {
+        console.log(err)
+    }
+}

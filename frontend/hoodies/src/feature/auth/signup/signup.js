@@ -203,6 +203,7 @@ const Signup = () => {
         localStorage.setItem('token', response.accessToken)
         localStorage.setItem('nickname', response.nickname)
         localStorage.setItem('email', email)
+        localStorage.setItem('hashNickname', response.hashNickname)
         history.push("/index");
       } 
       // 요청감

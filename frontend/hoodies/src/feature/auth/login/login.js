@@ -103,6 +103,7 @@ const Login = () => {
       if (response.statusCode === "200") {
         localStorage.setItem("token", response.accessToken);
         localStorage.setItem("nickname", response.nickname);
+        localStorage.setItem("hashNickname", response.hashNickname)
         localStorage.setItem("email", email);
         history.push("/index");
       }
