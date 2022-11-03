@@ -33,7 +33,7 @@ export const confirmWriter = (articleWriter, commentWriter, commentsMap) => {
         return '익명'
     } else {
         console.log(commentWriter, commentsMap)
-        return `익명${commentsMap[commentWriter]}`
+        return `익명${commentsMap[commentWriter]+1}`
     }
 
 }
