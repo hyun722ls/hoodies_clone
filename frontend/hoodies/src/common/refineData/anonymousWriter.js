@@ -5,7 +5,7 @@ export const annonymousWriter = (comments, writer) => {
     console.log(commentsWriters)
 
     const uniqueWriters = commentsWriters?.filter((element, index) => {
-        return comments.indexOf(element) === index ;
+        return commentsWriters.indexOf(element) === index ;
     });
     
     console.log(uniqueWriters)
@@ -16,7 +16,8 @@ export const annonymousWriter = (comments, writer) => {
 
     console.log(uniqueWriters)
     const commentsMap = uniqueWriters?.map((element, index) => {
-        return {element:index}
+        const newObj = {}
+        return newObj.element = index
     })
 
     console.log(commentsMap)
