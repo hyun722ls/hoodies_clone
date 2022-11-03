@@ -243,7 +243,7 @@ public class BoardController {
         Query commentQuery = new Query(Criteria.where("_id").is(id));
         Update commentUpdate = new Update();
         commentUpdate.inc("hit", -1);
-        commentUpdate.push("comment", comment);
+        commentUpdate.push("comments", comment);
 
         UpdateResult ur = mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
 
