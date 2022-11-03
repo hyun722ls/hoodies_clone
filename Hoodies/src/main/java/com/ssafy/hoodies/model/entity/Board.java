@@ -37,5 +37,7 @@ public class Board {
 
     private Map<String, Boolean> contributor;
 
+    private String filePath;
+
     // private ??? image;
 }
