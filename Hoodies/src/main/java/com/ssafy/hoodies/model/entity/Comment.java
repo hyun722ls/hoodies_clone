@@ -21,4 +21,6 @@ public class Comment {
     private List<Comment> replies;
 
     private String category;
+
+    private int type;
 }

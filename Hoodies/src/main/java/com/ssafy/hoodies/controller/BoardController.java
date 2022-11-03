@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +38,9 @@ public class BoardController {
     private final BoardRepository boardRepository;
     private final MongoTemplate mongoTemplate;
 
+    @Value("${nickname.salt}")
+    private String salt;
+
 
 //    private static final int PAGE_SIZE = 10; // 한 페이지의 게시물 수
 
@@ -52,13 +56,10 @@ public class BoardController {
         board.setCategory(res.getBody().trim());
         switch(BoardType.convert(dto.getType())){
             case FREE: // 자유게시판
-                System.out.println("FREE");
                 break;
             case ANON: // 익명게시판
-                System.out.println("ANON");
-                // 닉네임 해시화 필요
-                // hash(dto.getwriter());
-                // board.setwriter();
+                String ename = util.getEncryptPassword(dto.getWriter(), salt);
+                board.setWriter(ename);
                 break;
         }
         return boardRepository.save(board);
@@ -193,8 +194,19 @@ public class BoardController {
         ResponseEntity<String> res = util.checkExpression("", dto.getContent(), "comment");
         Comment comment = dto.toEntity();
         comment.setCategory(res.getBody().trim());
+
+        switch(BoardType.convert(dto.getType())){
+            case FREE: // 자유게시판
+                break;
+            case ANON: // 익명게시판
+                String ename = util.getEncryptPassword(dto.getWriter(), salt);
+                comment.setWriter(ename);
+                break;
+        }
+
         Query commentQuery = new Query(Criteria.where("_id").is(id));
         Update commentUpdate = new Update();
+        commentUpdate.inc("hit", -1);
         commentUpdate.push("comments", comment);
 
         UpdateResult ur = mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
@@ -214,6 +226,7 @@ public class BoardController {
         commentQuery.addCriteria(Criteria.where("_id").is(bid));
         commentQuery.addCriteria(Criteria.where("comments").elemMatch(Criteria.where("_id").is(cid)));
         Update commentUpdate = new Update();
+        commentUpdate.inc("hit", -1);
         commentUpdate.set("comments.$.content", dto.getContent());
         commentUpdate.set("comments.$.modifiedAt", util.getTimeStamp());
         commentUpdate.set("comments.$.category", res.getBody().trim());
@@ -234,6 +247,7 @@ public class BoardController {
         commentQuery.addCriteria(Criteria.where("_id").is(bid));
         commentQuery.addCriteria(Criteria.where("comments").elemMatch(Criteria.where("_id").is(cid)));
         Update commentUpdate = new Update();
+        commentUpdate.inc("hit", -1);
         commentUpdate.pull("comments", Query.query(Criteria.where("_id").is(cid)));
 
         UpdateResult ur = mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
@@ -243,6 +257,5 @@ public class BoardController {
         json.put("statusCode", statusCode);
         return json;
     }
-
 
 }
