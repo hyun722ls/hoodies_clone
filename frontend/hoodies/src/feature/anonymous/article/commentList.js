@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { confirmWriter } from "../../../common/refineData/anonymousWriter";
 
 const StyledCommentList = styled.ul`
   margin: 8px 0;
@@ -119,7 +120,7 @@ const CommentList = (props) => {
             <li key={comment._id}>
               <StyledComment>
                 <Nickname>
-                  {comment.writer}
+                  {confirmWriter(props.articleWriter, comment.writer, props.commentsMap[comment.writer])}
                 </Nickname>
                 <StyledContent>
                   {modifyForm && commentId === comment._id ? (
@@ -138,10 +139,10 @@ const CommentList = (props) => {
                   {/*<button onClick={() => props.deleteCommentHandler(comment._id)}>*/}
                   {/*  삭제*/}
                   {/*</button>*/}
-                  {comment.writer === localStorage.getItem('nickname') && !(modifyForm && commentId === comment._id) && <StyledButton onClick={() => openModifyForm(comment._id, comment.content)}>
+                  {comment.writer === localStorage.getItem('hashNickname') && !(modifyForm && commentId === comment._id) && <StyledButton onClick={() => openModifyForm(comment._id, comment.content)}>
                     수정
                   </StyledButton>}
-                  {comment.writer === localStorage.getItem('nickname') && <StyledButton onClick={() => props.deleteCommentHandler(comment._id)}>
+                  {comment.writer === localStorage.getItem('hashNickname') && <StyledButton onClick={() => props.deleteCommentHandler(comment._id)}>
                     삭제
                   </StyledButton>}
                 </ButtonList>

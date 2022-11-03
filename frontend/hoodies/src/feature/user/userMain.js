@@ -116,6 +116,7 @@ const UserMain = () => {
             const response = await updateNickname(newNickname.trim())
             if (response.statusCode === '200') {
                 localStorage.setItem('nickname', newNickname.trim())
+                localStorage.setItem('hashNickname', response.hashNickname)
                 setNickname(localStorage.getItem('nickname'))
                 setNewNickname('')
                 setNicknameModalOpen(false)
@@ -151,7 +152,10 @@ const UserMain = () => {
     const passwordModifyHandler = async (event) => {
         event.preventDefault()
         if (newPassword === confirmPassword) {
-            const response = await updatePassword({originalPassword,newPassword})
+            const response = await updatePassword({
+                originalPassword,
+                password: newPassword,
+            })
             if (response.statusCode === '200') {
                 setConfirmPassword('')
                 setNewPassword('')

@@ -51,11 +51,9 @@ const ArticleH2_filter = styled.h2`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: normal;
-  width: 350px;
-  padding: 5px;
-  color: cadetblue;
+  color: #ffadad;
 `
 
 const ArticleH3 = styled.h3`
@@ -122,7 +120,12 @@ const PopularText = (props) => {
     history.push("/board/free");
   };
   const detailPageHandler = (article) => {
-    history.push({ pathname: "/board/free/detail", state: article._id });
+    if (article.type === 1){
+      history.push({ pathname: "/board/free/detail", state: article._id });
+  
+    } else {
+      history.push({ pathname: "/board/annoymous/detail", state: article._id });
+    }
   };
 
     const isFilter = (article) => {
