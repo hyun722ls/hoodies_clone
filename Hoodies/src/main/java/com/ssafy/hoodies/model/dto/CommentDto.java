@@ -30,6 +30,8 @@ public class CommentDto {
     @ApiModelProperty(value="답글목록", accessMode = ApiModelProperty.AccessMode.READ_ONLY)
     private List<Comment> replies;
 
+    private int type;
+
     public Comment toEntity(){
         String now = util.getTimeStamp();
         Comment comment = Comment.builder()
@@ -39,6 +41,7 @@ public class CommentDto {
                         .createdAt(now)
                         .modifiedAt(now)
                         .replies(new ArrayList<>())
+                        .type(type)
                         .build();
         return comment;
     }
