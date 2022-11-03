@@ -9,7 +9,7 @@ export const annonymousWriter = (comments, writer) => {
     });
     
     
-    const writerIndex = uniqueWriters?.findIndex(writer)
+    const writerIndex = uniqueWriters?.indexOf(writer)
     console.log(writerIndex)
     if (writerIndex > -1){
         uniqueWriters?.splice(writerIndex, 1)
