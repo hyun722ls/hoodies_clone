@@ -12,17 +12,23 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -38,7 +44,9 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final UserAuthRepository userAuthRepository;
-    private final BoardRepository boardRepository;
+    private final MongoTemplate mongoTemplate;
+
+    @Value("${nickname.salt}") private String salt;
 
     @ApiOperation(value = "닉네임 중복 체크")
     @GetMapping("/check/{nickname}")
@@ -254,16 +262,21 @@ public class UserController {
         return resultMap;
     }
 
-//    @GetMapping("/article/{writer}")
-//    @ApiOperation(value = "사용자가 쓴 글 조회")
-//    public Page<Board> findUserBoard(  @ApiParam(
-//            name =  "writer",
-//            type = "String",
-//            value = "게시물의 DB상 writer, 닉네임",
-//            required = true) @PathVariable String writer, Pageable pageable){
-//        String ewriter = writer; // 인코딩 필요
-//        Sort sort = Sort.by("createdAt").descending();
-//        return boardRepository.findAllByWriterOrEwriter(writer, ewriter, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort));
-//    }
+    @GetMapping("/article/{writer}")
+    @ApiOperation(value = "사용자가 쓴 글 조회")
+    public List<Board> findUserBoard(  @ApiParam(
+            name =  "writer",
+            type = "String",
+            value = "게시물의 DB상 writer, 닉네임",
+            required = true) @PathVariable String writer){
+        String ewriter = util.getEncryptPassword(writer, salt);
+        List<String> names = new ArrayList<>();
+        names.add(writer); names.add(ewriter);
+        Sort sort = Sort.by("createdAt").descending();
 
+        Query query = new Query();
+        query.addCriteria(Criteria.where("writer").in(names));
+        query.with(sort);
+        return mongoTemplate.find(query, Board.class);
+    }
 }
