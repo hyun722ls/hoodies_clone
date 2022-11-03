@@ -3,8 +3,12 @@ import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../common/UI/header/header";
 import EvaulationComment from "./evaluationComment";
 import EvaluationPentagon from "./evaluationPentagon";
+import styled from "styled-components";
+import CreateEvaluation from "./evaluationRegister";
+
 
 const EvenPro = () => {
+
   const history = useHistory();
   const location = useLocation();
   const [staff, setStaff] = useState([]);
@@ -61,11 +65,10 @@ const EvenPro = () => {
       <div>
         <Header />
         <h4>
-          {staff.writer} {staffType}
+          {staff.writer} {staffType} {staff.contributor.length}명의 평가
         </h4>
         <p>이메일 : {staff.email}</p>
         <p>설명 : {staff.etc}</p>
-        <p>점수 : {staff.scores}</p>
         <div>
           <button onClick={backHandler}>뒤로 가기</button>
         </div>
@@ -75,9 +78,23 @@ const EvenPro = () => {
           modifyCommentHandler={modifyCommentHandler}
           createCommentHandler={createCommentHandler}
         />
-        <div style={{height:'500px'}}>
-          <EvaluationPentagon></EvaluationPentagon>
-        </div>
+        {/* <div style={{position:'relative'}}> 
+          <div style={{display:'flex', flexWrap:'wrap', marginLeft:'7vw'}}>
+            <img src={LeftTop} style={{height:'20%', width:'45%', margin:'15px'}} alt=''></img>
+            <img src={RightTop} style={{height:'20%', width:'45%',margin:'15px'}} alt=''></img>
+            <img src={BottomLeft} style={{height:'20%', width:'45%',margin:'15px'}} alt=''></img>
+            <img src={bottomright} style={{height:'20%', width:'45%',margin:'15px'}} alt=''></img>
+          </div>
+        </div> */}
+          <div style={{display:'flex', position:'absolute',left:'4.5%' ,top:'25%' ,'justifyContent':'center', height:'70vh', width:'70%'}}>
+            <EvaluationPentagon staff={staff}></EvaluationPentagon>
+          </div>
+        {/* <BoxOne style={{position:'relative'}}>
+          <div style={{position:'absolute', top:'30%', right:'60%'}}>
+            hello
+          </div>
+        </BoxOne> */}
+        <CreateEvaluation id={staff._id} staff={staff}></CreateEvaluation>
       </div>
     )
   );
