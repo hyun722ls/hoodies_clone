@@ -3,7 +3,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../common/UI/header/header";
 import EvaulationComment from "./evaluationComment";
 import EvaluationPentagon from "./evaluationPentagon";
-import styled from "styled-components";
+// import styled from "styled-components";
 import CreateEvaluation from "./evaluationRegister";
 
 
@@ -16,6 +16,7 @@ const EvenPro = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [staffType, setStaffType] = useState("");
 
+
   const backHandler = (event) => {
     history.go(-1);
   };
@@ -27,22 +28,24 @@ const EvenPro = () => {
     setComments(newComments);
   };
 
-  const modifyCommentHandler = (commentId, newContent) => {
-    const newComments = [...comments];
-    const index = comments.findIndex((comment) => comment.id === commentId);
-    newComments[index].content = newContent;
-    setComments(newComments);
-  };
-
-  const createCommentHandler = (newContent) => {
-    const newComments = [
-      { content: newContent, writer: "현규는 똑똑해" },
-      ...comments,
-    ];
-    setComments(newComments);
-  };
+  // const modifyCommentHandler = (commentId, newContent) => {
+  //   const newComments = [...comments];
+  //   const index = comments.findIndex((comment) => comment.id === commentId);
+  //   newComments[index].content = newContent;
+  //   setComments(newComments);
+  // };
+  //
+  // const createCommentHandler = (newContent) => {
+  //   const newComments = [
+  //     { content: newContent, writer: "현규는 똑똑해" },
+  //     ...comments,
+  //   ];
+  //   setComments(newComments);
+  // };
 
   useEffect(() => {
+    console.log(location.state)
+
     if (location.state) {
       setStaff(location.state);
       setComments(location.state.evaluations);
@@ -59,13 +62,14 @@ const EvenPro = () => {
     }
     setIsLoading(false);
   }, []);
+
   return (
     !isLoading &&
     comments && (
       <div>
         <Header />
         <h4>
-          {staff.writer} {staffType} {staff.contributor.length}명의 평가
+          {staff.writer} {staffType} ({staff.contributor.length}명의 평가)
         </h4>
         <p>이메일 : {staff.email}</p>
         <p>설명 : {staff.etc}</p>

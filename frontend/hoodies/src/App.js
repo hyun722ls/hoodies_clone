@@ -12,6 +12,9 @@ import ArticleDetail from "./feature/board/article/articleDetail";
 import ArticleForm from "./feature/board/article/articleForm";
 import BoardMain from "./feature/board/boardMain";
 import EvaluationMain from "./feature/evaluation/evaluationMain";
+
+import EvaluationNewMain from "./feature/evaluation/evaluationNewMain";
+
 import EvenPro from "./feature/evaluation/evenPro";
 import Main from "./feature/main/main";
 import ImageUpload from "./feature/test/imageUpload";
@@ -35,6 +38,9 @@ function App() {
           <PrivateRoute component={AnnoymousArticleDetail} exact path="/board/annoymous/detail" />
           <PrivateRoute component={AnnoymousArticleForm} exact path="/board/annoymous/form" />
           <PrivateRoute component={EvaluationMain} exact path="/pro" />
+
+          <PrivateRoute component={EvaluationNewMain} exact path="/pro/new" />
+
           <PrivateRoute component={EvenPro} exact path="/pro/detail" />
           <PrivateRoute component={UserMain} exact path="/user" />
           <PrivateRoute component={ErrorPage} path="*" />
