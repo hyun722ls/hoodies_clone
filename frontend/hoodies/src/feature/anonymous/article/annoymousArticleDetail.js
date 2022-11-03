@@ -153,14 +153,14 @@ const AnnoymousArticleDetail = () => {
       const response1 = await fetchArticle(article._id)
       setArticle(response1)
       setComments(response1.comments)
-      setCommentsMap(annonymousWriter(response.comments))
-      setArticleWriter(response.writer)
+      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+      setArticleWriter(response1.writer)
     } else {
       const response1 = await fetchArticle(article._id)
       setArticle(response1)
       setComments(response1.comments)
-      setCommentsMap(annonymousWriter(response.comments))
-      setArticleWriter(response.writer)
+      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+      setArticleWriter(response1.writer)
     }
   };
 
@@ -170,15 +170,15 @@ const AnnoymousArticleDetail = () => {
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
-      setCommentsMap(annonymousWriter(response.comments))
-      setArticleWriter(response.writer)
+      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+      setArticleWriter(response1.writer)
     }
     else {
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
-      setCommentsMap(annonymousWriter(response.comments))
-      setArticleWriter(response.writer)
+      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+      setArticleWriter(response1.writer)
      
     }
     // const newComments = [...comments];
@@ -193,15 +193,15 @@ const AnnoymousArticleDetail = () => {
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
-      setCommentsMap(annonymousWriter(response.comments))
-      setArticleWriter(response.writer)
+      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+      setArticleWriter(response1.writer)
     }
     else {
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
-      setCommentsMap(annonymousWriter(response.comments))
-      setArticleWriter(response.writer)
+      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+      setArticleWriter(response1.writer)
     }
   };
 
@@ -211,7 +211,7 @@ const AnnoymousArticleDetail = () => {
         const response = await fetchArticle(location.state)
         setArticle(response);
         setComments(response.comments);
-        setCommentsMap(annonymousWriter(response.comments))
+        setCommentsMap(annonymousWriter(response.comments, response.writer))
         setArticleWriter(response.writer)
 
       } else {
