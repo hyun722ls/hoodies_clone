@@ -227,7 +227,7 @@ const ArticleDetail = () => {
         setArticle(response);
         setComments(response.comments);
         let tmpLike = Object.keys(response.contributor).includes(localStorage.getItem('hashNickname'))
-        if (tmpLike === true){
+        if (tmpLike === true && response.contributor[localStorage.getItem('hashNickname')]){
           setIsLike(response.contributor[localStorage.getItem('hashNickname')])
         } else {
           setIsLike(false)
@@ -252,9 +252,8 @@ const ArticleDetail = () => {
             <Score>
               <Item>추천수 : {article.like}</Item>
                 <Tooltip title="추천!">
-                  <IconButton>
                     {isLike ? <ThumbDownAltIcon onClick={likeHandler} /> : <ThumbUpIcon onClick={likeHandler} />}
-                  </IconButton>
+                  
                 </Tooltip>
               <Item>조회수 : {article.hit}</Item>
               <Item>|</Item>
