@@ -65,7 +65,7 @@ const EvenPro = () => {
       <div>
         <Header />
         <h4>
-          {staff.writer} {staffType} {staff.contributor.length}명의 평가
+          {staff.writer} {staffType} {comments.length}명의 평가
         </h4>
         <p>이메일 : {staff.email}</p>
         <p>설명 : {staff.etc}</p>
@@ -74,7 +74,6 @@ const EvenPro = () => {
         </div>
         <EvaulationComment
           comments={comments}
-          deleteCommentHandler={deleteCommentHandler}
         />
         {/* <div style={{position:'relative'}}> 
           <div style={{display:'flex', flexWrap:'wrap', marginLeft:'7vw'}}>
