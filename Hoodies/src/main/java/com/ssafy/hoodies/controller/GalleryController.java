@@ -39,9 +39,8 @@ public class GalleryController {
     public Map<String, Object> fileUpload(MultipartFile file) throws IOException {
         Map<String, Object> resultMap = new HashMap<>();
 
-        System.out.println(s3Service.upload(null));
         try {
-
+            System.out.println(s3Service.upload(file));
             resultMap.put("statusCode", SUCCESS);
         } catch (Exception e) {
             resultMap.put("statusCode", FAIL);
