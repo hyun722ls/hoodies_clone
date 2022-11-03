@@ -237,12 +237,11 @@ public class UserController {
             mongoTemplate.updateMulti(query, update, Board.class);
             
             // 이전 닉네임으로 자유 게시판에 작성한 댓글
-            Query commentQuery = new Query();
-            commentQuery.addCriteria(Criteria.where("comments").elemMatch(Criteria.where("writer").is(writer)));
             Update commentUpdate = new Update();
-            commentUpdate.set("comments.$.writer", user.getNickname());
+            commentUpdate.set("comments.$[target].writer", user.getNickname());
+            commentUpdate.filterArray("target.writer", writer);
 
-            mongoTemplate.updateMulti(commentQuery, commentUpdate, Board.class);
+            mongoTemplate.updateMulti(new Query(), commentUpdate, Board.class);
             
             // 이전 닉네임으로 익명 게시판에 작성한 부분
             // 이전 닉네임으로 익명 게시판에 작성한 글
@@ -257,12 +256,11 @@ public class UserController {
             mongoTemplate.updateMulti(equery, eupdate, Board.class);
 
             // 이전 닉네임으로 익명 게시판에 작성한 댓글
-            Query ecommentQuery = new Query();
-            ecommentQuery.addCriteria(Criteria.where("comments").elemMatch(Criteria.where("writer").is(ewriter)));
             Update ecommentUpdate = new Update();
-            ecommentUpdate.set("comments.$.writer", enickname);
+            ecommentUpdate.set("comments.$[target].writer", enickname);
+            ecommentUpdate.filterArray("target.writer", ewriter);
 
-            mongoTemplate.updateMulti(ecommentQuery, ecommentUpdate, Board.class);
+            mongoTemplate.updateMulti(new Query(), ecommentUpdate, Board.class);
             
             resultMap.put("statusCode", SUCCESS);
         } catch (Exception e) {
