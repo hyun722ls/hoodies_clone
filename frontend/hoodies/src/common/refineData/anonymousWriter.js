@@ -32,7 +32,8 @@ export const confirmWriter = (articleWriter, commentWriter, commentsMap) => {
     if (articleWriter === commentWriter){
         return '익명'
     } else {
-        return `익명${commentsMap.commentWriter}`
+        console.log(commentWriter, commentsMap)
+        return `익명${commentsMap[commentWriter]}`
     }
 
 }
