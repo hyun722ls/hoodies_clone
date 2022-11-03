@@ -13,6 +13,7 @@ import com.ssafy.hoodies.util.util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -39,6 +40,9 @@ public class SignController {
     private final UserRepository userRepository;
     private final UserAuthRepository userAuthRepository;
     private final TokenRepository tokenRepository;
+
+    @Value("${nickname.salt}")
+    private String nicknameSalt;
 
 
     @ApiOperation(value = "회원가입")
@@ -126,6 +130,7 @@ public class SignController {
             tokenRepository.save(Token.builder().email(user.getEmail()).accessToken(accessToken).refreshToken(refreshToken).build());
 
             resultMap.put("nickname", getUser.getNickname());
+            resultMap.put("hashNickname", util.getEncryptPassword(getUser.getNickname(), nicknameSalt));
             resultMap.put("accessToken", accessToken);
             resultMap.put("statusCode", SUCCESS);
         } catch (Exception e) {
