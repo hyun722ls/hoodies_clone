@@ -4,22 +4,10 @@ import Header from "../../common/UI/header/header";
 import EvaulationComment from "./evaluationComment";
 import EvaluationPentagon from "./evaluationPentagon";
 import styled from "styled-components";
-import Shit from './guaca.png'
-import LeftTop from './lefttopsquare.svg'
-import RightTop from './righttop.svg'
-import BottomLeft from './bottomleft.svg'
-import bottomright from './bottomright.svg'
-
+import CreateEvaluation from "./evaluationRegister";
 
 
 const EvenPro = () => {
-
-  const BoxOne = styled.div`
-  background-image: url(${Shit});
-  height: 1000px;
-  width: 1000px;
-  background-repeat: no-repeat;
-  `
 
   const history = useHistory();
   const location = useLocation();
@@ -76,12 +64,11 @@ const EvenPro = () => {
     comments && (
       <div>
         <Header />
-        {/* <h4>
-          {staff.writer} {staffType}
+        <h4>
+          {staff.writer} {staffType} {staff.contributor.length}명의 평가
         </h4>
         <p>이메일 : {staff.email}</p>
         <p>설명 : {staff.etc}</p>
-        <p>점수 : {staff.scores}</p>
         <div>
           <button onClick={backHandler}>뒤로 가기</button>
         </div>
@@ -90,23 +77,24 @@ const EvenPro = () => {
           deleteCommentHandler={deleteCommentHandler}
           modifyCommentHandler={modifyCommentHandler}
           createCommentHandler={createCommentHandler}
-        /> */}
-        <div style={{position:'relative'}}> 
+        />
+        {/* <div style={{position:'relative'}}> 
           <div style={{display:'flex', flexWrap:'wrap', marginLeft:'7vw'}}>
             <img src={LeftTop} style={{height:'20%', width:'45%', margin:'15px'}} alt=''></img>
             <img src={RightTop} style={{height:'20%', width:'45%',margin:'15px'}} alt=''></img>
             <img src={BottomLeft} style={{height:'20%', width:'45%',margin:'15px'}} alt=''></img>
             <img src={bottomright} style={{height:'20%', width:'45%',margin:'15px'}} alt=''></img>
           </div>
+        </div> */}
           <div style={{display:'flex', position:'absolute',left:'4.5%' ,top:'25%' ,'justifyContent':'center', height:'70vh', width:'70%'}}>
-            <EvaluationPentagon></EvaluationPentagon>
+            <EvaluationPentagon staff={staff}></EvaluationPentagon>
           </div>
-        </div>
         {/* <BoxOne style={{position:'relative'}}>
           <div style={{position:'absolute', top:'30%', right:'60%'}}>
             hello
           </div>
         </BoxOne> */}
+        <CreateEvaluation id={staff._id} staff={staff}></CreateEvaluation>
       </div>
     )
   );

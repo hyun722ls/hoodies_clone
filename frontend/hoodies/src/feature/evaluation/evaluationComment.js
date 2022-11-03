@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Rating } from "@mui/material";
 
 const EvaulationComment = (props) => {
   const [modifyForm, setModifyForm] = useState(false);
@@ -6,35 +7,35 @@ const EvaulationComment = (props) => {
   const [commentId, setCommentId] = useState(null);
   const [newContent, setNewContent] = useState("");
 
-  const openModifyForm = (id, content) => {
-    setCommentId(id);
-    setModifyForm(true);
-    setModifyContent(content);
-  };
+  // const openModifyForm = (id, content) => {
+  //   setCommentId(id);
+  //   setModifyForm(true);
+  //   setModifyContent(content);
+  // };
 
-  const modifyContentChangeHandler = (event) => {
-    event.preventDefault();
-    setModifyContent(event.target.value);
-  };
+  // const modifyContentChangeHandler = (event) => {
+  //   event.preventDefault();
+  //   setModifyContent(event.target.value);
+  // };
 
-  const modifyHandler = (event) => {
-    event.preventDefault();
-    props.modifyCommentHandler(commentId, modifyContent);
-    setModifyContent("");
-    setModifyForm(false);
-    setCommentId(null);
-  };
+  // const modifyHandler = (event) => {
+  //   event.preventDefault();
+  //   props.modifyCommentHandler(commentId, modifyContent);
+  //   setModifyContent("");
+  //   setModifyForm(false);
+  //   setCommentId(null);
+  // };
 
-  const createHandler = (event) => {
-    event.preventDefault();
-    props.createCommentHandler(newContent);
-    setNewContent("");
-  };
+  // const createHandler = (event) => {
+  //   event.preventDefault();
+  //   props.createCommentHandler(newContent);
+  //   setNewContent("");
+  // };
 
-  const newContentChangeHandler = (event) => {
-    event.preventDefault();
-    setNewContent(event.target.value);
-  };
+  // const newContentChangeHandler = (event) => {
+  //   event.preventDefault();
+  //   setNewContent(event.target.value);
+  // };
 
   return props.comments.length ? (
     <div>
@@ -42,15 +43,25 @@ const EvaulationComment = (props) => {
         return (
           <ul key={comment._id}>
             <li>
-              {comment.content}, {comment.writer}
+              {comment.content}, {comment.writer}, {comment.createdAt}, {comment.like}, {comment.dislike}
             </li>
-            <button onClick={() => props.deleteCommentHandler(comment.id)}>
+            <Rating value={comment.score[0]} readOnly></Rating>
+            <Rating value={comment.score[1]} readOnly></Rating>
+            <Rating value={comment.score[2]} readOnly></Rating>
+            <Rating value={comment.score[3]} readOnly></Rating>
+            <Rating value={comment.score[4]} readOnly></Rating>
+            {localStorage.getItem('nickname') === comment.writer ? (
+              <button onClick={() => props.deleteCommentHandler(comment.id)}>
               삭제
-            </button>
-            <button onClick={() => openModifyForm(comment.id, comment.content)}>
+              </button>
+            ) : (null)}
+            {/* <button onClick={() => props.deleteCommentHandler(comment.id)}>
+              삭제
+            </button> */}
+            {/* <button onClick={() => openModifyForm(comment.id, comment.content)}>
               수정
-            </button>
-            {modifyForm && commentId === comment.id && (
+            </button> */}
+            {/* {modifyForm && commentId === comment.id && (
               <form onSubmit={modifyHandler}>
                 <input
                   type="text"
@@ -60,12 +71,12 @@ const EvaulationComment = (props) => {
                 />
                 <button type="submit">댓글 수정</button>
               </form>
-            )}
+            )} */}
           </ul>
         );
       })}
 
-      <form onSubmit={createHandler}>
+      {/* <form onSubmit={createHandler}>
         <input
           type="text"
           value={newContent}
@@ -73,12 +84,12 @@ const EvaulationComment = (props) => {
           placeholder="댓글을 입력하세요"
         />
         <button type="submit">댓글 등록</button>
-      </form>
+      </form> */}
     </div>
   ) : (
     <div>
       <p>댓글이 없습니다.</p>
-      <form onSubmit={createHandler}>
+      {/* <form onSubmit={createHandler}>
         <input
           type="text"
           value={newContent}
@@ -86,7 +97,7 @@ const EvaulationComment = (props) => {
           placeholder="댓글을 입력하세요"
         />
         <button type="submit">댓글 등록</button>
-      </form>
+      </form> */}
     </div>
   );
 };

@@ -8,36 +8,41 @@ import { ResponsiveRadar } from '@nivo/radar'
 // website examples showcase many properties,
 // you'll often use just a few of them.
 
-const evaluationPentagon = () => {
+const evaluationPentagon = (props) => {
+
+    const name = props.staff.writer
+    const scores = props.staff.scores
+
     const data = [
         {
-          "taste": "인품",
-          "chardonay": 10
+          "criteria": "인품",
+          [`${name}`]: scores[0]
         },
         {
-          "taste": "프로젝트 지도력",
-          "chardonay": 90
+          "criteria": "프로젝트 지도력",
+          [`${name}`]: scores[1]
         },
         {
-          "taste": "상담",
-          "chardonay": 73
+          "criteria": "상담",
+          [`${name}`]: scores[2]
         },
         {
-          "taste": "강의 전달력",
-          "chardonay": 97
+          "criteria": "강의 전달력",
+          [`${name}`]: scores[3]
         },
         {
-          "taste": "반 분위기",
-          "chardonay": 95
+          "criteria": "반 분위기",
+          [`${name}`]: scores[4]
         }
       ]
     return (
         <ResponsiveRadar
             data={data}
-            keys={[ 'chardonay' ]}
-            indexBy="taste"
+            keys={[ `${props.staff.writer}` ]}
+            indexBy="criteria"
             // valueFormat=">-.2f"
             margin={{ top: 70, right: 80, bottom: 40, left: 400 }}
+            maxValue={5}
             borderColor={{ from: 'color' }}
             borderWidth='4px'
             gridShape='linear'
