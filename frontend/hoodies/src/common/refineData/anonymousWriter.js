@@ -37,3 +37,21 @@ export const confirmWriter = (articleWriter, commentWriter, commentsMap) => {
     }
 
 }
+
+
+export const changeAnnonymous = (article) => {
+    if(article.type === 2){
+        return '익명'
+    } else{
+        return article.writer
+    }
+}
+
+
+export const checkBoradType = (article) => {
+    if(article.type === 2){
+        return '익명게시판'
+    } else if(article.type === 1){
+        return '자유게시판'
+    }
+}

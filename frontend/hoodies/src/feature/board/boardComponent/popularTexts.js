@@ -1,6 +1,7 @@
 import { useHistory } from "react-router-dom";
 import { blockArticle } from "../../../common/refineData/blockArticle";
 import styled from "styled-components";
+import { changeAnnonymous, checkBoradType } from "../../../common/refineData/anonymousWriter";
 
 const RightArticles = styled.div`
   grid-column: 3/4;
@@ -112,8 +113,8 @@ const PopularTexts = (props) => {
                 {isFilter(article) ?
                     <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
                     : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
-                <ArticleH3>{article.type}</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
-                <ArticleH3>{article.writer}</ArticleH3>
+                <ArticleH3>{checkBoradType(article)}</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
+                <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
                 <ArticleHr />
               </ArticleA>
             </Article>
