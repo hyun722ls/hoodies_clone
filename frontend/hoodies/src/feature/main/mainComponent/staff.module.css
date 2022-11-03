@@ -3,6 +3,13 @@
   width: 100%;
 }
 
+.border {
+  border-style: solid;
+  border-width: 1px;
+  margin-bottom: 13px;
+  border-color: #dbffb6;
+}
+
 .title {
   font-weight: bold;
   font-size: larger;
@@ -18,7 +25,7 @@
   display: inline-grid;
   width: 320px;
   text-align: center;
-  margin: 0 1rem;
+  margin: 3px 1rem;
   position: relative;
   cursor: pointer;
   /*padding: 2rem 1.5rem;*/
@@ -35,14 +42,13 @@
 .card::before {
   content: "";
   position: absolute;
-  top: 10%;
+  top: 111px;
   left: 50%;
   transform: translateX(-50%);
   border-radius: 50%;
-  background-color: rgba(0, 102, 255, 0.2);
-  height: 120px;
-  width: 120px;
-  -webkit-font-smoothing: antialiased;
+  background-color: rgba(195, 195, 255, 0.2);
+  height: 115px;
+  width: 115px;
   transition: all 200ms ease-out;
   z-index: -1;
 }
@@ -54,5 +60,5 @@
 }
 .card:hover::before {
   transform: translateX(-50%) translateY(30%) scale(8);
-  background-color: rgba(0, 102, 255, 1);
+  background-color: rgb(149, 192, 255);
 }
