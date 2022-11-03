@@ -13,25 +13,26 @@ export const annonymousWriter = (comments, writer) => {
     if (writerIndex > -1){
         uniqueWriters?.splice(writerIndex, 1)
     }
-
+ 
     console.log(uniqueWriters)
-    const commentsMap = uniqueWriters?.map((element, index) => {
-        const newObj = {}
-        return newObj.element = index
-    })
 
+    const commentsMap = {}
+    
+    uniqueWriters.forEach((element, index) => {
+        commentsMap[index] = element;
+    });
+    
     console.log(commentsMap)
 
     return commentsMap
 
 }
 
-export const confirmWriter = (writer, commentsMap) => {
-    const my = localStorage.getItem('hashNickname')
-    if (writer === my){
+export const confirmWriter = (articleWriter, commentWriter, commentsMap) => {
+    if (articleWriter === commentWriter){
         return '익명'
     } else {
-        return `익명${commentsMap[writer]}`
+        return `익명${commentsMap[commentWriter]}`
     }
 
 }
