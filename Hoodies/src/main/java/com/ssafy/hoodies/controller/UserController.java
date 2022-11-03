@@ -95,14 +95,19 @@ public class UserController {
         String email = map.getOrDefault("email", "");
         String authcode = map.getOrDefault("authcode", "");
 
+        System.out.println("auth map : " + map);
+
         // 기존 user가 있는 경우
         if (userRepository.findById(email).isPresent()) {
+            System.out.println("기존 유저 있음");
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
 
+
         UserAuth userAuth = userAuthRepository.findByEmailAndAuthcode(email, authcode);
         if (userAuth == null) {
+            System.out.println("인증 코드 없음");
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
@@ -112,6 +117,7 @@ public class UserController {
 
         // 제한시간이 만료되었을 경우
         if (!nowTime.before(time)) {
+            System.out.println("인증 시간 만료");
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
@@ -232,14 +238,14 @@ public class UserController {
             Update update = new Update();
             update.set("writer", user.getNickname());
             mongoTemplate.updateMulti(query, update, Board.class);
-            
+
             // 이전 닉네임으로 자유 게시판에 작성한 댓글
             Update commentUpdate = new Update();
             commentUpdate.set("comments.$[target].writer", user.getNickname());
             commentUpdate.filterArray("target.writer", writer);
 
             mongoTemplate.updateMulti(new Query(), commentUpdate, Board.class);
-            
+
             // 이전 닉네임으로 익명 게시판에 작성한 부분
             // 이전 닉네임으로 익명 게시판에 작성한 글
             String ewriter = util.getEncryptPassword(writer, salt);
@@ -258,7 +264,7 @@ public class UserController {
             ecommentUpdate.filterArray("target.writer", ewriter);
 
             mongoTemplate.updateMulti(new Query(), ecommentUpdate, Board.class);
-            
+
             resultMap.put("statusCode", SUCCESS);
             resultMap.put("hashNickname", enickname);
         } catch (Exception e) {
