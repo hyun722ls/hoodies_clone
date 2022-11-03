@@ -1,32 +1,36 @@
-export const annonymousWriter = (comments) => {
-    const my = localStorage.getItem('hashNickname')
+export const annonymousWriter = (comments, writer) => {
     const commentsWriters = comments?.map((comment) => {
         return comment.writer
     })
+    console.log(commentsWriters)
 
     const uniqueWriters = commentsWriters?.filter((element, index) => {
         return comments.indexOf(element) === index ;
     });
-    const writerIndex = uniqueWriters?.indexOf(my)
+    
+    console.log(uniqueWriters)
+    const writerIndex = uniqueWriters?.indexOf(writer)
     if (writerIndex > -1){
         uniqueWriters?.splice(writerIndex, 1)
     }
+
+    console.log(uniqueWriters)
     const commentsMap = uniqueWriters?.map((element, index) => {
         return {element:index}
     })
 
-    commentsMap.my = uniqueWriters?.length
+    console.log(commentsMap)
 
     return commentsMap
 
 }
 
-export const confirmWriter = (writer, value) => {
+export const confirmWriter = (writer, commentsMap) => {
     const my = localStorage.getItem('hashNickname')
     if (writer === my){
         return '익명'
     } else {
-        return `익명${value}`
+        return `익명${commentsMap[writer]}`
     }
 
 }
