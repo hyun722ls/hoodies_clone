@@ -80,7 +80,7 @@ export const deleteArticle = async (articleId) => {
 
 export const createComment = async (articleId, content) => {
     const writer = localStorage.getItem('nickname')
-    const formData = {'content': content, 'writer': writer,  type: 1}
+    const formData = {'content': content, 'writer': writer,  type: 2}
     try {
         const response = await axios1.post(API_URL + `board/${articleId}/comment`, formData, {headers: {
             'accessToken': localStorage.getItem('token')
@@ -106,7 +106,7 @@ export const deleteComment = async (articleId, commentId) => {
 
 export const modifyComment = async (articleId, commentId, content) => {
     const writer = localStorage.getItem('nickname')
-    const formData = {'content': content, 'writer': writer,  type: 1}
+    const formData = {'content': content, 'writer': writer,  type: 2}
     try {
         const response = await axios1.put(API_URL + `board/${articleId}/comment/${commentId}`, formData, {headers: {
             'accessToken': localStorage.getItem('token')
