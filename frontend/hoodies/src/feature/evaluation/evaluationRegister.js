@@ -30,6 +30,7 @@ const CreateEvaluation = (props) => {
         const score = [personality, atmosphere, project, lecture, consultation]
         const response = await postEvaluation(id, score, studentComment)
         const newComments = await getStaff(id)
+        console.log(newComments)
         props.setComments(newComments.evaluations)
         if (response) {
             alert('게시!')

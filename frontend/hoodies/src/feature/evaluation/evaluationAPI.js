@@ -29,6 +29,7 @@ export const getStaff = async(id) => {
         const response = await axios1.get(API_URL + `mentor/coach/${id}`,  {headers: {
             'accessToken': localStorage.getItem('token')
         }})
+        console.log(response.data)
         return response.data
     } catch(err) {
         console.log(err)
