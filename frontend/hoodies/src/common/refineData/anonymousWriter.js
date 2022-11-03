@@ -19,7 +19,7 @@ export const annonymousWriter = (comments, writer) => {
     const commentsMap = {}
     
     uniqueWriters.forEach((element, index) => {
-        commentsMap[index] = element;
+        commentsMap[element] = index;
     });
     
     console.log(commentsMap)
