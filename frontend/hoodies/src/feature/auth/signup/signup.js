@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useHistory, Link, Route } from "react-router-dom";
-import CustomModal from "../../../common/UI/modal/customModal";
 import { authMM, checkNickname, sendMM, signup } from "../authApi";
 import styled from "styled-components";
 import Swal from "sweetalert2";
@@ -147,10 +146,10 @@ const Signup = () => {
       if (response.statusCode === '200'){
         let timerInterval
         setEmailCheck(false)
-        const { value: isCorrect } = Swal.fire({
+        Swal.fire({
           title: 'Mettermost에 보낸<br> 코드를 입력해 주세요.',
           html: '<min></min> : <sec></sec>',
-          input: 'text',
+          input: 'email',
           timer: 180000,
           timerProgressBar: true,
           allowOutsideClick: false,
@@ -250,22 +249,6 @@ const Signup = () => {
     }
   };
 
-  let modalAuthCodeForm = (
-    <form onSubmit={authCodeTransferHandler}>
-      <span>보낸 코드을 확인하세요!</span>
-      <div>
-        <input
-          type="textarea"
-          value={authCode}
-          onChange={authCodeChangeHandler}
-        />
-      </div>
-      <div>
-        <button type="submit">전송</button>
-      </div>
-    </form>
-  );
-
   const signupHandler = async (event) => {
     event.preventDefault();
     if (
@@ -341,9 +324,6 @@ const Signup = () => {
         </div>
       </Form>
       <BtnCancle to="/login">뒤로</BtnCancle>
-      <CustomModal open={modalOpen} close={closeModal} header="">
-        {modalAuthCodeForm}
-      </CustomModal>
     </Container>
   );
 };
