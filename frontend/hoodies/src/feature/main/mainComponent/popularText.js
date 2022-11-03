@@ -53,7 +53,7 @@ const ArticleH2_filter = styled.h2`
   text-overflow: ellipsis;
   font-size: 13px;
   font-weight: normal;
-  color: #ffadad;
+  color: #ff5f5f;
 `
 
 const ArticleH3 = styled.h3`
@@ -158,6 +158,7 @@ const PopularText = (props) => {
                   {isFilter(article) ?
                       <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
                       : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
+                    <ArticleH3>{article.type}</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
                   <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
                   <ArticleH3>{article.writer}</ArticleH3>
                   <Score>
