@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
             if (flag == 1)
                 message.append("인증 코드입니다.\n");
             else
-                message.append("초기화 된 비밀번호 입니다.\n");
+                message.append("초기화된 비밀번호입니다.\n");
 
             String authcode = util.getRandomGenerateString(8);
             message.append("```\n").append(authcode).append("\n```");

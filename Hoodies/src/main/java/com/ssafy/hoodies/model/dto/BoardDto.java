@@ -37,8 +37,6 @@ public class BoardDto {
     private int type;
     private Map<String, Boolean> contributor;
 
-    // private ??? image;
-
     public Board toEntity() {
         String now = util.getTimeStamp();
         Board board = Board.builder()
@@ -53,7 +51,6 @@ public class BoardDto {
                         .type(type)
                         .contributor(new HashMap<String, Boolean>())
                         .build();
-        // board.setImage(image);
         return board;
     }
 
