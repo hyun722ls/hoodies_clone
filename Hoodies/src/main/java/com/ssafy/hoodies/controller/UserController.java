@@ -260,6 +260,7 @@ public class UserController {
             mongoTemplate.updateMulti(new Query(), ecommentUpdate, Board.class);
             
             resultMap.put("statusCode", SUCCESS);
+            resultMap.put("hashNickname", enickname);
         } catch (Exception e) {
             resultMap.put("statusCode", FAIL);
         }
