@@ -1,6 +1,7 @@
 package com.ssafy.hoodies.controller;
 
 import com.ssafy.hoodies.config.security.JwtTokenProvider;
+import com.ssafy.hoodies.model.dto.GalleryDto;
 import com.ssafy.hoodies.model.repository.TokenRepository;
 import com.ssafy.hoodies.model.repository.UserAuthRepository;
 import com.ssafy.hoodies.model.repository.UserRepository;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.HashMap;

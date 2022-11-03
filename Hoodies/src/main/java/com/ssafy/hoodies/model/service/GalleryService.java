@@ -1,8 +1,7 @@
 package com.ssafy.hoodies.model.service;
 
 import com.ssafy.hoodies.model.dto.GalleryDto;
-import com.victolee.s3exam.domain.repository.GalleryRepository;
-import com.victolee.s3exam.dto.GalleryDto;
+import com.ssafy.hoodies.model.repository.GalleryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

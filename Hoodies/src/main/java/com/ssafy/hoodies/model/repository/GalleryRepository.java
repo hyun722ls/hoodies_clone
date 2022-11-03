@@ -1,7 +1,7 @@
 package com.ssafy.hoodies.model.repository;
 
-import com.victolee.s3exam.domain.entity.GalleryEntity;
+import com.ssafy.hoodies.model.entity.Gallery;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface GalleryRepository extends JpaRepository<GalleryEntity, Long> {
+public interface GalleryRepository extends JpaRepository<Gallery, Long> {
 }
