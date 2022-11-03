@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Switch } from "react-router-dom";
 import PrivateRoute from "./common/routes/privateRoute";
 import PublicRoute from "./common/routes/publicRoute";
 import ErrorPage from "./common/UI/error/errorPage";
@@ -17,9 +17,6 @@ import Main from "./feature/main/main";
 import ImageUpload from "./feature/test/imageUpload";
 import UserMain from "./feature/user/userMain";
 
-const a = (e) => {
-  console.log(e)
-}
 
 function App() {
   return (

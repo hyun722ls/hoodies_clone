@@ -318,7 +318,211 @@ export const DUMMY_STAFF = [
         "writer": "제빵킹"
       },
     ],
-    "writer":"outside writer"
+    "writer":"김탁구 컨설턴트"
+  },
+
+  {
+    "_id": "김축구",
+    "averageScores": [
+      3,
+      2,
+      5,
+      4,
+      3
+    ],
+    "career": "삼성전자 무선사업부",
+    "email": "abcdef@samsung.com",
+    "etc": "리액트를 잘하고 리액션은 못합니다.",
+    "evaluations": [
+      {
+        "_id": "제빵왕",
+        "content": "축구를 너무 잘 치십니다.",
+        "createdAt": "2022.11.11 20:20",
+        "score": [
+          2,
+          2,
+          1,
+          1,
+          2
+        ],
+        "writer": "제빵킹"
+      },
+    ],
+    "writer":"김축구 컨설턴트"
+  },
+  {
+    "_id": "김탁구",
+    "averageScores": [
+      3,
+      5,
+      5,
+      2,
+      2
+    ],
+    "career": "삼성전자 무선사업부",
+    "email": "abcdef@samsung.com",
+    "etc": "리액트를 잘하고 리액션은 못합니다.",
+    "evaluations": [
+      {
+        "_id": "제빵왕",
+        "content": "배구를 너무 잘 치십니다.",
+        "createdAt": "2022.11.11 20:20",
+        "score": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "writer": "제빵킹"
+      },
+    ],
+    "writer":"김배구 컨설턴트"
+  },
+  {
+    "_id": "김탁구",
+    "averageScores": [
+      1,
+      5,
+      1,
+      3,
+      2
+    ],
+    "career": "삼성전자 무선사업부",
+    "email": "abcdef@samsung.com",
+    "etc": "리액트를 잘하고 리액션은 못합니다.",
+    "evaluations": [
+      {
+        "_id": "제빵왕",
+        "content": "피구를 너무 잘 치십니다.",
+        "createdAt": "2022.11.11 20:20",
+        "score": [
+          4,
+          3,
+          4,
+          5,
+          2
+        ],
+        "writer": "제빵킹"
+      },
+    ],
+    "writer":"김피구 컨설턴트"
+  },
+  {
+    "_id": "김탁구",
+    "averageScores": [
+      5,
+      4,
+      3,
+      3,
+      2
+    ],
+    "career": "삼성전자 무선사업부",
+    "email": "abcdef@samsung.com",
+    "etc": "리액트를 잘하고 리액션은 못합니다.",
+    "evaluations": [
+      {
+        "_id": "제빵왕",
+        "content": "야구를 너무 잘 치십니다.",
+        "createdAt": "2022.11.11 20:20",
+        "score": [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "writer": "제빵킹"
+      },
+    ],
+    "writer":"김야구 컨설턴트"
+  },
+  {
+    "_id": "김탁구",
+    "averageScores": [
+      2,
+      4,
+      4,
+      3,
+      2
+    ],
+    "career": "삼성전자 무선사업부",
+    "email": "abcdef@samsung.com",
+    "etc": "리액트를 잘하고 리액션은 못합니다.",
+    "evaluations": [
+      {
+        "_id": "제빵왕",
+        "content": "지구를 너무 잘 치십니다.",
+        "createdAt": "2022.11.11 20:20",
+        "score": [
+          2,
+          3,
+          5,
+          3,
+          2
+        ],
+        "writer": "제빵킹"
+      },
+    ],
+    "writer":"김지구 컨설턴트"
+  },
+  {
+    "_id": "김탁구",
+    "averageScores": [
+      5,
+      5,
+      5,
+      3,
+      3
+    ],
+    "career": "삼성전자 무선사업부",
+    "email": "abcdef@samsung.com",
+    "etc": "리액트를 잘하고 리액션은 못합니다.",
+    "evaluations": [
+      {
+        "_id": "제빵왕",
+        "content": "구구를 너무 잘 치십니다.",
+        "createdAt": "2022.11.11 20:20",
+        "score": [
+          4,
+          2,
+          5,
+          3,
+          4
+        ],
+        "writer": "제빵킹"
+      },
+    ],
+    "writer":"김구구 컨설턴트"
+  },
+  {
+    "_id": "김탁구",
+    "averageScores": [
+      5,
+      3,
+      2,
+      3,
+      2
+    ],
+    "career": "삼성전자 무선사업부",
+    "email": "abcdef@samsung.com",
+    "etc": "리액트를 잘하고 리액션은 못합니다.",
+    "evaluations": [
+      {
+        "_id": "제빵왕",
+        "content": "턱을 너무 잘 치십니다.",
+        "createdAt": "2022.11.11 20:20",
+        "score": [
+          3,
+          2,
+          4,
+          3,
+          4
+        ],
+        "writer": "제빵킹"
+      },
+    ],
+    "writer":"김턱구 컨설턴트"
   }
 ]
 
