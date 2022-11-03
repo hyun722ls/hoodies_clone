@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -16,11 +17,9 @@ public class Evaluation {
 
     private String createdAt; // 작성 시간
 
-//    private List<String> like; // 공감한 사람 목록
-    private int like;
+    private Map<String, Boolean> contributor; // 공감한 사람 목록
 
-//    private List<String> dislike; // 싫어한 사람 목록
-    private int dislike;
+    private int like;
 
     private int[] score; // 평점
 

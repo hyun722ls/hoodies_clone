@@ -7,13 +7,12 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.bson.types.ObjectId;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 @ApiModel
 public class EvaluationDto {
-    @ApiModelProperty(value="댓글 id", accessMode = ApiModelProperty.AccessMode.READ_ONLY)
     private String _id;
     @ApiModelProperty(value="작성자")
     private String writer;
@@ -21,16 +20,11 @@ public class EvaluationDto {
     @ApiModelProperty(value="내용")
     private String content;
 
-    @ApiModelProperty(value="작성시간", accessMode = ApiModelProperty.AccessMode.READ_ONLY)
     private String createdAt;
 
-    //    private List<String> like; // 공감한 사람 목록
-    @ApiModelProperty(value="공감", accessMode = ApiModelProperty.AccessMode.READ_ONLY)
-    private int like;
+    private Map<String, Boolean> contributor; // 공감한 사람 목록
 
-    //    private List<String> dislike; // 싫어한 사람 목록
-    @ApiModelProperty(value="비공감", accessMode = ApiModelProperty.AccessMode.READ_ONLY)
-    private int dislike;
+    private int like;
 
     @ApiModelProperty(value="평점")
     private int[] score;
@@ -42,8 +36,8 @@ public class EvaluationDto {
                 .writer(writer)
                 .content(content)
                 .createdAt(now)
+                .contributor(new HashMap<>())
                 .like(0)
-                .dislike(0)
                 .score(score)
                 .build();
         return evaluation;

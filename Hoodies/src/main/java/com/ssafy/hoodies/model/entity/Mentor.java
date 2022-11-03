@@ -3,13 +3,14 @@ package com.ssafy.hoodies.model.entity;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Builder
-@Data
+
+@Getter
 @Document(collection = "mentor")
 public class Mentor {
     @Id
@@ -23,11 +24,11 @@ public class Mentor {
 
     private String etc; // 기타정보
 
-    private String type; // 역할
+    private int type; // 역할
 
-    private double[] scores; // 평균평점
+    private double[] averageScores; // 평균평점
 
-    private String modifiedAt; // 수정 시간
+    private String modifiedAt; // 업데이트 시간
 
     private List<String> contributor; // 평가자 목록
 
