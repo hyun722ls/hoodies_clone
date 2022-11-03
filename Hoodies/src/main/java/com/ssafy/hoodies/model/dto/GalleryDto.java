@@ -1,7 +1,6 @@
 package com.ssafy.hoodies.model.dto;
 
 import com.ssafy.hoodies.model.entity.Gallery;
-import com.victolee.s3exam.domain.entity.GalleryEntity;
 import lombok.*;
 
 @Getter
@@ -13,7 +12,7 @@ public class GalleryDto {
     private String title;
     private String filePath;
 
-    public Gallery toEntity(){
+    public Gallery toEntity() {
         Gallery build = Gallery.builder()
                 .id(id)
                 .title(title)
