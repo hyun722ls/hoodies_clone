@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../../common/UI/header/header";
-import {createComment, deleteArticle, deleteComment, fetchArticle, modifyComment} from "../boardAPI";
+import {createComment, deleteArticle, deleteComment, fetchArticle, fetchLike, modifyComment} from "../boardAPI";
 import CommentList from "./commentList";
 import styled from "styled-components";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 
 const Articles = styled.div`
   position: relative;
@@ -130,6 +131,7 @@ const ArticleDetail = () => {
   const [article, setArticle] = useState([]);
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLike, setIsLike] = useState(false)
   const history = useHistory();
 
   const backHandler = (event) => {
@@ -195,12 +197,40 @@ const ArticleDetail = () => {
     }
   };
 
+  const likeHandler = async (event) => {
+    event.preventDefault()
+    const response = await fetchLike(location.state)
+    if (response.statusCode === 200){
+      const response1 = await fetchArticle(location.state)
+      setArticle(response1)
+      setComments(response1.comments)
+      let isLike = Object.keys(response1.contributor).includes(localStorage.getItem('hashNickname'))
+      if (isLike === true){
+        setIsLike(response1.contributor[localStorage.getItem('hashNickname')])
+      } else {
+        setIsLike(false)
+      }
+    }
+    else {
+      const response1 = await fetchArticle(location.state)
+      setArticle(response1)
+      setComments(response1.comments)
+    }
+
+  }
+
   useEffect(() => {
     (async () => {
       if (location.state) {
         const response = await fetchArticle(location.state)
         setArticle(response);
         setComments(response.comments);
+        let isLike = Object.keys(response.contributor).includes(localStorage.getItem('hashNickname'))
+        if (isLike === true){
+          setIsLike(response.contributor[localStorage.getItem('hashNickname')])
+        } else {
+          setIsLike(false)
+        }
       } else {
         alert("잘못된 접근입니다.");
         history.push("/index");
@@ -222,7 +252,7 @@ const ArticleDetail = () => {
               <Item>추천수 : {article.like}</Item>
                 <Tooltip title="추천!">
                   <IconButton>
-                    <ThumbUpIcon />
+                    {isLike ? <ThumbDownAltIcon onClick={likeHandler} /> : <ThumbUpIcon onClick={likeHandler} />}
                   </IconButton>
                 </Tooltip>
               <Item>조회수 : {article.hit}</Item>

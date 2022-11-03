@@ -6,6 +6,7 @@ import CreateIcon from "@mui/icons-material/Create";
 import Pagination from "react-js-pagination";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import { changeAnnonymous, checkBoradType } from "../../../common/refineData/anonymousWriter";
 
 const Articles = styled.div`
   position: relative;
@@ -165,7 +166,7 @@ const BoardTable = (props) => {
             }}>
               <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
               <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
-              <ArticleH3>{article.writer}</ArticleH3>
+              <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
               <Score>
                 <Item>{article.hit}</Item>
                 <Item>{article.like}</Item>
