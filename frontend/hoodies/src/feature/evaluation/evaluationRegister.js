@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material';
 import Rating from '@mui/material/Rating';
 import { Fragment, useState } from 'react';
-import { postEvaluation } from './evaluationAPI';
+import { postEvaluation, getStaff } from './evaluationAPI';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 
@@ -29,6 +29,8 @@ const CreateEvaluation = (props) => {
         event.preventDefault();
         const score = [personality, atmosphere, project, lecture, consultation]
         const response = await postEvaluation(id, score, studentComment)
+        const newComments = await getStaff(id)
+        props.setComments(newComments.evaluations)
         if (response) {
             alert('게시!')
             history.push({pathname: '/pro/detail', state:props.staff})

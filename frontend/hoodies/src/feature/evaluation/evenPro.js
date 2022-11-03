@@ -75,8 +75,6 @@ const EvenPro = () => {
         <EvaulationComment
           comments={comments}
           deleteCommentHandler={deleteCommentHandler}
-          modifyCommentHandler={modifyCommentHandler}
-          createCommentHandler={createCommentHandler}
         />
         {/* <div style={{position:'relative'}}> 
           <div style={{display:'flex', flexWrap:'wrap', marginLeft:'7vw'}}>
@@ -94,7 +92,7 @@ const EvenPro = () => {
             hello
           </div>
         </BoxOne> */}
-        <CreateEvaluation id={staff._id} staff={staff}></CreateEvaluation>
+        <CreateEvaluation setComments={setComments} id={staff._id} staff={staff}></CreateEvaluation>
       </div>
     )
   );
