@@ -19,8 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.UUID;
 
 @Service
@@ -40,40 +41,42 @@ public class FileService {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    private final String URL = "https://seoulhoodies.s3.ap-northeast-2.amazonaws.com/";
+    private final HashSet<String> availableExtensions = new HashSet<>(Arrays.asList("jpeg", "png"));
 
     @PostConstruct
     public void setAmazonS3() {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
 
-        amazonS3 = AmazonS3ClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withRegion(this.region)
-                .build();
+        amazonS3 = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion(this.region).build();
     }
 
-    public String upload(MultipartFile file) throws IOException {
-        StringBuilder fileName = new StringBuilder().append(UUID.randomUUID()).append("_").append(file.getOriginalFilename());
-        InputStream getFileInputStream = file.getInputStream();
-        ContentInfoUtil contentInfoUtil = new ContentInfoUtil();
-        ContentInfo fileInfo = contentInfoUtil.findMatch(getFileInputStream);
-        System.out.println("파일 정보 : " + fileInfo);
-        System.out.println(fileInfo.getFileExtensions());
-        System.out.println(fileInfo.getName());
-        System.out.println(fileInfo.getContentType());
+    public String upload(MultipartFile file) {
+        String uploadResult = "fail";
+        try {
+            StringBuilder fileName = new StringBuilder().append(UUID.randomUUID()).append("_").append(file.getOriginalFilename());
+            InputStream getFileInputStream = file.getInputStream();
 
-        byte[] bytes = IOUtils.toByteArray(getFileInputStream);
+            ContentInfoUtil contentInfoUtil = new ContentInfoUtil();
+            ContentInfo fileInfo = contentInfoUtil.findMatch(getFileInputStream);
+            String fileExtension = fileInfo.getName();
+            // 업로드할 수 없는 확장자일 경우
+            if (!availableExtensions.contains(fileExtension)) {
+                return uploadResult;
+            }
 
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentLength(bytes.length);
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+            byte[] bytes = IOUtils.toByteArray(getFileInputStream);
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentLength(bytes.length);
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 
-        amazonS3.putObject(new PutObjectRequest(bucket, fileName.toString(), byteArrayInputStream, objectMetadata)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
-        return fileName.toString();
+            amazonS3.putObject(new PutObjectRequest(bucket, fileName.toString(), byteArrayInputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+            uploadResult = fileName.toString();
+        } catch (Exception e) {
+        }
+        return uploadResult;
     }
 
-    public void deleteFile(String fileName) throws Exception {
+    public void deleteFile(String fileName) {
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
 }
