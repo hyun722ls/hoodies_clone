@@ -1,13 +1,17 @@
 import classes from "./header.module.css";
 import { Link, useHistory } from "react-router-dom";
 import { Fragment } from "react";
+import { logOut } from "../../../feature/auth/authApi";
 
 const Header = () => {
   const history = useHistory()
-  const logout = (event) => {
+  const logout = async (event) => {
     event.preventDefault()
-    localStorage.clear()
-    history.push('/login')
+    const response = await logOut()
+    if (response){
+      localStorage.clear()
+      history.push('/login')
+    }
   }
 
   return (
@@ -32,16 +36,6 @@ const Header = () => {
           <li>
             <Link to="/board/annonymous" className={classes.navbar__item}>
               익명 게시판
-            </Link>
-          </li>
-          <li>
-            <Link to="/board/free" className={classes.navbar__item}>
-              정보 게시판
-            </Link>
-          </li>
-          <li>
-            <Link to="/board/free" className={classes.navbar__item}>
-              취업 게시판
             </Link>
           </li>
           <li>
