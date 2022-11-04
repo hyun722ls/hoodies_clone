@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../../common/UI/header/header";
-import {createComment, deleteArticle, deleteComment, fetchArticle, modifyComment} from "../anonymousBoardAPI";
+import {createComment, deleteArticle, deleteComment, fetchArticle, fetchLike, fetchPopularArticles, modifyComment, reportArticle} from "../anonymousBoardAPI";
 import CommentList from "./commentList";
 import styled from "styled-components";
 import { annonymousWriter, confirmWriter } from "../../../common/refineData/anonymousWriter";
-
+import Tooltip from '@mui/material/Tooltip';
+import TouchAppIcon from '@mui/icons-material/TouchApp';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 const Articles = styled.div`
   position: relative;
   float: none;
@@ -130,6 +133,7 @@ const AnnoymousArticleDetail = () => {
   const [commentsMap, setCommentsMap] = useState({})
   const [articleWriter, setArticleWriter] = useState('')
   const history = useHistory();
+  const [isLike, setIsLike] = useState(false)
 
   const backHandler = (event) => {
     // history.go(-1)
@@ -206,18 +210,57 @@ const AnnoymousArticleDetail = () => {
     }
   };
 
+  const likeHandler = async (event) => {
+    event.preventDefault()
+    const response = await fetchLike(location.state)
+    if (response){
+      const response1 = await fetchArticle(location.state)
+      setArticle(response1)
+      setComments(response1.comments)
+      let tmpLike = Object.keys(response1.contributor).includes(localStorage.getItem('hashNickname'))
+      console.log(response1.contributor[localStorage.getItem('hashNickname')])
+      if (tmpLike === true && response1.contributor[localStorage.getItem('hashNickname')]){
+        setIsLike(true)
+      } else {
+        setIsLike(false)
+      }
+    }
+    else {
+      const response1 = await fetchArticle(location.state)
+      setArticle(response1)
+      setComments(response1.comments)
+    }
+  }
+
+  const reportHandler = async (event) => {
+    event.preventDefault()
+    if (article.reporter.includes(localStorage.getItem('hashNickname'))){
+      alert('중복된 신고입니다.')
+    } else {
+      const response = await reportArticle(location.state)
+      if (response === 200){
+        const response1 = await fetchArticle(location.state)
+        setArticle(response1)
+        setComments(response1.comments)
+      }
+      else {
+        console.log('신고 실패')
+      }
+    }
+  }
+
   useEffect(() => {
     (async () => {
       if (location.state) {
         const response = await fetchArticle(location.state)
         setArticle(response);
         setComments(response.comments);
-        setCommentsMap(annonymousWriter(response.comments, response.writer))
-        setArticleWriter(response.writer)
-
-      } else {
-        alert("잘못된 접근입니다.");
-        history.push("/index");
+        let tmpLike = Object.keys(response.contributor).includes(localStorage.getItem('hashNickname'))
+        if (tmpLike === true && response.contributor[localStorage.getItem('hashNickname')]){
+          setIsLike(response.contributor[localStorage.getItem('hashNickname')])
+        } else {
+          setIsLike(false)
+        }
       }
       setIsLoading(false);
     })()
@@ -233,8 +276,17 @@ const AnnoymousArticleDetail = () => {
             <ArticleH3>{'익명'}</ArticleH3>
             <ArticleTime>{article.createdAt} {article.createdAt !== article.modifiedAt && <span>(수정됨 {article.modifiedAt})</span>} </ArticleTime>
             <Score>
-              <Item>추천수 : {article.like}</Item>
+            <Item>추천수 : {article.like}</Item>
+                <Tooltip title="추천!">
+                    {isLike ? <ThumbDownAltIcon onClick={likeHandler} /> : <ThumbUpIcon onClick={likeHandler} />}
+                  
+                </Tooltip>
               <Item>조회수 : {article.hit}</Item>
+              <Item>|</Item>
+                <Tooltip title="신고하기">
+                    <TouchAppIcon onClick={reportHandler} />
+                </Tooltip>
+            
             </Score>
             <ArticleHr />
           </ArticleHead>

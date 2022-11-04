@@ -71,8 +71,8 @@ export const deleteArticle = async (articleId) => {
         const response = await axios1.delete(API_URL + `board/detail/${articleId}`, {headers: {
             'accessToken': localStorage.getItem('token')
         }} )
-        console.log(response.data)
-        return response
+        
+        return response.data
     } catch (err) {
         console.log(err)
     }
@@ -97,8 +97,8 @@ export const deleteComment = async (articleId, commentId) => {
         const response = await axios1.delete(API_URL + `board/${articleId}/comment/${commentId}`, {headers: {
             'accessToken': localStorage.getItem('token')
         }} )
-        console.log(response.data)
-        return response
+    
+        return response.data
     } catch (err) {
         console.log(err)
     }
@@ -111,8 +111,8 @@ export const modifyComment = async (articleId, commentId, content) => {
         const response = await axios1.put(API_URL + `board/${articleId}/comment/${commentId}`, formData, {headers: {
             'accessToken': localStorage.getItem('token')
         }} )
-        console.log(response.data)
-        return response
+    
+        return response.data
     } catch (err) {
         console.log(err)
     }
@@ -125,11 +125,39 @@ export const fetchLike = async (articleId) => {
         const response = await axios1.patch(API_URL + `board/detail/${articleId}/like/${writer}`, tmpData, {headers: {
             'accessToken': localStorage.getItem('token')
         }} )
-        console.log(response.data)
-        return response
+ 
+        return response.data
     } catch (err) {
         console.log(err)
     }
 
+}
+
+export const reportArticle = async (articleId) => {
+    const writer = localStorage.getItem('nickname')
+    const tmpData = {}
+    try {
+        const response = await axios1.put(API_URL + `board/detail/${articleId}/report/${writer}`, tmpData, {headers: {
+            'accessToken': localStorage.getItem('token')
+        }})
+        return response.data
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+
+
+export const reportComment = async (articleId, commentId) => {
+    const writer = localStorage.getItem('nickname')
+    const tmpData = {}
+    try {
+        const response = await axios1.put(API_URL + `board/${articleId}/comment/${}/report/${writer}`, tmpData, {headers: {
+            'accessToken': localStorage.getItem('token')
+        }})
+        return response.data
+    } catch (err) {
+        console.log(err)
+    }
 }
 
