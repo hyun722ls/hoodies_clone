@@ -3,11 +3,15 @@ import { blockArticle } from "../../../common/refineData/blockArticle";
 import styled from "styled-components";
 import { changeAnnonymous, checkBoradType } from "../../../common/refineData/anonymousWriter";
 import { timeConventer } from "../../../common/refineData/refineTime";
+import Grid from '@mui/material/Grid';
+import { blockCnt } from "../../../common/api/url";
+import Swal from "sweetalert2";
 
 const RightArticles = styled.div`
-  grid-column: 3/4;
-  grid-row: 1;
-  width: 320px;
+  width: 100%;
+  //grid-column: 3/4;
+  ////grid-row: 1;
+  //width: 320px;
   margin-bottom: auto;
   background-color: #F9F5EB;
 `
@@ -118,11 +122,22 @@ const ArticleHr = styled.hr`
 const PopularTexts = (props) => {
   const history = useHistory();
   const detailPageHandler = (article) => {
-    if (article.type === 1){
-      history.push({ pathname: "/board/free/detail", state: article._id });
-  
+    if (article.reporter?.length > blockCnt){
+      Swal.fire({
+        title: '신고 누적된 게시글입니다.',
+        icon: 'error',
+        timer: 2000,
+        timerProgressBar: true,
+      })
     } else {
-      history.push({ pathname: "/board/annoymous/detail", state: article._id });
+      if (article.type === 1){
+        history.push({ pathname: "/board/free/detail", state: article._id });
+    
+      } else {
+        history.push({ pathname: "/board/annoymous/detail", state: article._id });
+      }
+    
+
     }
   };
 
@@ -135,35 +150,37 @@ const PopularTexts = (props) => {
   };
 
   return props.popularTexts.length ? (
-    <RightArticles>
-      <Title>
-        <H2>인기게시글</H2>
-      </Title>
-        {props.popularTexts.map((article) => {
-          return (
-            <Article key={article._id}>
-              <ArticleA
-                onClick={() => {
-                  detailPageHandler(article);
-                }}>
-                <div style={{display: "flex", justifyContent: "space-between"}}>
-                  {isFilter(article) ?
-                      <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
-                      : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
-                  <ArticleH3 style={{color: "darkblue"}}>-{checkBoradType(article)}-</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
-                </div>
-                <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
-                <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
-                <Score style={{}}>
-                  <Item style={{fontSize: "2px"}}>조회수</Item><Item>{article.hit}</Item>
-                  <Item style={{color: "red", fontSize: "2px"}}>추천수</Item><Item style={{color: "red"}}>{article.like}</Item>
-                </Score>
-                <ArticleHr/>
-              </ArticleA>
-            </Article>
-          );
-        })}
-    </RightArticles>
+      <Grid item sx={{ margin: '0px', marginRight: '0px', padding: '10px'}} xs={12} md={3}>
+        <RightArticles>
+          <Title>
+            <H2>인기게시글</H2>
+          </Title>
+            {props.popularTexts.map((article) => {
+              return (
+                <Article key={article._id}>
+                  <ArticleA
+                    onClick={() => {
+                      detailPageHandler(article);
+                    }}>
+                    <div style={{display: "flex", justifyContent: "space-between"}}>
+                      {isFilter(article) ?
+                          <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
+                          : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
+                      <ArticleH3 style={{color: "darkblue"}}>-{checkBoradType(article)}-</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
+                    </div>
+                    <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
+                    <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
+                    <Score style={{}}>
+                      <Item style={{fontSize: "2px"}}>조회수</Item><Item>{article.hit}</Item>
+                      <Item style={{color: "red", fontSize: "2px"}}>추천수</Item><Item style={{color: "red"}}>{article.like}</Item>
+                    </Score>
+                    <ArticleHr/>
+                  </ArticleA>
+                </Article>
+              );
+            })}
+        </RightArticles>
+      </Grid>
   ) : (
     <p>작성된 글이 없습니다.</p>
   );

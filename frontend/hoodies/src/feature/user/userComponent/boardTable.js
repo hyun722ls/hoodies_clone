@@ -1,20 +1,14 @@
 import { useHistory } from "react-router-dom";
 import { blockArticle } from "../../../common/refineData/blockArticle";
 import {timeConventer} from "../../../common/refineData/refineTime"
-import { fetchArticles } from "../boardAPI";
 import CreateIcon from "@mui/icons-material/Create";
-import Pagination from "react-js-pagination";
 import styled from "styled-components";
-import { useState, useEffect } from "react";
 import {changeAnnonymous, checkBoradType} from "../../../common/refineData/anonymousWriter";
-import Grid from '@mui/material/Grid';
-import { blockCnt } from "../../../common/api/url";
-import Swal from "sweetalert2";
-
 
 const Articles = styled.div`
-  width: 100%;
   position: relative;
+  margin: 0 auto;
+  max-width: 1180px;
 `
 
 const Article = styled.article`
@@ -142,21 +136,12 @@ const ArticleHr = styled.hr`
 
 const BoardTable = (props) => {
   const history = useHistory();
+
   const detailPageHandler = (article) => {
-    if (article.reporter?.length > blockCnt){
-      Swal.fire({
-        title: '신고 누적된 게시글입니다.',
-        icon: 'error',
-        timer: 2000,
-        timerProgressBar: true,
-      })
+    if (article.type === 1){
+      history.push({ pathname: "/board/free/detail", state: article._id });
     } else {
-      if (article.type === 1){
-        history.push({ pathname: "/board/free/detail", state: article._id });
-    
-      } else {
-        history.push({ pathname: "/board/annoymous/detail", state: article._id });
-      }
+      history.push({ pathname: "/board/annoymous/detail", state: article._id });
     }
   };
 
@@ -168,53 +153,40 @@ const BoardTable = (props) => {
       }
   };
 
-  const createArticle = () => {
-    history.push("free/form");
-  };
-
   return props.articles.length ? (
-      <Grid>
-        <Articles>
-          <Title>
-            <H1>자유게시판</H1>
-          </Title>
-          <NewArticle onClick={createArticle}>
-            새로운 게시글 작성
-            <NewIcon />
-          </NewArticle>
-          {props.articles.map((article) => {
-            return (
-              <Article key={article._id}>
-                <ArticleA onClick={() => {
-                  detailPageHandler(article);
-                }}>
-                    <div style={{display: "flex", justifyContent: "space-between"}}>
-                        {isFilter(article) ?
-                            <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
-                            : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
-                    </div>
-                    <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
-                    <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
-                    <Score>
-                        <Item style={{fontSize: "2px"}}>조회수</Item><Item>{article.hit}</Item>
-                        <Item style={{color: "red", fontSize: "2px"}}>추천수</Item><Item style={{color: "red"}}>{article.like}</Item>
-                    </Score>
-                    <ArticleHr/>
-                </ArticleA>
-              </Article>
-            );
-          })}
-        </Articles>
-      </Grid>
+    <Articles>
+      <Title>
+        <H1>내가 쓴 글</H1>
+      </Title>
+      {props.articles.map((article) => {
+        return (
+          <Article key={article._id}>
+            <ArticleA onClick={() => {
+              detailPageHandler(article);
+            }}>
+                <div style={{display: "flex", justifyContent: "space-between"}}>
+                    {isFilter(article) ?
+                        <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
+                        : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
+                    <ArticleH3 style={{color: "darkblue"}}>-{checkBoradType(article)}-</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
+                </div>
+                <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
+                <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
+                <Score style={{}}>
+                    <Item style={{fontSize: "2px"}}>조회수</Item><Item>{article.hit}</Item>
+                    <Item style={{color: "red", fontSize: "2px"}}>추천수</Item><Item style={{color: "red"}}>{article.like}</Item>
+                </Score>
+                <ArticleHr/>
+            </ArticleA>
+          </Article>
+        );
+      })}
+    </Articles>
   ) : (
     <Articles>
       <Title>
         <H1>작성된 글이 없습니다.</H1>
       </Title>
-      <NewArticle onClick={createArticle}>
-        새로운 게시글 작성
-        <NewIcon />
-      </NewArticle>
     </Articles>
   );
 };

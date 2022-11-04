@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../../common/UI/header/header";
-import {createComment, deleteArticle, deleteComment, fetchArticle, fetchLike, modifyComment} from "../boardAPI";
+import {createComment, deleteArticle, deleteComment, fetchArticle, fetchLike, modifyComment, reportArticle, reportComment} from "../boardAPI";
 import CommentList from "./commentList";
 import styled from "styled-components";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import Swal from "sweetalert2";
 
 const Articles = styled.div`
   position: relative;
@@ -146,21 +147,21 @@ const ArticleDetail = () => {
 
   const deleteHandler = async (event) => {
     const response = await deleteArticle(article._id)
-    if (response) {
+    if (response.statusCode === 200) {
       history.push('/board/free');
+    } else {
+      console.log('게시글 삭제')
     }
   }
 
   const deleteCommentHandler = async (commentId) => {
     const response = await deleteComment(article._id, commentId)
-    if (response){
+    if (response.statusCode === 200){
       const response1 = await fetchArticle(article._id)
       setArticle(response1)
       setComments(response1.comments)
     } else {
-      const response1 = await fetchArticle(article._id)
-      setArticle(response1)
-      setComments(response1.comments)
+      console.log('댓글 삭제 에러')
     }
   };
 
@@ -172,9 +173,7 @@ const ArticleDetail = () => {
       setComments(response1.comments)
     }
     else {
-      const response1 = await fetchArticle(location.state)
-      setArticle(response1)
-      setComments(response1.comments)
+      console.log('댓글 수정 오류')
      
     }
     // const newComments = [...comments];
@@ -191,17 +190,14 @@ const ArticleDetail = () => {
       setComments(response1.comments)
     }
     else {
-      const response1 = await fetchArticle(location.state)
-      setArticle(response1)
-      setComments(response1.comments)
-     
+      console.log('댓글 생성 실패')
     }
   };
 
   const likeHandler = async (event) => {
     event.preventDefault()
     const response = await fetchLike(location.state)
-    if (response){
+    if (response.statusCode === 200){
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
@@ -209,16 +205,79 @@ const ArticleDetail = () => {
       console.log(response1.contributor[localStorage.getItem('hashNickname')])
       if (tmpLike === true && response1.contributor[localStorage.getItem('hashNickname')]){
         setIsLike(true)
+        Swal.fire({
+          icon: 'success',
+          timer: 2000,
+          showConfirmButton: false,
+        })
       } else {
         setIsLike(false)
+        Swal.fire({
+          icon: 'error',
+          timer: 2000,
+          showConfirmButton: false,
+        })
       }
     }
     else {
-      const response1 = await fetchArticle(location.state)
-      setArticle(response1)
-      setComments(response1.comments)
+      console.log('좋아요 실패')
     }
+  }
 
+  const reportHandler = async (event) => {
+    event.preventDefault()
+    if (article.reporter.includes(localStorage.getItem('hashNickname'))){
+      Swal.fire({
+        title: '중복된 신고입니다.',
+        icon: 'warning',
+        timer: 2000,
+        timerProgressBar: true,
+      })
+    } else {
+      const response = await reportArticle(location.state)
+      if (response.statusCode === 200){
+        const response1 = await fetchArticle(location.state)
+        setArticle(response1)
+        setComments(response1.comments)
+        Swal.fire({
+          title: '게시글이 신고되었습니다.',
+          icon: 'success',
+          timer: 2000,
+          timerProgressBar: true,
+        })
+      }
+      else {
+        console.log('신고 실패')
+      }
+    }
+  }
+
+  const reportCommentHandler = async (comment) => {
+    if (comment.reporter.includes(localStorage.getItem('hashNickname'))){
+      Swal.fire({
+        title: '중복된 신고입니다.',
+        icon: 'warning',
+        timer: 2000,
+        timerProgressBar: true,
+      })
+    } else {
+      const response = await reportComment(article._id, comment._id)
+      if (response.statusCode === 200){
+        const response1 = await fetchArticle(location.state)
+        setArticle(response1)
+        setComments(response1.comments)
+        Swal.fire({
+          title: '선택한 댓글이 신고되었습니다.',
+          icon: 'success',
+          timer: 2000,
+          timerProgressBar: true,
+        })
+      }
+      else {
+        console.log('댓글 신고 오류')
+     
+      }
+    }
   }
 
   useEffect(() => {
@@ -234,7 +293,11 @@ const ArticleDetail = () => {
           setIsLike(false)
         }
       } else {
-        alert("잘못된 접근입니다.");
+        Swal.fire({
+          title: '잘못된 접근입니다.',
+          icon: 'warning',
+          timer: 2000,
+        })
         history.push("/index");
       }
       setIsLoading(false);
@@ -258,11 +321,9 @@ const ArticleDetail = () => {
                 </Tooltip>
               <Item>조회수 : {article.hit}</Item>
               <Item>|</Item>
-                <Tooltip title="신고하기">
-                  <IconButton>
-                    <TouchAppIcon />
-                  </IconButton>
-                </Tooltip>
+
+                {localStorage.getItem('nickname') !== article.writer && <TouchAppIcon onClick={reportHandler} />}
+              
 
             </Score>
             <ArticleHr />
@@ -277,6 +338,7 @@ const ArticleDetail = () => {
           deleteCommentHandler={deleteCommentHandler}
           modifyCommentHandler={modifyCommentHandler}
           createCommentHandler={createCommentHandler}
+          reportCommentHandler={reportCommentHandler}
         />
         <div>
           <StyledButton onClick={backHandler}>목록보기</StyledButton>

@@ -154,7 +154,6 @@ const Signup = () => {
           timerProgressBar: true,
           allowOutsideClick: false,
           showCancelButton: true,
-          confirmButtonColor: '#EAE3D2',
           confirmButtonText: '확인',
           cancelButtonText: '취소',
           reverseButtons: true,

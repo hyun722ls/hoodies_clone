@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../../common/UI/header/header";
-import {createComment, deleteArticle, deleteComment, fetchArticle, modifyComment} from "../anonymousBoardAPI";
+import {createComment, deleteArticle, deleteComment, fetchArticle, fetchLike, fetchPopularArticles, modifyComment, reportArticle, reportComment} from "../anonymousBoardAPI";
 import CommentList from "./commentList";
 import styled from "styled-components";
 import { annonymousWriter, confirmWriter } from "../../../common/refineData/anonymousWriter";
+import Tooltip from '@mui/material/Tooltip';
+import TouchAppIcon from '@mui/icons-material/TouchApp';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import { alertTitleClasses } from "@mui/material";
+import Swal from "sweetalert2";
 
 const Articles = styled.div`
   position: relative;
@@ -130,6 +136,7 @@ const AnnoymousArticleDetail = () => {
   const [commentsMap, setCommentsMap] = useState({})
   const [articleWriter, setArticleWriter] = useState('')
   const history = useHistory();
+  const [isLike, setIsLike] = useState(false)
 
   const backHandler = (event) => {
     // history.go(-1)
@@ -143,25 +150,23 @@ const AnnoymousArticleDetail = () => {
 
   const deleteHandler = async (event) => {
     const response = await deleteArticle(article._id)
-    if (response) {
+    if (response.statusCode === 200) {
       history.push('/board/annonymous');
+    } else {
+      console.log('게시글 삭제 에러')
     }
   }
 
   const deleteCommentHandler = async (commentId) => {
     const response = await deleteComment(article._id, commentId)
-    if (response){
+    if (response.statusCode === 200){
       const response1 = await fetchArticle(article._id)
       setArticle(response1)
       setComments(response1.comments)
       setCommentsMap(annonymousWriter(response1.comments, response1.writer))
       setArticleWriter(response1.writer)
     } else {
-      const response1 = await fetchArticle(article._id)
-      setArticle(response1)
-      setComments(response1.comments)
-      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
-      setArticleWriter(response1.writer)
+      console.log('댓글 삭제 에러')
     }
   };
 
@@ -175,11 +180,7 @@ const AnnoymousArticleDetail = () => {
       setArticleWriter(response1.writer)
     }
     else {
-      const response1 = await fetchArticle(location.state)
-      setArticle(response1)
-      setComments(response1.comments)
-      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
-      setArticleWriter(response1.writer)
+      console.log('댓글 수정 에러')
      
     }
     // const newComments = [...comments];
@@ -198,13 +199,102 @@ const AnnoymousArticleDetail = () => {
       setArticleWriter(response1.writer)
     }
     else {
+      console.log('댓글 생성 에러')
+    }
+  };
+
+  const likeHandler = async (event) => {
+    event.preventDefault()
+    const response = await fetchLike(location.state)
+    if (response.statusCode === 200){
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
       setCommentsMap(annonymousWriter(response1.comments, response1.writer))
       setArticleWriter(response1.writer)
+      let tmpLike = Object.keys(response1.contributor).includes(localStorage.getItem('hashNickname'))
+      console.log(response1.contributor[localStorage.getItem('hashNickname')])
+      if (tmpLike === true && response1.contributor[localStorage.getItem('hashNickname')]){
+        setIsLike(true)
+        Swal.fire({
+          icon: 'success',
+          timer: 2000,
+          showConfirmButton: false,
+        })
+      } else {
+        setIsLike(false)
+        Swal.fire({
+          icon: 'error',
+          timer: 2000,
+          showConfirmButton: false,
+        })
+      }
     }
-  };
+    else {
+      console.log('좋아요 에러')
+    }
+  }
+
+  const reportHandler = async (event) => {
+    event.preventDefault()
+    if (article.reporter.includes(localStorage.getItem('hashNickname'))){
+      Swal.fire({
+        title: '중복된 신고입니다.',
+        icon: 'warning',
+        timer: 2000,
+        timerProgressBar: true,
+      })
+    } else {
+      const response = await reportArticle(location.state)
+      if (response.statusCode === 200){
+        const response1 = await fetchArticle(location.state)
+        setArticle(response1)
+        setComments(response1.comments)
+        setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+        setArticleWriter(response1.writer)
+        Swal.fire({
+          title: '게시글이 신고되었습니다.',
+          icon: 'success',
+          timer: 2000,
+          timerProgressBar: true,
+        })
+      }
+      else {
+        console.log('신고 실패')
+      }
+    }
+  }
+
+  const reportCommentHandler = async (comment) => {
+    if (comment.reporter.includes(localStorage.getItem('hashNickname'))){
+      Swal.fire({
+        title: '중복된 신고입니다.',
+        icon: 'warning',
+        timer: 2000,
+        timerProgressBar: true,
+      })
+    } else {
+      const response = await reportComment(article._id, comment._id)
+      if (response.statusCode === 200){
+        const response1 = await fetchArticle(location.state)
+        setArticle(response1)
+        setComments(response1.comments)
+        setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+        setArticleWriter(response1.writer)
+        Swal.fire({
+          title: '선택한 댓글이 신고되었습니다.',
+          icon: 'success',
+          timer: 2000,
+          timerProgressBar: true,
+        })
+      }
+      else {
+        console.log('댓글 신고 오류')
+     
+      }
+    }
+  }
+
 
   useEffect(() => {
     (async () => {
@@ -214,10 +304,12 @@ const AnnoymousArticleDetail = () => {
         setComments(response.comments);
         setCommentsMap(annonymousWriter(response.comments, response.writer))
         setArticleWriter(response.writer)
-
-      } else {
-        alert("잘못된 접근입니다.");
-        history.push("/index");
+        let tmpLike = Object.keys(response.contributor).includes(localStorage.getItem('hashNickname'))
+        if (tmpLike === true && response.contributor[localStorage.getItem('hashNickname')]){
+          setIsLike(response.contributor[localStorage.getItem('hashNickname')])
+        } else {
+          setIsLike(false)
+        }
       }
       setIsLoading(false);
     })()
@@ -233,8 +325,17 @@ const AnnoymousArticleDetail = () => {
             <ArticleH3>{'익명'}</ArticleH3>
             <ArticleTime>{article.createdAt} {article.createdAt !== article.modifiedAt && <span>(수정됨 {article.modifiedAt})</span>} </ArticleTime>
             <Score>
-              <Item>추천수 : {article.like}</Item>
+            <Item>추천수 : {article.like}</Item>
+                <Tooltip title="추천!">
+                    {isLike ? <ThumbDownAltIcon onClick={likeHandler} /> : <ThumbUpIcon onClick={likeHandler} />}
+                  
+                </Tooltip>
               <Item>조회수 : {article.hit}</Item>
+              <Item>|</Item>
+                
+                    {localStorage.getItem('hashNickname') !== article.writer && <TouchAppIcon onClick={reportHandler} />}
+               
+            
             </Score>
             <ArticleHr />
           </ArticleHead>
@@ -250,6 +351,7 @@ const AnnoymousArticleDetail = () => {
           deleteCommentHandler={deleteCommentHandler}
           modifyCommentHandler={modifyCommentHandler}
           createCommentHandler={createCommentHandler}
+          reportCommentHandler={reportCommentHandler}
         />
         <div>
           <StyledButton onClick={backHandler}>목록보기</StyledButton>

@@ -5,6 +5,7 @@ import Header from "../../../common/UI/header/header";
 import { createArticle, modifyArticle } from "../anonymousBoardAPI";
 import styled from "styled-components";
 import { style } from "@mui/system";
+import Swal from "sweetalert2";
 
 const Articles = styled.div`
   position: relative;
@@ -106,11 +107,22 @@ const AnnoymousArticleForm = () => {
     const id = location.state?._id
     const response = await modifyArticle(title, content, id)
     if (response){
-      alert('등록완료')
+      Swal.fire({
+        title: '등록완료',
+        icon: 'success',
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      })
       history.push({ pathname: "/board/annoymous/detail", state: article._id });
       
     } else {
-      alert('등록실패')
+      Swal.fire({
+        title: '등록실패',
+        icon: 'error',
+        timer: 2000,
+        timerProgressBar: true,
+      })
     }
    
   };
@@ -119,12 +131,23 @@ const AnnoymousArticleForm = () => {
     event.preventDefault();
     const response = await createArticle(title, content)
     if (response) {
-      alert('등록완료')
+      Swal.fire({
+        title: '등록완료',
+        icon: 'success',
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      })
       history.push("/board/annonymous");
       
 
     } else {
-      alert('등록실패')
+      Swal.fire({
+        title: '등록실패',
+        icon: 'error',
+        timer: 2000,
+        timerProgressBar: true,
+      })
     }
   };
   return (

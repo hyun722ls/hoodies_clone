@@ -4,6 +4,7 @@ import { Fragment, useState } from 'react';
 import { postEvaluation, getStaff } from './evaluationAPI';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 import StarOutlineRoundedIcon from '@mui/icons-material/StarOutlineRounded';
 
@@ -35,7 +36,12 @@ const CreateEvaluation = (props) => {
         console.log(newComments)
         props.setComments(newComments.evaluations)
         if (response) {
-            alert('게시!')
+            Swal.fire({
+                title: '게시',
+                icon: 'success',
+                timer: 2000,
+                timerProgressBar: true,
+            })
             history.push({pathname: '/pro/detail', state:props.staff})
         }
         else {

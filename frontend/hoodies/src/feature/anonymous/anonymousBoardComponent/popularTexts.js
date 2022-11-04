@@ -2,6 +2,8 @@ import { useHistory } from "react-router-dom";
 import { blockArticle } from "../../../common/refineData/blockArticle";
 import styled from "styled-components";
 import { changeAnnonymous, checkBoradType } from "../../../common/refineData/anonymousWriter";
+import { blockCnt } from "../../../common/api/url";
+import Swal from "sweetalert2";
 
 const RightArticles = styled.div`
   grid-column: 3/4;
@@ -70,11 +72,22 @@ const ArticleHr = styled.hr`
 const PopularTexts = (props) => {
   const history = useHistory();
   const detailPageHandler = (article) => {
-    if (article.type === 1){
-      history.push({ pathname: "/board/free/detail", state: article._id });
-  
+    if (article.reporter?.length > blockCnt){
+      Swal.fire({
+        title: '신고 누적된 게시글입니다.',
+        icon: 'error',
+        timer: 2000,
+        timerProgressBar: true,
+      })
     } else {
-      history.push({ pathname: "/board/annoymous/detail", state: article._id });
+      if (article.type === 1){
+        history.push({ pathname: "/board/free/detail", state: article._id });
+    
+      } else {
+        history.push({ pathname: "/board/annoymous/detail", state: article._id });
+      }
+    
+
     }
   };
  

@@ -146,7 +146,6 @@ const Login = () => {
       reverseButtons: true,
       cancelButtonText: '닫기',
       confirmButtonText: '다음',
-      confirmButtonColor: '#EAE3D2',
       preConfirm: async (value) => {
         const response = await passwordSendMM(value);
         if (response.statusCode === "200") {
@@ -165,7 +164,6 @@ const Login = () => {
           reverseButtons: true,
           cancelButtonText: '닫기',
           confirmButtonText: '확인',
-          confirmButtonColor: '#EAE3D2',
           preConfirm: async (value) => {
             const response = await passworAuthMM(result.value, value)
             if (response.statusCode === "200") {
@@ -182,7 +180,6 @@ const Login = () => {
               html: 'Mattermost에서 확인해 주세요.',
               timer: '3000',
               confirmButtonText: '확인',
-              confirmButtonColor: '#EAE3D2',
             })
           }
         })

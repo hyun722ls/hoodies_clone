@@ -8,13 +8,16 @@ import PopularTexts from "./boardComponent/popularTexts";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import "./boardMain.css";
+import Grid from '@mui/material/Grid';
+import GRID from "../main/main.module.css";
 
 const Container = styled.div`
   display: grid;
   grid-template-columns: auto;
   column-gap: 20px;
   position: relative;
-  margin: 24px auto 24px auto;
+  //margin: 24px auto 24px auto;
+  justify-content: center;
 `
 
 const BoardMain = () => {
@@ -57,21 +60,21 @@ const BoardMain = () => {
   popularTexts && (
     <div>
       <Header />
-      <Container>
-        <div>
-          <BoardTable articles={articles} />
-          <div>
-            <Pagination
-              activePage={activePage}
-              itemsCountPerPage={20}
-              totalItemsCount={totalItemsCount}
-              pageRangeDisplayed={5}
-              onChange={handlePageChange}
-            />
-          </div>
-        </div>
-        <PopularTexts popularTexts={popularTexts} />
-      </Container>
+        <Grid container spacing={3}>
+          <Grid item sx={{ margin: '0px', marginRight: '0px', padding: '10px',placeItems: 'center'}} xs={12} md={6}>
+            <BoardTable articles={articles} />
+            <div>
+              <Pagination
+                  activePage={activePage}
+                  itemsCountPerPage={20}
+                  totalItemsCount={totalItemsCount}
+                  pageRangeDisplayed={5}
+                  onChange={handlePageChange}
+              />
+            </div>
+          </Grid>
+          <PopularTexts popularTexts={popularTexts} />
+        </Grid>
     </div>
   );
 };

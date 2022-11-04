@@ -6,7 +6,7 @@ import EvaulationComment from "./evaluationComment";
 import EvaluationPentagon from "./evaluationPentagon";
 // import styled from "styled-components";
 import CreateEvaluation from "./evaluationRegister";
-
+import Swal from "sweetalert2";
 
 const EvenPro = () => {
 
@@ -43,7 +43,11 @@ const EvenPro = () => {
         setStaffType("coach");
       }
     } else {
-      alert("잘못된 접근입니다.");
+      Swal.fire({
+        title: '잘못된 접근입니다.',
+        icon: 'warning',
+        timer: 2000,
+      })
       history.push("/index");
     }
     setIsLoading(false);
