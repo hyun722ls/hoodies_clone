@@ -7,9 +7,7 @@ import BoardTable from "./boardComponent/boardTable";
 import PopularTexts from "./boardComponent/popularTexts";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import BOA from "./boardMain.css";
 import Grid from '@mui/material/Grid';
-import GRID from "../main/main.module.css";
 
 const Container = styled.div`
   display: grid;
@@ -60,8 +58,8 @@ const BoardMain = () => {
   popularTexts && (
     <div>
       <Header />
-        <Grid container spacing={3} sx={{ marginTop: "10px", paddingLeft: "10px", justifyContent: 'center'}} className={BOA.marge}>
-          <Grid item sx={{paddingTop: "0px!important", paddingLeft: "0px!important", margin:"10px"}} className={BOA.marge2} xs={12} md={6}>
+        <Grid container spacing={3} sx={{ marginTop: "10px", paddingLeft: "10px", justifyContent: 'center'}}>
+          <Grid item sx={{paddingTop: "0px!important", paddingLeft: "0px!important", padding:"10px!important"}} xs={12} md={6}>
             <BoardTable articles={articles} />
             <div>
               <Pagination
@@ -73,7 +71,7 @@ const BoardMain = () => {
               />
             </div>
           </Grid>
-          <PopularTexts sx={{paddingTop: "0px!important", paddingLeft: "0px!important", margin:"10px"}} popularTexts={popularTexts} />
+          <PopularTexts sx={{paddingTop: "0px!important", paddingLeft: "0px!important", padding:"10px!important"}} popularTexts={popularTexts} />
         </Grid>
     </div>
   );
