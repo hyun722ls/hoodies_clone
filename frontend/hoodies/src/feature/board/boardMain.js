@@ -7,7 +7,7 @@ import BoardTable from "./boardComponent/boardTable";
 import PopularTexts from "./boardComponent/popularTexts";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import "./boardMain.css";
+import BOA from "./boardMain.css";
 import Grid from '@mui/material/Grid';
 import GRID from "../main/main.module.css";
 
@@ -60,7 +60,7 @@ const BoardMain = () => {
   popularTexts && (
     <div>
       <Header />
-        <Grid container spacing={3} sx={{ margin: "0px", justifyContent: 'center'}}>
+        <Grid container spacing={3} sx={{ marginTop: "0px", justifyContent: 'center'}} className={BOA.marge}>
           <Grid item sx={{ marginRight: '0px', padding: '10px', placeItems: 'center'}} xs={12} md={6}>
             <BoardTable articles={articles} />
             <div>
