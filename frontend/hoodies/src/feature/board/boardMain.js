@@ -59,9 +59,8 @@ const BoardMain = () => {
   popularTexts && (
     <div>
       <Header />
-        <Container container spacing={10}>
+        <Grid container spacing={10}>
           <Grid item xs ={0} md={2}>
-            <div></div>
           </Grid>
           <Grid item xs ={12} md={6}>
             <BoardTable articles={articles} />
@@ -75,13 +74,13 @@ const BoardMain = () => {
               />
             </div>
           </Grid>
-          <Grid item xs ={12} md={2}>
+          <Grid item xs ={12} md={3}>
             <PopularTexts popularTexts={popularTexts} />
           </Grid>
-          <Grid item xs ={0} md={2}>
+          <Grid item xs ={0} md={1}>
             <div></div>
           </Grid>
-        </Container>
+        </Grid>
     </div>
   );
 };
