@@ -176,7 +176,6 @@ const BoardTable = (props) => {
                     {isFilter(article) ?
                         <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
                         : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
-                    <ArticleH3 style={{color: "darkblue"}}>-{checkBoradType(article)}-</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
                 </div>
                 <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
                 <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
