@@ -27,7 +27,7 @@ const Article = styled.article`
 
 const ArticleA = styled.a`
   margin: 0;
-  padding: 16px;
+  padding: 12px;
   display: block;
 `
 
