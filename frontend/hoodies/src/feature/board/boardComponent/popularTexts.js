@@ -5,9 +5,10 @@ import { changeAnnonymous, checkBoradType } from "../../../common/refineData/ano
 import { timeConventer } from "../../../common/refineData/refineTime";
 
 const RightArticles = styled.div`
-  grid-column: 3/4;
-  grid-row: 1;
-  width: 320px;
+  width: 100%;
+  //grid-column: 3/4;
+  ////grid-row: 1;
+  //width: 320px;
   margin-bottom: auto;
   background-color: #F9F5EB;
 `
