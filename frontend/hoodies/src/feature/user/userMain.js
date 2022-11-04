@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../../common/UI/header/header";
 import CustomModal from "../../common/UI/modal/customModal";
@@ -55,6 +56,7 @@ const UserMain = () => {
     const [isNewNicknameDuplicated, setIsNewNicknameDuplicated] = useState(false)
     const [newNickname, setNewNickname] = useState('')
     const [isPasswordDuplicated, setIsPasswordDuplicated] = useState(false)
+    const history = useHistory();
 
     useEffect(()=>{
         setNickname(localStorage.getItem('nickname'))
@@ -97,6 +99,11 @@ const UserMain = () => {
             }
         }
     };
+
+    const toUserBoard = (event) => {
+        event.preventDefault();
+        history.push('/user/board')
+    }
 
     // const nicknameModifyHandler = async (event) => {
     //     event.preventDefault()
@@ -207,8 +214,7 @@ const UserMain = () => {
         event.preventDefault()
         Swal.fire({
             title: '비밀번호 변경',
-            html: '<input id="password" type="password" class="swal2-input" placeholder="비밀번호"></input>' + 
-            '<input id="password2" type="password" class="swal2-input" placeholder="비밀번호 확인"></input>',
+            html: '<form><input id="password" type="password" class="swal2-input" placeholder="비밀번호"></input><input id="password2" type="password" class="swal2-input" placeholder="비밀번호 확인"></input></form>',
             confirmButtonColor: '#EAE3D2',
             showCancelButton: true,
             confirmButtonText: '확인',
@@ -286,7 +292,7 @@ const UserMain = () => {
             <StyledCard>
                 {/* <StyledP onClick={openNicknameModal}>닉네임 변경</StyledP> */}
                 <StyledP onClick={openPasswordModal}>비밀번호 변경</StyledP>
-                <StyledP>내가 쓴 글</StyledP>
+                <StyledP onClick={toUserBoard}>내가 쓴 글</StyledP>
                 <StyledP onClick={openWithdrawalModal}>회원탈퇴</StyledP>
             </StyledCard>
             <CustomModal open={passwordModalOpen} close={closePasswordModal} header="">
