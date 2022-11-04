@@ -39,3 +39,14 @@ export const updatePassword = async (data) => {
         console.log(err)
     }
 }
+
+export const fetchArticles = async (page) => {
+    try {
+        const response = await axios1.get(API_URL + `user/article/${localStorage.getItem('nickname')}`, {headers: {
+            'accessToken': localStorage.getItem('token')
+        }})
+        return response.data
+    } catch (err) {
+        console.log(err)
+    }
+}
