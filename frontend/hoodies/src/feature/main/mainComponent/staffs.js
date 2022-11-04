@@ -56,7 +56,6 @@ const H5 = styled.h5`
 const H6 = styled.h6`
   font-size: small;
   color: #0050ad;
-  position: flex;
   justify-content: end;
 `
 
