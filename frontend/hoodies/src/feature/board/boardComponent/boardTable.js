@@ -13,8 +13,6 @@ import Grid from '@mui/material/Grid';
 const Articles = styled.div`
   width: 100%;
   position: relative;
-  padding-left: 24px;
-  padding-top: 24px;
 `
 
 const Article = styled.article`

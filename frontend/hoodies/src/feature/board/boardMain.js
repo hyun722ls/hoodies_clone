@@ -60,8 +60,9 @@ const BoardMain = () => {
   popularTexts && (
     <div>
       <Header />
-        <Grid spacing={3}>
+        <Grid container spacing={3}>
             <BoardTable articles={articles} />
+            <PopularTexts popularTexts={popularTexts} />
             <div>
               <Pagination
                   activePage={activePage}
@@ -71,7 +72,6 @@ const BoardMain = () => {
                   onChange={handlePageChange}
               />
             </div>
-            <PopularTexts popularTexts={popularTexts} />
         </Grid>
     </div>
   );
