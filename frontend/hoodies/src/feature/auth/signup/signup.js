@@ -149,7 +149,7 @@ const Signup = () => {
         Swal.fire({
           title: 'Mettermost에 보낸<br> 코드를 입력해 주세요.',
           html: '<min></min> : <sec></sec>',
-          input: 'email',
+          input: 'text',
           timer: 180000,
           timerProgressBar: true,
           allowOutsideClick: false,
