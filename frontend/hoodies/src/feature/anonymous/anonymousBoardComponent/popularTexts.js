@@ -1,7 +1,7 @@
 import { useHistory } from "react-router-dom";
 import { blockArticle } from "../../../common/refineData/blockArticle";
 import styled from "styled-components";
-import { changeAnonymous, checkBoradType } from "../../../common/refineData/anonymousWriter";
+import { changeAnonymous, checkBoardType } from "../../../common/refineData/anonymousWriter";
 import { blockCnt } from "../../../common/api/url";
 import Swal from "sweetalert2";
 import Grid from "@mui/material/Grid";
@@ -156,7 +156,7 @@ const PopularTexts = (props) => {
                       {isFilter(article) ?
                           <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
                           : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
-                      <ArticleH3 style={{color: "darkblue"}}>-{checkBoradType(article)}-</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
+                      <ArticleH3 style={{color: "darkblue"}}>-{checkBoardType(article)}-</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
                     </div>
                     <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
                     <ArticleH3>{changeAnonymous(article)}</ArticleH3>
