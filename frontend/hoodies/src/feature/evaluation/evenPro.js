@@ -1,3 +1,4 @@
+import { Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../common/UI/header/header";
@@ -28,21 +29,6 @@ const EvenPro = () => {
     setComments(newComments);
   };
 
-  // const modifyCommentHandler = (commentId, newContent) => {
-  //   const newComments = [...comments];
-  //   const index = comments.findIndex((comment) => comment.id === commentId);
-  //   newComments[index].content = newContent;
-  //   setComments(newComments);
-  // };
-  //
-  // const createCommentHandler = (newContent) => {
-  //   const newComments = [
-  //     { content: newContent, writer: "현규는 똑똑해" },
-  //     ...comments,
-  //   ];
-  //   setComments(newComments);
-  // };
-
   useEffect(() => {
     console.log(location.state)
 
@@ -72,34 +58,35 @@ const EvenPro = () => {
     comments && (
       <div>
         <Header />
-        <h4>
-          {staff.writer} {staffType} {comments.length}명의 평가
-        </h4>
-        <p>이메일 : {staff.email}</p>
-        <p>설명 : {staff.etc}</p>
-        <div>
+        <Grid container sx={{height:'500px', width:'100vw'}}>
+          <Grid container sx={{height:'500px'}} item xs={8}>
+            <Grid style={{backgroundColor:'#EAE3D2'}} item xs={6}>
+              <div>
+                <h4>
+                  {staff.writer}
+                </h4>
+                <p>{staffType}</p>
+                <p>{comments.length}명의 평가</p>
+                <p>이메일 : {staff.email}</p>
+                <p>설명 : {staff.etc}</p>
+              </div>
+            </Grid>
+            <Grid item xs={6}>
+              <div style={{display:'flex','justifyContent':'center', height:'40vh', width:'70%'}}>
+                <EvaluationPentagon staff={staff}></EvaluationPentagon>
+              </div>
+            </Grid>
+            <Grid item xs={12} style={{backgroundColor:'#EAE3D2'}}>
+              <CreateEvaluation setComments={setComments} id={staff._id} staff={staff}></CreateEvaluation>
+            </Grid>
+          </Grid>
+          <Grid item xs={4} style={{marginTop:'0.5rem', height:'80vh', overflowY:'scroll', overflowX:'hidden'}}>
+            <EvaulationComment comments={comments}/>
+          </Grid>
+        </Grid>
+        {/* <div>
           <button onClick={backHandler}>뒤로 가기</button>
-        </div>
-        <EvaulationComment
-          comments={comments}
-        />
-        {/* <div style={{position:'relative'}}> 
-          <div style={{display:'flex', flexWrap:'wrap', marginLeft:'7vw'}}>
-            <img src={LeftTop} style={{height:'20%', width:'45%', margin:'15px'}} alt=''></img>
-            <img src={RightTop} style={{height:'20%', width:'45%',margin:'15px'}} alt=''></img>
-            <img src={BottomLeft} style={{height:'20%', width:'45%',margin:'15px'}} alt=''></img>
-            <img src={bottomright} style={{height:'20%', width:'45%',margin:'15px'}} alt=''></img>
-          </div>
         </div> */}
-          <div style={{display:'flex','justifyContent':'center', height:'70vh', width:'70%'}}>
-            <EvaluationPentagon staff={staff}></EvaluationPentagon>
-          </div>
-        {/* <BoxOne style={{position:'relative'}}>
-          <div style={{position:'absolute', top:'30%', right:'60%'}}>
-            hello
-          </div>
-        </BoxOne> */}
-        <CreateEvaluation setComments={setComments} id={staff._id} staff={staff}></CreateEvaluation>
       </div>
     )
   );
