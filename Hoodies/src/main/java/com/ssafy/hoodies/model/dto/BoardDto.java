@@ -7,10 +7,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
 @ApiModel
@@ -36,6 +33,7 @@ public class BoardDto {
     @ApiModelProperty(value="게시글 유형", accessMode = ApiModelProperty.AccessMode.READ_ONLY)
     private int type;
     private Map<String, Boolean> contributor;
+    private Set<String> reporter;
 
     public Board toEntity() {
         String now = util.getTimeStamp();
@@ -50,6 +48,7 @@ public class BoardDto {
                         .comments(new ArrayList<>())
                         .type(type)
                         .contributor(new HashMap<String, Boolean>())
+                        .reporter(new HashSet<>())
                         .build();
         return board;
     }
