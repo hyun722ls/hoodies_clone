@@ -129,7 +129,6 @@ const UserMain = () => {
         Swal.fire({
             title: 'Mattermost로 문의해 주세요',
             icon: 'info',
-            confirmButtonColor: '#EAE3D2',
         })
     } 
 
@@ -215,7 +214,6 @@ const UserMain = () => {
         Swal.fire({
             title: '비밀번호 변경',
             html: '<form><input id="password" type="password" class="swal2-input" placeholder="비밀번호"></input><input id="password2" type="password" class="swal2-input" placeholder="비밀번호 확인"></input></form>',
-            confirmButtonColor: '#EAE3D2',
             showCancelButton: true,
             confirmButtonText: '확인',
             cancelButtonText: '취소',
