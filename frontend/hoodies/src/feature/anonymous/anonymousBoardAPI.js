@@ -72,7 +72,7 @@ export const deleteArticle = async (articleId) => {
             'accessToken': localStorage.getItem('token')
         }} )
        
-        return response
+        return response.data
     } catch (err) {
         console.log(err)
     }
@@ -98,7 +98,7 @@ export const deleteComment = async (articleId, commentId) => {
             'accessToken': localStorage.getItem('token')
         }} )
         
-        return response
+        return response.data
     } catch (err) {
         console.log(err)
     }
@@ -112,7 +112,7 @@ export const modifyComment = async (articleId, commentId, content) => {
             'accessToken': localStorage.getItem('token')
         }} )
         console.log(response.data)
-        return response
+        return response.data
     } catch (err) {
         console.log(err)
     }
@@ -126,7 +126,7 @@ export const fetchLike = async (articleId) => {
             'accessToken': localStorage.getItem('token')
         }} )
       
-        return response
+        return response.data
     } catch (err) {
         console.log(err)
     }
@@ -140,7 +140,7 @@ export const reportArticle = async (articleId) => {
         const response = await axios1.put(API_URL + `board/detail/${articleId}/report/${writer}`, tmpData, {headers: {
             'accessToken': localStorage.getItem('token')
         }})
-        return response
+        return response.data
     } catch (err) {
         console.log(err)
     }
@@ -155,7 +155,7 @@ export const reportComment = async (articleId, commentId) => {
         const response = await axios1.put(API_URL + `board/${articleId}/comment/${commentId}/report/${writer}`, tmpData, {headers: {
             'accessToken': localStorage.getItem('token')
         }})
-        return response
+        return response.data
     } catch (err) {
         console.log(err)
     }
