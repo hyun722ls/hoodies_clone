@@ -4,7 +4,7 @@ import Header from "../../../common/UI/header/header";
 import {createComment, deleteArticle, deleteComment, fetchArticle, fetchLike, fetchPopularArticles, modifyComment, reportArticle, reportComment} from "../anonymousBoardAPI";
 import CommentList from "./commentList";
 import styled from "styled-components";
-import { annonymousWriter, confirmWriter } from "../../../common/refineData/anonymousWriter";
+import { anonymousWriter, confirmWriter } from "../../../common/refineData/anonymousWriter";
 import Tooltip from '@mui/material/Tooltip';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
@@ -128,7 +128,7 @@ const BtnCancle = styled(RightButton)`
   }
 `
 
-const AnnoymousArticleDetail = () => {
+const AnonymousArticleDetail = () => {
   const location = useLocation();
   const [article, setArticle] = useState([]);
   const [comments, setComments] = useState([]);
@@ -140,18 +140,18 @@ const AnnoymousArticleDetail = () => {
 
   const backHandler = (event) => {
     // history.go(-1)
-    history.push({ pathname: "/board/annoymous"});
+    history.push({ pathname: "/board/anonymous"});
   };
   // 요청설개할것, 수정페이지에서 넘길때 새로운정보 필요
 
   const modifyHandler = (event) => {
-    history.push({ pathname: "/board/annoymous/form", state: article });
+    history.push({ pathname: "/board/anonymous/form", state: article });
   };
 
   const deleteHandler = async (event) => {
     const response = await deleteArticle(article._id)
     if (response.statusCode === 200) {
-      history.push('/board/annonymous');
+      history.push('/board/anonymous');
     } else {
       console.log('게시글 삭제 에러')
     }
@@ -163,7 +163,7 @@ const AnnoymousArticleDetail = () => {
       const response1 = await fetchArticle(article._id)
       setArticle(response1)
       setComments(response1.comments)
-      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+      setCommentsMap(anonymousWriter(response1.comments, response1.writer))
       setArticleWriter(response1.writer)
     } else {
       console.log('댓글 삭제 에러')
@@ -176,7 +176,7 @@ const AnnoymousArticleDetail = () => {
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
-      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+      setCommentsMap(anonymousWriter(response1.comments, response1.writer))
       setArticleWriter(response1.writer)
     }
     else {
@@ -195,7 +195,7 @@ const AnnoymousArticleDetail = () => {
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
-      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+      setCommentsMap(anonymousWriter(response1.comments, response1.writer))
       setArticleWriter(response1.writer)
     }
     else {
@@ -210,7 +210,7 @@ const AnnoymousArticleDetail = () => {
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
-      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+      setCommentsMap(anonymousWriter(response1.comments, response1.writer))
       setArticleWriter(response1.writer)
       let tmpLike = Object.keys(response1.contributor).includes(localStorage.getItem('hashNickname'))
       console.log(response1.contributor[localStorage.getItem('hashNickname')])
@@ -250,7 +250,7 @@ const AnnoymousArticleDetail = () => {
         const response1 = await fetchArticle(location.state)
         setArticle(response1)
         setComments(response1.comments)
-        setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+        setCommentsMap(anonymousWriter(response1.comments, response1.writer))
         setArticleWriter(response1.writer)
         Swal.fire({
           title: '게시글이 신고되었습니다.',
@@ -279,7 +279,7 @@ const AnnoymousArticleDetail = () => {
         const response1 = await fetchArticle(location.state)
         setArticle(response1)
         setComments(response1.comments)
-        setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+        setCommentsMap(anonymousWriter(response1.comments, response1.writer))
         setArticleWriter(response1.writer)
         Swal.fire({
           title: '선택한 댓글이 신고되었습니다.',
@@ -302,7 +302,7 @@ const AnnoymousArticleDetail = () => {
         const response = await fetchArticle(location.state)
         setArticle(response);
         setComments(response.comments);
-        setCommentsMap(annonymousWriter(response.comments, response.writer))
+        setCommentsMap(anonymousWriter(response.comments, response.writer))
         setArticleWriter(response.writer)
         let tmpLike = Object.keys(response.contributor).includes(localStorage.getItem('hashNickname'))
         if (tmpLike === true && response.contributor[localStorage.getItem('hashNickname')]){
@@ -365,4 +365,4 @@ const AnnoymousArticleDetail = () => {
   );
 };
 
-export default AnnoymousArticleDetail;
+export default AnonymousArticleDetail;
