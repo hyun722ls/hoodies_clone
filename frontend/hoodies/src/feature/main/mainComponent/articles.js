@@ -48,7 +48,7 @@ const ArticleH2 = styled.h2`
   font-weight: normal;
 `
 const ArticleH2_filter = styled.h2`
-  margin: 0;
+  margin: 0px;
   margin-bottom: 5px;
   line-height: 18px;
   white-space: nowrap;
@@ -60,8 +60,8 @@ const ArticleH2_filter = styled.h2`
 `
 
 const ArticleH3 = styled.h3`
-  margin: 0;
-  padding: 0;
+  margin: 0px;
+  padding: 0px;
   float: left;
   max-width: 90px;
   height: 15px;
@@ -75,8 +75,8 @@ const ArticleH3 = styled.h3`
 `
 
 const ArticleTime = styled.time`
-  margin: 0;
-  padding: 0;
+  margin: 0px;
+  padding: 0px;
   float: left;
   margin-right: 5px;
   height: 15px;
@@ -86,14 +86,14 @@ const ArticleTime = styled.time`
 `
 
 const Score = styled.ul`
-  margin: 0;
-  padding: 0;
+  margin: 0px;
+  padding: 0px;
   float: right;
   list-style: none;
 `
 
 const Item = styled.li`
-  margin: 0;
+  margin: 0px;
   float: left;
   margin-left: 0px;
   padding: 0 2px;
