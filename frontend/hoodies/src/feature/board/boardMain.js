@@ -58,7 +58,7 @@ const BoardMain = () => {
     <div>
       <Header />
       <Container>
-        <div>
+        <div style={{}}>
           <BoardTable articles={articles} />
           <div>
             <Pagination
@@ -69,8 +69,8 @@ const BoardMain = () => {
               onChange={handlePageChange}
             />
           </div>
-        </div>
         <PopularTexts popularTexts={popularTexts} />
+        </div>
       </Container>
     </div>
   );
