@@ -1,4 +1,4 @@
-import axios1 from "axios";
+import axios1 from "../../common/customAxios/customAxios";
 import { API_URL } from "../../common/api/url"
 
 export const fetchPreview = async () => {
