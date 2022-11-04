@@ -286,8 +286,8 @@ const ArticleDetail = () => {
                 </Tooltip>
               <Item>조회수 : {article.hit}</Item>
               <Item>|</Item>
-                
-                    {localStorage.getItem('nickname') !== article.writer && <TouchAppIcon onClick={reportHandler} />}
+
+                {localStorage.getItem('nickname') !== article.writer && <TouchAppIcon onClick={reportHandler} />}
               
 
             </Score>
