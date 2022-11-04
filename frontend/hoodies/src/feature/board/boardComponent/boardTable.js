@@ -160,7 +160,7 @@ const BoardTable = (props) => {
   };
 
   return props.articles.length ? (
-      <Grid item sx={{ margin: '0px', marginRight: '0px'}} xs={12} md={6}>
+      <Grid item sx={{ margin: '0px', marginRight: '0px', padding: '10px'}} xs={12} md={6}>
         <Articles>
           <Title>
             <H1>자유게시판</H1>

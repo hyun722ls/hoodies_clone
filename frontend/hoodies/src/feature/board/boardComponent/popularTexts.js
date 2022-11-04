@@ -137,7 +137,7 @@ const PopularTexts = (props) => {
   };
 
   return props.popularTexts.length ? (
-      <Grid item sx={{ margin: '0px', marginRight: '0px'}} xs={12} md={6}>
+      <Grid item sx={{ margin: '0px', marginRight: '0px', padding: '10px'}} xs={12} md={3}>
         <RightArticles>
           <Title>
             <H2>인기게시글</H2>
