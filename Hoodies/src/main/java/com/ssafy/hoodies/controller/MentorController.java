@@ -40,17 +40,17 @@ public class MentorController {
     // 전체 평가 페이지 조회
     @GetMapping("mentor")
     @ApiOperation(value = "전체 평가페이지 조회")
-    public Page<Mentor> findAllMentor(Pageable pageable){
+    public List<Mentor> findAllMentor(){
         Sort sort = Sort.by("modifiedAt").descending();
-        return mentorRepository.findAll(PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(), sort));
+        return mentorRepository.findAll(sort);
     }
 
     // 타입별 평가 페이지 조회
     @GetMapping("mentor/{type}")
     @ApiOperation(value = "타입별 전체 평가 페이지 조회")
-    public Page<Mentor> findMentorByType(Pageable pageable, @PathVariable int type){
+    public List<Mentor> findMentorByType(@PathVariable int type){
         Sort sort = Sort.by("modifiedAt").descending();
-        return mentorRepository.findAllByType(type, PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(), sort));
+        return mentorRepository.findAllByType(type, sort);
     }
 
     // 특정 평가페이지 조회
@@ -89,6 +89,7 @@ public class MentorController {
             ResponseEntity<String> res = util.checkExpression("", dto.getContent(), "comment");
             Evaluation evaluation = dto.toEntity();
             evaluation.setCategory(res.getBody().trim());
+            evaluation.setWriter(ewriter);
 
             double[] avgscore = mentor.getAverageScores();
             int length = mentor.getEvaluations().size();
@@ -124,10 +125,20 @@ public class MentorController {
         int statusCode = 400;
         String target = "";
 
+        double[] sum = new double[]{0,0,0,0,0};
+        int cnt = 0;
         for(Evaluation evaluation : mentorRepository.findById(mid).get().getEvaluations()){
             if(eid.equals(evaluation.get_id())){
                 target = evaluation.getWriter();
+            }else{
+                for(int idx=0; idx<5; ++idx){
+                    sum[idx] += evaluation.getScore()[idx];
+                }
+                cnt++;
             }
+        }
+        if(cnt > 0){
+            for(int idx=0; idx<5; ++idx) sum[idx] = sum[idx] / cnt;
         }
 
         if(!"".equals(target)){
@@ -135,10 +146,12 @@ public class MentorController {
             evaluationQuery.addCriteria(Criteria.where("_id").is(mid));
             evaluationQuery.addCriteria(Criteria.where("evaluations").elemMatch(Criteria.where("_id").is(eid)));
             Update evaluationUpdate = new Update();
+            evaluationUpdate.set("averageScores", sum);
             evaluationUpdate.pull("evaluations", Query.query(Criteria.where("_id").is(eid)));
             evaluationUpdate.pull("contributor", target);
 
-            UpdateResult ur = mongoTemplate.updateFirst(evaluationQuery, evaluationUpdate, "board");
+            UpdateResult ur = mongoTemplate.updateFirst(evaluationQuery, evaluationUpdate, "mentor");
+
             statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
         }
 
