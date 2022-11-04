@@ -59,7 +59,6 @@ const BoardMain = () => {
   popularTexts && (
     <div>
       <Header />
-      <Container>
         <Grid container spacing={10}>
           <Grid item xs ={0} md={3}>
           빈공간
@@ -80,7 +79,6 @@ const BoardMain = () => {
             <PopularTexts popularTexts={popularTexts} />
           </Grid>
         </Grid>
-      </Container>
     </div>
   );
 };
