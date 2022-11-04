@@ -145,6 +145,7 @@ public class BoardController {
         Update boardUpdate = new Update();
         boardUpdate.set("contributor", contributor);
         boardUpdate.inc("like", diff);
+        boardUpdate.inc("hit", -1);
         UpdateResult ur = mongoTemplate.updateFirst(boardQuery, boardUpdate, "board");
 
         int statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
@@ -308,6 +309,7 @@ public class BoardController {
             Query boardQuery = new Query(Criteria.where("_id").is(id));
             Update boardUpdate = new Update();
             boardUpdate.set("reporter", reporter);
+            boardUpdate.inc("hit", -1);
             UpdateResult ur = mongoTemplate.updateFirst(boardQuery, boardUpdate, "board");
             statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
         } catch (Exception e) {
@@ -339,6 +341,7 @@ public class BoardController {
 
             Update commentUpdate = new Update();
             commentUpdate.set("comments.$.reporter", reporter);
+            commentUpdate.inc("hit", -1);
             UpdateResult ur = mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
             statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
         } catch (Exception e) {
