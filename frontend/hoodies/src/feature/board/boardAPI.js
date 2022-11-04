@@ -152,7 +152,7 @@ export const reportComment = async (articleId, commentId) => {
     const writer = localStorage.getItem('nickname')
     const tmpData = {}
     try {
-        const response = await axios1.put(API_URL + `board/${articleId}/comment/${}/report/${writer}`, tmpData, {headers: {
+        const response = await axios1.put(API_URL + `board/${articleId}/comment/${commentId}/report/${writer}`, tmpData, {headers: {
             'accessToken': localStorage.getItem('token')
         }})
         return response.data
