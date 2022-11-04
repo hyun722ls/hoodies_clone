@@ -21,9 +21,9 @@ const EvaluationMain = () => {
   useEffect(() => {
     (async() =>{
       const fullList = await getStaffList()
-      setData(fullList.content)
-      setSelectedData(fullList.content)
-      console.log(fullList.content)
+      setData(fullList)
+      setSelectedData(fullList)
+      console.log(fullList)
     })()
   }, []);
 
