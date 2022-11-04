@@ -1,5 +1,6 @@
 import axios from "axios"
 import { API_URL } from "../../common/api/url"
+import axios1 from "../../common/customAxios/customAxios"
 
 export const checkNickname = async (nickname) => {
     try {
@@ -79,7 +80,7 @@ export const passworAuthMM = async (email, authcode ) => {
 
 export const logOut = async () => {
     try {
-        const response = await axios.get(API_URL + 'user/logout', {headers: {
+        const response = await axios1.get(API_URL + 'user/logout', {headers: {
             'accessToken': localStorage.getItem('token')
         }})
         return response.data
