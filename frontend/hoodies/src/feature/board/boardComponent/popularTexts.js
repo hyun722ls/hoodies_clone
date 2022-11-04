@@ -137,7 +137,6 @@ const PopularTexts = (props) => {
   };
 
   return props.popularTexts.length ? (
-
       <Grid item sx={{ margin: '0px', marginRight: '0px'}} xs={12} md={6}>
         <RightArticles>
           <Title>
