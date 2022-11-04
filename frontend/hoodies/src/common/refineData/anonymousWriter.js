@@ -2,7 +2,7 @@ export const annonymousWriter = (comments, writer) => {
     const commentsWriters = comments?.map((comment) => {
         return comment.writer
     })
-    console.log(commentsWriters)
+    // console.log(commentsWriters)
 
     const uniqueWriters = commentsWriters?.filter((element, index) => {
         return commentsWriters.indexOf(element) === index ;
@@ -10,7 +10,7 @@ export const annonymousWriter = (comments, writer) => {
     
     
     const writerIndex = uniqueWriters?.indexOf(writer)
-    console.log(writerIndex)
+    // console.log(writerIndex)
     if (writerIndex > -1){
         uniqueWriters?.splice(writerIndex, 1)
     }
@@ -22,7 +22,7 @@ export const annonymousWriter = (comments, writer) => {
         commentsMap[element] = index;
     });
     
-    console.log(commentsMap)
+    // console.log(commentsMap)
 
     return commentsMap
 
@@ -32,7 +32,7 @@ export const confirmWriter = (articleWriter, commentWriter, commentsMap) => {
     if (articleWriter === commentWriter){
         return '익명'
     } else {
-        console.log(commentWriter, commentsMap)
+        // console.log(commentWriter, commentsMap)
         return `익명${commentsMap[commentWriter]+1}`
     }
 
