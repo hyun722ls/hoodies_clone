@@ -72,7 +72,7 @@ public class UserController {
             return resultMap;
         }
 
-        String authcode = userService.sendMM(emailId + "@", 1);
+        String authcode = userService.sendMM(emailId, 1);
         if (authcode.equals("fail")) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
@@ -96,7 +96,7 @@ public class UserController {
         String emailId = email.split("@")[0];
 
         // 기존 user가 있는 경우
-        if (!userRepository.findByEmailStartsWith(emailId).isEmpty()) {
+        if (!userRepository.findByEmailStartsWith(emailId + "@").isEmpty()) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
