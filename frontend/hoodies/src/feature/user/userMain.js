@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Header from "../../common/UI/header/header";
 import CustomModal from "../../common/UI/modal/customModal";
 import { checkNickname, updateNickname, updatePassword } from "../user/userApi"
+import Swal from "sweetalert2";
 
 const StyledCard = styled.div`
   margin: 8px auto 0 auto;
@@ -68,9 +69,6 @@ const UserMain = () => {
         }
     }, [newPassword, confirmPassword])
 
-    const openNicknameModal = () => {
-        setNicknameModalOpen(true);
-    };
     const closeNicknameModal = () => {
         setNicknameModalOpen(false);
         setIsNewNicknameDuplicated(false);
@@ -169,7 +167,34 @@ const UserMain = () => {
         }
     }
 
+    const openNicknameModal = async (event) => {
+        event.preventDefault()
+        Swal.fire({
+                title: '변경할 닉네임을 입력하세요!',
+                input: 'text',
+                showCancelButton: true,
+                showDenyButton: true,
+                showConfirmButton: isNewNicknameDuplicated,
+                denyButtonText: isNewNicknameDuplicated ? '사용 가능' : '중복 검사',
+                denyButtonColor: 'blue',
+                reverseButtons: true,
+                returnInputValueOnDeny: true,
+                preConfirm: async () => {
+                },
+                preDeny: async (value) => {
+                    console.log(value)
+                    const response = await checkNickname(value)
+                    if (response.cnt === 0) {
+                        setIsNewNicknameDuplicated(true)
+                    } else {
+                        setIsNewNicknameDuplicated(false)
+                        Swal.showValidationMessage('중복된 닉네임입니다.')
+                    }
+                    return false
+                },
+            })
 
+    }
 
     let modalNicknameForm = (
         <form onSubmit={nicknameModifyHandler}>
