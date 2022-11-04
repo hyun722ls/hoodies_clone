@@ -61,7 +61,7 @@ const BoardMain = () => {
     <div>
       <Header />
         <Grid container spacing={3} sx={{ paddingLeft: "10px", justifyContent: 'center'}} className={BOA.marge}>
-          <Grid item sx={{ marginRight: '0px', padding: '10px', placeItems: 'center'}} xs={12} md={6}>
+          <Grid item sx={{ marginRight: '0px', padding: '10px', placeItems: 'center'}} className={BOA.marge2} xs={12} md={6}>
             <BoardTable articles={articles} />
             <div>
               <Pagination
