@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import "./boardMain.css";
 import Grid from '@mui/material/Grid';
+import GRID from "../main/main.module.css";
 
 const Container = styled.div`
   display: grid;
@@ -59,10 +60,7 @@ const BoardMain = () => {
   popularTexts && (
     <div>
       <Header />
-        <Grid container spacing={10}>
-          <Grid item xs ={0} md={2}>
-          </Grid>
-          <Grid item xs ={12} md={6}>
+        <Grid container spacing={3} className={GRID.container}>
             <BoardTable articles={articles} />
             <div>
               <Pagination
@@ -73,13 +71,7 @@ const BoardMain = () => {
                   onChange={handlePageChange}
               />
             </div>
-          </Grid>
-          <Grid item xs ={12} md={3}>
             <PopularTexts popularTexts={popularTexts} />
-          </Grid>
-          <Grid item xs ={0} md={1}>
-            <div></div>
-          </Grid>
         </Grid>
     </div>
   );
