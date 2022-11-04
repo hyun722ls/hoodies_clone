@@ -146,7 +146,7 @@ const CommentList = (props) => {
                   {comment.writer === localStorage.getItem('hashNickname') && <StyledButton onClick={() => props.deleteCommentHandler(comment._id)}>
                     삭제
                   </StyledButton>}
-                  {comment.writer !== localStorage.getItem('nickname') && <StyledButton onClick={() => props.reportCommentHandler(comment)}>
+                  {comment.writer !== localStorage.getItem('hashNickname') && <StyledButton onClick={() => props.reportCommentHandler(comment)}>
                     신고
                   </StyledButton>}
                 </ButtonList>
