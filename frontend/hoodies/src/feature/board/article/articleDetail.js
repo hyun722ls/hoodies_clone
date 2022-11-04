@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../../common/UI/header/header";
-import {createComment, deleteArticle, deleteComment, fetchArticle, fetchLike, modifyComment, reportArticle} from "../boardAPI";
+import {createComment, deleteArticle, deleteComment, fetchArticle, fetchLike, modifyComment, reportArticle, reportComment} from "../boardAPI";
 import CommentList from "./commentList";
 import styled from "styled-components";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
@@ -223,9 +223,28 @@ const ArticleDetail = () => {
         const response1 = await fetchArticle(location.state)
         setArticle(response1)
         setComments(response1.comments)
+        alert('신고완료')
       }
       else {
         console.log('신고 실패')
+      }
+    }
+  }
+
+  const reportCommentHandler = async (comment) => {
+    if (comment.reporter.includes(localStorage.getItem('hashNickname'))){
+      alert('중복된 신고입니다.')
+    } else {
+      const response = await reportComment(article._id, comment._id)
+      if (response.statusCode === 200){
+        const response1 = await fetchArticle(location.state)
+        setArticle(response1)
+        setComments(response1.comments)
+        alert('선택한 댓글이 신고되었습니다.')
+      }
+      else {
+        console.log('댓글 신고 오류')
+     
       }
     }
   }
@@ -267,9 +286,9 @@ const ArticleDetail = () => {
                 </Tooltip>
               <Item>조회수 : {article.hit}</Item>
               <Item>|</Item>
-                <Tooltip title="신고하기">
-                    <TouchAppIcon onClick={reportHandler} />
-                </Tooltip>
+
+                {localStorage.getItem('nickname') !== article.writer && <TouchAppIcon onClick={reportHandler} />}
+              
 
             </Score>
             <ArticleHr />
@@ -284,6 +303,7 @@ const ArticleDetail = () => {
           deleteCommentHandler={deleteCommentHandler}
           modifyCommentHandler={modifyCommentHandler}
           createCommentHandler={createCommentHandler}
+          reportCommentHandler={reportCommentHandler}
         />
         <div>
           <StyledButton onClick={backHandler}>목록보기</StyledButton>
