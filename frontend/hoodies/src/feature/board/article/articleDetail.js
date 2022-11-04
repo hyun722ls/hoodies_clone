@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../../common/UI/header/header";
-import {createComment, deleteArticle, deleteComment, fetchArticle, fetchLike, modifyComment} from "../boardAPI";
+import {createComment, deleteArticle, deleteComment, fetchArticle, fetchLike, modifyComment, reportArticle} from "../boardAPI";
 import CommentList from "./commentList";
 import styled from "styled-components";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
@@ -146,21 +146,21 @@ const ArticleDetail = () => {
 
   const deleteHandler = async (event) => {
     const response = await deleteArticle(article._id)
-    if (response) {
+    if (response.statusCode === 200) {
       history.push('/board/free');
+    } else {
+      console.log('게시글 삭제')
     }
   }
 
   const deleteCommentHandler = async (commentId) => {
     const response = await deleteComment(article._id, commentId)
-    if (response){
+    if (response.statusCode === 200){
       const response1 = await fetchArticle(article._id)
       setArticle(response1)
       setComments(response1.comments)
     } else {
-      const response1 = await fetchArticle(article._id)
-      setArticle(response1)
-      setComments(response1.comments)
+      console.log('댓글 삭제 에러')
     }
   };
 
@@ -172,9 +172,7 @@ const ArticleDetail = () => {
       setComments(response1.comments)
     }
     else {
-      const response1 = await fetchArticle(location.state)
-      setArticle(response1)
-      setComments(response1.comments)
+      console.log('댓글 수정 오류')
      
     }
     // const newComments = [...comments];
@@ -191,17 +189,14 @@ const ArticleDetail = () => {
       setComments(response1.comments)
     }
     else {
-      const response1 = await fetchArticle(location.state)
-      setArticle(response1)
-      setComments(response1.comments)
-     
+      console.log('댓글 생성 실패')
     }
   };
 
   const likeHandler = async (event) => {
     event.preventDefault()
     const response = await fetchLike(location.state)
-    if (response){
+    if (response.statusCode === 200){
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
@@ -214,11 +209,25 @@ const ArticleDetail = () => {
       }
     }
     else {
-      const response1 = await fetchArticle(location.state)
-      setArticle(response1)
-      setComments(response1.comments)
+      console.log('좋아요 실패')
     }
+  }
 
+  const reportHandler = async (event) => {
+    event.preventDefault()
+    if (article.reporter.includes(localStorage.getItem('hashNickname'))){
+      alert('중복된 신고입니다.')
+    } else {
+      const response = await reportArticle(location.state)
+      if (response.statusCode === 200){
+        const response1 = await fetchArticle(location.state)
+        setArticle(response1)
+        setComments(response1.comments)
+      }
+      else {
+        console.log('신고 실패')
+      }
+    }
   }
 
   useEffect(() => {
@@ -259,9 +268,7 @@ const ArticleDetail = () => {
               <Item>조회수 : {article.hit}</Item>
               <Item>|</Item>
                 <Tooltip title="신고하기">
-                  <IconButton>
-                    <TouchAppIcon />
-                  </IconButton>
+                    <TouchAppIcon onClick={reportHandler} />
                 </Tooltip>
 
             </Score>
