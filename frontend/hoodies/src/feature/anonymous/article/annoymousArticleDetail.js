@@ -10,6 +10,8 @@ import TouchAppIcon from '@mui/icons-material/TouchApp';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { alertTitleClasses } from "@mui/material";
+import Swal from "sweetalert2";
+
 const Articles = styled.div`
   position: relative;
   float: none;
@@ -214,8 +216,18 @@ const AnnoymousArticleDetail = () => {
       console.log(response1.contributor[localStorage.getItem('hashNickname')])
       if (tmpLike === true && response1.contributor[localStorage.getItem('hashNickname')]){
         setIsLike(true)
+        Swal.fire({
+          icon: 'success',
+          timer: 2000,
+          showConfirmButton: false,
+        })
       } else {
         setIsLike(false)
+        Swal.fire({
+          icon: 'error',
+          timer: 2000,
+          showConfirmButton: false,
+        })
       }
     }
     else {
@@ -226,7 +238,12 @@ const AnnoymousArticleDetail = () => {
   const reportHandler = async (event) => {
     event.preventDefault()
     if (article.reporter.includes(localStorage.getItem('hashNickname'))){
-      alert('중복된 신고입니다.')
+      Swal.fire({
+        title: '중복된 신고입니다.',
+        icon: 'warning',
+        timer: 2000,
+        timerProgressBar: true,
+      })
     } else {
       const response = await reportArticle(location.state)
       if (response.statusCode === 200){
@@ -235,7 +252,12 @@ const AnnoymousArticleDetail = () => {
         setComments(response1.comments)
         setCommentsMap(annonymousWriter(response1.comments, response1.writer))
         setArticleWriter(response1.writer)
-        alert('게시글이 신고되었습니다.')
+        Swal.fire({
+          title: '게시글이 신고되었습니다.',
+          icon: 'success',
+          timer: 2000,
+          timerProgressBar: true,
+        })
       }
       else {
         console.log('신고 실패')
@@ -245,7 +267,12 @@ const AnnoymousArticleDetail = () => {
 
   const reportCommentHandler = async (comment) => {
     if (comment.reporter.includes(localStorage.getItem('hashNickname'))){
-      alert('중복된 신고입니다.')
+      Swal.fire({
+        title: '중복된 신고입니다.',
+        icon: 'warning',
+        timer: 2000,
+        timerProgressBar: true,
+      })
     } else {
       const response = await reportComment(article._id, comment._id)
       if (response.statusCode === 200){
@@ -254,7 +281,12 @@ const AnnoymousArticleDetail = () => {
         setComments(response1.comments)
         setCommentsMap(annonymousWriter(response1.comments, response1.writer))
         setArticleWriter(response1.writer)
-        alert('선택한 댓글이 신고되었습니다.')
+        Swal.fire({
+          title: '선택한 댓글이 신고되었습니다.',
+          icon: 'success',
+          timer: 2000,
+          timerProgressBar: true,
+        })
       }
       else {
         console.log('댓글 신고 오류')

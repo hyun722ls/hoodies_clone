@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 import styled from "styled-components";
 import { changeAnnonymous, checkBoradType } from "../../../common/refineData/anonymousWriter";
 import { blockCnt } from "../../../common/api/url";
+import Swal from "sweetalert2";
 
 const Article = styled.article`
   margin-bottom: -1px;
@@ -123,7 +124,12 @@ const freeBoardHandler = () => {
 };
 const detailPageHandler = (article) => {
   if (article.reporter?.length > blockCnt){
-    alert('신고 누적된 게시글입니다.')
+    Swal.fire({
+      title: '신고 누적된 게시글입니다.',
+      icon: 'error',
+      timer: 2000,
+      timerProgressBar: true,
+    })
   } else {
     if (article.type === 1){
       history.push({ pathname: "/board/free/detail", state: article._id });
