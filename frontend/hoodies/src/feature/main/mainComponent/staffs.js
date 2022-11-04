@@ -175,25 +175,25 @@ const Staffs = (props) => {
                                     />
                                 </Grid>
 
-                                    <H4>{staff.evaluations[0].writer}님의 한줄평 : {staff.evaluations[0].content}</H4>
-                                    <br />
-                                    <Box
-                                        sx={{
-                                            width: 300,
-                                            alignItems: 'center',
-                                        }}
-                                    >
-                                        <Rating
-                                            name="text-feedback"
-                                            value={value}
-                                            readOnly
-                                            precision={0.5}
-                                            icon={<StarIcon fontSize="large" />}
-                                            emptyIcon={<StarIcon style={{ opacity: 0.45 }} fontSize="large" />}
-                                        />
-                                        <H5>{labels[value]}</H5>
-                                        <H6>{staff.evaluations[0].createdAt}</H6>
-                                    </Box>
+                                <H4>{staff.evaluations[0].writer}님의 한줄평 : {staff.evaluations[0].content}</H4>
+                                <br />
+                                <Box
+                                    sx={{
+                                        width: 300,
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <Rating
+                                        name="text-feedback"
+                                        value={value}
+                                        readOnly
+                                        precision={0.5}
+                                        icon={<StarIcon fontSize="large" />}
+                                        emptyIcon={<StarIcon style={{ opacity: 0.45 }} fontSize="large" />}
+                                    />
+                                    <H5>{labels[value]}</H5>
+                                    <H6>{staff.evaluations[0].createdAt}</H6>
+                                </Box>
                             </Grid>
                         </Grid>
                     );
