@@ -9,8 +9,6 @@ import Swal from "sweetalert2";
 
 const RightArticles = styled.div`
   width: 100%;
-  padding-left: 0 !important;
-  padding-top: 0 !important;
   background-color: #F9F5EB;
 `
 const Article = styled.article`
@@ -145,7 +143,7 @@ const PopularTexts = (props) => {
   };
 
   return props.popularTexts.length ? (
-      <Grid item xs={12} md={3}>
+      <Grid item xs={12} md={3} sx={{margin:"10px"}}>
         <RightArticles>
           <Title>
             <H2>인기게시글</H2>
