@@ -138,7 +138,11 @@ const BoardTable = (props) => {
   const history = useHistory();
 
   const detailPageHandler = (article) => {
-    history.push({ pathname: "/board/free/detail", state: article._id });
+    if (article.type === 1){
+      history.push({ pathname: "/board/free/detail", state: article._id });
+    } else {
+      history.push({ pathname: "/board/annoymous/detail", state: article._id });
+    }
   };
 
   const isFilter = (article) => {
@@ -147,10 +151,6 @@ const BoardTable = (props) => {
       } else {
           return 0
       }
-  };
-
-  const createArticle = () => {
-    history.push("free/form");
   };
 
   return props.articles.length ? (
