@@ -99,6 +99,7 @@ public class SignController {
             tokenRepository.save(Token.builder().email(user.getEmail()).accessToken(accessToken).refreshToken(refreshToken).build());
 
             resultMap.put("nickname", user.getNickname());
+            resultMap.put("hashNickname", util.getEncryptPassword(user.getNickname(), nicknameSalt));
             resultMap.put("accessToken", accessToken);
             resultMap.put("statusCode", SUCCESS);
         } catch (Exception e) {
