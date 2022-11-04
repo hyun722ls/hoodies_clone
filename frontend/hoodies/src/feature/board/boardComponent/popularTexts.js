@@ -7,14 +7,6 @@ import Grid from '@mui/material/Grid';
 import { blockCnt } from "../../../common/api/url";
 import Swal from "sweetalert2";
 
-const RightArticles = styled.div`
-  width: 100%;
-  //grid-column: 3/4;
-  ////grid-row: 1;
-  //width: 320px;
-  margin-bottom: auto;
-  background-color: #F9F5EB;
-`
 const Article = styled.article`
   margin-bottom: -1px;
   box-sizing: border-box;
@@ -150,8 +142,7 @@ const PopularTexts = (props) => {
   };
 
   return props.popularTexts.length ? (
-      <Grid itemxs={12} md={3}>
-        <RightArticles sx={{padding: '10px',placeItems: 'center'}}>
+      <Grid item sx={{ margin: '0px', marginRight: '0px', padding: '10px', placeItems: 'center'}} xs={12} md={3}>
           <Title>
             <H2>인기게시글</H2>
           </Title>
@@ -179,7 +170,6 @@ const PopularTexts = (props) => {
                 </Article>
               );
             })}
-        </RightArticles>
       </Grid>
   ) : (
     <p>작성된 글이 없습니다.</p>
