@@ -9,10 +9,9 @@ import Swal from "sweetalert2";
 
 const RightArticles = styled.div`
   width: 100%;
-  //grid-column: 3/4;
-  ////grid-row: 1;
-  //width: 320px;
-  margin: 10px;
+  padding: 10px;
+  padding-left: 0 !important;
+  padding-top: 0 !important;
   background-color: #F9F5EB;
 `
 const Article = styled.article`
