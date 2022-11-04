@@ -5,6 +5,7 @@ import { timeConventer } from "../../../common/refineData/refineTime";
 import Grid from '@mui/material/Grid';
 import styled from "styled-components";
 import { changeAnnonymous, checkBoradType } from "../../../common/refineData/anonymousWriter";
+import { blockCnt } from "../../../common/api/url";
 
 const Article = styled.article`
   margin-bottom: -1px;
@@ -121,11 +122,17 @@ const freeBoardHandler = () => {
   history.push("/board/free");
 };
 const detailPageHandler = (article) => {
-  if (article.type === 1){
-    history.push({ pathname: "/board/free/detail", state: article._id });
-
+  if (article.reporter?.length > blockCnt){
+    alert('신고 누적된 게시글입니다.')
   } else {
-    history.push({ pathname: "/board/annoymous/detail", state: article._id });
+    if (article.type === 1){
+      history.push({ pathname: "/board/free/detail", state: article._id });
+  
+    } else {
+      history.push({ pathname: "/board/annoymous/detail", state: article._id });
+    }
+  
+
   }
 };
 

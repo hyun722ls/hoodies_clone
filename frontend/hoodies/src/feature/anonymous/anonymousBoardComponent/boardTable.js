@@ -7,6 +7,7 @@ import Pagination from "react-js-pagination";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { changeAnnonymous, checkBoradType } from "../../../common/refineData/anonymousWriter";
+import { blockCnt } from "../../../common/api/url";
 
 const Articles = styled.div`
   position: relative;
@@ -142,7 +143,12 @@ const BoardTable = (props) => {
   const history = useHistory();
 
   const detailPageHandler = (article) => {
-    history.push({ pathname: "/board/annoymous/detail", state: article._id });
+    if (article.reporter?.length > blockCnt){
+      alert('신고 누적된 게시글입니다.')
+    } else {
+      history.push({ pathname: "/board/annoymous/detail", state: article._id });
+
+    }
   };
 
   const createArticle = () => {
