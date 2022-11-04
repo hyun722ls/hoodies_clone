@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import {changeAnnonymous, checkBoradType} from "../../../common/refineData/anonymousWriter";
 import Grid from '@mui/material/Grid';
 import { blockCnt } from "../../../common/api/url";
+import Swal from "sweetalert2";
 
 
 const Articles = styled.div`
@@ -146,7 +147,12 @@ const BoardTable = (props) => {
 
   const detailPageHandler = (article) => {
     if (article.reporter?.length > blockCnt){
-      alert('신고 누적된 게시글입니다.')
+      Swal.fire({
+        title: '신고 누적된 게시글입니다.',
+        icon: 'error',
+        timer: 2000,
+        timerProgressBar: true,
+      })
     } else {
     
       history.push({ pathname: "/board/free/detail", state: article._id });
