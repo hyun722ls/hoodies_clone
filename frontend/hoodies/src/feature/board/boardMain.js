@@ -15,7 +15,7 @@ const Container = styled.div`
   grid-template-columns: auto;
   column-gap: 20px;
   position: relative;
-  margin: 24px auto 24px auto;
+  //margin: 24px auto 24px auto;
   justify-content: center;
 `
 
@@ -59,7 +59,7 @@ const BoardMain = () => {
   popularTexts && (
     <div>
       <Header />
-        <Grid container spacing={10}>
+        <Container container spacing={10}>
           <Grid item xs ={0} md={2}>
           </Grid>
           <Grid item xs ={12} md={6}>
@@ -79,7 +79,7 @@ const BoardMain = () => {
           </Grid>
           <Grid item xs ={0} md={2}>
           </Grid>
-        </Grid>
+        </Container>
     </div>
   );
 };
