@@ -39,7 +39,7 @@ const EvaluationMain = () => {
     } else {
       const selectedList = await getStaffListByType(flag)
       console.log(selectedList)
-      setSelectedData(selectedList.content)
+      setSelectedData(selectedList)
     }
     // setSelectedDropValue(data.filter((data) => data.flag === value)[0].id);
   };
@@ -52,7 +52,7 @@ const EvaluationMain = () => {
     <div>
       <Header />
       <Box sx={{width:'100%', borderBottom: 1, borderColor:'gray'}}>
-        <Tabs value={selectedTab} onChange={handleDropProduct}>
+        <Tabs value={selectedTab} onChange={handleDropProduct} centered sx={{'& .Mui-selected':{color:'#1D3979'}, '& .MuiTabs-indicator':{backgroundColor:'#1D3979'}}}>
           {CATEGORY_LIST.map((option) => (
             <Tab sx={{fontFamily:'IBM Plex Sans KR', justifyContent:'center'}} key={option.value} label={option.label} value={option.id}></Tab>
           ))}

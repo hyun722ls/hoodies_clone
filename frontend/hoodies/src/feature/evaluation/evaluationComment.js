@@ -1,7 +1,121 @@
 import { useState } from "react";
 import { Rating } from "@mui/material";
+import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
+import StarOutlineRoundedIcon from '@mui/icons-material/StarOutlineRounded';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import styled from "styled-components";
+
+const RightArticles = styled.div`
+  grid-column: 3/4;
+  grid-row: 1;
+  width: 320px;
+  margin-bottom: auto;
+  background-color: #F9F5EB;
+`
+const Article = styled.article`
+  margin-bottom: -1px;
+  box-sizing: border-box;
+  border: 1px solid #EAE3D2;
+  cursor: pointer;
+`
+
+const ArticleA = styled.a`
+  margin: 0;
+  padding: 14px;
+  display: block;
+`
+
+const ArticleH2 = styled.h2`
+  margin: 0;
+  margin-bottom: 5px;
+  line-height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  font-weight: normal;
+`
+
+const ArticleH2_filter = styled.h2`
+  margin: 0;
+  margin-bottom: 5px;
+  line-height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  font-weight: normal;
+  color: #ff5f5f;
+`
+
+const ArticleH3 = styled.h3`
+  margin: 0;
+  padding: 0;
+  float: left;
+  max-width: 90px;
+  height: 15px;
+  line-height: 15px;
+  font-size: 11px;
+  font-weight: normal;
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
+
+const Title = styled.div`
+  padding: 16px;
+  border-bottom: 3px solid #EAE3D2;
+  box-sizing: border-box;
+`
+
+const H2 = styled.h2`
+  color: #1D3979;
+  margin: 0;
+`
+
+const ArticleTime = styled.time`
+  margin: 0;
+  padding: 0;
+  float: left;
+  margin-right: 5px;
+  height: 15px;
+  line-height: 15px;
+  font-size: 11px;
+  color: #a6a6a6;
+`
+
+const Score = styled.ul`
+  margin: 0;
+  padding: 0;
+  float: right;
+  list-style: none;
+`
+
+const Item = styled.li`
+  margin: 0;
+  float: left;
+  margin-left: 0px;
+  padding: 0 2px;
+  padding-left: 2px;
+  height: 20px;
+  line-height: 20px;
+  font-size: 12px;
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 11px 11px;
+  cursor: pointer;
+`
+
+const ArticleHr = styled.hr`
+  margin: 0;
+  padding: 0;
+  clear: both;
+  height: 0;
+  border: 0;
+  width: 100%;
+`
 
 const EvaulationComment = (props) => {
   const [modifyForm, setModifyForm] = useState(false);
@@ -16,102 +130,33 @@ const EvaulationComment = (props) => {
     console.log(like)
   }
 
-  // const openModifyForm = (id, content) => {
-  //   setCommentId(id);
-  //   setModifyForm(true);
-  //   setModifyContent(content);
-  // };
-
-  // const modifyContentChangeHandler = (event) => {
-  //   event.preventDefault();
-  //   setModifyContent(event.target.value);
-  // };
-
-  // const modifyHandler = (event) => {
-  //   event.preventDefault();
-  //   props.modifyCommentHandler(commentId, modifyContent);
-  //   setModifyContent("");
-  //   setModifyForm(false);
-  //   setCommentId(null);
-  // };
-
-  // const createHandler = (event) => {
-  //   event.preventDefault();
-  //   props.createCommentHandler(newContent);
-  //   setNewContent("");
-  // };
-
-  // const newContentChangeHandler = (event) => {
-  //   event.preventDefault();
-  //   setNewContent(event.target.value);
-  // };
+  function average(array){
+    let sum = 0
+    for (const item of array){
+      sum += item;
+    }
+    return sum/5
+  }
 
   return props.comments.length ? (
-    <div>
+    <div style={{border: '1px solid #EAE3D2', backgroundColor:'#F9F5EB'}}>
+      <Title>
+        <H2>한줄평</H2>
+      </Title>
       {props.comments.map((comment) => {
         return (
-          <ul key={comment._id}>
-            <li>
-              {comment.content}, {comment.writer}, {comment.createdAt}, {comment.like}, {comment.dislike}
-            </li>
-            <li>
-              {/* <ThumbUpAltIcon></ThumbUpAltIcon> */}
-              {like ? <ThumbUpAltIcon onClick={handleLike}/> : <ThumbUpOffAltIcon onClick={handleLike}/>}
-            </li>
-            <Rating value={comment.score[0]} readOnly></Rating>
-            <Rating value={comment.score[1]} readOnly></Rating>
-            <Rating value={comment.score[2]} readOnly></Rating>
-            <Rating value={comment.score[3]} readOnly></Rating>
-            <Rating value={comment.score[4]} readOnly></Rating>
-
-            {/* {localStorage.getItem('nickname') === comment.writer ? (
-              <button onClick={() => props.deleteCommentHandler(comment.id)}>
-              삭제
-              </button>
-            ) : (null)} */}
-            {/* <button onClick={() => props.deleteCommentHandler(comment.id)}>
-              삭제
-            </button> */}
-            {/* <button onClick={() => openModifyForm(comment.id, comment.content)}>
-              수정
-            </button> */}
-            {/* {modifyForm && commentId === comment.id && (
-              <form onSubmit={modifyHandler}>
-                <input
-                  type="text"
-                  value={modifyContent}
-                  onChange={modifyContentChangeHandler}
-                  placeholder="댓글을 입력하세요"
-                />
-                <button type="submit">댓글 수정</button>
-              </form>
-            )} */}
-          </ul>
+          <div key={comment._id} style={{borderBottom:'1px solid #EAE3D2', marginLeft:'10px'}}>
+            <div style={{textOverflow:'ellipsis', fontWeight:500}}>{comment.content}</div>
+            <div style={{fontSize:'11px'}}>{comment.createdAt.slice(0,10)}</div>
+            <div style={{display:'inline-flex'}}><Rating value={average(comment.score).toFixed(1)} precision={0.1} icon={<StarRateRoundedIcon/>} emptyIcon={<StarOutlineRoundedIcon/>} readOnly></Rating><div style={{marginLeft:'5px',fontSize:'10px'}}>{average(comment.score).toFixed(1)}</div></div>
+            <div style={{display:'flex'}}><ThumbUpAltIcon fontSize='small'></ThumbUpAltIcon><div style={{marginLeft:'3px'}}>{comment.like}</div></div>
+          </div>
         );
       })}
-
-      {/* <form onSubmit={createHandler}>
-        <input
-          type="text"
-          value={newContent}
-          onChange={newContentChangeHandler}
-          placeholder="댓글을 입력하세요"
-        />
-        <button type="submit">댓글 등록</button>
-      </form> */}
     </div>
   ) : (
     <div>
       <p>댓글이 없습니다.</p>
-      {/* <form onSubmit={createHandler}>
-        <input
-          type="text"
-          value={newContent}
-          onChange={newContentChangeHandler}
-          placeholder="댓글을 입력하세요"
-        />
-        <button type="submit">댓글 등록</button>
-      </form> */}
     </div>
   );
 };

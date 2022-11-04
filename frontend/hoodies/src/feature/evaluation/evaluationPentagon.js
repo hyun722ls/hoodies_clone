@@ -67,42 +67,29 @@ const evaluationPentagon = (props) => {
                 keys={[ `${name}` ]}
                 indexBy="criteria"
                 animate={false}
-                height={400}
-                width={600}
-                // valueFormat=">-.2f"
+                height={330}
+                width={330}
+                valueFormat=">-.2f"
                 margin={{ top: 60, bottom: 60, right: 60, left: 60 }}
                 gridShape='linear'
                 maxValue={5}
                 borderColor={{ from: 'color' }}
                 gridLabelOffset={20}
-                isInteractive={false}
+                isInteractive={true}
                 dotSize={15}
                 dotColor={{ theme: 'background' }}
                 dotBorderWidth={2}
-                colors={{ scheme: 'accent' }}
+                colors='#617EAA'
                 blendMode="overlay"
                 motionConfig="wobbly"
-                legends={[
-                    {
-                        anchor: 'top-right',
-                        direction: 'column',
-                        translateX: -100,
-                        translateY: 100,
-                        itemWidth: 80,
-                        itemHeight: -220,
-                        itemTextColor: '#999',
-                        symbolSize: 8,
-                        symbolShape: 'circle',
-                        effects: [
-                            {
-                                on: 'hover',
-                                style: {
-                                    itemTextColor: '#000'
-                                }
-                            }
-                        ]
+                theme={{'fontSize':15,
+                    'fontFamily':'IBM Plex Sans KR',
+                    'grid' : {
+                      'line':{
+                        'stroke':'black'
+                      }
                     }
-                ]}
+                  }}
             />
         </Grid>
         //////////////////////////////////내 코드 끝이에유/////////////////////////////////
