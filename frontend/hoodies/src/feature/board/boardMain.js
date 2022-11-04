@@ -44,7 +44,7 @@ const BoardMain = () => {
   popularTexts && (
     <div>
       <Header />
-        <Grid container spacing={3} sx={{ marginTop: "10px", paddingLeft: "10px", justifyContent: 'center'}}>
+        <Grid container sx={{justifyContent: 'center'}}>
           <Grid item sx={{paddingTop: "0px!important", paddingLeft: "0px!important", padding:"10px!important", marginLeft:"15px"}} xs={12} md={6}>
             <BoardTable articles={articles} />
             <div>
