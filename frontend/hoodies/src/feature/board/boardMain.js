@@ -60,7 +60,7 @@ const BoardMain = () => {
   popularTexts && (
     <div>
       <Header />
-        <Grid container spacing={3} className={GRID.container}>
+        <Grid spacing={3}>
             <BoardTable articles={articles} />
             <div>
               <Pagination
