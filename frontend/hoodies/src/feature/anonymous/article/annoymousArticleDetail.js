@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../../common/UI/header/header";
-import {createComment, deleteArticle, deleteComment, fetchArticle, fetchLike, fetchPopularArticles, modifyComment, reportArticle} from "../anonymousBoardAPI";
+import {createComment, deleteArticle, deleteComment, fetchArticle, fetchLike, fetchPopularArticles, modifyComment, reportArticle, reportComment} from "../anonymousBoardAPI";
 import CommentList from "./commentList";
 import styled from "styled-components";
 import { annonymousWriter, confirmWriter } from "../../../common/refineData/anonymousWriter";
@@ -9,6 +9,7 @@ import Tooltip from '@mui/material/Tooltip';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import { alertTitleClasses } from "@mui/material";
 const Articles = styled.div`
   position: relative;
   float: none;
@@ -234,6 +235,7 @@ const AnnoymousArticleDetail = () => {
         setComments(response1.comments)
         setCommentsMap(annonymousWriter(response1.comments, response1.writer))
         setArticleWriter(response1.writer)
+        alert('게시글이 신고되었습니다.')
       }
       else {
         console.log('신고 실패')
@@ -241,12 +243,35 @@ const AnnoymousArticleDetail = () => {
     }
   }
 
+  const reportCommentHandler = async (comment) => {
+    if (comment.reporter.includes(localStorage.getItem('hashNickname'))){
+      alert('중복된 신고입니다.')
+    } else {
+      const response = await reportComment(article._id, comment._id)
+      if (response.statusCode === 200){
+        const response1 = await fetchArticle(location.state)
+        setArticle(response1)
+        setComments(response1.comments)
+        setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+        setArticleWriter(response1.writer)
+        alert('선택한 댓글이 신고되었습니다.')
+      }
+      else {
+        console.log('댓글 신고 오류')
+     
+      }
+    }
+  }
+
+
   useEffect(() => {
     (async () => {
       if (location.state) {
         const response = await fetchArticle(location.state)
         setArticle(response);
         setComments(response.comments);
+        setCommentsMap(annonymousWriter(response.comments, response.writer))
+        setArticleWriter(response.writer)
         let tmpLike = Object.keys(response.contributor).includes(localStorage.getItem('hashNickname'))
         if (tmpLike === true && response.contributor[localStorage.getItem('hashNickname')]){
           setIsLike(response.contributor[localStorage.getItem('hashNickname')])
@@ -275,9 +300,9 @@ const AnnoymousArticleDetail = () => {
                 </Tooltip>
               <Item>조회수 : {article.hit}</Item>
               <Item>|</Item>
-                <Tooltip title="신고하기">
-                    {localStorage.getItem('hashNickname') === article.writer && <TouchAppIcon onClick={reportHandler} />}
-                </Tooltip>
+                
+                    {localStorage.getItem('hashNickname') !== article.writer && <TouchAppIcon onClick={reportHandler} />}
+               
             
             </Score>
             <ArticleHr />
@@ -294,6 +319,7 @@ const AnnoymousArticleDetail = () => {
           deleteCommentHandler={deleteCommentHandler}
           modifyCommentHandler={modifyCommentHandler}
           createCommentHandler={createCommentHandler}
+          reportCommentHandler={reportCommentHandler}
         />
         <div>
           <StyledButton onClick={backHandler}>목록보기</StyledButton>
