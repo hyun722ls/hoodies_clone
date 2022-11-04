@@ -44,6 +44,7 @@ public class SignController {
     @Value("${nickname.salt}")
     private String nicknameSalt;
 
+    private final String ADMIN_EMAIL = "admin";
 
     @ApiOperation(value = "회원가입")
     @PostMapping
@@ -84,7 +85,7 @@ public class SignController {
             user.setRole(Role.ROLE_USER);
             userRepository.save(user);
 
-            Token tokenInfo = jwtTokenProvider.generateToken("email", user.getEmail(), "token");
+            Token tokenInfo = jwtTokenProvider.generateToken("email", user.getEmail(), "token", user.getRole());
             String accessToken = tokenInfo.getAccessToken();
             String refreshToken = tokenInfo.getRefreshToken();
 
@@ -123,7 +124,7 @@ public class SignController {
                 return resultMap;
             }
 
-            Token tokenInfo = jwtTokenProvider.generateToken("email", user.getEmail(), "token");
+            Token tokenInfo = jwtTokenProvider.generateToken("email", user.getEmail(), "token", getUser.getRole());
             String accessToken = tokenInfo.getAccessToken();
             String refreshToken = tokenInfo.getRefreshToken();
 
@@ -136,6 +137,10 @@ public class SignController {
             response.addCookie(cookie);
 
             tokenRepository.save(Token.builder().email(user.getEmail()).accessToken(accessToken).refreshToken(refreshToken).build());
+
+            // 관리자일 경우
+            if (getUser.getEmail().equals(ADMIN_EMAIL))
+                resultMap.put("isAdmin", true);
 
             resultMap.put("nickname", getUser.getNickname());
             resultMap.put("hashNickname", util.getEncryptPassword(getUser.getNickname(), nicknameSalt));
@@ -172,27 +177,34 @@ public class SignController {
 
         String refreshToken = cookieRefreshToken.getValue();
 
-        Token tokenInfo = tokenRepository.findByRefreshToken(refreshToken);
-        if (tokenInfo == null) {
+        try {
+            Token tokenInfo = tokenRepository.findByRefreshToken(refreshToken);
+            if (tokenInfo == null) {
+                resultMap.put("statusCode", FAIL);
+                status = HttpStatus.BAD_REQUEST;
+                return new ResponseEntity<Map<String, Object>>(resultMap, status);
+            }
+            String email = tokenInfo.getEmail();
+
+            // refreshToken이 만료되었을 경우
+            if (!jwtTokenProvider.validateToken(refreshToken)) {
+                resultMap.put("statusCode", EXPIRED);
+                status = HttpStatus.BAD_REQUEST;
+                return new ResponseEntity<Map<String, Object>>(resultMap, status);
+            }
+
+            Role role = userRepository.findById(email).get().getRole();
+
+            String newAccessToken = jwtTokenProvider.generateAccessToken("email", email, "token", role);
+
+            tokenRepository.save(Token.builder().email(email).accessToken(newAccessToken).refreshToken(refreshToken).build());
+
+            resultMap.put("accessToken", newAccessToken);
+            resultMap.put("statusCode", SUCCESS);
+        } catch (Exception e) {
             resultMap.put("statusCode", FAIL);
             status = HttpStatus.BAD_REQUEST;
-            return new ResponseEntity<Map<String, Object>>(resultMap, status);
         }
-        String email = tokenInfo.getEmail();
-
-        // refreshToken이 만료되었을 경우
-        if (!jwtTokenProvider.validateToken(refreshToken)) {
-            resultMap.put("statusCode", EXPIRED);
-            status = HttpStatus.BAD_REQUEST;
-            return new ResponseEntity<Map<String, Object>>(resultMap, status);
-        }
-
-        String newAccessToken = jwtTokenProvider.generateAccessToken("email", email, "token");
-
-        tokenRepository.save(Token.builder().email(email).accessToken(newAccessToken).refreshToken(refreshToken).build());
-
-        resultMap.put("accessToken", newAccessToken);
-        resultMap.put("statusCode", SUCCESS);
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
