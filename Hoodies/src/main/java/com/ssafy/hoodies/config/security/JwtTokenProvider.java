@@ -32,11 +32,11 @@ public class JwtTokenProvider {
     }
 
     // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
-    public Token generateToken(String key, String data, String subject) {
+    public Token generateToken(String key, String data, String subject, Role role) {
         Date now = new Date(System.currentTimeMillis() + refreshTokenValidMillisecond);
 
         // Access Token 생성
-        String accessToken = generateAccessToken(key, data, subject);
+        String accessToken = generateAccessToken(key, data, subject, role);
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
@@ -50,7 +50,7 @@ public class JwtTokenProvider {
                 .build();
     }
 
-    public String generateAccessToken(String key, String data, String subject) {
+    public String generateAccessToken(String key, String data, String subject, Role role) {
         Date now = new Date(System.currentTimeMillis() + accessTokenValidMillisecond);
 
         // Access Token 생성
@@ -59,7 +59,7 @@ public class JwtTokenProvider {
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setSubject(subject)
                 .claim(key, data)
-                .claim("role", Role.ROLE_USER)
+                .claim("role", role)
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
