@@ -52,13 +52,13 @@ public class SignController {
         String emailId = user.getEmail().split("@")[0];
 
         // 기존 user가 있는 경우
-        if (!userRepository.findByEmailContains(emailId).isEmpty()) {
+        if (!userRepository.findByEmailStartsWith(emailId + "@").isEmpty()) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
 
         // 기존 닉네임이 있는 경우
-        if(userRepository.findByNickname(user.getNickname()) != null) {
+        if (userRepository.findByNickname(user.getNickname()) != null) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
