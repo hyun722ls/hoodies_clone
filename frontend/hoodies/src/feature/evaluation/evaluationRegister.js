@@ -1,8 +1,9 @@
-import { TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import Rating from '@mui/material/Rating';
 import { Fragment, useState } from 'react';
 import { postEvaluation, getStaff } from './evaluationAPI';
 import styled from 'styled-components';
+import { Grid } from "@mui/material";
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
@@ -15,6 +16,8 @@ const Rate = styled.div`
 
 const RateItem = styled.div`
     display: inline-flex;
+    margin-bottom: 7px;
+    align-items: center;
 `
 
 const CreateEvaluation = (props) => {
@@ -52,34 +55,35 @@ const CreateEvaluation = (props) => {
     }
 
     return (
-        <div>
-            <Rate>
+        <Grid container items spacing={1} style={{marginTop:'5px', marginLeft:'10px'}}>
+            <Grid item xs={5} style={{display:'flex', flexDirection:'column'}}>
                 <RateItem>
-                    <p style={{margin:0}}>인품</p>
-                    <Rating value={personality} onChange={(event, newValue) => {setPersonality(newValue)}} icon={<StarRateRoundedIcon/>} emptyIcon={<StarOutlineRoundedIcon/>}></Rating>
+                    <p style={{margin:0, fontSize:'large' ,fontWeight:500}}>인품:</p>
+                    <Rating value={personality} onChange={(event, newValue) => {setPersonality(newValue)}} icon={<StarRateRoundedIcon fontSize='large'/>} emptyIcon={<StarOutlineRoundedIcon fontSize='large'/>}></Rating>
                 </RateItem>
                 <RateItem>
-                    <p style={{margin:0}}>반 분위기</p>
-                    <Rating value={atmosphere} onChange={(event, newValue) => {setAtmosphere(newValue)}} icon={<StarRateRoundedIcon/>} emptyIcon={<StarOutlineRoundedIcon/>}></Rating>
+                    <p style={{margin:0, fontSize:'large' ,fontWeight:500}}>반 분위기:</p>
+                    <Rating value={atmosphere} onChange={(event, newValue) => {setAtmosphere(newValue)}} icon={<StarRateRoundedIcon  fontSize='large'/>} emptyIcon={<StarOutlineRoundedIcon  fontSize='large'/>}></Rating>
                 </RateItem>
                 <RateItem>
-                    <p style={{margin:0}}>프로젝트 지도력</p>
-                    <Rating value={project} onChange={(event, newValue) => {setProject(newValue)}} icon={<StarRateRoundedIcon/>} emptyIcon={<StarOutlineRoundedIcon/>}></Rating>
+                    <p style={{margin:0, fontSize:'large' ,fontWeight:500}}>프로젝트 지도력:</p>
+                    <Rating value={project} onChange={(event, newValue) => {setProject(newValue)}} icon={<StarRateRoundedIcon  fontSize='large'/>} emptyIcon={<StarOutlineRoundedIcon  fontSize='large'/>}></Rating>
                 </RateItem>
                 <RateItem>
-                    <p style={{margin:0}}>강의 전달력</p>
-                    <Rating value={lecture} onChange={(event, newValue) => {setLecture(newValue)}} icon={<StarRateRoundedIcon/>} emptyIcon={<StarOutlineRoundedIcon/>}></Rating>
+                    <p style={{margin:0, fontSize:'large' ,fontWeight:500}}>강의 전달력:</p>
+                    <Rating value={lecture} onChange={(event, newValue) => {setLecture(newValue)}} icon={<StarRateRoundedIcon  fontSize='large'/>} emptyIcon={<StarOutlineRoundedIcon  fontSize='large'/>}></Rating>
                 </RateItem>
                 <RateItem>
-                    <p style={{margin:0}}>상담</p>
-                    <Rating value={consultation} onChange={(event, newValue) => {setConsultation(newValue)}} icon={<StarRateRoundedIcon/>} emptyIcon={<StarOutlineRoundedIcon/>}></Rating>
+                    <p style={{margin:0, fontSize:'large' ,fontWeight:500}}>상담:</p>
+                    <Rating value={consultation} onChange={(event, newValue) => {setConsultation(newValue)}} icon={<StarRateRoundedIcon  fontSize='large'/>} emptyIcon={<StarOutlineRoundedIcon fontSize='large'/>}></Rating>
                 </RateItem>
-            </Rate>
-            <div>
-                <TextField value={studentComment||''} onChange={(event) => {setStudentComment(event.target.value)}} label='한줄평을 입력해주세요.' variant='outlined'></TextField>
-                <button onClick={handleSubmit}>등록</button>
-            </div>
-        </div>
+            </Grid>
+            <Grid item xs={6.6} style={{display:'flex', flexDirection:'column'}}>
+                <TextField sx={{'& .MuiOutlinedInput-input':{height:'100px', backgroundColor:'white'}}} value={studentComment||''} onChange={(event) => {setStudentComment(event.target.value)}} label='한줄평을 입력해주세요.' variant='outlined'></TextField>
+                <div style={{color:'red'}}>*게시 후 삭제, 수정이 불가합니다!</div>
+                <Button style={{marginTop:'10px'}} onClick={handleSubmit} variant='contained'>등록</Button>
+            </Grid>
+        </Grid>
     )
 }
 
