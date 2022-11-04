@@ -151,8 +151,6 @@ const BoardTable = (props) => {
       } else {
         history.push({ pathname: "/board/annoymous/detail", state: article._id });
       }
-    
-
     }
   };
 
@@ -191,7 +189,7 @@ const BoardTable = (props) => {
                     </div>
                     <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
                     <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
-                    <Score style={{}}>
+                    <Score>
                         <Item style={{fontSize: "2px"}}>조회수</Item><Item>{article.hit}</Item>
                         <Item style={{color: "red", fontSize: "2px"}}>추천수</Item><Item style={{color: "red"}}>{article.like}</Item>
                     </Score>
