@@ -173,7 +173,7 @@ const BoardTable = (props) => {
       <Grid>
         <Articles>
           <Title>
-            <H1>자유게시판</H1>
+            <H1>자유 게시판</H1>
           </Title>
           <NewArticle onClick={createArticle}>
             새로운 게시글 작성
