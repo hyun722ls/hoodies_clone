@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String sendMM(String email, int flag) {
+    public String sendMM(String emailId, int flag) {
         try {
             // 1. 발신자 인증
             HttpURLConnection conn = connInit("users/login", null);
@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
             conn = connInit("users/usernames", token);
 
             // request 전송
-            sendData = "[\"" + email.split("@")[0] + "\"]";
+            sendData = "[\"" + emailId + "\"]";
             response = getResponse(conn, sendData);
 
             // response 수신
