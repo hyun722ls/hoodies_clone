@@ -147,25 +147,23 @@ const AnnoymousArticleDetail = () => {
 
   const deleteHandler = async (event) => {
     const response = await deleteArticle(article._id)
-    if (response) {
+    if (response.statusCode === 200) {
       history.push('/board/annonymous');
+    } else {
+      console.log('게시글 삭제 에러')
     }
   }
 
   const deleteCommentHandler = async (commentId) => {
     const response = await deleteComment(article._id, commentId)
-    if (response){
+    if (response.statusCode === 200){
       const response1 = await fetchArticle(article._id)
       setArticle(response1)
       setComments(response1.comments)
       setCommentsMap(annonymousWriter(response1.comments, response1.writer))
       setArticleWriter(response1.writer)
     } else {
-      const response1 = await fetchArticle(article._id)
-      setArticle(response1)
-      setComments(response1.comments)
-      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
-      setArticleWriter(response1.writer)
+      console.log('댓글 삭제 에러')
     }
   };
 
@@ -179,11 +177,7 @@ const AnnoymousArticleDetail = () => {
       setArticleWriter(response1.writer)
     }
     else {
-      const response1 = await fetchArticle(location.state)
-      setArticle(response1)
-      setComments(response1.comments)
-      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
-      setArticleWriter(response1.writer)
+      console.log('댓글 수정 에러')
      
     }
     // const newComments = [...comments];
@@ -202,21 +196,19 @@ const AnnoymousArticleDetail = () => {
       setArticleWriter(response1.writer)
     }
     else {
-      const response1 = await fetchArticle(location.state)
-      setArticle(response1)
-      setComments(response1.comments)
-      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
-      setArticleWriter(response1.writer)
+      console.log('댓글 생성 에러')
     }
   };
 
   const likeHandler = async (event) => {
     event.preventDefault()
     const response = await fetchLike(location.state)
-    if (response){
+    if (response.statusCode === 200){
       const response1 = await fetchArticle(location.state)
       setArticle(response1)
       setComments(response1.comments)
+      setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+      setArticleWriter(response1.writer)
       let tmpLike = Object.keys(response1.contributor).includes(localStorage.getItem('hashNickname'))
       console.log(response1.contributor[localStorage.getItem('hashNickname')])
       if (tmpLike === true && response1.contributor[localStorage.getItem('hashNickname')]){
@@ -226,9 +218,7 @@ const AnnoymousArticleDetail = () => {
       }
     }
     else {
-      const response1 = await fetchArticle(location.state)
-      setArticle(response1)
-      setComments(response1.comments)
+      console.log('좋아요 에러')
     }
   }
 
@@ -238,10 +228,12 @@ const AnnoymousArticleDetail = () => {
       alert('중복된 신고입니다.')
     } else {
       const response = await reportArticle(location.state)
-      if (response === 200){
+      if (response.statusCode === 200){
         const response1 = await fetchArticle(location.state)
         setArticle(response1)
         setComments(response1.comments)
+        setCommentsMap(annonymousWriter(response1.comments, response1.writer))
+        setArticleWriter(response1.writer)
       }
       else {
         console.log('신고 실패')
