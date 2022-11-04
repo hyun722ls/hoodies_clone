@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import {changeAnnonymous, checkBoradType} from "../../../common/refineData/anonymousWriter";
 
 const Articles = styled.div`
+  width: 100%;
   position: relative;
   grid-column: 1/3;
   grid-row: 1;
