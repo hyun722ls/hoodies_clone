@@ -61,6 +61,7 @@ const ArticleH3 = styled.h3`
   overflow: hidden;
   text-overflow: ellipsis;
 `
+
 const Title = styled.div`
   padding: 16px;
   border: 1px solid #EAE3D2;
