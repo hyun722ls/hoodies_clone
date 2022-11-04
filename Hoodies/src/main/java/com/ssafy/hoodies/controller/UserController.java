@@ -182,9 +182,10 @@ public class UserController {
 
         try {
             User user = userRepository.findById(email).get();
+            String emailId = email.split("@")[0];
 
             String salt = user.getSalt();
-            String password = userService.sendMM(email, 2);
+            String password = userService.sendMM(emailId, 2);
             String encryptPassword = util.getEncryptPassword(password, salt);
 
             if (encryptPassword == null) {
