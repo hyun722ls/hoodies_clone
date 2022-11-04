@@ -286,9 +286,9 @@ const ArticleDetail = () => {
                 </Tooltip>
               <Item>조회수 : {article.hit}</Item>
               <Item>|</Item>
-                <Tooltip title="신고하기">
+                
                     {localStorage.getItem('nickname') !== article.writer && <TouchAppIcon onClick={reportHandler} />}
-                </Tooltip>
+              
 
             </Score>
             <ArticleHr />
