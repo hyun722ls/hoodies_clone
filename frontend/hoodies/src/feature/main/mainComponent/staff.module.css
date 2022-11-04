@@ -17,13 +17,12 @@
 .card {
   display: inline-grid;
   width: 320px;
-  text-align: center;
-  margin: 0 1rem;
-  position: relative;
   cursor: pointer;
+  border-style: inset;
+  borderColor: divider;
   /*padding: 2rem 1.5rem;*/
-  overflow: hidden;
-  border-radius: 2rem;
+  /*overflow: hidden;*/
+  /*border-radius: 2rem;*/
 }
 
 /*.card h2 {*/
