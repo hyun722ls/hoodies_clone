@@ -69,7 +69,7 @@ const EvenPro = () => {
       <div>
         <Header />
         <h4>
-          {staff.writer} {staffType} ({staff.contributor.length}명의 평가)
+          {staff.writer} {staffType} {comments.length}명의 평가
         </h4>
         <p>이메일 : {staff.email}</p>
         <p>설명 : {staff.etc}</p>
@@ -78,7 +78,6 @@ const EvenPro = () => {
         </div>
         <EvaulationComment
           comments={comments}
-          deleteCommentHandler={deleteCommentHandler}
         />
         {/* <div style={{position:'relative'}}> 
           <div style={{display:'flex', flexWrap:'wrap', marginLeft:'7vw'}}>
@@ -88,7 +87,7 @@ const EvenPro = () => {
             <img src={bottomright} style={{height:'20%', width:'45%',margin:'15px'}} alt=''></img>
           </div>
         </div> */}
-          <div style={{display:'flex', position:'absolute',left:'4.5%' ,top:'25%' ,'justifyContent':'center', height:'70vh', width:'70%'}}>
+          <div style={{display:'flex','justifyContent':'center', height:'70vh', width:'70%'}}>
             <EvaluationPentagon staff={staff}></EvaluationPentagon>
           </div>
         {/* <BoxOne style={{position:'relative'}}>

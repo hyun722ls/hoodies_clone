@@ -1,11 +1,20 @@
 import { useState } from "react";
 import { Rating } from "@mui/material";
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 
 const EvaulationComment = (props) => {
   const [modifyForm, setModifyForm] = useState(false);
   const [modifyContent, setModifyContent] = useState("");
   const [commentId, setCommentId] = useState(null);
   const [newContent, setNewContent] = useState("");
+  const [like, setLike] = useState(false);
+
+  function handleLike(){
+    //다 불켜짐
+    setLike(!like)
+    console.log(like)
+  }
 
   // const openModifyForm = (id, content) => {
   //   setCommentId(id);
@@ -45,16 +54,21 @@ const EvaulationComment = (props) => {
             <li>
               {comment.content}, {comment.writer}, {comment.createdAt}, {comment.like}, {comment.dislike}
             </li>
+            <li>
+              {/* <ThumbUpAltIcon></ThumbUpAltIcon> */}
+              {like ? <ThumbUpAltIcon onClick={handleLike}/> : <ThumbUpOffAltIcon onClick={handleLike}/>}
+            </li>
             <Rating value={comment.score[0]} readOnly></Rating>
             <Rating value={comment.score[1]} readOnly></Rating>
             <Rating value={comment.score[2]} readOnly></Rating>
             <Rating value={comment.score[3]} readOnly></Rating>
             <Rating value={comment.score[4]} readOnly></Rating>
-            {localStorage.getItem('nickname') === comment.writer ? (
+
+            {/* {localStorage.getItem('nickname') === comment.writer ? (
               <button onClick={() => props.deleteCommentHandler(comment.id)}>
               삭제
               </button>
-            ) : (null)}
+            ) : (null)} */}
             {/* <button onClick={() => props.deleteCommentHandler(comment.id)}>
               삭제
             </button> */}
