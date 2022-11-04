@@ -20,7 +20,7 @@ public class Mentor {
 
     private String email; // 이메일
 
-    private String career; // 경력사항
+    private List<String> career; // 경력사항
 
     private String etc; // 기타정보
 
