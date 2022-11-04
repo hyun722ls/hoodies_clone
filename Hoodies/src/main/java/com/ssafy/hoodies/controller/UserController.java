@@ -1,6 +1,5 @@
 package com.ssafy.hoodies.controller;
 
-import com.mongodb.client.result.UpdateResult;
 import com.ssafy.hoodies.model.entity.Board;
 import com.ssafy.hoodies.model.entity.User;
 import com.ssafy.hoodies.model.entity.UserAuth;
@@ -21,7 +20,6 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -69,7 +67,7 @@ public class UserController {
         String emailId = email.split("@")[0];
 
         // 기존 user가 있는 경우
-        if(!userRepository.findByEmailContains(emailId).isEmpty()){
+        if (!userRepository.findByEmailStartsWith(emailId + "@").isEmpty()) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
@@ -98,7 +96,7 @@ public class UserController {
         String emailId = email.split("@")[0];
 
         // 기존 user가 있는 경우
-        if(!userRepository.findByEmailContains(emailId).isEmpty()){
+        if (!userRepository.findByEmailStartsWith(emailId + "@").isEmpty()) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
