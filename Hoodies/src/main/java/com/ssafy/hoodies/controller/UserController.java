@@ -66,14 +66,15 @@ public class UserController {
     @GetMapping("/auth/{email}")
     public Map<String, Object> sendMM(@PathVariable String email) {
         Map<String, Object> resultMap = new HashMap<>();
+        String emailId = email.split("@")[0];
 
         // 기존 user가 있는 경우
-        if (userRepository.findById(email).isPresent()) {
+        if(!userRepository.findByEmailContains(emailId).isEmpty()){
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
 
-        String authcode = userService.sendMM(email, 1);
+        String authcode = userService.sendMM(emailId, 1);
         if (authcode.equals("fail")) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
@@ -94,20 +95,16 @@ public class UserController {
         Map<String, Object> resultMap = new HashMap<>();
         String email = map.getOrDefault("email", "");
         String authcode = map.getOrDefault("authcode", "");
-
-        System.out.println("auth map : " + map);
+        String emailId = email.split("@")[0];
 
         // 기존 user가 있는 경우
-        if (userRepository.findById(email).isPresent()) {
-            System.out.println("기존 유저 있음");
+        if(!userRepository.findByEmailContains(emailId).isEmpty()){
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
 
-
         UserAuth userAuth = userAuthRepository.findByEmailAndAuthcode(email, authcode);
         if (userAuth == null) {
-            System.out.println("인증 코드 없음");
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
@@ -117,7 +114,6 @@ public class UserController {
 
         // 제한시간이 만료되었을 경우
         if (!nowTime.before(time)) {
-            System.out.println("인증 시간 만료");
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }

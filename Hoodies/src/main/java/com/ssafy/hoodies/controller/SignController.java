@@ -49,9 +49,16 @@ public class SignController {
     @PostMapping
     public Map<String, Object> signup(@RequestBody User user, HttpServletResponse response) {
         Map<String, Object> resultMap = new HashMap<>();
+        String emailId = user.getEmail().split("@")[0];
 
         // 기존 user가 있는 경우
-        if (userRepository.findById(user.getEmail()).isPresent()) {
+        if (!userRepository.findByEmailContains(emailId).isEmpty()) {
+            resultMap.put("statusCode", FAIL);
+            return resultMap;
+        }
+
+        // 기존 닉네임이 있는 경우
+        if(userRepository.findByNickname(user.getNickname()) != null) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
