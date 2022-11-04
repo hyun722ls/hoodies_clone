@@ -135,7 +135,9 @@ public class UserController {
             return resultMap;
         }
 
-        String authcode = userService.sendMM(email, 1);
+        String emailId = email.split("@")[0];
+
+        String authcode = userService.sendMM(emailId, 1);
         if (authcode.equals("fail")) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
