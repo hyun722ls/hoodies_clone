@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import {changeAnnonymous, checkBoradType} from "../../../common/refineData/anonymousWriter";
 import Grid from '@mui/material/Grid';
+import { blockCnt } from "../../../common/api/url";
 
 
 const Articles = styled.div`
@@ -140,9 +141,8 @@ const ArticleHr = styled.hr`
 
 const BoardTable = (props) => {
   const history = useHistory();
-
   const detailPageHandler = (article) => {
-      if (article.reporter?.length > 3){
+    if (article.reporter?.length > blockCnt){
       alert('신고 누적된 게시글입니다.')
     } else {
       if (article.type === 1){
