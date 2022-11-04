@@ -96,9 +96,6 @@ const Score = styled.ul`
 const Item = styled.li`
   margin: 0;
   float: left;
-  margin-left: 0px;
-  padding: 0 2px;
-  padding-left: 2px;
   height: 20px;
   line-height: 20px;
   font-size: 12px;
