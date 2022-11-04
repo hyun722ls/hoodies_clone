@@ -15,7 +15,7 @@ import { Box } from "@mui/material";
 const EvaluationMain = () => {
   const [selectedData, setSelectedData] = useState([]);
   const [data, setData] = useState([]);
-  const [selectedTab, setSelectedTab] = useState('all');
+  const [selectedTab, setSelectedTab] = useState(0);
   const history = useHistory();
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const EvaluationMain = () => {
     setSelectedTab(newValue)
     console.log('selectedTab:',selectedTab)
     console.log('flag:',flag);
-    if (flag === 'all') {
+    if (flag === 0) {
       setSelectedData(data);
     } else {
       const selectedList = await getStaffListByType(flag)
@@ -54,7 +54,7 @@ const EvaluationMain = () => {
       <Box sx={{width:'100%', borderBottom: 1, borderColor:'gray'}}>
         <Tabs value={selectedTab} onChange={handleDropProduct}>
           {CATEGORY_LIST.map((option) => (
-            <Tab sx={{fontFamily:'IBM Plex Sans KR', justifyContent:'center'}} key={option.value} label={option.label} value={option.value}></Tab>
+            <Tab sx={{fontFamily:'IBM Plex Sans KR', justifyContent:'center'}} key={option.value} label={option.label} value={option.id}></Tab>
           ))}
         </Tabs>
       </Box>
