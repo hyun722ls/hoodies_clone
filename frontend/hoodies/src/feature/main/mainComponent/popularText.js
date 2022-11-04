@@ -93,9 +93,9 @@ const Score = styled.ul`
 const Item = styled.li`
   margin: 0;
   float: left;
-  margin-left: 8px;
+  margin-left: 0px;
   padding: 0 2px;
-  padding-left: 15px;
+  padding-left: 2px;
   height: 20px;
   line-height: 20px;
   font-size: 12px;
@@ -153,21 +153,22 @@ const PopularText = (props) => {
         {props.popularText.map((article) => {
           return (
               <Article key={article._id}>
-                <ArticleA onClick={() => {
-                  detailPageHandler(article);
-                }}>
-                  {isFilter(article) ?
-                      <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
-                      : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
-                    <ArticleH3>{checkBoradType(article)}</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
-                    <br/>
-                  <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
-                  <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
-                  <Score>
-                    <Item>{article.hit}</Item>
-                    <Item>{article.like}</Item>
-                  </Score>
-                  <ArticleHr/>
+                  <ArticleA onClick={() => {
+                      detailPageHandler(article);
+                  }}>
+                      <div style={{display: "flex", justifyContent: "space-between"}}>
+                          {isFilter(article) ?
+                              <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
+                              : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
+                          <ArticleH3 style={{color: "darkblue"}}>-{checkBoradType(article)}-</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
+                      </div>
+                      <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
+                      <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
+                      <Score style={{}}>
+                          <Item style={{fontSize: "2px"}}>조회수</Item><Item>{article.hit}</Item>
+                          <Item style={{color: "red", fontSize: "2px"}}>추천수</Item><Item style={{color: "red"}}>{article.like}</Item>
+                      </Score>
+                      <ArticleHr/>
                 </ArticleA>
               </Article>
 
