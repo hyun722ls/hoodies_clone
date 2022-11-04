@@ -276,7 +276,7 @@ const AnnoymousArticleDetail = () => {
               <Item>조회수 : {article.hit}</Item>
               <Item>|</Item>
                 <Tooltip title="신고하기">
-                    <TouchAppIcon onClick={reportHandler} />
+                    {localStorage.getItem('hashNickname') === article.writer && <TouchAppIcon onClick={reportHandler} />}
                 </Tooltip>
             
             </Score>
