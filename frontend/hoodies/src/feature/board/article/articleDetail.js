@@ -223,7 +223,7 @@ const ArticleDetail = () => {
         const response1 = await fetchArticle(location.state)
         setArticle(response1)
         setComments(response1.comments)
-        alert('신고완료')
+        alert('게시글이 신고되었습니다.')
       }
       else {
         console.log('신고 실패')
