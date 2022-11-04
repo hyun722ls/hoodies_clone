@@ -60,8 +60,7 @@ const BoardMain = () => {
     <div>
       <Header />
         <Grid container spacing={10}>
-          <Grid item xs ={0} md={3}>
-          빈공간
+          <Grid item xs ={0} md={2}>
           </Grid>
           <Grid item xs ={12} md={6}>
             <BoardTable articles={articles} />
@@ -77,6 +76,8 @@ const BoardMain = () => {
           </Grid>
           <Grid item xs ={12} md={2}>
             <PopularTexts popularTexts={popularTexts} />
+          </Grid>
+          <Grid item xs ={0} md={2}>
           </Grid>
         </Grid>
     </div>
