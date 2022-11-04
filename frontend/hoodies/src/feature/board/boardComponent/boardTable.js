@@ -142,7 +142,7 @@ const BoardTable = (props) => {
   const history = useHistory();
 
   const detailPageHandler = (article) => {
-      if (article.reporter?.length > blockCnt){
+      if (article.reporter?.length > 3){
       alert('신고 누적된 게시글입니다.')
     } else {
       if (article.type === 1){
