@@ -7,6 +7,8 @@ import Pagination from "react-js-pagination";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import {changeAnnonymous, checkBoradType} from "../../../common/refineData/anonymousWriter";
+import Grid from '@mui/material/Grid';
+
 
 const Articles = styled.div`
   width: 100%;
@@ -159,37 +161,39 @@ const BoardTable = (props) => {
   };
 
   return props.articles.length ? (
-    <Articles>
-      <Title>
-        <H1>자유게시판</H1>
-      </Title>
-      <NewArticle onClick={createArticle}>
-        새로운 게시글 작성
-        <NewIcon />
-      </NewArticle>
-      {props.articles.map((article) => {
-        return (
-          <Article key={article._id}>
-            <ArticleA onClick={() => {
-              detailPageHandler(article);
-            }}>
-                <div style={{display: "flex", justifyContent: "space-between"}}>
-                    {isFilter(article) ?
-                        <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
-                        : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
-                </div>
-                <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
-                <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
-                <Score style={{}}>
-                    <Item style={{fontSize: "2px"}}>조회수</Item><Item>{article.hit}</Item>
-                    <Item style={{color: "red", fontSize: "2px"}}>추천수</Item><Item style={{color: "red"}}>{article.like}</Item>
-                </Score>
-                <ArticleHr/>
-            </ArticleA>
-          </Article>
-        );
-      })}
-    </Articles>
+      <Grid item sx={{ margin: '0px', marginRight: '0px'}} xs={12} md={6}>
+        <Articles>
+          <Title>
+            <H1>자유게시판</H1>
+          </Title>
+          <NewArticle onClick={createArticle}>
+            새로운 게시글 작성
+            <NewIcon />
+          </NewArticle>
+          {props.articles.map((article) => {
+            return (
+              <Article key={article._id}>
+                <ArticleA onClick={() => {
+                  detailPageHandler(article);
+                }}>
+                    <div style={{display: "flex", justifyContent: "space-between"}}>
+                        {isFilter(article) ?
+                            <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
+                            : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
+                    </div>
+                    <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
+                    <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
+                    <Score style={{}}>
+                        <Item style={{fontSize: "2px"}}>조회수</Item><Item>{article.hit}</Item>
+                        <Item style={{color: "red", fontSize: "2px"}}>추천수</Item><Item style={{color: "red"}}>{article.like}</Item>
+                    </Score>
+                    <ArticleHr/>
+                </ArticleA>
+              </Article>
+            );
+          })}
+        </Articles>
+      </Grid>
   ) : (
     <Articles>
       <Title>
