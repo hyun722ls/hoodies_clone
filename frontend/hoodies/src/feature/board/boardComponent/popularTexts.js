@@ -150,7 +150,7 @@ const PopularTexts = (props) => {
   };
 
   return props.popularTexts.length ? (
-      <Grid xs={12} md={3}>
+      <Grid item xs={12} md={3}>
         <RightArticles>
           <Title>
             <H2>인기게시글</H2>
