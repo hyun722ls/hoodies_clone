@@ -173,7 +173,7 @@ const BoardTable = (props) => {
   };
 
   return props.articles.length ? (
-      <Grid>
+      <Grid sx={{ paddingTop: "0"}}>
         <Articles>
           <Title>
             <H1>자유게시판</H1>
