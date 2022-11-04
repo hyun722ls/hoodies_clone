@@ -1,9 +1,9 @@
-import axios from "axios";
+import axios1 from "axios";
 import { API_URL } from "../../common/api/url"
 
 export const fetchPreview = async () => {
     try {
-        const response = await axios.get(API_URL + 'preview/free', {headers: {
+        const response = await axios1.get(API_URL + 'preview/free', {headers: {
                 'accessToken': localStorage.getItem('token')
             }})
         return response.data
@@ -14,7 +14,7 @@ export const fetchPreview = async () => {
 
 export const fetchPopularview = async () => {
     try {
-        const response = await axios.get(API_URL + 'preview/popular', {headers: {
+        const response = await axios1.get(API_URL + 'preview/popular', {headers: {
                 'accessToken': localStorage.getItem('token')
             }})
         return response.data
@@ -25,7 +25,7 @@ export const fetchPopularview = async () => {
 
 export const fetchStaffview = async () => {
     try {
-        const response = await axios.get(API_URL + 'preview/mentor', {headers: {
+        const response = await axios1.get(API_URL + 'preview/mentor', {headers: {
                 'accessToken': localStorage.getItem('token')
             }})
         return response.data
