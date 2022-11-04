@@ -2,6 +2,7 @@ import { useHistory } from "react-router-dom";
 import { blockArticle } from "../../../common/refineData/blockArticle";
 import styled from "styled-components";
 import { changeAnnonymous, checkBoradType } from "../../../common/refineData/anonymousWriter";
+import { timeConventer } from "../../../common/refineData/refineTime";
 
 const RightArticles = styled.div`
   grid-column: 3/4;
@@ -70,6 +71,18 @@ const H2 = styled.h2`
   color: #1D3979;
   margin: 0;
 `
+
+const ArticleTime = styled.time`
+  margin: 0;
+  padding: 0;
+  float: left;
+  margin-right: 5px;
+  height: 15px;
+  line-height: 15px;
+  font-size: 11px;
+  color: #a6a6a6;
+`
+
 const ArticleHr = styled.hr`
   margin: 0;
   padding: 0;
@@ -110,11 +123,19 @@ const PopularTexts = (props) => {
                 onClick={() => {
                   detailPageHandler(article);
                 }}>
-                {isFilter(article) ?
-                    <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
-                    : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
-                <ArticleH3>{checkBoradType(article)}</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
-                <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
+                <div style={{justifyContent: "space-between"}}>
+                  <div>
+                    {isFilter(article) ?
+                        <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
+                        : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
+                    <br/>
+                    <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
+                    <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
+                  </div>
+                  <div>
+                    <ArticleH3>{checkBoradType(article)}</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
+                  </div>
+                </div>
                 <ArticleHr />
               </ArticleA>
             </Article>
