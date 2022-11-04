@@ -8,7 +8,9 @@ import lombok.Data;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @ApiModel
@@ -32,6 +34,8 @@ public class CommentDto {
 
     private int type;
 
+    private Set<String> reporter;
+
     public Comment toEntity(){
         String now = util.getTimeStamp();
         Comment comment = Comment.builder()
@@ -42,6 +46,7 @@ public class CommentDto {
                         .modifiedAt(now)
                         .replies(new ArrayList<>())
                         .type(type)
+                        .reporter(new HashSet<>())
                         .build();
         return comment;
     }
