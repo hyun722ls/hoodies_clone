@@ -12,7 +12,7 @@ const RightArticles = styled.div`
   //grid-column: 3/4;
   ////grid-row: 1;
   //width: 320px;
-  margin-bottom: auto;
+  margin: 10px;
   background-color: #F9F5EB;
 `
 const Article = styled.article`
