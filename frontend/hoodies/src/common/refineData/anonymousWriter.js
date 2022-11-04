@@ -48,7 +48,7 @@ export const changeAnonymous = (article) => {
 }
 
 
-export const checkBoradType = (article) => {
+export const checkBoardType = (article) => {
     if(article.type === 2){
         return '익명게시판'
     } else if(article.type === 1){

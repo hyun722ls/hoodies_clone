@@ -3,7 +3,7 @@ import { blockArticle } from "../../../common/refineData/blockArticle";
 import {timeConventer} from "../../../common/refineData/refineTime"
 import CreateIcon from "@mui/icons-material/Create";
 import styled from "styled-components";
-import {changeAnonymous, checkBoradType} from "../../../common/refineData/anonymousWriter";
+import {changeAnonymous, checkBoardType} from "../../../common/refineData/anonymousWriter";
 import Grid from '@mui/material/Grid';
 import { blockCnt } from "../../../common/api/url";
 import Swal from "sweetalert2";
