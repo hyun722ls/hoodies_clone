@@ -2,7 +2,7 @@ import { blockCnt } from "../api/url"
 
 export const blockArticle = (article, tmpCategory) => {
     const category = JSON.parse(tmpCategory)
-    const reportCnt = article.reporter?.legnth
+    const reportCnt = article.reporter?.length
     if (reportCnt > blockCnt){
         return '신고 누적된 게시글 입니다.'
     } else {
@@ -59,7 +59,7 @@ export const blockArticle = (article, tmpCategory) => {
 
 export const blockComment = (comment) => {
     const category = JSON.parse(comment.category)
-    if (comment.reporter?.legnth > 2 ){
+    if (comment.reporter?.length > blockCnt ){
         return '신고 누적된 댓글입니다.'
     } else{
         if (category.commentResult === 'clean'){
