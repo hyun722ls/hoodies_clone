@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { blockComment } from "../../../common/refineData/blockArticle";
 
 const StyledCommentList = styled.ul`
   margin: 8px 0;
@@ -131,7 +132,7 @@ const CommentList = (props) => {
                       placeholder="댓글을 입력하세요"
                     />
                   </form>
-                ) : (comment.content)}
+                ) : (blockComment(comment))}
                 </StyledContent>
                 <ButtonList>
                   {modifyForm && commentId === comment._id && (<StyledButton type="submit" form="Mod">댓글 수정</StyledButton>)}
