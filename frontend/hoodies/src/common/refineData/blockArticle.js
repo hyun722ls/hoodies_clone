@@ -21,7 +21,7 @@ export const blockArticle = (article, tmpCategory) => {
         return `게시글에 욕설이 포함되어 있습니다.`
       } else {
         if (category.contentResult === '성소수자' || category.contentResult === '종교') {
-            return `게시글에 ${category.titleResuit} 비하 표현이 포함되어 있습니다.`
+            return `게시글에 ${category.contentResuit} 비하 표현이 포함되어 있습니다.`
         } else if(category.contentResult === '여성/가족') {
             return '게시글에 여성 혐오 표현이 포함되어 있습니다.'
         } else if (category.contentResult === '남성'){
@@ -35,7 +35,7 @@ export const blockArticle = (article, tmpCategory) => {
             return `게시글에 욕설이 포함되어 있습니다.`
           } else {
             if (category.contentResult === '성소수자' || category.contentResult === '종교') {
-                return `게시글에 ${category.titleResuit} 비하 표현이 포함되어 있습니다.`
+                return `게시글에 ${category.contentResuit} 비하 표현이 포함되어 있습니다.`
             } else if(category.contentResult === '여성/가족') {
                 return '게시글에 여성 혐오 표현이 포함되어 있습니다.'
             } else if (category.contentResult === '남성'){
