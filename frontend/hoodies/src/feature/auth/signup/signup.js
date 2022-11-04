@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useHistory, Link, Route } from "react-router-dom";
-import CustomModal from "../../../common/UI/modal/customModal";
 import { authMM, checkNickname, sendMM, signup } from "../authApi";
 import styled from "styled-components";
+import Swal from "sweetalert2";
 
 const Container = styled.div`
   position: absolute;
@@ -136,11 +136,60 @@ const Signup = () => {
 
   const checkEmailHandler = async (event) => {
     event.preventDefault();
-    const response = await sendMM(email) 
-    if (response.statusCode === '200'){
-      setModalOpen(true);
+    if (!email) {
+      Swal.fire({
+        icon: 'error',
+        title: '이메일을 입력해주세요.',
+      })
     } else {
-      alert('이메일을 잘못 입력하셨습니다.')
+      const response = await sendMM(email) 
+      if (response.statusCode === '200'){
+        let timerInterval
+        setEmailCheck(false)
+        Swal.fire({
+          title: 'Mettermost에 보낸<br> 코드를 입력해 주세요.',
+          html: '<min></min> : <sec></sec>',
+          input: 'text',
+          timer: 180000,
+          timerProgressBar: true,
+          allowOutsideClick: false,
+          showCancelButton: true,
+          confirmButtonColor: '#EAE3D2',
+          confirmButtonText: '확인',
+          cancelButtonText: '취소',
+          reverseButtons: true,
+          preConfirm: async (value) => {
+            const response = await authMM(email, value)
+            if (!value) {
+              Swal.showValidationMessage('코드를 입력해 주세요.')
+            } else if (response.statusCode === '200') {
+              setEmail(email);
+              setEmailCheck(true)
+            } else {
+              Swal.showValidationMessage('잘못된 코드입니다.')
+            }
+            return { value }
+          },
+          didOpen: () => {
+            const sec = Swal.getHtmlContainer().querySelector('sec')
+            timerInterval = setInterval(() => {
+              sec.textContent = parseInt(Swal.getTimerLeft() / 1000) % 60
+            }, 1000)
+            const min = Swal.getHtmlContainer().querySelector('min')
+            timerInterval = setInterval(() => {
+              min.textContent = parseInt(Swal.getTimerLeft() / 60000)
+            }, 1000)
+          },
+          willClose: (isConfirmed) => {
+            clearInterval(timerInterval)
+          }
+        })
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: '잘못된 사용자입니다.',
+        })
+      }
     }
   };
 
@@ -181,29 +230,24 @@ const Signup = () => {
       if (response.cnt === 0 && response.statusCode === "200"){
         setIsNicknameDuplicated(true);
         setNickname(nickname);
-        alert("닉네임 사용가능");
+        Swal.fire({
+          icon: 'success',
+          title: '사용가능한 닉네임입니다.',
+        })
 
+      } else if (response.cnt === 1 && response.statusCode === "200"){
+        Swal.fire({
+          icon: 'error',
+          title: '중복된 닉네임입니다.',
+        })
       } else {
-        alert("서버 에러")
+        Swal.fire({
+          icon: 'error',
+          title: '에러가 발생했습니다.',
+        })
       }
     }
   };
-
-  let modalAuthCodeForm = (
-    <form onSubmit={authCodeTransferHandler}>
-      <span>보낸 코드을 확인하세요!</span>
-      <div>
-        <input
-          type="textarea"
-          value={authCode}
-          onChange={authCodeChangeHandler}
-        />
-      </div>
-      <div>
-        <button type="submit">전송</button>
-      </div>
-    </form>
-  );
 
   const signupHandler = async (event) => {
     event.preventDefault();
@@ -249,7 +293,7 @@ const Signup = () => {
             value={email}
             disabled={emailCheck}
             onChange={emailChangeHandler}
-            type="text"
+            type="email"
             placeholder="이메일"
           />
           <InputBtn onClick={checkEmailHandler}>
@@ -280,9 +324,6 @@ const Signup = () => {
         </div>
       </Form>
       <BtnCancle to="/login">뒤로</BtnCancle>
-      <CustomModal open={modalOpen} close={closeModal} header="">
-        {modalAuthCodeForm}
-      </CustomModal>
     </Container>
   );
 };

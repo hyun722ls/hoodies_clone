@@ -4,6 +4,7 @@ import { blockArticle } from "../../../common/refineData/blockArticle";
 import { timeConventer } from "../../../common/refineData/refineTime";
 import Grid from '@mui/material/Grid';
 import styled from "styled-components";
+import { changeAnnonymous, checkBoradType } from "../../../common/refineData/anonymousWriter";
 
 const Article = styled.article`
   margin-bottom: -1px;
@@ -158,9 +159,9 @@ const PopularText = (props) => {
                   {isFilter(article) ?
                       <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
                       : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
-                    <ArticleH3>{article.type}</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
+                    <ArticleH3>{checkBoradType(article)}</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
                   <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
-                  <ArticleH3>{article.writer}</ArticleH3>
+                  <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
                   <Score>
                     <Item>{article.hit}</Item>
                     <Item>{article.like}</Item>

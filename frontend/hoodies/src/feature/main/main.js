@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { previewPros } from "../../common/data/dummyData";
+import { DUMMY_STAFF } from "../../common/data/dummyData";
 import Grid from '@mui/material/Grid';
 import Header from "../../common/UI/header/header";
 import WeeklyMenu from "./mainComponent/weeklyMenu"
@@ -40,34 +40,36 @@ const Main = () => {
       const response1 = await fetchPopularview()
       const responseStaffs = await fetchStaffview()
 
-    setJobInfo(tempJobInfo)
-    setArticles(response)    
-    setPopularText(response1)
-    setStaffs(responseStaffs)
-    // setStaffs(previewPros)
-    setIsLoading(false);
-    })()
-  }, []);
-  return (
-    !isLoading &&
-    articles &&
-    popularText &&
-    staffs && (
-        <div>
-          <Header />
-              <Grid>
-                <WeeklyMenu />
-                <JobInfo jobInfo={jobInfo}/>
-                <Grid container spacing={3} className={GRID.container}>
-                  <Articles articles={articles} />
-                  <PopularText popularText={popularText} />
+      setJobInfo(tempJobInfo)
+      setArticles(response)
+      setPopularText(response1)
+      setStaffs(DUMMY_STAFF)
+      // setStaffs(responseStaffs)
+      // setStaffs(previewPros)
+      setIsLoading(false);
+      })()
+    }, []);
+    return (
+      !isLoading &&
+      articles &&
+      popularText &&
+      staffs &&
+      (
+          <div>
+            <Header />
+                <Grid>
+                  <WeeklyMenu />
+                  <JobInfo jobInfo={jobInfo}/>
+                  <Grid container spacing={3} className={GRID.container}>
+                    <Articles articles={articles} />
+                    <PopularText popularText={popularText} />
+                  </Grid>
+                  <Staffs staffs={staffs} />
                 </Grid>
-                <Staffs staffs={staffs} />
-              </Grid>
-              <button onClick={reissueToken}>토큰 재발행</button>
-        </div>
-    )
-  );
-};
+                <button onClick={reissueToken}>토큰 재발행</button>
+          </div>
+      )
+    );
+  };
 
-export default Main;
+  export default Main;
