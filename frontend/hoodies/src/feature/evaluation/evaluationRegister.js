@@ -47,7 +47,7 @@ const CreateEvaluation = (props) => {
     } else {
       Swal.fire({
         title: "이미 평가글을 올렸습니다.",
-        icon: "fail",
+        icon: "warning",
         timer: 2000,
         timerProgressBar: true,
       });

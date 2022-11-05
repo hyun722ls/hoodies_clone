@@ -1,14 +1,23 @@
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../../common/UI/header/header";
-import {createComment, deleteArticle, deleteComment, fetchArticle, fetchLike, modifyComment, reportArticle, reportComment} from "../boardAPI";
+import {
+  createComment,
+  deleteArticle,
+  deleteComment,
+  fetchArticle,
+  fetchLike,
+  modifyComment,
+  reportArticle,
+  reportComment,
+} from "../boardAPI";
 import CommentList from "./commentList";
 import styled from "styled-components";
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import TouchAppIcon from '@mui/icons-material/TouchApp';
-import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import TouchAppIcon from "@mui/icons-material/TouchApp";
+import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import Swal from "sweetalert2";
 
 const Articles = styled.div`
@@ -17,13 +26,13 @@ const Articles = styled.div`
   left: 24px;
   margin: 24px auto;
   width: 780px;
-`
+`;
 const ArticleHead = styled.div`
   margin-bottom: -1px;
   box-sizing: border-box;
-  border-bottom: 2px solid #EAE3D2;
+  border-bottom: 2px solid #eae3d2;
   background-color: #fff;
-`
+`;
 const ArticleH2 = styled.h2`
   margin: 0;
   margin-bottom: 5px;
@@ -33,7 +42,7 @@ const ArticleH2 = styled.h2`
   text-overflow: ellipsis;
   font-weight: bold;
   font-size: 16px;
-`
+`;
 const ArticleH3 = styled.h3`
   margin: 0;
   margin-right: 5px;
@@ -46,7 +55,7 @@ const ArticleH3 = styled.h3`
   font-weight: normal;
   letter-spacing: 0;
   white-space: nowrap;
-`
+`;
 const ArticleTime = styled.time`
   margin: 0;
   padding: 0;
@@ -56,7 +65,7 @@ const ArticleTime = styled.time`
   line-height: 15px;
   font-size: 11px;
   color: #a6a6a6;
-`
+`;
 const ArticleHr = styled.hr`
   margin: 0;
   padding: 0;
@@ -64,13 +73,13 @@ const ArticleHr = styled.hr`
   height: 0;
   border: 0;
   width: 100%;
-`
+`;
 const Score = styled.ul`
   margin: 0;
   padding: 0;
   float: right;
   list-style: none;
-`
+`;
 const Item = styled.li`
   margin: 0;
   float: left;
@@ -83,61 +92,61 @@ const Item = styled.li`
   background-repeat: no-repeat;
   background-position: left center;
   background-size: 11px 11px;
-`
-const ArticleBody= styled.div`
+`;
+const ArticleBody = styled.div`
   min-height: 320px;
   box-sizing: border-box;
-  border-bottom: 2px solid #EAE3D2;
+  border-bottom: 2px solid #eae3d2;
   background-color: #fff;
-`
+`;
 
 const StyledButton = styled.button`
   margin: 0 4px;
   min-width: 80px;
   height: 32px;
-  border: 1px solid #F9F5EB;
-  background-color: #EAE3D2;
-  color: #1D3979;
+  border: 1px solid #f9f5eb;
+  background-color: #eae3d2;
+  color: #1d3979;
   border-radius: 8px;
   font-weight: bold;
   &:hover {
-    background-color: #D9D2C3;
+    background-color: #d9d2c3;
     cursor: pointer;
   }
-`
+`;
 const RightButton = styled.button`
   float: right;
   margin: 0 4px;
   min-width: 80px;
   height: 32px;
-  border: 1px solid #F9F5EB;
-  background-color: #EAE3D2;
-  color: #1D3979;
+  border: 1px solid #f9f5eb;
+  background-color: #eae3d2;
+  color: #1d3979;
   border-radius: 8px;
   font-weight: bold;
   &:hover {
-    background-color: #D9D2C3;
+    background-color: #d9d2c3;
     cursor: pointer;
   }
-`
+`;
 const BtnCancle = styled(RightButton)`
-  background-color: #F9F5EB;
+  background-color: #f9f5eb;
   &:hover {
-    background-color: #EAE3D2;
+    background-color: #eae3d2;
   }
-`
+`;
 
 const ArticleDetail = () => {
   const location = useLocation();
   const [article, setArticle] = useState([]);
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLike, setIsLike] = useState(false)
+  const [isLike, setIsLike] = useState(false);
   const history = useHistory();
 
   const backHandler = (event) => {
     // history.go(-1);
-    history.push({ pathname: "/board/free"})
+    history.push({ pathname: "/board/free" });
   };
   // 요청설개할것, 수정페이지에서 넘길때 새로운정보 필요
 
@@ -146,35 +155,33 @@ const ArticleDetail = () => {
   };
 
   const deleteHandler = async (event) => {
-    const response = await deleteArticle(article._id)
+    const response = await deleteArticle(article._id);
     if (response.statusCode === 200) {
-      history.push('/board/free');
+      history.push("/board/free");
     } else {
-      console.log('게시글 삭제')
+      console.log("게시글 삭제");
     }
-  }
+  };
 
   const deleteCommentHandler = async (commentId) => {
-    const response = await deleteComment(article._id, commentId)
-    if (response.statusCode === 200){
-      const response1 = await fetchArticle(article._id)
-      setArticle(response1)
-      setComments(response1.comments)
+    const response = await deleteComment(article._id, commentId);
+    if (response.statusCode === 200) {
+      const response1 = await fetchArticle(article._id);
+      setArticle(response1);
+      setComments(response1.comments);
     } else {
-      console.log('댓글 삭제 에러')
+      console.log("댓글 삭제 에러");
     }
   };
 
   const modifyCommentHandler = async (commentId, newContent) => {
-    const response = await modifyComment(article._id, commentId, newContent)
-    if (response.statusCode === 200){
-      const response1 = await fetchArticle(location.state)
-      setArticle(response1)
-      setComments(response1.comments)
-    }
-    else {
-      console.log('댓글 수정 오류')
-     
+    const response = await modifyComment(article._id, commentId, newContent);
+    if (response.statusCode === 200) {
+      const response1 = await fetchArticle(location.state);
+      setArticle(response1);
+      setComments(response1.comments);
+    } else {
+      console.log("댓글 수정 오류");
     }
     // const newComments = [...comments];
     // const index = comments.findIndex((comment) => comment.id === commentId);
@@ -183,125 +190,130 @@ const ArticleDetail = () => {
   };
 
   const createCommentHandler = async (newContent) => {
-    const response = await createComment(article._id, newContent)
-    if (response.statusCode === 200){
-      const response1 = await fetchArticle(location.state)
-      setArticle(response1)
-      setComments(response1.comments)
-    }
-    else {
-      console.log('댓글 생성 실패')
+    const response = await createComment(article._id, newContent);
+    if (response.statusCode === 200) {
+      const response1 = await fetchArticle(location.state);
+      setArticle(response1);
+      setComments(response1.comments);
+    } else {
+      console.log("댓글 생성 실패");
     }
   };
 
   const likeHandler = async (event) => {
-    event.preventDefault()
-    const response = await fetchLike(location.state)
-    if (response.statusCode === 200){
-      const response1 = await fetchArticle(location.state)
-      setArticle(response1)
-      setComments(response1.comments)
-      let tmpLike = Object.keys(response1.contributor).includes(localStorage.getItem('hashNickname'))
-      console.log(response1.contributor[localStorage.getItem('hashNickname')])
-      if (tmpLike === true && response1.contributor[localStorage.getItem('hashNickname')]){
-        setIsLike(true)
+    event.preventDefault();
+    const response = await fetchLike(location.state);
+    if (response.statusCode === 200) {
+      const response1 = await fetchArticle(location.state);
+      setArticle(response1);
+      setComments(response1.comments);
+      let tmpLike = Object.keys(response1.contributor).includes(
+        localStorage.getItem("hashNickname")
+      );
+      console.log(response1.contributor[localStorage.getItem("hashNickname")]);
+      if (
+        tmpLike === true &&
+        response1.contributor[localStorage.getItem("hashNickname")]
+      ) {
+        setIsLike(true);
         Swal.fire({
-          icon: 'success',
+          icon: "success",
           timer: 2000,
           showConfirmButton: false,
-        })
+        });
       } else {
-        setIsLike(false)
+        setIsLike(false);
         Swal.fire({
-          icon: 'error',
+          icon: "error",
           timer: 2000,
           showConfirmButton: false,
-        })
+        });
       }
+    } else {
+      console.log("좋아요 실패");
     }
-    else {
-      console.log('좋아요 실패')
-    }
-  }
+  };
 
   const reportHandler = async (event) => {
-    event.preventDefault()
-    if (article.reporter.includes(localStorage.getItem('hashNickname'))){
+    event.preventDefault();
+    if (article.reporter.includes(localStorage.getItem("hashNickname"))) {
       Swal.fire({
-        title: '중복된 신고입니다.',
-        icon: 'warning',
+        title: "중복된 신고입니다.",
+        icon: "warning",
         timer: 2000,
         timerProgressBar: true,
-      })
+      });
     } else {
-      const response = await reportArticle(location.state)
-      if (response.statusCode === 200){
-        const response1 = await fetchArticle(location.state)
-        setArticle(response1)
-        setComments(response1.comments)
+      const response = await reportArticle(location.state);
+      if (response.statusCode === 200) {
+        const response1 = await fetchArticle(location.state);
+        setArticle(response1);
+        setComments(response1.comments);
         Swal.fire({
-          title: '게시글이 신고되었습니다.',
-          icon: 'success',
+          title: "게시글이 신고되었습니다.",
+          icon: "success",
           timer: 2000,
           timerProgressBar: true,
-        })
-      }
-      else {
-        console.log('신고 실패')
+        });
+      } else {
+        console.log("신고 실패");
       }
     }
-  }
+  };
 
   const reportCommentHandler = async (comment) => {
-    if (comment.reporter.includes(localStorage.getItem('hashNickname'))){
+    if (comment.reporter.includes(localStorage.getItem("hashNickname"))) {
       Swal.fire({
-        title: '중복된 신고입니다.',
-        icon: 'warning',
+        title: "중복된 신고입니다.",
+        icon: "warning",
         timer: 2000,
         timerProgressBar: true,
-      })
+      });
     } else {
-      const response = await reportComment(article._id, comment._id)
-      if (response.statusCode === 200){
-        const response1 = await fetchArticle(location.state)
-        setArticle(response1)
-        setComments(response1.comments)
+      const response = await reportComment(article._id, comment._id);
+      if (response.statusCode === 200) {
+        const response1 = await fetchArticle(location.state);
+        setArticle(response1);
+        setComments(response1.comments);
         Swal.fire({
-          title: '선택한 댓글이 신고되었습니다.',
-          icon: 'success',
+          title: "선택한 댓글이 신고되었습니다.",
+          icon: "success",
           timer: 2000,
           timerProgressBar: true,
-        })
-      }
-      else {
-        console.log('댓글 신고 오류')
-     
+        });
+      } else {
+        console.log("댓글 신고 오류");
       }
     }
-  }
+  };
 
   useEffect(() => {
     (async () => {
       if (location.state) {
-        const response = await fetchArticle(location.state)
+        const response = await fetchArticle(location.state);
         setArticle(response);
         setComments(response.comments);
-        let tmpLike = Object.keys(response.contributor).includes(localStorage.getItem('hashNickname'))
-        if (tmpLike === true && response.contributor[localStorage.getItem('hashNickname')]){
-          setIsLike(response.contributor[localStorage.getItem('hashNickname')])
+        let tmpLike = Object.keys(response.contributor).includes(
+          localStorage.getItem("hashNickname")
+        );
+        if (
+          tmpLike === true &&
+          response.contributor[localStorage.getItem("hashNickname")]
+        ) {
+          setIsLike(response.contributor[localStorage.getItem("hashNickname")]);
         } else {
-          setIsLike(false)
+          setIsLike(false);
         }
       } else {
         Swal.fire({
-          title: '잘못된 접근입니다.',
-          icon: 'warning',
+          title: "잘못된 접근입니다.",
+          icon: "warning",
           timer: 2000,
-        })
+        });
         history.push("/index");
       }
       setIsLoading(false);
-    })()
+    })();
   }, []);
   return (
     !isLoading &&
@@ -312,40 +324,53 @@ const ArticleDetail = () => {
           <ArticleHead>
             <ArticleH2>{article.title}</ArticleH2>
             <ArticleH3>{article.writer}</ArticleH3>
-            <ArticleTime>{article.createdAt} {article.createdAt !== article.modifiedAt && <span>(수정됨 {article.modifiedAt})</span>} </ArticleTime>
+            <ArticleTime>
+              {article.createdAt}{" "}
+              {article.createdAt !== article.modifiedAt && (
+                <span>(수정됨 {article.modifiedAt})</span>
+              )}{" "}
+            </ArticleTime>
             <Score>
               <Item>추천수 : {article.like}</Item>
-                <Tooltip title="추천!">
-                    {isLike ? <ThumbDownAltIcon onClick={likeHandler} /> : <ThumbUpIcon onClick={likeHandler} />}
-                  
-                </Tooltip>
+              <Tooltip title="추천!">
+                {isLike ? (
+                  <ThumbDownAltIcon onClick={likeHandler} />
+                ) : (
+                  <ThumbUpIcon onClick={likeHandler} />
+                )}
+              </Tooltip>
               <Item>조회수 : {article.hit}</Item>
               <Item>|</Item>
 
-                {localStorage.getItem('nickname') !== article.writer && <TouchAppIcon onClick={reportHandler} />}
-              
-
+              {localStorage.getItem("nickname") !== article.writer && (
+                <TouchAppIcon onClick={reportHandler} />
+              )}
             </Score>
             <ArticleHr />
           </ArticleHead>
           <ArticleBody>
             <p>{article.content}</p>
           </ArticleBody>
-        <CommentList
-          comments={comments}
-          setArticle={setArticle}
-          setComments={setComments}
-          deleteCommentHandler={deleteCommentHandler}
-          modifyCommentHandler={modifyCommentHandler}
-          createCommentHandler={createCommentHandler}
-          reportCommentHandler={reportCommentHandler}
-        />
-        <div>
-          <StyledButton onClick={backHandler}>목록보기</StyledButton>
-          
-          {article.writer === localStorage.getItem('nickname') && <RightButton onClick={modifyHandler}>수정</RightButton>}
-          {article.writer === localStorage.getItem('nickname') && <BtnCancle onClick={deleteHandler}>삭제</BtnCancle>}
-        </div>
+          <CommentList
+            comments={comments}
+            setArticle={setArticle}
+            setComments={setComments}
+            deleteCommentHandler={deleteCommentHandler}
+            modifyCommentHandler={modifyCommentHandler}
+            createCommentHandler={createCommentHandler}
+            reportCommentHandler={reportCommentHandler}
+          />
+          <div>
+            <StyledButton onClick={backHandler}>목록보기</StyledButton>
+
+            {article.writer === localStorage.getItem("nickname") && (
+              <RightButton onClick={modifyHandler}>수정</RightButton>
+            )}
+            {(article.writer === localStorage.getItem("nickname") ||
+              localStorage.getItem("flag")) && (
+              <BtnCancle onClick={deleteHandler}>삭제</BtnCancle>
+            )}
+          </div>
         </Articles>
       </div>
     )
