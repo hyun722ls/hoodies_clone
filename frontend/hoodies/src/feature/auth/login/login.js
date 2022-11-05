@@ -11,18 +11,17 @@ const Container = styled.div`
   margin: -280px 0 24px -180px;
   height: 560px;
   width: 360px;
-
-`
+`;
 const Form = styled.form`
   margin: 0;
   padding: 0;
-`
+`;
 const InputDiv = styled.div`
   margin-bottom: 32px;
   padding: 4px 10px;
   border: 1px solid #d6d6d6;
   background-color: #fff;
-`
+`;
 const Input = styled.input`
   margin: 0;
   padding: 0;
@@ -34,7 +33,7 @@ const Input = styled.input`
   background-color: transparent;
   outline: none;
   vertical-align: middle;
-`
+`;
 
 const InputBtn = styled.button`
   position: absolute;
@@ -42,16 +41,16 @@ const InputBtn = styled.button`
   margin: 0 4px;
   min-width: 80px;
   height: 28px;
-  border: 1px solid #F9F5EB;
-  background-color: #EAE3D2;
-  color: #1D3979;
+  border: 1px solid #f9f5eb;
+  background-color: #eae3d2;
+  color: #1d3979;
   border-radius: 5px;
   font-weight: bold;
   &:hover {
-    background-color: #D9D2C3;
+    background-color: #d9d2c3;
     cursor: pointer;
   }
-`
+`;
 const StyledLink = styled(Link)`
   margin: 0 4px;
   color: inherit;
@@ -61,7 +60,7 @@ const StyledLink = styled(Link)`
   &:hover {
     cursor: pointer;
   }
-`
+`;
 const StyledSpan = styled.span`
   margin: 0 4px;
   color: inherit;
@@ -71,16 +70,15 @@ const StyledSpan = styled.span`
   &:hover {
     cursor: pointer;
   }
-`
+`;
 const Logo = styled.p`
   text-decoration: none;
   font-size: 40px;
-  color: #1D3979;
+  color: #1d3979;
   cursor: pointer;
   text-align: center;
-  font-family: 'Milky Honey';
-`
-
+  font-family: "Milky Honey";
+`;
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -102,8 +100,11 @@ const Login = () => {
       if (response.statusCode === "200") {
         localStorage.setItem("token", response.accessToken);
         localStorage.setItem("nickname", response.nickname);
-        localStorage.setItem("hashNickname", response.hashNickname)
+        localStorage.setItem("hashNickname", response.hashNickname);
         localStorage.setItem("email", email);
+        if (Object.keys("isAdmin")) {
+          localStorage.setItem("flag", response.isAdmin);
+        }
         history.push("/index");
       }
       // 오류 제어 코드 필요
@@ -137,61 +138,58 @@ const Login = () => {
   const resetPasswordHandler = async (event) => {
     event.preventDefault();
     Swal.fire({
-      title: '이메일주소를 입력해주세요',
-      input: 'email',
-      inputPlaceholder: '이메일',
-      validationMessage: '올바른 이메일 형식이 아닙니다.',
+      title: "이메일주소를 입력해주세요",
+      input: "email",
+      inputPlaceholder: "이메일",
+      validationMessage: "올바른 이메일 형식이 아닙니다.",
       allowOutsideClick: false,
       showCancelButton: true,
       reverseButtons: true,
-      cancelButtonText: '닫기',
-      confirmButtonText: '다음',
+      cancelButtonText: "닫기",
+      confirmButtonText: "다음",
       preConfirm: async (value) => {
         const response = await passwordSendMM(value);
         if (response.statusCode === "200") {
         } else {
-          Swal.showValidationMessage('올바른 이메일 형식이 아닙니다.')
+          Swal.showValidationMessage("올바른 이메일 형식이 아닙니다.");
         }
       },
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
-          title: 'Mattermost에서 코드 확인 후 입력해주세요.',
-          input: 'text',
-          inputPlaceholder: '코드',
+          title: "Mattermost에서 코드 확인 후 입력해주세요.",
+          input: "text",
+          inputPlaceholder: "코드",
           allowOutsideClick: false,
           showCancelButton: true,
           reverseButtons: true,
-          cancelButtonText: '닫기',
-          confirmButtonText: '확인',
+          cancelButtonText: "닫기",
+          confirmButtonText: "확인",
           preConfirm: async (value) => {
-            const response = await passworAuthMM(result.value, value)
+            const response = await passworAuthMM(result.value, value);
             if (response.statusCode === "200") {
-              
             } else {
-              Swal.showValidationMessage('잘못된 코드를 입력하였습니다.')
+              Swal.showValidationMessage("잘못된 코드를 입력하였습니다.");
             }
-          }
+          },
         }).then((result) => {
           if (result.isConfirmed) {
             Swal.fire({
-              icon: 'success',
-              title: '비밀번호가 성공적으로 초기화 되었습니다.',
-              html: 'Mattermost에서 확인해 주세요.',
-              timer: '3000',
-              confirmButtonText: '확인',
-            })
+              icon: "success",
+              title: "비밀번호가 성공적으로 초기화 되었습니다.",
+              html: "Mattermost에서 확인해 주세요.",
+              timer: "3000",
+              confirmButtonText: "확인",
+            });
           }
-        })
+        });
       }
-    })
-  }
-  
+    });
+  };
+
   return (
     <Container>
-      <Logo>
-        Hoodies
-      </Logo>
+      <Logo>Hoodies</Logo>
       <Form onSubmit={LoginHandler}>
         <InputDiv>
           <Input
