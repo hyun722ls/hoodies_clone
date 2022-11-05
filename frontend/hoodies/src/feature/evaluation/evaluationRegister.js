@@ -38,18 +38,19 @@ const CreateEvaluation = (props) => {
       const response1 = await getStaff(id);
       props.setStaff(response1);
       props.setComments(response1.evaluations);
-      if (response) {
-        Swal.fire({
-          title: "게시",
-          icon: "success",
-          timer: 2000,
-          timerProgressBar: true,
-        });
-        history.push({ pathname: "/pro/detail", state: props.staff });
-      } else {
-        console.log("이런!");
-        history.push({ pathname: "/pro/detail", state: props.staff });
-      }
+      Swal.fire({
+        title: "게시",
+        icon: "success",
+        timer: 2000,
+        timerProgressBar: true,
+      });
+    } else {
+      Swal.fire({
+        title: "이미 평가글을 올렸습니다.",
+        icon: "fail",
+        timer: 2000,
+        timerProgressBar: true,
+      });
     }
   }
 
