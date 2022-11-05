@@ -173,7 +173,7 @@ const EvenPro = () => {
 
   return (
     !isLoading &&
-    comments && (
+    comments && staff.averageScores?.length > 0 && (
       <div>
         <Header />
         <Grid
