@@ -7,34 +7,34 @@ const StyledCommentList = styled.ul`
   margin: 8px 0;
   padding: 0;
   list-style: none;
-`
+`;
 const StyledComment = styled.div`
   padding: 8px 4px;
   box-sizing: border-box;
-  border-bottom: 1px solid #F9F5EB;
+  border-bottom: 1px solid #f9f5eb;
   background-color: #fff;
-`
+`;
 const Nickname = styled.div`
   float: left;
   display: block;
   font-size: 12px;
   width: 132px;
-`
+`;
 const StyledContent = styled.div`
   float: left;
   font-size: 13px;
   width: 480px;
-`
+`;
 const Hr = styled.hr`
   margin: 0;
   padding: 0;
   clear: both;
   height: 0;
   border: 0;
-`
+`;
 const ButtonList = styled.div`
   float: right;
-`
+`;
 const StyledButton = styled.button`
   margin: 0 4px;
   border: 0;
@@ -43,22 +43,21 @@ const StyledButton = styled.button`
   &:hover {
     cursor: pointer;
   }
-`
+`;
 
 const CommentForm = styled.form`
   width: 100%;
   margin: 8px auto;
-
-`
+`;
 const CommentInput = styled.input`
   width: 480px;
-`
+`;
 const CommentArea = styled.textarea`
   float: left;
   margin: 8px 0 8px 0;
   width: 660px;
-  resize : none
-`
+  resize: none;
+`;
 const CommentButton = styled.button`
   float: right;
   margin-top: 8px;
@@ -66,16 +65,16 @@ const CommentButton = styled.button`
   top: 0;
   min-width: 80px;
   height: 76px;
-  border: 1px solid #F9F5EB;
-  background-color: #EAE3D2;
-  color: #1D3979;
+  border: 1px solid #f9f5eb;
+  background-color: #eae3d2;
+  color: #1d3979;
   border-radius: 8px;
   font-weight: bold;
   &:hover {
-    background-color: #D9D2C3;
+    background-color: #d9d2c3;
     cursor: pointer;
   }
-`
+`;
 
 const CommentList = (props) => {
   const [modifyForm, setModifyForm] = useState(false);
@@ -116,45 +115,71 @@ const CommentList = (props) => {
   return props.comments.length ? (
     <div>
       <StyledCommentList>
-      {props.comments.map((comment) => {
-        return (
+        {props.comments.map((comment) => {
+          return (
             <li key={comment._id}>
               <StyledComment>
                 <Nickname>
-                  {confirmWriter(props.articleWriter, comment.writer, props.commentsMap)}
+                  {confirmWriter(
+                    props.articleWriter,
+                    comment.writer,
+                    props.commentsMap
+                  )}
                 </Nickname>
                 <StyledContent>
                   {modifyForm && commentId === comment._id ? (
-                  <form onSubmit={modifyHandler} id="Mod">
-                    <CommentInput
-                      type="text"
-                      value={modifyContent}
-                      onChange={modifyContentChangeHandler}
-                      placeholder="댓글을 입력하세요"
-                    />
-                  </form>
-                ) : (blockComment(comment))}
+                    <form onSubmit={modifyHandler} id="Mod">
+                      <CommentInput
+                        type="text"
+                        value={modifyContent}
+                        onChange={modifyContentChangeHandler}
+                        placeholder="댓글을 입력하세요"
+                      />
+                    </form>
+                  ) : (
+                    blockComment(comment)
+                  )}
                 </StyledContent>
                 <ButtonList>
-                  {modifyForm && commentId === comment._id && (<StyledButton type="submit" form="Mod">댓글 수정</StyledButton>)}
+                  {modifyForm && commentId === comment._id && (
+                    <StyledButton type="submit" form="Mod">
+                      댓글 수정
+                    </StyledButton>
+                  )}
                   {/*<button onClick={() => props.deleteCommentHandler(comment._id)}>*/}
                   {/*  삭제*/}
                   {/*</button>*/}
-                  {comment.writer === localStorage.getItem('hashNickname') && !(modifyForm && commentId === comment._id) && <StyledButton onClick={() => openModifyForm(comment._id, comment.content)}>
-                    수정
-                  </StyledButton>}
-                  {comment.writer === localStorage.getItem('hashNickname') && <StyledButton onClick={() => props.deleteCommentHandler(comment._id)}>
-                    삭제
-                  </StyledButton>}
-                  {comment.writer !== localStorage.getItem('hashNickname') && <StyledButton onClick={() => props.reportCommentHandler(comment)}>
-                    신고
-                  </StyledButton>}
+                  {comment.writer === localStorage.getItem("hashNickname") &&
+                    !(modifyForm && commentId === comment._id) && (
+                      <StyledButton
+                        onClick={() =>
+                          openModifyForm(comment._id, comment.content)
+                        }
+                      >
+                        수정
+                      </StyledButton>
+                    )}
+                  {(comment.writer === localStorage.getItem("hashNickname") ||
+                    localStorage.getItem("flag")) && (
+                    <StyledButton
+                      onClick={() => props.deleteCommentHandler(comment._id)}
+                    >
+                      삭제
+                    </StyledButton>
+                  )}
+                  {comment.writer !== localStorage.getItem("hashNickname") && (
+                    <StyledButton
+                      onClick={() => props.reportCommentHandler(comment)}
+                    >
+                      신고
+                    </StyledButton>
+                  )}
                 </ButtonList>
-              <Hr />
+                <Hr />
               </StyledComment>
             </li>
-        );
-      })}
+          );
+        })}
       </StyledCommentList>
 
       <CommentForm onSubmit={createHandler} id="comment">
@@ -165,7 +190,9 @@ const CommentList = (props) => {
           placeholder="댓글을 입력하세요"
           rows="5"
         />
-        <CommentButton type="submit" form="comment">댓글 등록</CommentButton>
+        <CommentButton type="submit" form="comment">
+          댓글 등록
+        </CommentButton>
         <Hr />
       </CommentForm>
     </div>
