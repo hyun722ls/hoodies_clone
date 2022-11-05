@@ -1,7 +1,7 @@
 import { useHistory } from "react-router-dom";
 import { blockArticle } from "../../../common/refineData/blockArticle";
 import styled from "styled-components";
-import { changeAnnonymous, checkBoardType } from "../../../common/refineData/anonymousWriter";
+import { changeAnonymous, checkBoardType } from "../../../common/refineData/anonymousWriter";
 import { timeConventer } from "../../../common/refineData/refineTime";
 import Grid from '@mui/material/Grid';
 import { blockCnt } from "../../../common/api/url";
@@ -159,7 +159,7 @@ const PopularTexts = (props) => {
                       <ArticleH3 style={{color: "darkblue"}}>-{checkBoardType(article)}-</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
                     </div>
                     <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
-                    <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
+                    <ArticleH3>{changeAnonymous(article)}</ArticleH3>
                     <Score style={{}}>
                       <Item style={{fontSize: "2px"}}>조회수</Item><Item>&nbsp;{article.hit}&nbsp;</Item>
                       <Item style={{color: "red", fontSize: "2px"}}>추천수</Item><Item style={{color: "red"}}>&nbsp;{article.like}</Item>
