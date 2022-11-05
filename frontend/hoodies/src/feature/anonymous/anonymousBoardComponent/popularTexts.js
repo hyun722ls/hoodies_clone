@@ -114,6 +114,7 @@ const ArticleHr = styled.hr`
 
 const PopularTexts = (props) => {
   const history = useHistory();
+
   const detailPageHandler = (article) => {
     if (article.reporter?.length > blockCnt){
       Swal.fire({
@@ -160,7 +161,7 @@ const PopularTexts = (props) => {
                     </div>
                     <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
                     <ArticleH3>{changeAnonymous(article)}</ArticleH3>
-                    <Score style={{}}>
+                    <Score>
                       <Item style={{fontSize: "2px"}}>조회수</Item><Item>{article.hit}&nbsp;</Item>
                       <Item style={{color: "red", fontSize: "2px"}}>추천수</Item><Item style={{color: "red"}}>{article.like}</Item>
                     </Score>
