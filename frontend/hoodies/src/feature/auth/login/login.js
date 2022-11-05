@@ -102,7 +102,7 @@ const Login = () => {
         localStorage.setItem("nickname", response.nickname);
         localStorage.setItem("hashNickname", response.hashNickname);
         localStorage.setItem("email", email);
-        if (Object.keys(response).includes('isAdmin') {
+        if (Object.keys(response).includes('isAdmin')) {
           localStorage.setItem("flag", response.isAdmin);
         }
         history.push("/index");
