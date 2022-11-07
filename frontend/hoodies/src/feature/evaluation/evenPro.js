@@ -7,7 +7,7 @@ import EvaluationPentagon from "./evaluationPentagon";
 // import styled from "styled-components";
 import CreateEvaluation from "./evaluationRegister";
 import Swal from "sweetalert2";
-import { getStaff, postEvaluation } from "./evaluationAPI";
+import { deleteComment, getStaff, postEvaluation } from "./evaluationAPI";
 
 const EvenPro = () => {
   const dummyData = {
@@ -138,11 +138,15 @@ const EvenPro = () => {
     history.go(-1);
   };
 
-  const deleteCommentHandler = (commentId) => {
-    const newComments = [...comments];
-    const index = comments.findIndex((comment) => comment.id === commentId);
-    newComments.splice(index, 1);
-    setComments(newComments);
+  const deleteCommentHandler = async (commentId) => {
+    const response = await deleteComment(staff._id, commentId);
+    if (response.statusCode === 200) {
+      const response1 = await getStaff(staff._id);
+      setStaff(response1);
+      setComments(response1.comments);
+    } else {
+      console.log("댓글 삭제 에러");
+    }
   };
 
   useEffect(() => {
@@ -264,7 +268,7 @@ const EvenPro = () => {
               overflowX: "hidden",
             }}
           >
-            <EvaulationComment comments={comments} />
+            <EvaulationComment comments={comments} deleteCommentHandler={deleteCommentHandler} />
           </Grid>
         </Grid>
         {/* <div>
