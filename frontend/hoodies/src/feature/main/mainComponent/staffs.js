@@ -226,7 +226,7 @@ const Staffs = (props) => {
                                     />
                                 </Grid>
 
-                                {staff.evaluations.length > 0 ? <H4>익명님의 한줄평 : {staff.evaluations[0].content}</H4> : <H4>한줄평을 기다리고 있어요!👻</H4>}
+                                {staff.evaluations.length > 0 ? <H4>익명님의 한줄평 : {staff.evaluations[0].content}</H4> : <H4>한줄평을 기다리고 있어요!😺</H4>}
                                 <br />
                                 <Box
                                     sx={{
@@ -243,7 +243,8 @@ const Staffs = (props) => {
                                         emptyIcon={<StarRateRoundedIcon style={{ opacity: 0.45 }} fontSize="large" />}
                                     />
                                     <H5>{labels[value]}</H5>
-                                    <H6>{staff.evaluations[0].createdAt}</H6>
+                                    {staff.evaluations.length > 0 ? <H6>{staff.evaluations[0].createdAt}</H6> : <H6></H4>}
+                                    <H6></H6>
                                 </Box>
                             </Grid>
                         </Grid>
