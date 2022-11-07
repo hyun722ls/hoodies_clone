@@ -134,7 +134,7 @@ const CommentList = (props) => {
                   )}
                 </Nickname>
                   {modifyForm && commentId === comment._id ? (
-                      <StyledContent style={{color: comment === blockComment(comment) ? 'black' : '#ff5f5f'}}>
+                      <StyledContent style={{color: (comment.content === blockComment(comment) ? 'black' : '#ff5f5f')}}>
                         <form onSubmit={modifyHandler} id="Mod">
                           <CommentInput
                             type="text"
