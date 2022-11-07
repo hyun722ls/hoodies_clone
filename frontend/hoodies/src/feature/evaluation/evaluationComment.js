@@ -147,7 +147,7 @@ const EvaulationComment = (props) => {
       {props.comments.map((comment) => {
         return (
           <div key={comment._id} style={{borderBottom:'1px solid #EAE3D2', marginLeft:'10px'}}>
-            <div style={{display:'flex', flexWrap:'wrap', fontWeight:500}}><div>{blockComment(comment)}</div></div>
+            <div style={{display:'flex', flexWrap:'wrap', fontWeight:500}}><div>{comment.content}</div></div>
             <div style={{fontSize:'11px'}}>{comment.createdAt.slice(0,10)}</div>
             <div style={{display:'inline-flex'}}><Rating value={average(comment.score).toFixed(1)} precision={0.1} icon={<StarRateRoundedIcon/>} emptyIcon={<StarOutlineRoundedIcon/>} readOnly></Rating><div style={{marginLeft:'5px',fontSize:'10px'}}>{average(comment.score).toFixed(1)}</div></div>
             {localStorage.getItem("flag") && (

@@ -1,7 +1,7 @@
 import { Button, TextField } from "@mui/material";
 import Rating from "@mui/material/Rating";
 import { Fragment, useState } from "react";
-import { postEvaluation, getStaff } from "./evaluationAPI";
+import { postEvaluation, getStaff, checkEvaluation } from "./evaluationAPI";
 import styled from "styled-components";
 import { Grid } from "@mui/material";
 import { useHistory } from "react-router-dom";
@@ -33,25 +33,37 @@ const CreateEvaluation = (props) => {
   async function handleSubmit(event) {
     event.preventDefault();
     const score = [personality, atmosphere, project, lecture, consultation];
-    const response = await postEvaluation(id, score, studentComment);
-    if (response.statusCode === 200) {
-      const response1 = await getStaff(id);
-      props.setStaff(response1);
-      props.setComments(response1.evaluations);
-      Swal.fire({
-        title: "게시",
-        icon: "success",
-        timer: 2000,
-        timerProgressBar: true,
-      });
-    } else {
-      Swal.fire({
-        title: "이미 평가글을 올렸습니다.",
-        icon: "warning",
-        timer: 2000,
-        timerProgressBar: true,
-      });
+    const formData = new FormData()
+    formData.set('comment', studentComment)
+    const checkStuduentData = await checkEvaluation(formData)
+    
+    const category = JSON.parse(checkStuduentData)
+    console.log(checkStuduentData, category)
+    if (category.commentResult !== 'clean'){
+      alert('부적절한 표현이 있습니다. 상대를 생각하세요.')
+     } else {
+       const response = await postEvaluation(id, score, studentComment);
+       if (response.statusCode === 200) {
+         const response1 = await getStaff(id);
+         props.setStaff(response1);
+         props.setComments(response1.evaluations);
+         Swal.fire({
+           title: "게시",
+           icon: "success",
+           timer: 2000,
+           timerProgressBar: true,
+         });
+       } else {
+         Swal.fire({
+           title: "이미 평가글을 올렸습니다.",
+           icon: "warning",
+           timer: 2000,
+           timerProgressBar: true,
+         });
+       }
+
     }
+
   }
 
   return (
