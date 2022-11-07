@@ -4,10 +4,13 @@ import com.mongodb.client.result.UpdateResult;
 import com.ssafy.hoodies.model.BoardType;
 import com.ssafy.hoodies.model.dto.BoardDto;
 import com.ssafy.hoodies.model.dto.CommentDto;
+import com.ssafy.hoodies.model.dto.FeedbackDto;
 import com.ssafy.hoodies.model.entity.Board;
 import com.ssafy.hoodies.model.entity.Comment;
+import com.ssafy.hoodies.model.entity.Feedback;
 import com.ssafy.hoodies.model.entity.User;
 import com.ssafy.hoodies.model.repository.BoardRepository;
+import com.ssafy.hoodies.model.repository.FeedbackRepository;
 import com.ssafy.hoodies.model.repository.UserRepository;
 import com.ssafy.hoodies.model.service.FileService;
 import com.ssafy.hoodies.util.util;
@@ -48,6 +51,7 @@ public class BoardController {
     private final MongoTemplate mongoTemplate;
     private final FileService fileService;
     private final UserRepository userRepository;
+    private final FeedbackRepository feedbackRepository;
 
     @Value("${nickname.salt}")
     private String salt;
@@ -455,6 +459,31 @@ public class BoardController {
         }
         json.put("statusCode", statusCode);
         return json;
+    }
+
+    @PostMapping("/board/feedback")
+    @ApiOperation(value = "피드백 작성")
+    public JSONObject writeFeedback(@RequestBody FeedbackDto feedbackDto) {
+        JSONObject json = new JSONObject();
+        int statusCode = 200;
+
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
+
+        Feedback feedback = feedbackDto.toEntity();
+        feedback.setWriter(email);
+        feedbackRepository.save(feedback);
+
+        json.put("statusCode", statusCode);
+        return json;
+    }
+
+    @GetMapping("/admin/feedback")
+    @ApiOperation(value = "피드백 조회")
+    public List<Feedback> findAllFeedback() {
+        Sort sort = Sort.by("createdAt").descending();
+        return feedbackRepository.findAll(sort);
     }
 
 }
