@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { ResponsiveRadar } from '@nivo/radar';
+import * as React from "react";
+import { ResponsiveRadar } from "@nivo/radar";
 import { useHistory } from "react-router-dom";
 import staffs from "./staff.module.css";
 import PageviewIcon from "@mui/icons-material/Pageview";
-import Grid from '@mui/material/Grid';
+import Grid from "@mui/material/Grid";
 // import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import styled from "styled-components";
 // import { PRO_EVAL } from "../../../common/data/dummyData"
@@ -16,17 +16,17 @@ const Title = styled.div`
   font-size: 1em;
   margin-bottom: 10px;
   padding: 12px;
-  border: 1px solid #F9F5EB;
+  border: 1px solid #f9f5eb;
   box-sizing: border-box;
   display: flex;
   text-align: center;
   justify-content: center;
   background-color: #e4ffc5;
-`
+`;
 
 const DIV = styled.div`
   margin-bottom: 3px;
-`
+`;
 
 const DIV2 = styled.div`
   height: 15.2px;
@@ -34,12 +34,12 @@ const DIV2 = styled.div`
 
 const H1 = styled.h1`
   margin: 0;
-`
+`;
 
 const H2 = styled.h2`
   font-size: medium;
   color: #090079;
-`
+`;
 
 const H3 = styled.h3`
   display: -webkit-box;
@@ -52,7 +52,7 @@ const H3 = styled.h3`
 
 const H4 = styled.h4`
   font-weight: bold;
-`
+`;
 
 const H5 = styled.h5`
   font-weight: normal;
@@ -60,21 +60,20 @@ const H5 = styled.h5`
   font-size: 12px;
   margin-top: 0;
   color: goldenrod;
-`
+`;
 
 const H6 = styled.h6`
   font-size: small;
   color: #0050ad;
-  position: flex;
   justify-content: end;
-`
+`;
 
 const labels = {
-    1: '저와는 맞지 않았어요 ;<',
-    2: '보통이었어요 :O',
-    3: '좋았어요! :)',
-    4: '매우 좋았습니다!! :>',
-    5: '최고의 PRO.',
+  1: "저와는 맞지 않았어요 ;<",
+  2: "보통이었어요 :O",
+  3: "좋았어요! :)",
+  4: "매우 좋았습니다!! :>",
+  5: "최고의 PRO.",
 };
 
 

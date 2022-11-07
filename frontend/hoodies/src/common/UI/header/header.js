@@ -1,7 +1,7 @@
 import classes from "./header.module.css";
 import { Link, useHistory } from "react-router-dom";
 import { Fragment } from "react";
-import { logOut } from "../../../feature/auth/authApi";
+import { logOut, postInquiry } from "../../../feature/auth/authApi";
 
 const Header = () => {
   const history = useHistory()
@@ -12,6 +12,13 @@ const Header = () => {
       localStorage.clear()
       history.push('/login')
     }
+  }
+
+  const inquiryHandler = async (event) => {
+    event.preventDefault()
+    const content = '가는가'
+    const response = await postInquiry(content)
+  
   }
 
   return (
@@ -34,7 +41,7 @@ const Header = () => {
             </Link>
           </li>
           <li>
-            <Link to="/board/annonymous" className={classes.navbar__item}>
+            <Link to="/board/anonymous" className={classes.navbar__item}>
               익명 게시판
             </Link>
           </li>
@@ -46,11 +53,22 @@ const Header = () => {
           {/* <Link to="/admin/form" state={null} className={classes. navbar__item}>
             Create
           </Link> */}
+          {localStorage.getItem('flag') &&  <Link to="/admin" className={classes.navbar__item}>
+              문의 결과
+            </Link>}
+          {!localStorage.getItem('flag') && 
+          <li>
+            <span onClick={inquiryHandler} className={classes.navbar__item}>
+              문의 보내기
+            </span>
+          </li>}
+
           <li>
             <span onClick={logout} className={classes.navbar__item}>
               Logout
             </span>
           </li>
+          
         </ul>
       </nav>
     </Fragment>

@@ -1,4 +1,4 @@
-export const annonymousWriter = (comments, writer) => {
+export const anonymousWriter = (comments, writer) => {
     const commentsWriters = comments?.map((comment) => {
         return comment.writer
     })
@@ -39,7 +39,7 @@ export const confirmWriter = (articleWriter, commentWriter, commentsMap) => {
 }
 
 
-export const changeAnnonymous = (article) => {
+export const changeAnonymous = (article) => {
     if(article.type === 2){
         return '익명'
     } else{
@@ -48,7 +48,7 @@ export const changeAnnonymous = (article) => {
 }
 
 
-export const checkBoradType = (article) => {
+export const checkBoardType = (article) => {
     if(article.type === 2){
         return '익명게시판'
     } else if(article.type === 1){

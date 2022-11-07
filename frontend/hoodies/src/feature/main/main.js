@@ -7,7 +7,6 @@ import JobInfo from "./mainComponent/jobInfo"
 import Articles from "./mainComponent/articles";
 import PopularText from "./mainComponent/popularText";
 import Staffs from "./mainComponent/staffs";
-// import axios from 'axios';
 import { fetchPopularview, fetchPreview, fetchStaffview } from "./mainAPI";
 import {tempJobInfo} from "../../common/data/dummyJobData";
 import axios from "axios";
