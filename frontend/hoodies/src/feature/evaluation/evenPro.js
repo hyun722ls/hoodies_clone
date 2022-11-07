@@ -209,9 +209,9 @@ const EvenPro = () => {
         <Header />
         <Grid
           container
-          sx={{ height: "500px", width: "100vw", marginTop: "1rem" }}
+          sx={{ height: "auto", width: "auto" }}
         >
-          <Grid container sx={{ height: "500px" }} item xs={8}>
+          <Grid container sx={{ height: "auto" }} item xs={8}>
             <Grid
               style={{
                 border: "1px solid #EAE3D2",
@@ -234,7 +234,7 @@ const EvenPro = () => {
                 <p>설명 :</p>
                 <div>
                   <Ellipsis>{staff.etc}</Ellipsis>
-                  <div style={{fontSize:'8px', color:'grey'}} onClick={longerTextHandler}>더보기</div>
+                  <div style={{fontSize:'10px', color:'grey'}} onClick={longerTextHandler}>더보기</div>
                 </div>
                 {/* <p style={{textOverflow:'ellipsis', overflow:'hidden', WebkitLineClamp:3, display:'-webkit-box', wordBreak:'break-all',webkitBoxOrient:'vertical'}}>{staff.etc}</p> */}
                 <p>{comments.length}명의 평가</p>
@@ -296,6 +296,7 @@ const EvenPro = () => {
               height: "inherit",
               overflowY: "scroll",
               overflowX: "hidden",
+              backgroundColor:'#F9F5EB'
             }}
           >
             <EvaulationComment comments={comments} deleteCommentHandler={deleteCommentHandler} />
