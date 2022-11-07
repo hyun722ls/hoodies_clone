@@ -8,10 +8,7 @@ const AdminPage =() => {
 
     return (
     <div>
-        <Header />
-        <Container>
-        <BoardTable articles={articles} />
-        </Container>
+        
     </div>
     )
 }
