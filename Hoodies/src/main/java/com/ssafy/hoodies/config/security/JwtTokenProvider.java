@@ -23,8 +23,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenProvider {
     private final Key secretKey;
-//    private final Long accessTokenValidMillisecond = 60 * 60 * 1000L; //  1 hour
-    private final Long accessTokenValidMillisecond = 60 * 1000L; //  1 hour
+    private final Long accessTokenValidMillisecond = 60 * 60 * 1000L; //  1 hour
     private final Long refreshTokenValidMillisecond = 24 * 60 * 60 * 1000L; // 1 day
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
