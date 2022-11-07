@@ -4,7 +4,9 @@ import com.mongodb.client.result.UpdateResult;
 import com.ssafy.hoodies.model.dto.EvaluationDto;
 import com.ssafy.hoodies.model.entity.Evaluation;
 import com.ssafy.hoodies.model.entity.Mentor;
+import com.ssafy.hoodies.model.entity.User;
 import com.ssafy.hoodies.model.repository.MentorRepository;
+import com.ssafy.hoodies.model.repository.UserRepository;
 import com.ssafy.hoodies.util.util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,6 +23,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -33,6 +38,7 @@ import java.util.List;
 public class MentorController {
     private final MentorRepository mentorRepository;
     private final MongoTemplate mongoTemplate;
+    private final UserRepository userRepository;
 
     @Value("${nickname.salt}")
     private String salt;
@@ -79,7 +85,13 @@ public class MentorController {
     public JSONObject writeEvaluation(@RequestBody EvaluationDto dto, @PathVariable String id){
         Mentor mentor = mentorRepository.findById(id).get();
         List<String> contributors = mentor.getContributor();
-        String ewriter = util.getEncryptPassword(dto.getWriter(), salt);
+
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
+
+        User user = userRepository.findById(email).get();
+        String ewriter = util.getEncryptPassword(user.getNickname(), salt);
 
         int statusCode = 400;
 
