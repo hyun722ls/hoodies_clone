@@ -81,15 +81,13 @@ const ArticleH3 = styled.h3`
   margin: 0;
   padding: 0;
   float: left;
-  max-width: 90px;
+  max-width: 200px;
   height: 15px;
   line-height: 15px;
   font-size: 11px;
   font-weight: normal;
   letter-spacing: 0;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `
 
 const ArticleTime = styled.time`
