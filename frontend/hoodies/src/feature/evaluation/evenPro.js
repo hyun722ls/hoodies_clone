@@ -13,7 +13,7 @@ const EvenPro = () => {
 
   const history = useHistory();
   const location = useLocation();
-  const ellipsisRef = useRef();
+  const ellipsisRef = useRef<HTMLDivElement>(null);
   const [staff, setStaff] = useState([]);
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
