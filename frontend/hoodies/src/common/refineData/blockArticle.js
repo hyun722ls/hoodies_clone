@@ -57,6 +57,8 @@ export const blockArticle = (article, tmpCategory) => {
    
     }
 
+
+
 export const blockComment = (comment) => {
     const category = JSON.parse(comment.category)
     if (comment.reporter?.length > blockCnt){
