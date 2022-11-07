@@ -149,6 +149,8 @@ const CreateEvaluation = (props) => {
           }}
           label="한줄평을 입력해주세요."
           variant="outlined"
+          error={studentComment.trim ? true: false}
+          helperText='한줄평을 입력해주세요.'
           required
         ></TextField>
         <div style={{ color: "red" }}>*게시 후 삭제, 수정이 불가합니다!</div>
