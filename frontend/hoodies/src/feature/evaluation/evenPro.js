@@ -13,17 +13,17 @@ const EvenPro = () => {
 
   const history = useHistory();
   const location = useLocation();
-  const ellipsisRef = useRef<HTMLDivElement>(null);
+  // const ellipsisRef = useRef<HTMLDivElement>(null);
   const [staff, setStaff] = useState([]);
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [staffType, setStaffType] = useState("");
   const [longerText, setLongerText] = useState(3)
 
-  function isOverflown(element) {
-    const {scrollHeight, clientHeight} = element;
-    return scrollHeight > clientHeight
-  }
+  // function isOverflown(element) {
+  //   const {scrollHeight, clientHeight} = element;
+  //   return scrollHeight > clientHeight
+  // }
 
   const longerTextHandler = (event) => {
     event.preventDefault();
@@ -122,8 +122,9 @@ const EvenPro = () => {
                 {staff.email ? <p>이메일 : {staff.email}</p> : <p>이메일 : N/A</p>}
                 <p>설명 :</p>
                 <div>
-                  <Ellipsis ref={ellipsisRef}>{staff.etc}</Ellipsis>
-                  {isOverflown(ellipsisRef.current) ? <div style={{fontSize:'10px', color:'grey'}} onClick={longerTextHandler}>더보기</div> : <div></div>}
+                  <Ellipsis>{staff.etc}</Ellipsis>
+                  <div style={{fontSize:'10px', color:'grey'}} onClick={longerTextHandler}>더보기</div>
+                  {/* {isOverflown(ellipsisRef.current) ? <div style={{fontSize:'10px', color:'grey'}} onClick={longerTextHandler}>더보기</div> : <div></div>} */}
                 </div>
                 {/* <p style={{textOverflow:'ellipsis', overflow:'hidden', WebkitLineClamp:3, display:'-webkit-box', wordBreak:'break-all',webkitBoxOrient:'vertical'}}>{staff.etc}</p> */}
                 <p>{comments.length}명의 평가</p>
