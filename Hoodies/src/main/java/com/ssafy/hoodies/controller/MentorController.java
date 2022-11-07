@@ -14,9 +14,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -91,7 +89,7 @@ public class MentorController {
         String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
 
         User user = userRepository.findById(email).get();
-        String ewriter = util.getEncryptPassword(user.getNickname(), salt);
+        String ewriter = util.getEncryptStr(user.getNickname(), salt);
 
         int statusCode = 400;
 
