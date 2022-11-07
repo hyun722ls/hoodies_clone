@@ -1,5 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { isAdmin } from "../../../common/api/isLogin";
+import { blockCnt } from "../../../common/api/url";
 import { confirmWriter } from "../../../common/refineData/anonymousWriter";
 import { blockComment } from "../../../common/refineData/blockArticle";
 
@@ -144,7 +146,7 @@ const CommentList = (props) => {
                         </form>
                       </StyledContent>
                   ) : (
-                      <StyledContentFilter>{blockComment(comment)}</StyledContentFilter>
+                      <StyledContentFilter>{isAdmin() && comment.reporter.length > blockCnt ? `(신고 누적)${comment.content}`  : blockComment(comment)}</StyledContentFilter>
                   )}
                 <ButtonList>
                   {modifyForm && commentId === comment._id && (

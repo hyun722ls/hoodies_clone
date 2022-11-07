@@ -59,7 +59,7 @@ export const blockArticle = (article, tmpCategory) => {
 
 export const blockComment = (comment) => {
     const category = JSON.parse(comment.category)
-    if (comment.reporter?.length > blockCnt ){
+    if (comment.reporter?.length > blockCnt){
         return '신고 누적된 댓글입니다.'
     } else{
         if (category.commentResult === 'clean'){
