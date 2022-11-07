@@ -26,7 +26,6 @@ const StyledContent = styled.div`
   float: left;
   font-size: 13px;
   width: 480px;
-  color: #ff5f5f;
 `;
 
 const StyledContentFilter = styled.div`
@@ -135,7 +134,7 @@ const CommentList = (props) => {
                   )}
                 </Nickname>
                   {modifyForm && commentId === comment._id ? (
-                      <StyledContent>
+                      <StyledContent style={{color: comment === blockComment(comment) ? 'black' : '#ff5f5f'}}>
                         <form onSubmit={modifyHandler} id="Mod">
                           <CommentInput
                             type="text"
