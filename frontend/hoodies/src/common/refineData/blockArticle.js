@@ -1,4 +1,3 @@
-import { isAdmin } from "../api/isLogin"
 import { blockCnt } from "../api/url"
 
 export const blockArticle = (article, tmpCategory) => {
@@ -60,27 +59,22 @@ export const blockArticle = (article, tmpCategory) => {
 
 export const blockComment = (comment) => {
     const category = JSON.parse(comment.category)
-    if (isAdmin()){
-        return comment.content
-    } else {
-        if (comment.reporter?.length > blockCnt ){
-            return '신고 누적된 댓글입니다.'
+    if (comment.reporter?.length > blockCnt){
+        return '신고 누적된 댓글입니다.'
+    } else{
+        if (category.commentResult === 'clean'){
+            return comment.content
+        } else if (category.commentResult === '악플/욕설'){
+            return '댓글에 욕설이 포함되어 있습니다.'
+        } else if (category.commentResult === '성소수자' || category.commentResult === '종교' ){
+            return `댓글에 ${category.commentResult} 비하 표현이 포함되어 있습니다.`
+        } else if (category.commentResult === '여성/가족'){
+            return '댓글에 여성 혐오 표현이 포함되어 있습니다.'
+        } else if (category.commentResult === '남성'){
+            return '댓글에 남성 혐오 표현이 포함되어 있습니다.'
         } else{
-            if (category.commentResult === 'clean'){
-                return comment.content
-            } else if (category.commentResult === '악플/욕설'){
-                return '댓글에 욕설이 포함되어 있습니다.'
-            } else if (category.commentResult === '성소수자' || category.commentResult === '종교' ){
-                return `댓글에 ${category.commentResult} 비하 표현이 포함되어 있습니다.`
-            } else if (category.commentResult === '여성/가족'){
-                return '댓글에 여성 혐오 표현이 포함되어 있습니다.'
-            } else if (category.commentResult === '남성'){
-                return '댓글에 남성 혐오 표현이 포함되어 있습니다.'
-            } else{
-                return `댓글에 혐오 표현이 포함되어 있습니다.`
-            }
+            return `댓글에 혐오 표현이 포함되어 있습니다.`
         }
-
     }
 
 }
