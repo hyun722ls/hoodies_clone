@@ -74,7 +74,7 @@ public class SignController {
             }
 
             String salt = util.getRandomGenerateString(8);
-            String encryptPassword = util.getEncryptPassword(user.getPassword(), salt);
+            String encryptPassword = util.getEncryptStr(user.getPassword(), salt);
             if (encryptPassword == null) {
                 resultMap.put("statusCode", FAIL);
                 return resultMap;
@@ -100,7 +100,7 @@ public class SignController {
             tokenRepository.save(Token.builder().email(user.getEmail()).accessToken(accessToken).refreshToken(refreshToken).build());
 
             resultMap.put("nickname", user.getNickname());
-            resultMap.put("hashNickname", util.getEncryptPassword(user.getNickname(), nicknameSalt));
+            resultMap.put("hashNickname", util.getEncryptStr(user.getNickname(), nicknameSalt));
             resultMap.put("accessToken", accessToken);
             resultMap.put("statusCode", SUCCESS);
         } catch (Exception e) {
@@ -118,7 +118,7 @@ public class SignController {
             User getUser = userRepository.findById(user.getEmail()).get();
 
             // 비밀번호가 다른 경우
-            String hashPassword = util.getEncryptPassword(user.getPassword(), getUser.getSalt());
+            String hashPassword = util.getEncryptStr(user.getPassword(), getUser.getSalt());
             if (!hashPassword.equals(getUser.getPassword())) {
                 resultMap.put("statusCode", FAIL);
                 return resultMap;
@@ -143,7 +143,7 @@ public class SignController {
                 resultMap.put("isAdmin", true);
 
             resultMap.put("nickname", getUser.getNickname());
-            resultMap.put("hashNickname", util.getEncryptPassword(getUser.getNickname(), nicknameSalt));
+            resultMap.put("hashNickname", util.getEncryptStr(getUser.getNickname(), nicknameSalt));
             resultMap.put("accessToken", accessToken);
             resultMap.put("statusCode", SUCCESS);
         } catch (Exception e) {

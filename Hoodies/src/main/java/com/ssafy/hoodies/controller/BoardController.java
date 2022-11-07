@@ -75,7 +75,7 @@ public class BoardController {
             case FREE: // 자유게시판
                 break;
             case ANON: // 익명게시판
-                String ename = util.getEncryptPassword(dto.getWriter(), salt);
+                String ename = util.getEncryptStr(dto.getWriter(), salt);
                 board.setWriter(ename);
                 break;
         }
@@ -132,7 +132,7 @@ public class BoardController {
 
             User user = userRepository.findById(email).get();
             String nickname = user.getNickname();
-            String hashNickname = util.getEncryptPassword(nickname, salt);
+            String hashNickname = util.getEncryptStr(nickname, salt);
             String writer = boardRepository.findById(id).get().getWriter();
 
             // 글 작성자가 아닌 경우
@@ -158,33 +158,44 @@ public class BoardController {
         return json;
     }
 
-    @PatchMapping("/board/detail/{id}/like/{user}")
+    @PatchMapping("/board/detail/{id}/like")
     @ApiOperation(value = "id로 특정 게시물 좋아요 등록/해제")
     public JSONObject likeBoard(@ApiParam(
             name = "id",
             type = "String",
             value = "게시물의 DB상 id",
             required = true)
-                                @PathVariable String id,
-                                @PathVariable String user) {
+                                @PathVariable String id) {
         // 목록에 있으면 -1, 목록에 없거나 취소한 인원이면 +1
         // 작성자 인코딩 필요
-        Map<String, Boolean> contributor = boardRepository.findById(id).get().getContributor();
-        String euser = util.getEncryptPassword(user, salt);
-        boolean value = contributor.getOrDefault(euser, false);
-        int diff = value ? -1 : +1;
-        contributor.put(euser, !value);
-
-        Query boardQuery = new Query(Criteria.where("_id").is(id));
-        Update boardUpdate = new Update();
-        boardUpdate.set("contributor", contributor);
-        boardUpdate.inc("like", diff);
-        boardUpdate.inc("hit", -1);
-        UpdateResult ur = mongoTemplate.updateFirst(boardQuery, boardUpdate, "board");
-
-        int statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
         JSONObject json = new JSONObject();
-        json.put("statusCode", statusCode);
+        int statusCode = 400;
+        try {
+            Map<String, Boolean> contributor = boardRepository.findById(id).get().getContributor();
+
+            SecurityContext context = SecurityContextHolder.getContext();
+            Authentication authentication = context.getAuthentication();
+            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
+
+            User user = userRepository.findById(email).get();
+
+            String euser = util.getEncryptStr(user.getNickname(), salt);
+            boolean value = contributor.getOrDefault(euser, false);
+            int diff = value ? -1 : +1;
+            contributor.put(euser, !value);
+
+            Query boardQuery = new Query(Criteria.where("_id").is(id));
+            Update boardUpdate = new Update();
+            boardUpdate.set("contributor", contributor);
+            boardUpdate.inc("like", diff);
+            boardUpdate.inc("hit", -1);
+            UpdateResult ur = mongoTemplate.updateFirst(boardQuery, boardUpdate, "board");
+
+            statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
+            json.put("statusCode", statusCode);
+        } catch (Exception e){
+            json.put("statusCode", statusCode);
+        }
         return json;
     }
 
@@ -208,7 +219,7 @@ public class BoardController {
 
             User user = userRepository.findById(email).get();
             String nickname = user.getNickname();
-            String hashNickname = util.getEncryptPassword(nickname, salt);
+            String hashNickname = util.getEncryptStr(nickname, salt);
             String writer = boardRepository.findById(id).get().getWriter();
 
             // 관리자 또는 글 작성자가 아닌 경우
@@ -297,7 +308,7 @@ public class BoardController {
             case FREE: // 자유게시판
                 break;
             case ANON: // 익명게시판
-                String ename = util.getEncryptPassword(dto.getWriter(), salt);
+                String ename = util.getEncryptStr(dto.getWriter(), salt);
                 comment.setWriter(ename);
                 break;
         }
@@ -328,7 +339,7 @@ public class BoardController {
 
             User user = userRepository.findById(email).get();
             String nickname = user.getNickname();
-            String hashNickname = util.getEncryptPassword(nickname, salt);
+            String hashNickname = util.getEncryptStr(nickname, salt);
 
             for (Comment comment : boardRepository.findById(bid).get().getComments()) {
                 String getCid = comment.get_id();
@@ -380,7 +391,7 @@ public class BoardController {
 
             User user = userRepository.findById(email).get();
             String nickname = user.getNickname();
-            String hashNickname = util.getEncryptPassword(nickname, salt);
+            String hashNickname = util.getEncryptStr(nickname, salt);
 
             for (Comment comment : boardRepository.findById(bid).get().getComments()) {
                 String getCid = comment.get_id();
@@ -419,14 +430,21 @@ public class BoardController {
     }
 
     // 게시물 신고
-    @PutMapping("/board/detail/{id}/report/{user}")
+    @PutMapping("/board/detail/{id}/report")
     @ApiOperation(value = "게시물 신고")
-    public JSONObject reportBoard(@PathVariable String id, @PathVariable String user) {
+    public JSONObject reportBoard(@PathVariable String id) {
         JSONObject json = new JSONObject();
         int statusCode = 400;
         try {
             Set<String> reporter = boardRepository.findById(id).get().getReporter();
-            String euser = util.getEncryptPassword(user, salt);
+
+            SecurityContext context = SecurityContextHolder.getContext();
+            Authentication authentication = context.getAuthentication();
+            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
+
+            User user = userRepository.findById(email).get();
+
+            String euser = util.getEncryptStr(user.getNickname(), salt);
             reporter.add(euser);
 
             Query boardQuery = new Query(Criteria.where("_id").is(id));
@@ -442,9 +460,9 @@ public class BoardController {
     }
 
     // 댓글 신고
-    @PutMapping("/board/{bid}/comment/{cid}/report/{user}")
+    @PutMapping("/board/{bid}/comment/{cid}/report")
     @ApiOperation(value = "댓글 신고")
-    public JSONObject reportBoard(@PathVariable String bid, @PathVariable String cid, @PathVariable String user) {
+    public JSONObject reportBoard(@PathVariable String bid, @PathVariable String cid) {
         JSONObject json = new JSONObject();
         int statusCode = 400;
         try {
@@ -459,7 +477,14 @@ public class BoardController {
                     break;
                 }
             }
-            String euser = util.getEncryptPassword(user, salt);
+
+            SecurityContext context = SecurityContextHolder.getContext();
+            Authentication authentication = context.getAuthentication();
+            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
+
+            User user = userRepository.findById(email).get();
+
+            String euser = util.getEncryptStr(user.getNickname(), salt);
             reporter.add(euser);
 
             Update commentUpdate = new Update();

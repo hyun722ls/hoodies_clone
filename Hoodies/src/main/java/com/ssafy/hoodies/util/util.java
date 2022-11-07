@@ -58,10 +58,10 @@ public class util {
         return builder.toString();
     }
 
-    public static String getEncryptPassword(String password, String salt) {
+    public static String getEncryptStr(String str, String salt) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            String text = password + salt;
+            String text = str + salt;
             md.update(text.getBytes());
 
             return bytesToHex(md.digest());
