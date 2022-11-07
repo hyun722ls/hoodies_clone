@@ -6,6 +6,7 @@ import { blockCnt } from "../../../common/api/url";
 import Swal from "sweetalert2";
 import Grid from "@mui/material/Grid";
 import {timeConventer} from "../../../common/refineData/refineTime";
+import { isAdmin } from "../../../common/api/isLogin";
 
 const RightArticles = styled.div`
   width: 100%;
@@ -116,7 +117,7 @@ const PopularTexts = (props) => {
   const history = useHistory();
 
   const detailPageHandler = (article) => {
-    if (article.reporter?.length > blockCnt){
+    if (article.reporter?.length > blockCnt && !isAdmin()){
       Swal.fire({
         title: '신고 누적된 게시글입니다.',
         icon: 'error',
