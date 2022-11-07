@@ -33,22 +33,17 @@ const EvaluationMain = () => {
       const fullList = await getStaffList();
       setData(fullList);
       setSelectedData(fullList);
-      console.log(fullList);
     })();
   }, []);
 
   const handleDropProduct = async (event, newValue) => {
     event.preventDefault();
-    console.log("newvalue: ", newValue);
     const flag = newValue;
     setSelectedTab(newValue);
-    console.log("selectedTab:", selectedTab);
-    console.log("flag:", flag);
     if (flag === 0) {
       setSelectedData(data);
     } else {
       const selectedList = await getStaffListByType(flag);
-      console.log(selectedList);
       setSelectedData(selectedList);
     }
     // setSelectedDropValue(data.filter((data) => data.flag === value)[0].id);

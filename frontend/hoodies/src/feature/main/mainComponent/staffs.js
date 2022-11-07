@@ -84,7 +84,6 @@ const Staffs = (props) => {
 
     const detailPageHandler = (staff) => {
         history.push({ pathname: "/pro/detail", state: staff._id });
-        console.log(staff)
     };
     return props.staffs.length ? (
         <Grid container>

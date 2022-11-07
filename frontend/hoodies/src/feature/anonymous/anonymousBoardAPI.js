@@ -111,7 +111,6 @@ export const modifyComment = async (articleId, commentId, content) => {
         const response = await axios1.put(API_URL + `board/${articleId}/comment/${commentId}`, formData, {headers: {
             'accessToken': localStorage.getItem('token')
         }} )
-        console.log(response.data)
         return response.data
     } catch (err) {
         console.log(err)
