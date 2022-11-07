@@ -11,6 +11,16 @@ import Header from "../../common/UI/header/header";
 import { getStaff, getStaffList, getStaffListByType } from "./evaluationAPI";
 import classes from "./evaluation.module.css";
 import { Box } from "@mui/material";
+import styled from "styled-components";
+
+const EllipsisP = styled.p`
+-webkit-box-orient: vertical;
+text-overflow: ellipsis;
+overflow: hidden;
+-webkit-line-clamp: 1;
+display: -webkit-box;
+word-break: break-word;
+`
 
 const EvaluationMain = () => {
   const [selectedData, setSelectedData] = useState([]);
@@ -84,9 +94,8 @@ const EvaluationMain = () => {
               }}
             >
               <h3>{staff.writer}</h3>
-              <p>{staff.email}</p>
-              <p>{staff.etc}</p>
-              <p>{staff.scores}</p>
+              {staff.email ? <p>{staff.email}</p> : <p>E-mail N/A</p>}
+              <EllipsisP>{staff.etc}</EllipsisP>
             </div>
           );
         })}
