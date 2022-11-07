@@ -9,7 +9,6 @@ import Swal from "sweetalert2";
 
 const RightArticles = styled.div`
   width: 100%;
-  padding: 10px;
   padding-left: 0 !important;
   padding-top: 0 !important;
   background-color: #F9F5EB;

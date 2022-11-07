@@ -9,7 +9,8 @@ import styled from "styled-components";
 // import { PRO_EVAL } from "../../../common/data/dummyData"
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
-import StarIcon from '@mui/icons-material/Star';
+// import StarIcon from '@mui/icons-material/Star';
+import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 
 const Title = styled.div`
   font-size: 1em;
@@ -106,33 +107,33 @@ const Staffs = (props) => {
                                 {/*<Grid item sx={{ margin: '0px', marginRight: '0px'}} xs={12} md={6}>*/}
                                 <Grid style={{height:'200px', width: '25vw', position: 'relative', display: 'table', marginLeft: 'auto', marginRight: 'auto'}} xs={12} md={6}>
                                     <ResponsiveRadar
-                                        data={[
-                                            {
-                                                "item": "인품",
-                                                "평균": 3.5,
-                                                "작성자": staff.evaluations[0].score[0]
-                                            },
-                                            {
-                                                "item": "프로젝트 지도력",
-                                                "평균": 3.5,
-                                                "작성자": staff.evaluations[0].score[1]
-                                            },
-                                            {
-                                                "item": "상담",
-                                                "평균": 3.5,
-                                                "작성자": staff.evaluations[0].score[2]
-                                            },
-                                            {
-                                                "item": "강의 전달력",
-                                                "평균": 3.5,
-                                                "작성자": staff.evaluations[0].score[3]
-                                            },
-                                            {
-                                                "item": "반 분위기",
-                                                "평균": 3.5,
-                                                "작성자": staff.evaluations[0].score[4]
-                                            }
-                                        ]}
+                                        // data={[
+                                        //     {
+                                        //         "item": "인품",
+                                        //         "평균": 3.5,
+                                        //         "작성자": staff.evaluations[0].score[0]
+                                        //     },
+                                        //     {
+                                        //         "item": "프로젝트 지도력",
+                                        //         "평균": 3.5,
+                                        //         "작성자": staff.evaluations[0].score[1]
+                                        //     },
+                                        //     {
+                                        //         "item": "상담",
+                                        //         "평균": 3.5,
+                                        //         "작성자": staff.evaluations[0].score[2]
+                                        //     },
+                                        //     {
+                                        //         "item": "강의 전달력",
+                                        //         "평균": 3.5,
+                                        //         "작성자": staff.evaluations[0].score[3]
+                                        //     },
+                                        //     {
+                                        //         "item": "반 분위기",
+                                        //         "평균": 3.5,
+                                        //         "작성자": staff.evaluations[0].score[4]
+                                        //     }
+                                        // ]}
                                         keys={[ '작성자' ]}
                                         indexBy="item"
                                         animate={false}
@@ -153,12 +154,12 @@ const Staffs = (props) => {
                                         motionConfig="wobbly"
                                         legends={[
                                             {
-                                                anchor: 'top-right',
+                                                anchor: 'bottom-right',
                                                 direction: 'column',
                                                 translateX: -70,
                                                 translateY: 100,
                                                 itemWidth: 80,
-                                                itemHeight: -220,
+                                                itemHeight: 220,
                                                 itemTextColor: '#999',
                                                 symbolSize: 8,
                                                 symbolShape: 'circle',
@@ -188,8 +189,8 @@ const Staffs = (props) => {
                                         value={value}
                                         readOnly
                                         precision={0.5}
-                                        icon={<StarIcon fontSize="large" />}
-                                        emptyIcon={<StarIcon style={{ opacity: 0.45 }} fontSize="large" />}
+                                        icon={<StarRateRoundedIcon fontSize="large" />}
+                                        emptyIcon={<StarRateRoundedIcon style={{ opacity: 0.45 }} fontSize="large" />}
                                     />
                                     <H5>{labels[value]}</H5>
                                     <H6>{staff.evaluations[0].createdAt}</H6>
