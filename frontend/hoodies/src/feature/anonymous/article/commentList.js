@@ -146,7 +146,7 @@ const CommentList = (props) => {
                         </form>
                       </StyledContent>
                   ) : (
-                      <StyledContentFilter>{isAdmin() && comment.reporter.length > blockCnt ? `(신고 누적)${comment.content}`  : blockComment(comment)}</StyledContentFilter>
+                      <StyledContentFilter>{isAdmin() ? `${comment.content}`  : blockComment(comment)}</StyledContentFilter>
                   )}
                 <ButtonList>
                   {modifyForm && commentId === comment._id && (
