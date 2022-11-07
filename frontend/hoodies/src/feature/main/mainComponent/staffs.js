@@ -102,7 +102,7 @@ const Staffs = (props) => {
                     const average = arr => arr.reduce((p, c) => p + c, 0) / arr.length;
                     const value = Math.round(average(array))
 
-                    return isEmptyObj(staff.evaluations) ? (
+                    return isEmptyObj(!staff.evaluations) ? (
                         <Grid
                             className={`${staffs.card} ${staffs.border}`}
                             key={staff._id}
