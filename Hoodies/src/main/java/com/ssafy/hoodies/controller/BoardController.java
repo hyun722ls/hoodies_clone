@@ -6,7 +6,9 @@ import com.ssafy.hoodies.model.dto.BoardDto;
 import com.ssafy.hoodies.model.dto.CommentDto;
 import com.ssafy.hoodies.model.entity.Board;
 import com.ssafy.hoodies.model.entity.Comment;
+import com.ssafy.hoodies.model.entity.User;
 import com.ssafy.hoodies.model.repository.BoardRepository;
+import com.ssafy.hoodies.model.repository.UserRepository;
 import com.ssafy.hoodies.model.service.FileService;
 import com.ssafy.hoodies.util.util;
 import io.swagger.annotations.Api;
@@ -25,10 +27,16 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
@@ -39,6 +47,7 @@ public class BoardController {
     private final BoardRepository boardRepository;
     private final MongoTemplate mongoTemplate;
     private final FileService fileService;
+    private final UserRepository userRepository;
 
     @Value("${nickname.salt}")
     private String salt;
@@ -109,18 +118,38 @@ public class BoardController {
                                           value = "게시물의 DB상 id",
                                           required = true)
                                   @PathVariable String id) {
-        ResponseEntity<String> res = util.checkExpression(dto.getTitle(), dto.getContent(), "article");
-        Query boardQuery = new Query(Criteria.where("_id").is(id));
-        Update boardUpdate = new Update();
-        boardUpdate.set("title", dto.getTitle());
-        boardUpdate.set("content", dto.getContent());
-        boardUpdate.set("category", res.getBody().trim());
-        boardUpdate.set("modifiedAt", util.getTimeStamp());
-        UpdateResult ur = mongoTemplate.updateFirst(boardQuery, boardUpdate, "board");
-
-        int statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
         JSONObject json = new JSONObject();
-        json.put("statusCode", statusCode);
+        int statusCode = 400;
+        try {
+            SecurityContext context = SecurityContextHolder.getContext();
+            Authentication authentication = context.getAuthentication();
+            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
+
+            User user = userRepository.findById(email).get();
+            String nickname = user.getNickname();
+            String hashNickname = util.getEncryptPassword(nickname, salt);
+            String writer = boardRepository.findById(id).get().getWriter();
+
+            // 글 작성자가 아닌 경우
+            if (!(nickname.equals(writer) || hashNickname.equals(writer))) {
+                json.put("statusCode", statusCode);
+                return json;
+            }
+
+            ResponseEntity<String> res = util.checkExpression(dto.getTitle(), dto.getContent(), "article");
+            Query boardQuery = new Query(Criteria.where("_id").is(id));
+            Update boardUpdate = new Update();
+            boardUpdate.set("title", dto.getTitle());
+            boardUpdate.set("content", dto.getContent());
+            boardUpdate.set("category", res.getBody().trim());
+            boardUpdate.set("modifiedAt", util.getTimeStamp());
+            UpdateResult ur = mongoTemplate.updateFirst(boardQuery, boardUpdate, "board");
+
+            statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
+            json.put("statusCode", statusCode);
+        } catch (Exception e) {
+            json.put("statusCode", statusCode);
+        }
         return json;
     }
 
@@ -164,12 +193,32 @@ public class BoardController {
                     value = "게시물의 DB상 id",
                     required = true)
             @PathVariable String id) {
-        boolean isExist = boardRepository.existsById(id);
-        boardRepository.deleteById(id);
-
-        int statusCode = isExist ? 200 : 400;
         JSONObject json = new JSONObject();
-        json.put("statusCode", statusCode);
+        int statusCode = 400;
+        try {
+            SecurityContext context = SecurityContextHolder.getContext();
+            Authentication authentication = context.getAuthentication();
+            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
+            boolean isAdmin = authentication.getAuthorities().contains("ROLE_ADMIN");
+
+            User user = userRepository.findById(email).get();
+            String nickname = user.getNickname();
+            String hashNickname = util.getEncryptPassword(nickname, salt);
+            String writer = boardRepository.findById(id).get().getWriter();
+
+            // 관리자 또는 글 작성자가 아닌 경우
+            if (!(isAdmin || nickname.equals(writer) || hashNickname.equals(writer))) {
+                json.put("statusCode", statusCode);
+                return json;
+            }
+
+            boolean isExist = boardRepository.existsById(id);
+            boardRepository.deleteById(id);
+            statusCode = isExist ? 200 : 400;
+            json.put("statusCode", statusCode);
+        } catch (Exception e) {
+            json.put("statusCode", statusCode);
+        }
         return json;
     }
 
@@ -258,40 +307,98 @@ public class BoardController {
     @PutMapping("/board/{bid}/comment/{cid}")
     @ApiOperation(value = "댓글 수정")
     public JSONObject updateComment(@RequestBody CommentDto dto, @PathVariable String bid, @PathVariable String cid) {
-        ResponseEntity<String> res = util.checkExpression("", dto.getContent(), "comment");
-        Query commentQuery = new Query();
-        commentQuery.addCriteria(Criteria.where("_id").is(bid));
-        commentQuery.addCriteria(Criteria.where("comments").elemMatch(Criteria.where("_id").is(cid)));
-        Update commentUpdate = new Update();
-        commentUpdate.inc("hit", -1);
-        commentUpdate.set("comments.$.content", dto.getContent());
-        commentUpdate.set("comments.$.modifiedAt", util.getTimeStamp());
-        commentUpdate.set("comments.$.category", res.getBody().trim());
-
-        UpdateResult ur = mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
-
-        int statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
         JSONObject json = new JSONObject();
-        json.put("statusCode", statusCode);
+        int statusCode = 400;
+        try {
+            SecurityContext context = SecurityContextHolder.getContext();
+            Authentication authentication = context.getAuthentication();
+            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
+
+            User user = userRepository.findById(email).get();
+            String nickname = user.getNickname();
+            String hashNickname = util.getEncryptPassword(nickname, salt);
+
+            for (Comment comment : boardRepository.findById(bid).get().getComments()) {
+                String getCid = comment.get_id();
+                String writer = comment.getWriter();
+
+                // 수정하려는 댓글이 아닌 경우
+                if (!cid.equals(getCid))
+                    continue;
+
+                // 글 작성자가 아닌 경우
+                if (!(nickname.equals(writer) || hashNickname.equals(writer))) {
+                    json.put("statusCode", statusCode);
+                    return json;
+                }
+            }
+
+            ResponseEntity<String> res = util.checkExpression("", dto.getContent(), "comment");
+            Query commentQuery = new Query();
+            commentQuery.addCriteria(Criteria.where("_id").is(bid));
+            commentQuery.addCriteria(Criteria.where("comments").elemMatch(Criteria.where("_id").is(cid)));
+            Update commentUpdate = new Update();
+            commentUpdate.inc("hit", -1);
+            commentUpdate.set("comments.$.content", dto.getContent());
+            commentUpdate.set("comments.$.modifiedAt", util.getTimeStamp());
+            commentUpdate.set("comments.$.category", res.getBody().trim());
+
+            UpdateResult ur = mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
+
+            statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
+            json.put("statusCode", statusCode);
+        } catch (Exception e) {
+            json.put("statusCode", statusCode);
+        }
         return json;
+
     }
 
     // 댓글 삭제
     @DeleteMapping("/board/{bid}/comment/{cid}")
     @ApiOperation(value = "댓글 삭제")
     public JSONObject deleteComment(@PathVariable String bid, @PathVariable String cid) {
-        Query commentQuery = new Query();
-        commentQuery.addCriteria(Criteria.where("_id").is(bid));
-        commentQuery.addCriteria(Criteria.where("comments").elemMatch(Criteria.where("_id").is(cid)));
-        Update commentUpdate = new Update();
-        commentUpdate.inc("hit", -1);
-        commentUpdate.pull("comments", Query.query(Criteria.where("_id").is(cid)));
-
-        UpdateResult ur = mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
-
-        int statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
         JSONObject json = new JSONObject();
-        json.put("statusCode", statusCode);
+        int statusCode = 400;
+        try {
+            SecurityContext context = SecurityContextHolder.getContext();
+            Authentication authentication = context.getAuthentication();
+            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
+            boolean isAdmin = authentication.getAuthorities().contains("ROLE_ADMIN");
+
+            User user = userRepository.findById(email).get();
+            String nickname = user.getNickname();
+            String hashNickname = util.getEncryptPassword(nickname, salt);
+
+            for (Comment comment : boardRepository.findById(bid).get().getComments()) {
+                String getCid = comment.get_id();
+                String writer = comment.getWriter();
+
+                // 삭제하려는 댓글이 아닌 경우
+                if (!cid.equals(getCid))
+                    continue;
+
+                // 관리자 또는 글 작성자가 아닌 경우
+                if (!(isAdmin || nickname.equals(writer) || hashNickname.equals(writer))) {
+                    json.put("statusCode", statusCode);
+                    return json;
+                }
+            }
+
+            Query commentQuery = new Query();
+            commentQuery.addCriteria(Criteria.where("_id").is(bid));
+            commentQuery.addCriteria(Criteria.where("comments").elemMatch(Criteria.where("_id").is(cid)));
+            Update commentUpdate = new Update();
+            commentUpdate.inc("hit", -1);
+            commentUpdate.pull("comments", Query.query(Criteria.where("_id").is(cid)));
+
+            UpdateResult ur = mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
+
+            statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
+            json.put("statusCode", statusCode);
+        } catch (Exception e) {
+            json.put("statusCode", statusCode);
+        }
         return json;
     }
 
