@@ -253,6 +253,7 @@ const Signup = () => {
     if (
       nickname &&
       email &&
+      password.length > 7 &&
       password === confirmPassword &&
       isNicknameDuplicated &&
       emailCheck
@@ -316,7 +317,8 @@ const Signup = () => {
           />
         </InputDiv>
         <EmptyDiv>
-          {isPasswordDuplicated && <StyledSmall>암호가 일치하지 않습니다</StyledSmall>}
+          {password && password.length < 8 && <StyledSmall>8자 이상 입력해주세요</StyledSmall>}
+          {password.length > 7 && isPasswordDuplicated && <StyledSmall>암호가 일치하지 않습니다</StyledSmall>}
         </EmptyDiv>
         <div>
           <InputBtn type="submit">회원가입</InputBtn>
