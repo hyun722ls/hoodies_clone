@@ -74,7 +74,7 @@ const Staffs = (props) => {
     };
 
     const detailPageHandler = (staff) => {
-        history.push({ pathname: "/pro/detail", state: staff });
+        history.push({ pathname: "/pro/detail", state: staff._id });
         console.log(staff)
     };
     return props.staffs.length ? (
@@ -108,7 +108,7 @@ const Staffs = (props) => {
                                     <ResponsiveRadar
                                         data={[
                                             {
-                                                "item": "인품",
+                                                "item": "열정",
                                                 "평균": 3.5,
                                                 "작성자": staff.evaluations[0].score[0]
                                             },
