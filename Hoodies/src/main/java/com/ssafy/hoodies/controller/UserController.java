@@ -186,7 +186,7 @@ public class UserController {
 
             String salt = user.getSalt();
             String password = userService.sendMM(emailId, 2);
-            String encryptPassword = util.getEncryptPassword(password, salt);
+            String encryptPassword = util.getEncryptStr(password, salt);
 
             if (encryptPassword == null) {
                 resultMap.put("statusCode", FAIL);
@@ -245,8 +245,8 @@ public class UserController {
 
             // 이전 닉네임으로 익명 게시판에 작성한 부분
             // 이전 닉네임으로 익명 게시판에 작성한 글
-            String ewriter = util.getEncryptPassword(writer, salt);
-            String enickname = util.getEncryptPassword(user.getNickname(), salt);
+            String ewriter = util.getEncryptStr(writer, salt);
+            String enickname = util.getEncryptStr(user.getNickname(), salt);
 
             Query equery = new Query();
             equery.addCriteria(Criteria.where("writer").is(ewriter));
@@ -283,7 +283,7 @@ public class UserController {
             User user = userRepository.findById(email).get();
 
             String salt = user.getSalt();
-            String encryptPassword = util.getEncryptPassword(password, salt);
+            String encryptPassword = util.getEncryptStr(password, salt);
             String beforePassword = user.getPassword();
 
             // 이전 비밀번호와 동일한 경우
@@ -309,7 +309,7 @@ public class UserController {
             type = "String",
             value = "게시물의 DB상 writer, 닉네임",
             required = true) @PathVariable String writer) {
-        String ewriter = util.getEncryptPassword(writer, salt);
+        String ewriter = util.getEncryptStr(writer, salt);
         List<String> names = new ArrayList<>();
         names.add(writer);
         names.add(ewriter);
