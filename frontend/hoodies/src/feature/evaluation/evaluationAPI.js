@@ -51,3 +51,16 @@ export const postEvaluation = async (id, score, content) => {
     }
     
 }
+
+
+export const deleteComment = async (proId, commentId) => {
+    try {
+        const response = await axios1.delete(API_URL + `mentor/${proId}/evaluation/${commentId}`, {headers: {
+            'accessToken': localStorage.getItem('token')
+        }} )
+    
+        return response.data
+    } catch (err) {
+        console.log(err)
+    }
+}
