@@ -101,7 +101,7 @@ const Staffs = (props) => {
 
                             <Grid sx={{ minWidth: 275}}>
                                 <H2>{staff.writer}</H2>
-                                <H3 sx={{{height:'15.2px'}}}>{staff.etc}</H3>
+                                <H3 sx={{height:'15.2px'}}>{staff.etc}</H3>
 
                                 {/*<Grid item sx={{ margin: '0px', marginRight: '0px'}} xs={12} md={6}>*/}
                                 <Grid style={{height:'200px', width: '25vw', position: 'relative', display: 'table', marginLeft: 'auto', marginRight: 'auto'}} xs={12} md={6}>
