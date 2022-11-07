@@ -202,26 +202,6 @@ const Signup = () => {
     setAuthCode(event.target.value);
   };
 
-  const authCodeTransferHandler = async (event) => {
-    event.preventDefault();
-    if (authCode.trim()) {
-      const response = await authMM(email, authCode)
-      if (response.statusCode === '200'){
-        setAuthCode("");
-        setEmail(email);
-        setEmailCheck(true);
-        alert("인증됨");
-        setModalOpen(false);
-      } else {
-        setAuthCode("");
-        setEmail('');
-        setEmailCheck(false);
-        alert("잘못된 유효코드입니다.");
-        setModalOpen(false);
-      }
-    }
-  };
-
   const NicknameDuplicatedHandler = async (event) => {
     event.preventDefault();
     if (nickname.trim()) {

@@ -48,14 +48,6 @@ const StyledInput = styled.input`
 const UserMain = () => {
     const [nickname, setNickname] = useState('')
     const [email, setEmail] = useState('')
-    const [nicknameModalOpen, setNicknameModalOpen] = useState(false);
-    const [passwordModalOpen, setPasswordModalOpen] = useState(false);
-    const [originalPassword, setOriginalPassword] = useState('')
-    const [newPassword, setNewPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
-    const [isNewNicknameDuplicated, setIsNewNicknameDuplicated] = useState(false)
-    const [newNickname, setNewNickname] = useState('')
-    const [isPasswordDuplicated, setIsPasswordDuplicated] = useState(false)
     const history = useHistory();
 
     useEffect(()=>{
@@ -63,67 +55,11 @@ const UserMain = () => {
         setEmail(localStorage.getItem('email'))
     }, [nickname])
 
-    useEffect(()=>{
-        if (newPassword.trim() === confirmPassword.trim() | !confirmPassword){
-            setIsPasswordDuplicated(false)
-        } else {
-            setIsPasswordDuplicated(true)
-        }
-    }, [newPassword, confirmPassword])
-
-    const closePasswordModal = () => {
-        setConfirmPassword('')
-        setOriginalPassword('')
-        setNewPassword('')
-        setIsPasswordDuplicated(false)
-        setPasswordModalOpen(false)
-    }
-
-    const newNicknameChangeHandler = (event) => {
-        event.preventDefault()
-        setIsNewNicknameDuplicated(false)
-        setNewNickname(event.target.value)
-    }
-
-    const newNicknameDuplicatedHandler = async (event) => {
-        event.preventDefault();
-        if (newNickname.trim()) {
-            const response = await checkNickname(newNickname.trim())
-            if (response.cnt === 0) {
-                setIsNewNicknameDuplicated(true)
-                setNewNickname(newNickname.trim())
-                alert("닉네임 사용가능")
-            } else {
-                alert("중복된 닉네임입니다")
-                setNewNickname("")
-            }
-        }
-    };
-
     const toUserBoard = (event) => {
         event.preventDefault();
         history.push('/user/board')
     }
 
-    // const nicknameModifyHandler = async (event) => {
-    //     event.preventDefault()
-    //     if (isNewNicknameDuplicated === true) {
-    //         const response = await updateNickname(newNickname.trim())
-    //         if (response.statusCode === '200') {
-    //             localStorage.setItem('nickname', newNickname.trim())
-    //             localStorage.setItem('hashNickname', response.hashNickname)
-    //             setNickname(localStorage.getItem('nickname'))
-    //             setNewNickname('')
-    //             setNicknameModalOpen(false)
-    //             setIsNewNicknameDuplicated(false)
-    //             alert('변경성공')
-    //         } else {
-    //             alert('변경실패')
-    //         }
-    //     } else {
-    //         alert('중복검사를 먼저 해주세요')
-    //     }
-    // }
     const openWithdrawalModal = (event) => {
         event.preventDefault()
         Swal.fire({
@@ -131,83 +67,6 @@ const UserMain = () => {
             icon: 'info',
         })
     } 
-
-
-    const originiPasswordChangeHandler = (event) => {
-      event.preventDefault()
-      setOriginalPassword(event.target.value)
-    }
-
-    const newPasswordChangeHandler = (event) => {
-        event.preventDefault()
-        const tmpPassword = event.target.value
-        setNewPassword(tmpPassword)
-    }
-
-    const confirmPasswordChangeHandler = (event) => {
-        event.preventDefault()
-        const tmpPassword1 = event.target.value
-        setConfirmPassword(tmpPassword1)
-
-    }
-
-
-    const passwordModifyHandler = async (event) => {
-        event.preventDefault()
-        if (newPassword === confirmPassword) {
-            const response = await updatePassword({
-                originalPassword,
-                password: newPassword,
-            })
-            if (response.statusCode === '200') {
-                setConfirmPassword('')
-                setNewPassword('')
-                setOriginalPassword('')
-                alert('변경성공')
-            } else {
-                alert('변경실패')
-            }
-        } else {
-            alert('비밀번호가 일치하지 않습니다')
-        }
-    }
-
-    // const openNicknameModal = async (event) => {
-    //     event.preventDefault()
-    //     const steps = ['1', '2']
-    //     const nicknameModal = Swal.mixin({
-    //         title: '변경할 닉네임을 입력하세요!',
-    //         input: 'text',
-    //         showCancelButton: true,
-    //         showDenyButton: true,
-    //         showConfirmButton: isNewNicknameDuplicated,
-    //         denyButtonText: isNewNicknameDuplicated ? '사용 가능' : '중복 검사',
-    //         denyButtonColor: 'blue',
-    //         reverseButtons: true,
-    //         returnInputValueOnDeny: true,
-    //         preConfirm: async () => {
-    //         },
-    //         preDeny: async (value) => {
-    //             if(value) {
-    //                 const response = await checkNickname(value)
-    //                 if (response.cnt === 0) {
-    //                     setIsNewNicknameDuplicated(true)
-    //                 } else {
-    //                     setIsNewNicknameDuplicated(false)
-    //                     Swal.showValidationMessage('중복된 닉네임입니다.')
-    //                 }
-    //             }
-    //         },
-    //     })
-    //     const values = []
-    //     let currentStep
-
-    //     for (currentStep = 0; currentStep < steps.length;) {
-    //         const result = await nicknameModal.fire({
-    //             inputValue: values[currentStep],
-    //         })
-    //     }
-    // }
 
     const openPasswordModal = (event) => {
         event.preventDefault()
@@ -249,39 +108,6 @@ const UserMain = () => {
         })
     }
 
-    let modalPasswordForm = (
-        <form onSubmit={passwordModifyHandler}>
-            <span>기존 패스워드</span>
-            <div>
-                <input
-                type="password"
-                value={originalPassword}
-                onChange={originiPasswordChangeHandler}
-                />
-            </div>
-            <span>변경 패스워드</span>
-            <div>
-                <input
-                    type="password"
-                    value={newPassword}
-                    onChange={newPasswordChangeHandler}
-                />
-            </div>
-            <span>변경 패스워드 확인</span>
-            <div>
-                <StyledInput
-                    type="password"
-                    value={confirmPassword}
-                    onChange={confirmPasswordChangeHandler}
-                />
-                {isPasswordDuplicated && <StyledSmall>암호가 일치하지 않습니다</StyledSmall>}
-            </div>
-            <div>
-                <button type="submit">전송</button>
-            </div>
-        </form>
-    );
-
     return (
         <div>
             <Header />
@@ -297,9 +123,6 @@ const UserMain = () => {
                 <StyledP onClick={toUserBoard}>내가 쓴 글</StyledP>
                 <StyledP onClick={openWithdrawalModal}>회원탈퇴</StyledP>
             </StyledCard>
-            <CustomModal open={passwordModalOpen} close={closePasswordModal} header="">
-                {modalPasswordForm}
-            </CustomModal>
         </div>
     );
 };

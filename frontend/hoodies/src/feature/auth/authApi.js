@@ -51,7 +51,6 @@ export const login = async (email, password) => {
     const formData = {'email':email, 'password': password}
     try {
         const response = await axios.post(API_URL + 'user/login', formData)
-        console.log(response.data)
         return response.data
     } catch (err) {
         console.log(err)

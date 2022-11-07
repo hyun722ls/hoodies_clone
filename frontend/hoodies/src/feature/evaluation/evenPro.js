@@ -180,7 +180,6 @@ const EvenPro = () => {
     (async () => {
       if (location.state) {
         const response = await getStaff(location.state);
-        console.log(response)
         setStaff(response);
         setComments(response.evaluations);
         if (response.type === "consultant") {

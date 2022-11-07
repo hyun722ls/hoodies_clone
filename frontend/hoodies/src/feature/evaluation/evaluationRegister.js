@@ -38,7 +38,6 @@ const CreateEvaluation = (props) => {
     const checkStuduentData = await checkEvaluation(formData)
     
     
-    console.log(checkStuduentData)
     if (checkStuduentData.commentResult !== 'clean'){
       Swal.fire('부적절한 표현이 있습니다. 상대를 생각하세요.')
      } else {
