@@ -154,23 +154,43 @@ const ArticleDetail = () => {
   };
 
   const deleteHandler = async (event) => {
-    const response = await deleteArticle(article._id);
-    if (response.statusCode === 200) {
-      history.push("/board/free");
-    } else {
-      console.log("게시글 삭제");
-    }
+    Swal.fire({
+      title: '삭제하시겠습니까?',
+      showCancelButton: true,
+      cancelButtonText: '취소',
+      confirmButtonText: '삭제',
+      reverseButtons: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const response = await deleteArticle(article._id);
+        if (response.statusCode === 200) {
+          history.push("/board/free");
+        } else {
+          console.log("게시글 삭제");
+        }
+      }
+    })
   };
 
   const deleteCommentHandler = async (commentId) => {
-    const response = await deleteComment(article._id, commentId);
-    if (response.statusCode === 200) {
-      const response1 = await fetchArticle(article._id);
-      setArticle(response1);
-      setComments(response1.comments);
-    } else {
-      console.log("댓글 삭제 에러");
-    }
+    Swal.fire({
+      title: '삭제하시겠습니까?',
+      showCancelButton: true,
+      cancelButtonText: '취소',
+      confirmButtonText: '삭제',
+      reverseButtons: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const response = await deleteComment(article._id, commentId);
+        if (response.statusCode === 200) {
+          const response1 = await fetchArticle(article._id);
+          setArticle(response1);
+          setComments(response1.comments);
+        } else {
+          console.log("댓글 삭제 에러");
+        }
+      }
+    })
   };
 
   const modifyCommentHandler = async (commentId, newContent) => {
@@ -250,20 +270,30 @@ const ArticleDetail = () => {
         timerProgressBar: true,
       });
     } else {
-      const response = await reportArticle(location.state);
-      if (response.statusCode === 200) {
-        const response1 = await fetchArticle(location.state);
-        setArticle(response1);
-        setComments(response1.comments);
-        Swal.fire({
-          title: "게시글이 신고되었습니다.",
-          icon: "success",
-          timer: 2000,
-          timerProgressBar: true,
-        });
-      } else {
-        console.log("신고 실패");
-      }
+      Swal.fire({
+        title: '신고하시겠습니까?',
+        showCancelButton: true,
+        cancelButtonText: '취소',
+        confirmButtonText: '신고',
+        reverseButtons: true,
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const response = await reportArticle(location.state);
+          if (response.statusCode === 200) {
+            const response1 = await fetchArticle(location.state);
+            setArticle(response1);
+            setComments(response1.comments);
+            Swal.fire({
+              title: "게시글이 신고되었습니다.",
+              icon: "success",
+              timer: 2000,
+              timerProgressBar: true,
+            });
+          } else {
+            console.log("신고 실패");
+          }
+        }
+      })
     }
   };
 
@@ -276,20 +306,30 @@ const ArticleDetail = () => {
         timerProgressBar: true,
       });
     } else {
-      const response = await reportComment(article._id, comment._id);
-      if (response.statusCode === 200) {
-        const response1 = await fetchArticle(location.state);
-        setArticle(response1);
-        setComments(response1.comments);
-        Swal.fire({
-          title: "선택한 댓글이 신고되었습니다.",
-          icon: "success",
-          timer: 2000,
-          timerProgressBar: true,
-        });
-      } else {
-        console.log("댓글 신고 오류");
-      }
+      Swal.fire({
+        title: '신고하시겠습니까?',
+        showCancelButton: true,
+        cancelButtonText: '취소',
+        confirmButtonText: '신고',
+        reverseButtons: true,
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const response = await reportComment(article._id, comment._id);
+          if (response.statusCode === 200) {
+            const response1 = await fetchArticle(location.state);
+            setArticle(response1);
+            setComments(response1.comments);
+            Swal.fire({
+              title: "선택한 댓글이 신고되었습니다.",
+              icon: "success",
+              timer: 2000,
+              timerProgressBar: true,
+            });
+          } else {
+            console.log("댓글 신고 오류");
+          }
+        }
+      })
     }
   };
 

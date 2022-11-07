@@ -121,7 +121,7 @@ export const fetchLike = async (articleId) => {
     const writer = localStorage.getItem('nickname')
     const tmpData = []
     try {
-        const response = await axios1.patch(API_URL + `board/detail/${articleId}/like/${writer}`, tmpData, {headers: {
+        const response = await axios1.patch(API_URL + `board/detail/${articleId}/like`, tmpData, {headers: {
             'accessToken': localStorage.getItem('token')
         }} )
       
@@ -136,7 +136,7 @@ export const reportArticle = async (articleId) => {
     const writer = localStorage.getItem('nickname')
     const tmpData = {}
     try {
-        const response = await axios1.put(API_URL + `board/detail/${articleId}/report/${writer}`, tmpData, {headers: {
+        const response = await axios1.put(API_URL + `board/detail/${articleId}/report`, tmpData, {headers: {
             'accessToken': localStorage.getItem('token')
         }})
         return response.data
@@ -151,7 +151,7 @@ export const reportComment = async (articleId, commentId) => {
     const writer = localStorage.getItem('nickname')
     const tmpData = {}
     try {
-        const response = await axios1.put(API_URL + `board/${articleId}/comment/${commentId}/report/${writer}`, tmpData, {headers: {
+        const response = await axios1.put(API_URL + `board/${articleId}/comment/${commentId}/report`, tmpData, {headers: {
             'accessToken': localStorage.getItem('token')
         }})
         return response.data
