@@ -57,7 +57,7 @@ axios1.interceptors.response.use(
           .catch((err) => {
             console.log("reissue 마무리");
             Swal.fire({
-              title: '로그아웃 되었습니다.',
+              title: '세션이 만료되었습니다',
               icon: "warning"
             });
             localStorage.clear();

@@ -9,6 +9,12 @@ const Header = () => {
   const logout = async (event) => {
     event.preventDefault()
     const response = await logOut()
+    Swal.fire({
+      title: '성공적으로 로그아웃했습니다',
+      icon: 'success',
+      timer: 2000,
+      timerProgressBar: true,
+    })
     if (response){
       localStorage.clear()
       history.push('/login')
@@ -27,6 +33,7 @@ const Header = () => {
       confirmButtonText: '확인',
       cancelButtonText: '닫기',
       showCancelButton: true,
+      reverseButtons: true,
       preConfirm: async (value) => {
         if (!value) {
           Swal.showValidationMessage('내용을 입력해주세요.')
