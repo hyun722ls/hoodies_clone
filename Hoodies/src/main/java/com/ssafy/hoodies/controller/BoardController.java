@@ -233,7 +233,6 @@ public class BoardController {
             statusCode = isExist ? 200 : 400;
             json.put("statusCode", statusCode);
         } catch (Exception e) {
-            System.out.println("에러 발생!");
             json.put("statusCode", statusCode);
         }
         return json;
@@ -401,11 +400,8 @@ public class BoardController {
                 if (!cid.equals(getCid))
                     continue;
 
-                System.out.println("댓글 찾음!");
-
                 // 관리자 또는 글 작성자가 아닌 경우
                 if (!(isAdmin || nickname.equals(writer) || hashNickname.equals(writer))) {
-                    System.out.println("writer = " + writer);
                     json.put("statusCode", statusCode);
                     return json;
                 }
@@ -423,7 +419,6 @@ public class BoardController {
             statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
             json.put("statusCode", statusCode);
         } catch (Exception e) {
-            System.out.println("에러 발생!");
             json.put("statusCode", statusCode);
         }
         return json;
