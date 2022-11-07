@@ -106,8 +106,12 @@ const Login = () => {
           localStorage.setItem("flag", response.isAdmin);
         }
         history.push("/index");
+      } else {
+        Swal.fire({
+          title: '올바르지 않은 이메일 혹은 패스워드입니다',
+          icon: 'error'
+        })
       }
-      // 오류 제어 코드 필요
     }
   };
 
