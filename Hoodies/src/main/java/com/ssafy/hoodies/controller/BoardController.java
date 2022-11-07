@@ -231,16 +231,22 @@ public class BoardController {
     @GetMapping("/preview/free")
     @ApiOperation(value = "최근 게시물 10개 조회")
     public List<Board> findRecentBoard() {
-        return boardRepository.findBy(PageRequest.of(0, 10, Sort.by("createdAt").descending()));
+        Sort sort = Sort.by("createdAt").descending();
+        // 신고 횟수 2회 이하인 게시글만 조회
+        Query boardQuery = new Query(Criteria.where("reporter.2").exists(false));
+        boardQuery.with(sort);
+        return mongoTemplate.find(boardQuery, Board.class).subList(0, 10);
     }
 
     // 인기 게시물 조회
     @GetMapping("/preview/popular")
     @ApiOperation(value = "인기 게시물 10개 조회")
     public List<Board> findPopularBoard() {
-        return boardRepository.findBy(PageRequest.of(0, 10, Sort.by("like").descending()
-                .and(Sort.by("createdAt").descending())
-        ));
+        Sort sort = Sort.by("like").descending().and(Sort.by("createdAt").descending();
+        // 신고 횟수 2회 이하인 게시글만 조회
+        Query boardQuery = new Query(Criteria.where("reporter.2").exists(false));
+        boardQuery.with(sort);
+        return mongoTemplate.find(boardQuery, Board.class).subList(0, 10);
     }
 
     @PostMapping("/file/{id}")
