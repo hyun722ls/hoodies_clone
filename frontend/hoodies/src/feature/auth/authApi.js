@@ -88,3 +88,26 @@ export const logOut = async () => {
         console.log(err)
     }
 }
+
+export const postInquiry = async (content) => {
+    const data = {'content': content}
+    try {
+        const response = await axios1.post(API_URL + 'board/feedback', data, {headers: {
+            'accessToken': localStorage.getItem('token')
+        }})
+        return response.data
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+export const getInquiry = async () => {
+    try {
+        const response = await axios1.get(API_URL + 'admin/feedback', {headers: {
+            'accessToken': localStorage.getItem('token')
+        }})
+        return response.data
+    } catch (err) {
+        console.log(err)
+    }
+}

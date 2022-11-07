@@ -7,6 +7,7 @@ import {changeAnonymous, checkBoardType} from "../../../common/refineData/anonym
 import Grid from '@mui/material/Grid';
 import { blockCnt } from "../../../common/api/url";
 import Swal from "sweetalert2";
+import { isAdmin } from "../../../common/api/isLogin";
 
 
 const Articles = styled.div`
@@ -140,7 +141,7 @@ const ArticleHr = styled.hr`
 const BoardTable = (props) => {
   const history = useHistory();
   const detailPageHandler = (article) => {
-    if (article.reporter?.length > blockCnt){
+    if (article.reporter?.length > blockCnt && !isAdmin()){
       Swal.fire({
         title: '신고 누적된 게시글입니다.',
         icon: 'error',
