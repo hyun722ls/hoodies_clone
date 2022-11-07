@@ -37,9 +37,9 @@ const CreateEvaluation = (props) => {
     formData.set('comment', studentComment)
     const checkStuduentData = await checkEvaluation(formData)
     
-    const category = JSON.parse(checkStuduentData)
-    console.log(checkStuduentData, category)
-    if (category.commentResult !== 'clean'){
+    
+    console.log(checkStuduentData)
+    if (checkStuduentData.commentResult !== 'clean'){
       alert('부적절한 표현이 있습니다. 상대를 생각하세요.')
      } else {
        const response = await postEvaluation(id, score, studentComment);
