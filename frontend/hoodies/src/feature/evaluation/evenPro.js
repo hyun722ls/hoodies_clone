@@ -21,7 +21,8 @@ const EvenPro = () => {
   const [longerText, setLongerText] = useState(3)
 
   function isOverflown(element) {
-    return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
+    const {scrollHeight, clientHeight} = element;
+    return scrollHeight > clientHeight
   }
 
   const longerTextHandler = (event) => {
