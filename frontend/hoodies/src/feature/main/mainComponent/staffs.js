@@ -243,8 +243,7 @@ const Staffs = (props) => {
                                         emptyIcon={<StarRateRoundedIcon style={{ opacity: 0.45 }} fontSize="large" />}
                                     />
                                     <H5>{labels[value]}</H5>
-                                    {staff.evaluations.length > 0 ? <H6>{staff.evaluations[0].createdAt}</H6> : <H6></H4>}
-                                    <H6></H6>
+                                    {staff.evaluations.length > 0 ? <H6>{staff.evaluations[0].createdAt}</H6> : <H6></H6>}
                                 </Box>
                             </Grid>
                         </Grid>
