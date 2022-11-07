@@ -158,7 +158,7 @@ const Staffs = (props) => {
         <Grid container>
             <Title className={staffs.spacing}>
                 <H1 className={staffs.title}>최신 평가&nbsp;&nbsp;&nbsp;</H1>
-                <PageviewIcon onClick={evaluationPagzeHandler} />
+                <PageviewIcon onClick={evaluationPageHandler} />
             </Title>
             <DIV>
                 {props.staffs.map((staff) => {
