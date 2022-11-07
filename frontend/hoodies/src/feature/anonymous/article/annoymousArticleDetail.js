@@ -6,10 +6,9 @@ import CommentList from "./commentList";
 import styled from "styled-components";
 import { annonymousWriter, confirmWriter } from "../../../common/refineData/anonymousWriter";
 import Tooltip from '@mui/material/Tooltip';
-import TouchAppIcon from '@mui/icons-material/TouchApp';
-import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import { alertTitleClasses } from "@mui/material";
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import Swal from "sweetalert2";
 
 const Articles = styled.div`
@@ -327,13 +326,13 @@ const AnnoymousArticleDetail = () => {
             <Score>
             <Item>추천수 : {article.like}</Item>
                 <Tooltip title="추천!">
-                    {isLike ? <ThumbDownAltIcon onClick={likeHandler} /> : <ThumbUpIcon onClick={likeHandler} />}
+                  {isLike ? <ThumbUpAltIcon onClick={likeHandler} /> : <ThumbUpOffAltIcon onClick={likeHandler} />}
                   
                 </Tooltip>
               <Item>조회수 : {article.hit}</Item>
               <Item>|</Item>
                 
-                    {localStorage.getItem('hashNickname') !== article.writer && <TouchAppIcon onClick={reportHandler} />}
+                    {localStorage.getItem('hashNickname') !== article.writer && <WarningAmberIcon onClick={reportHandler} />}
                
             
             </Score>

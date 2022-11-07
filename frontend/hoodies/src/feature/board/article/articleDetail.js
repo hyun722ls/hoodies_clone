@@ -5,10 +5,9 @@ import {createComment, deleteArticle, deleteComment, fetchArticle, fetchLike, mo
 import CommentList from "./commentList";
 import styled from "styled-components";
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import TouchAppIcon from '@mui/icons-material/TouchApp';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import Tooltip from '@mui/material/Tooltip';
 import Swal from "sweetalert2";
 
 const Articles = styled.div`
@@ -322,7 +321,7 @@ const ArticleDetail = () => {
               <Item>조회수 : {article.hit}</Item>
               <Item>|</Item>
 
-                {localStorage.getItem('nickname') !== article.writer && <TouchAppIcon onClick={reportHandler} />}
+                {localStorage.getItem('nickname') !== article.writer && <WarningAmberIcon onClick={reportHandler} />}
 
 
             </Score>
