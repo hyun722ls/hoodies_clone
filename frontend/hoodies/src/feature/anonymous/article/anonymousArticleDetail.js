@@ -203,32 +203,40 @@ const AnonymousArticleDetail = () => {
   };
 
   const modifyCommentHandler = async (commentId, newContent) => {
-    const response = await modifyComment(article._id, commentId, newContent);
-    if (response.statusCode === 200) {
-      const response1 = await fetchArticle(location.state);
-      setArticle(response1);
-      setComments(response1.comments);
-      setCommentsMap(anonymousWriter(response1.comments, response1.writer));
-      setArticleWriter(response1.writer);
+    if (newContent.trim()) {
+      const response = await modifyComment(article._id, commentId, newContent);
+      if (response.statusCode === 200) {
+        const response1 = await fetchArticle(location.state);
+        setArticle(response1);
+        setComments(response1.comments);
+        setCommentsMap(anonymousWriter(response1.comments, response1.writer));
+        setArticleWriter(response1.writer);
+      } else {
+        console.log("댓글 수정 에러");
+      }
+      // const newComments = [...comments];
+      // const index = comments.findIndex((comment) => comment.id === commentId);
+      // newComments[index].content = newContent;
+      // setComments(newComments);
     } else {
-      console.log("댓글 수정 에러");
+      Swal.fire('댓글을 입력해주세요!')
     }
-    // const newComments = [...comments];
-    // const index = comments.findIndex((comment) => comment.id === commentId);
-    // newComments[index].content = newContent;
-    // setComments(newComments);
   };
 
   const createCommentHandler = async (newContent) => {
-    const response = await createComment(article._id, newContent);
-    if (response.statusCode === 200) {
-      const response1 = await fetchArticle(location.state);
-      setArticle(response1);
-      setComments(response1.comments);
-      setCommentsMap(anonymousWriter(response1.comments, response1.writer));
-      setArticleWriter(response1.writer);
+    if (newContent.trim()) {
+      const response = await createComment(article._id, newContent);
+      if (response.statusCode === 200) {
+        const response1 = await fetchArticle(location.state);
+        setArticle(response1);
+        setComments(response1.comments);
+        setCommentsMap(anonymousWriter(response1.comments, response1.writer));
+        setArticleWriter(response1.writer);
+      } else {
+        console.log("댓글 생성 에러");
+      }
     } else {
-      console.log("댓글 생성 에러");
+      Swal.fire('댓글을 입력해주세요!')
     }
   };
 
