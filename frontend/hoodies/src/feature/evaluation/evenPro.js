@@ -7,7 +7,7 @@ import EvaluationPentagon from "./evaluationPentagon";
 // import styled from "styled-components";
 import CreateEvaluation from "./evaluationRegister";
 import Swal from "sweetalert2";
-import { getStaff, postEvaluation } from "./evaluationAPI";
+import { deleteComment, getStaff, postEvaluation } from "./evaluationAPI";
 
 const EvenPro = () => {
   const dummyData = {
