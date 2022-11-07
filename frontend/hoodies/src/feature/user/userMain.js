@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 
 const StyledCard = styled.div`
   margin: 8px auto 0 auto;
-  width: 480px;
+  max-width: 480px;
   padding: 12px 0;
   box-sizing: border-box;
   border: 1px solid #EDEDED;
