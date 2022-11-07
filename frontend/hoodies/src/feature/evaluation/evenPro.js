@@ -9,15 +9,6 @@ import CreateEvaluation from "./evaluationRegister";
 import Swal from "sweetalert2";
 import { deleteComment, getStaff, postEvaluation } from "./evaluationAPI";
 
-const Ellipsis = styled.div`
--webkit-box-orient: vertical;
-text-overflow: ellipsis;
-overflow: hidden;
--webkit-line-clamp: 3;
-display: -webkit-box;
-word-break: break-word;
-`
-
 const EvenPro = () => {
   const dummyData = {
     averageScores: [1, 2, 3, 4, 5],
@@ -142,10 +133,30 @@ const EvenPro = () => {
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [staffType, setStaffType] = useState("");
+  const [longerText, setLongerText] = useState(3)
+
+  const longerTextHandler = (event) => {
+    event.preventDefault();
+    if (longerText < 50) {
+      setLongerText(100);
+    }
+    else {
+      setLongerText(3)
+    }
+  }
 
   const backHandler = (event) => {
     history.go(-1);
   };
+
+  const Ellipsis = styled.div`
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -webkit-line-clamp: ${longerText};
+    display: -webkit-box;
+    word-break: break-word;
+    `
 
   const deleteCommentHandler = async (commentId) => {
     const response = await deleteComment(staff._id, commentId);
@@ -221,7 +232,10 @@ const EvenPro = () => {
                 <p>직책: {staffType}</p>
                 {staff.email ? <p>이메일 : {staff.email}</p> : <p>이메일 : N/A</p>}
                 <p>설명 :</p>
-                <Ellipsis>{staff.etc}</Ellipsis>
+                <div>
+                  <Ellipsis>{staff.etc}</Ellipsis>
+                  <div style={{fontSize:'8px', color:'grey'}} onClick={longerTextHandler}>더보기</div>
+                </div>
                 {/* <p style={{textOverflow:'ellipsis', overflow:'hidden', WebkitLineClamp:3, display:'-webkit-box', wordBreak:'break-all',webkitBoxOrient:'vertical'}}>{staff.etc}</p> */}
                 <p>{comments.length}명의 평가</p>
               </div>
