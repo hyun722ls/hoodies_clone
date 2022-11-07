@@ -41,6 +41,9 @@ const H3 = styled.h3`
   font-size: 3px;
   color: #0050ad;
   height: 15.2px;
+  white-space: no-wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 const H4 = styled.h4`
