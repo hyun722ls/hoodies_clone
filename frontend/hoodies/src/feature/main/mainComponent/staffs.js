@@ -69,6 +69,7 @@ const labels = {
   5: "최고의 PRO.",
 };
 
+
 const Staffs = (props) => {
     const history = useHistory();
     const evaluationPageHandler = () => {history.push("/pro");
