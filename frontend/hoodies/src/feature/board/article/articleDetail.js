@@ -13,11 +13,11 @@ import {
 } from "../boardAPI";
 import CommentList from "./commentList";
 import styled from "styled-components";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import TouchAppIcon from "@mui/icons-material/TouchApp";
-import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import TouchAppIcon from '@mui/icons-material/TouchApp';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import Swal from "sweetalert2";
 
 const Articles = styled.div`
@@ -332,12 +332,16 @@ const ArticleDetail = () => {
             </ArticleTime>
             <Score>
               <Item>추천수 : {article.like}</Item>
-                <div title="추천!">
-                    {isLike ? <img src="../../../common/data/happy.png" alt="따봉!" onClick={likeHandler}/> : <img src="../../../common/data/like.png" alt="un따봉!" onClick={likeHandler}/>}
-                </div>
+                <Tooltip title="추천!">
+                    {isLike ? <ThumbUpAltIcon onClick={likeHandler} /> : <ThumbUpOffAltIcon onClick={likeHandler} />}
+
+                </Tooltip>
               <Item>조회수 : {article.hit}</Item>
               <Item>|</Item>
-                {localStorage.getItem('nickname') !== article.writer && <img src="../../../common/data/alert.png" alt="" onClick={reportHandler}/>}
+
+                {localStorage.getItem('nickname') !== article.writer && <TouchAppIcon onClick={reportHandler} />}
+
+
             </Score>
             <ArticleHr />
           </ArticleHead>
