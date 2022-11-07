@@ -1,20 +1,16 @@
 import { useHistory } from "react-router-dom";
 import { blockArticle } from "../../../common/refineData/blockArticle";
 import {timeConventer} from "../../../common/refineData/refineTime"
-import { fetchArticles } from "../anonymousBoardAPI";
 import CreateIcon from "@mui/icons-material/Create";
-import Pagination from "react-js-pagination";
 import styled from "styled-components";
-import { useState, useEffect } from "react";
-import { changeAnnonymous, checkBoradType } from "../../../common/refineData/anonymousWriter";
+import { changeAnonymous, checkBoardType } from "../../../common/refineData/anonymousWriter";
 import { blockCnt } from "../../../common/api/url";
 import Swal from "sweetalert2";
+import Grid from "@mui/material/Grid";
 
 const Articles = styled.div`
+  width: 100%;
   position: relative;
-  grid-column: 1/3;
-  grid-row: 1;
-  margin-left: 90px;
 `
 
 const Article = styled.article`
@@ -27,7 +23,7 @@ const Article = styled.article`
 
 const ArticleA = styled.a`
   margin: 0;
-  padding: 12px;
+  padding: 16px;
   display: block;
 `
 
@@ -41,18 +37,17 @@ const ArticleH2 = styled.h2`
   font-size: 14px;
   font-weight: normal;
 `
-
-// const ArticleP = styled.p`
-//   margin: 0;
-//   margin-bottom: 5px;
-//   padding: 0;
-//   max-height: 30px;
-//   line-height: 15px;
-//   white-space: normal;
-//   overflow: hidden;
-//   color: #a6a6a6;
-//   font-size: 12px;
-// `
+const ArticleH2_filter = styled.h2`
+  margin: 0;
+  margin-bottom: 5px;
+  line-height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  font-weight: normal;
+  color: #ff5f5f;
+`
 
 const Title = styled.div`
   margin-bottom: -20px;
@@ -119,9 +114,9 @@ const Score = styled.ul`
 const Item = styled.li`
   margin: 0;
   float: left;
-  margin-left: 8px;
+  margin-left: 0px;
   padding: 0 2px;
-  padding-left: 15px;
+  padding-left: 2px;
   height: 20px;
   line-height: 20px;
   font-size: 12px;
@@ -152,43 +147,59 @@ const BoardTable = (props) => {
         timerProgressBar: true,
       })
     } else {
-      history.push({ pathname: "/board/annoymous/detail", state: article._id });
+      history.push({ pathname: "/board/anonymous/detail", state: article._id });
 
     }
   };
 
-  const createArticle = () => {
-    history.push("annoymous/form");
+  const isFilter = (article) => {
+      if (blockArticle(article, article.category) === article.title) {
+          return 1
+      } else {
+          return 0
+      }
+  };
+
+
+
+    const createArticle = () => {
+    history.push("anonymous/form");
   };
 
   return props.articles.length ? (
-    <Articles>
-      <Title>
-        <H1>익명게시판</H1>
-      </Title>
-      <NewArticle onClick={createArticle}>
-        새로운 게시글 작성
-        <NewIcon />
-      </NewArticle>
-      {props.articles.map((article) => {
-        return (
-          <Article key={article._id}>
-            <ArticleA onClick={() => {
-              detailPageHandler(article);
-            }}>
-              <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
-              <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
-              <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
-              <Score>
-                <Item>{article.hit}</Item>
-                <Item>{article.like}</Item>
-              </Score>
-              <ArticleHr/>
-            </ArticleA>
-          </Article>
-        );
-      })}
-    </Articles>
+      <Grid>
+          <Articles>
+              <Title>
+                  <H1>익명 게시판</H1>
+              </Title>
+              <NewArticle onClick={createArticle}>
+                  새로운 게시글 작성
+                  <NewIcon />
+              </NewArticle>
+              {props.articles.map((article) => {
+                  return (
+                      <Article key={article._id}>
+                          <ArticleA onClick={() => {
+                              detailPageHandler(article);
+                          }}>
+                              <div style={{display: "flex", justifyContent: "space-between"}}>
+                                  {isFilter(article) ?
+                                      <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
+                                      : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
+                              </div>
+                              <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
+                              <ArticleH3>{changeAnonymous(article)}</ArticleH3>
+                              <Score>
+                                  <Item style={{fontSize: "2px"}}>조회수</Item><Item>{article.hit}</Item>
+                                  <Item style={{color: "red", fontSize: "2px"}}>추천수</Item><Item style={{color: "red"}}>{article.like}</Item>
+                              </Score>
+                              <ArticleHr/>
+                          </ArticleA>
+                      </Article>
+                  );
+              })}
+          </Articles>
+      </Grid>
   ) : (
     <Articles>
       <Title>

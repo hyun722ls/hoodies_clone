@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 
 const StyledCard = styled.div`
   margin: 8px auto 0 auto;
-  width: 480px;
+  max-width: 480px;
   padding: 12px 0;
   box-sizing: border-box;
   border: 1px solid #EDEDED;
@@ -222,13 +222,17 @@ const UserMain = () => {
                 const password = document.getElementById('password').value
                 const password2 = document.getElementById('password2').value
                 if (password && password2) {
-                    if (password === password2) {
-                        const response = await updatePassword({ password })
-                        if (response.statusCode !== '200') {
-                            Swal.showValidationMessage('비밀번호 변경에 실패했습니다.')
-                        }
+                    if (password.length < 8) {
+                        Swal.showValidationMessage('8자 이상 입력해주세요.')
                     } else {
-                        Swal.showValidationMessage('비밀번호가 일치하지 않습니다.')
+                        if (password === password2) {
+                            const response = await updatePassword({ password })
+                            if (response.statusCode !== '200') {
+                                Swal.showValidationMessage('비밀번호 변경에 실패했습니다.')
+                            }
+                        } else {
+                            Swal.showValidationMessage('비밀번호가 일치하지 않습니다.')
+                        }
                     }
                 } else {
                     Swal.showValidationMessage('비밀번호를 입력해주세요.')

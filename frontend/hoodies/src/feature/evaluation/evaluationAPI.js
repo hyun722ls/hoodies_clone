@@ -51,3 +51,28 @@ export const postEvaluation = async (id, score, content) => {
     }
     
 }
+
+
+export const deleteComment = async (proId, commentId) => {
+    try {
+        const response = await axios1.delete(API_URL + `mentor/${proId}/evaluation/${commentId}`, {headers: {
+            'accessToken': localStorage.getItem('token')
+        }} )
+    
+        return response.data
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+
+export const checkEvaluation = async (formData) => {
+    try {
+        const response = await axios1.post('https://k7a402.p.ssafy.io/ai/comment', formData)
+        return response.data
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+

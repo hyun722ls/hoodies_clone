@@ -1,12 +1,9 @@
 import { useHistory } from "react-router-dom";
 import { blockArticle } from "../../../common/refineData/blockArticle";
 import {timeConventer} from "../../../common/refineData/refineTime"
-import { fetchArticles } from "../boardAPI";
 import CreateIcon from "@mui/icons-material/Create";
-import Pagination from "react-js-pagination";
 import styled from "styled-components";
-import { useState, useEffect } from "react";
-import {changeAnnonymous, checkBoradType} from "../../../common/refineData/anonymousWriter";
+import {changeAnonymous, checkBoardType} from "../../../common/refineData/anonymousWriter";
 import Grid from '@mui/material/Grid';
 import { blockCnt } from "../../../common/api/url";
 import Swal from "sweetalert2";
@@ -155,7 +152,7 @@ const BoardTable = (props) => {
         history.push({ pathname: "/board/free/detail", state: article._id });
     
       } else {
-        history.push({ pathname: "/board/annoymous/detail", state: article._id });
+        history.push({ pathname: "/board/anonymous/detail", state: article._id });
       }
     }
   };
@@ -173,10 +170,10 @@ const BoardTable = (props) => {
   };
 
   return props.articles.length ? (
-      <Grid sx={{ paddingTop: "0"}}>
+      <Grid>
         <Articles>
           <Title>
-            <H1>자유게시판</H1>
+            <H1>자유 게시판</H1>
           </Title>
           <NewArticle onClick={createArticle}>
             새로운 게시글 작성
@@ -194,7 +191,7 @@ const BoardTable = (props) => {
                             : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
                     </div>
                     <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
-                    <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
+                    <ArticleH3>{changeAnonymous(article)}</ArticleH3>
                     <Score>
                         <Item style={{fontSize: "2px"}}>조회수</Item><Item>{article.hit}</Item>
                         <Item style={{color: "red", fontSize: "2px"}}>추천수</Item><Item style={{color: "red"}}>{article.like}</Item>

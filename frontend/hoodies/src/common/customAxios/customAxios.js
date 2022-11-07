@@ -55,6 +55,7 @@ axios1.interceptors.response.use(
           })
           .catch((err) => {
             console.log("reissue 마무리");
+            alert('로그아웃 되었습니다.')
             localStorage.clear();
             window.location.href = "/login";
           });

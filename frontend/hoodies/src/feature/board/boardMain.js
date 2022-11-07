@@ -1,22 +1,12 @@
 import { useEffect, useState } from "react";
-import { freePreview } from "../../common/data/dummyData";
 import Pagination from "react-js-pagination";
 import { fetchArticles, fetchPopularArticles } from "./boardAPI";
 import Header from "../../common/UI/header/header";
 import BoardTable from "./boardComponent/boardTable";
 import PopularTexts from "./boardComponent/popularTexts";
 import { useHistory } from "react-router-dom";
-import styled from "styled-components";
 import Grid from '@mui/material/Grid';
 
-const Container = styled.div`
-  display: grid;
-  grid-template-columns: auto;
-  column-gap: 20px;
-  position: relative;
-  //margin: 24px auto 24px auto;
-  justify-content: center;
-`
 
 const BoardMain = () => {
   const [articles, setArticles] = useState([]);
@@ -29,10 +19,6 @@ const BoardMain = () => {
 
 
   useEffect(() => {
-    // const response = 요청(게시글 20개가 한 페이지 = 제목, 닉네임, 시간, 조회수, 추천)
-    // const response1 = 인기 게시글(제목, 날짜)
-    // setArticles(response)
-    // setPopularText(response1
     (async () => {
       const response = await fetchArticles(activePage)
       const response1 = await fetchPopularArticles()
@@ -58,8 +44,8 @@ const BoardMain = () => {
   popularTexts && (
     <div>
       <Header />
-        <Grid container spacing={3} sx={{ marginTop: "10px", paddingLeft: "10px", justifyContent: 'center'}}>
-          <Grid item sx={{paddingTop: "0px!important", paddingLeft: "0px!important", padding:"10px!important"}} xs={12} md={6}>
+        <Grid container sx={{justifyContent: 'center'}}>
+          <Grid item sx={{padding:"10px!important"}} xs={12} md={6}>
             <BoardTable articles={articles} />
             <div>
               <Pagination
@@ -71,7 +57,7 @@ const BoardMain = () => {
               />
             </div>
           </Grid>
-          <PopularTexts sx={{paddingTop: "0px!important", paddingLeft: "0px!important", padding:"10px!important"}} popularTexts={popularTexts} />
+          <PopularTexts sx={{paddingTop: "0px!important", paddingLeft: "0px!important", padding:"10px!important", paddingRight: "10px"}} popularTexts={popularTexts} />
         </Grid>
     </div>
   );
