@@ -1,7 +1,6 @@
 import { useHistory } from "react-router-dom";
 import { blockArticle } from "../../../common/refineData/blockArticle";
 import {timeConventer} from "../../../common/refineData/refineTime"
-import CreateIcon from "@mui/icons-material/Create";
 import styled from "styled-components";
 import {changeAnonymous, checkBoardType} from "../../../common/refineData/anonymousWriter";
 
@@ -10,7 +9,6 @@ const Articles = styled.div`
   margin: 0 auto;
   max-width: 1180px;
 `
-
 const Article = styled.article`
   margin-bottom: -1px;
   box-sizing: border-box;
@@ -18,13 +16,11 @@ const Article = styled.article`
   background-color: #fff;
   cursor: pointer;
 `
-
 const ArticleA = styled.a`
   margin: 0;
   padding: 16px;
   display: block;
 `
-
 const ArticleH2 = styled.h2`
   margin: 0;
   margin-bottom: 5px;
@@ -35,8 +31,7 @@ const ArticleH2 = styled.h2`
   font-size: 14px;
   font-weight: normal;
 `
-
-const ArticleH2_filter = styled.h2`
+const ArticleH2Filter = styled.h2`
   margin: 0;
   margin-bottom: 5px;
   line-height: 18px;
@@ -47,35 +42,14 @@ const ArticleH2_filter = styled.h2`
   font-weight: normal;
   color: #ff5f5f;
 `
-
 const Title = styled.div`
   margin-bottom: -20px;
   padding: 16px;
   border: 1px solid #F9F5EB;
   box-sizing: border-box;
 `
-
 const H1 = styled.h1`
   margin: 0;
-`
-const NewArticle = styled.a`
-  position: relative;
-  float: none;
-  margin-top: 24px;
-  display: block;
-  padding: 0 10px;
-  height: 50px;
-  line-height: 46px;
-  border: 2px solid #EAE3D2;
-  box-sizing: border-box;
-  color: #a6a6a6;
-  font-size: 14px;
-  cursor: pointer;
-`
-const NewIcon = styled(CreateIcon)`
-  position: absolute;
-  top: 13px;
-  right: 16px;
 `
 const ArticleH3 = styled.h3`
   margin: 0;
@@ -91,7 +65,6 @@ const ArticleH3 = styled.h3`
   overflow: hidden;
   text-overflow: ellipsis;
 `
-
 const ArticleTime = styled.time`
   margin: 0;
   padding: 0;
@@ -102,14 +75,12 @@ const ArticleTime = styled.time`
   font-size: 11px;
   color: #a6a6a6;
 `
-
 const Score = styled.ul`
   margin: 0;
   padding: 0;
   float: right;
   list-style: none;
 `
-
 const Item = styled.li`
   margin: 0;
   float: left;
@@ -124,7 +95,6 @@ const Item = styled.li`
   background-size: 11px 11px;
   cursor: pointer;
 `
-
 const ArticleHr = styled.hr`
   margin: 0;
   padding: 0;
@@ -167,7 +137,7 @@ const BoardTable = (props) => {
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     {isFilter(article) ?
                         <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
-                        : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
+                        : <ArticleH2Filter>{blockArticle(article, article.category)}</ArticleH2Filter>}
                     <ArticleH3 style={{color: "darkblue"}}>-{checkBoardType(article)}-</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
                 </div>
                 <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
