@@ -34,7 +34,7 @@ const Header = () => {
       },
     }).then(async (result)=>{
       const response = await postInquiry(result.value)
-      if (response.statusCode === '200') {
+      if (response.statusCode === 200) {
         Swal.fire({
           title: '문의가 성공적으로 등록되었습니다.',
           icon: 'success',
