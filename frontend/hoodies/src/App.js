@@ -20,6 +20,8 @@ import Main from "./feature/main/main";
 import ImageUpload from "./feature/test/imageUpload";
 import UserMain from "./feature/user/userMain";
 import UserBoard from "./feature/user/userBoard";
+import AdminRoute from "./common/routes/adminRoute";
+import AdminPage from "./feature/auth/admin/adminPage";
 
 
 function App() {
@@ -45,6 +47,7 @@ function App() {
           <PrivateRoute component={EvenPro} exact path="/pro/detail" />
           <PrivateRoute component={UserMain} exact path="/user" />
           <PrivateRoute component={UserBoard} exact path="/user/board" />
+          <AdminRoute component={AdminPage} exact path="/admin" />
           <PrivateRoute component={ErrorPage} path="*" />
         </Switch>
       </BrowserRouter>
