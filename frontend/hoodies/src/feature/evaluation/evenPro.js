@@ -1,5 +1,5 @@
   import { Grid } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../common/UI/header/header";
 import EvaulationComment from "./evaluationComment";
@@ -10,130 +10,19 @@ import Swal from "sweetalert2";
 import { deleteComment, getStaff, postEvaluation } from "./evaluationAPI";
 
 const EvenPro = () => {
-  const dummyData = {
-    averageScores: [1, 2, 3, 4, 5],
-    career: ["삼성SDS", "SSG.COM", "넷마블 이츠게임즈", "SSAFY 컨설턴트"],
-    contributor: [
-      "bc3659f6f3ad0a7924d9b8b1c0ed6f670965b55ba965090b541e671bd0cd9e00",
-    ],
-    email: "www.google.com",
-    etc: "JAVA, Spring, Unicty, C#\nOracle Query\nBig Data",
-    evaluations: [
-      {
-        category: '{\n  "commentResult": "clean"\n}',
-        content: "최고",
-        createdAt: "2022-11-04 15:30:02",
-        like: 0,
-        score: [1, 2, 3, 4, 5],
-        writer:
-          "bc3659f6f3ad0a7924d9b8b1c0ed6f670965b55ba965090b541e671bd0cd9e00",
-        _id: "6364b16aec210b489df24e1f",
-      },
-      {
-        category: '{\n  "commentResult": "clean"\n}',
-        content: "최고",
-        createdAt: "2022-11-04 15:30:02",
-        like: 0,
-        score: [1, 2, 3, 4, 5],
-        writer:
-          "bc3659f6f3ad0a7924d9b8b1c0ed6f670965b55ba965090b541e671bd0cd9e00",
-        _id: "6364b16aec210b489df24e1f",
-      },
-      {
-        category: '{\n  "commentResult": "clean"\n}',
-        content: "최고",
-        createdAt: "2022-11-04 15:30:02",
-        like: 0,
-        score: [1, 2, 3, 4, 5],
-        writer:
-          "bc3659f6f3ad0a7924d9b8b1c0ed6f670965b55ba965090b541e671bd0cd9e00",
-        _id: "6364b16aec210b489df24e1f",
-      },
-      {
-        category: '{\n  "commentResult": "clean"\n}',
-        content: "최고",
-        createdAt: "2022-11-04 15:30:02",
-        like: 0,
-        score: [1, 2, 3, 4, 5],
-        writer:
-          "bc3659f6f3ad0a7924d9b8b1c0ed6f670965b55ba965090b541e671bd0cd9e00",
-        _id: "6364b16aec210b489df24e1f",
-      },
-      {
-        category: '{\n  "commentResult": "clean"\n}',
-        content: "최고",
-        createdAt: "2022-11-04 15:30:02",
-        like: 0,
-        score: [1, 2, 3, 4, 5],
-        writer:
-          "bc3659f6f3ad0a7924d9b8b1c0ed6f670965b55ba965090b541e671bd0cd9e00",
-        _id: "6364b16aec210b489df24e1f",
-      },
-      {
-        category: '{\n  "commentResult": "clean"\n}',
-        content: "최고",
-        createdAt: "2022-11-04 15:30:02",
-        like: 0,
-        score: [1, 2, 3, 4, 5],
-        writer:
-          "bc3659f6f3ad0a7924d9b8b1c0ed6f670965b55ba965090b541e671bd0cd9e00",
-        _id: "6364b16aec210b489df24e1f",
-      },
-      {
-        category: '{\n  "commentResult": "clean"\n}',
-        content:
-          "dslfjsdlkfjsdlkfjlsdkfjlsdkjflsdkjflsdkjflksdjflksdjflkdsjflkdsjflsdjflksdjlfksdjlfkjsdlfkjsdlfkjsdlfkjsdlfkj",
-        createdAt: "2022-11-04 15:30:02",
-        like: 0,
-        score: [1, 2, 3, 4, 5],
-        writer:
-          "bc3659f6f3ad0a7924d9b8b1c0ed6f670965b55ba965090b541e671bd0cd9e00",
-        _id: "6364b16aec210b489df24e1f",
-      },
-      {
-        category: '{\n  "commentResult": "clean"\n}',
-        content: "최고",
-        createdAt: "2022-11-04 15:30:02",
-        like: 0,
-        score: [1, 2, 3, 4, 5],
-        writer:
-          "bc3659f6f3ad0a7924d9b8b1c0ed6f670965b55ba965090b541e671bd0cd9e00",
-        _id: "6364b16aec210b489df24e1f",
-      },
-      {
-        category: '{\n  "commentResult": "clean"\n}',
-        content: "최고",
-        createdAt: "2022-11-04 15:30:02",
-        like: 0,
-        score: [1, 2, 3, 4, 5],
-        writer:
-          "bc3659f6f3ad0a7924d9b8b1c0ed6f670965b55ba965090b541e671bd0cd9e00",
-        _id: "6364b16aec210b489df24e1f",
-      },
-      {
-        category: '{\n  "commentResult": "clean"\n}',
-        content: "최고",
-        createdAt: "2022-11-04 15:30:02",
-        like: 0,
-        score: [1, 2, 3, 4, 5],
-        writer:
-          "bc3659f6f3ad0a7924d9b8b1c0ed6f670965b55ba965090b541e671bd0cd9e00",
-        _id: "6364b16aec210b489df24e1f",
-      },
-    ],
-    modifiedAt: "2022-11-04 15:30:02",
-    type: 1,
-    writer: "이태희",
-    _id: "1",
-  };
 
   const history = useHistory();
   const location = useLocation();
+  const ellipsisRef = useRef();
   const [staff, setStaff] = useState([]);
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [staffType, setStaffType] = useState("");
   const [longerText, setLongerText] = useState(3)
+
+  function isOverflown(element) {
+    return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
+  }
 
   const longerTextHandler = (event) => {
     event.preventDefault();
@@ -232,8 +121,8 @@ const EvenPro = () => {
                 {staff.email ? <p>이메일 : {staff.email}</p> : <p>이메일 : N/A</p>}
                 <p>설명 :</p>
                 <div>
-                  <Ellipsis>{staff.etc}</Ellipsis>
-                  <div style={{fontSize:'10px', color:'grey'}} onClick={longerTextHandler}>더보기</div>
+                  <Ellipsis ref={ellipsisRef}>{staff.etc}</Ellipsis>
+                  {isOverflown(ellipsisRef.current) ? <div style={{fontSize:'10px', color:'grey'}} onClick={longerTextHandler}>더보기</div> : <div></div>}
                 </div>
                 {/* <p style={{textOverflow:'ellipsis', overflow:'hidden', WebkitLineClamp:3, display:'-webkit-box', wordBreak:'break-all',webkitBoxOrient:'vertical'}}>{staff.etc}</p> */}
                 <p>{comments.length}명의 평가</p>
