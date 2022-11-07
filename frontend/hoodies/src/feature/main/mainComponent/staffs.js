@@ -44,7 +44,7 @@ const H2 = styled.h2`
 const H3 = styled.h3`
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2 (integer);
+  -webkit-line-clamp: 2;
   overflow: hidden;
   font-size: 3px;
   color: #0050ad;

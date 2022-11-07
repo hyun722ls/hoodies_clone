@@ -316,13 +316,13 @@ const ArticleDetail = () => {
             <Score>
               <Item>추천수 : {article.like}</Item>
                 <Tooltip title="추천!">
-                    {isLike ? <ThumbDownAltIcon onClick={likeHandler} /> : <ThumbUpIcon onClick={likeHandler} />}
+                    {isLike ? <img src="../../../common/data/happy.png" alt="" onClick={likeHandler}/> : <img src="../../../common/data/like.png" alt="" onClick={likeHandler}/>z}
                   
                 </Tooltip>
               <Item>조회수 : {article.hit}</Item>
               <Item>|</Item>
 
-                {localStorage.getItem('nickname') !== article.writer && <TouchAppIcon onClick={reportHandler} />}
+                {localStorage.getItem('nickname') !== article.writer && <img src="../../../common/data/alert.png" alt="" onClick={reportHandler}/>}
               
 
             </Score>
