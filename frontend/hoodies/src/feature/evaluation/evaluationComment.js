@@ -5,6 +5,7 @@ import StarOutlineRoundedIcon from '@mui/icons-material/StarOutlineRounded';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import styled from "styled-components";
+import { blockComment } from "../../common/refineData/blockArticle";
 
 const RightArticles = styled.div`
   grid-column: 3/4;
@@ -146,17 +147,27 @@ const EvaulationComment = (props) => {
       {props.comments.map((comment) => {
         return (
           <div key={comment._id} style={{borderBottom:'1px solid #EAE3D2', marginLeft:'10px'}}>
-            <div style={{textOverflow:'ellipsis', fontWeight:500}}>{comment.content}</div>
+            <div style={{display:'flex', flexWrap:'wrap', fontWeight:500}}><div>{comment.content}</div></div>
             <div style={{fontSize:'11px'}}>{comment.createdAt.slice(0,10)}</div>
             <div style={{display:'inline-flex'}}><Rating value={average(comment.score).toFixed(1)} precision={0.1} icon={<StarRateRoundedIcon/>} emptyIcon={<StarOutlineRoundedIcon/>} readOnly></Rating><div style={{marginLeft:'5px',fontSize:'10px'}}>{average(comment.score).toFixed(1)}</div></div>
-            <div style={{display:'flex'}}><ThumbUpAltIcon fontSize='small'></ThumbUpAltIcon><div style={{marginLeft:'3px'}}>{comment.like}</div></div>
+            {localStorage.getItem("flag") && (
+                    <button
+                      onClick={() => props.deleteCommentHandler(comment._id)}
+                    >
+                      삭제
+                    </button>
+                  )}
+            {/* <div style={{display:'flex'}}><ThumbUpAltIcon fontSize='small'></ThumbUpAltIcon><div style={{marginLeft:'3px'}}>{comment.like}</div></div> */}
           </div>
         );
       })}
     </div>
   ) : (
-    <div>
-      <p>댓글이 없습니다.</p>
+    <div style={{border: '1px solid #EAE3D2', backgroundColor:'#F9F5EB'}}>
+      <Title>
+        <H2>한줄평</H2>
+      </Title>
+      <div style={{borderBottom:'1px solid #EAE3D2', marginLeft:'10px'}}>평가가 존재하지 않습니다.</div>
     </div>
   );
 };

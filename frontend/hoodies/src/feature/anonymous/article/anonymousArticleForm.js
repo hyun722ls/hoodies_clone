@@ -70,7 +70,7 @@ const BtnCancle = styled(Btn)`
   }
 `
 
-const AnnoymousArticleForm = () => {
+const AnonymousArticleForm = () => {
   const [article, setArticle] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");
@@ -89,7 +89,7 @@ const AnnoymousArticleForm = () => {
 
   const backHandler = (event) => {
     history.go(-1);
-    // history.push("/board/annoymous");
+    // history.push("/board/anonymous");
   };
 
   const titleChangeHandler = (event) => {
@@ -114,7 +114,7 @@ const AnnoymousArticleForm = () => {
         timerProgressBar: true,
         showConfirmButton: false,
       })
-      history.push({ pathname: "/board/annoymous/detail", state: article._id });
+      history.push({ pathname: "/board/anonymous/detail", state: article._id });
       
     } else {
       Swal.fire({
@@ -138,7 +138,7 @@ const AnnoymousArticleForm = () => {
         timerProgressBar: true,
         showConfirmButton: false,
       })
-      history.push("/board/annonymous");
+      history.push("/board/anonymous");
       
 
     } else {
@@ -224,4 +224,4 @@ const AnnoymousArticleForm = () => {
   );
 };
 
-export default AnnoymousArticleForm;
+export default AnonymousArticleForm;
