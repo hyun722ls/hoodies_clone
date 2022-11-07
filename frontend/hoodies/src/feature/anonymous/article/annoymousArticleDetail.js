@@ -333,7 +333,6 @@ const AnnoymousArticleDetail = () => {
               <Item>|</Item>
                 
                     {localStorage.getItem('hashNickname') !== article.writer && <WarningAmberIcon onClick={reportHandler} />}
-               
             
             </Score>
             <ArticleHr />

@@ -7,16 +7,22 @@ import {
   deleteComment,
   fetchArticle,
   fetchLike,
+  fetchPopularArticles,
   modifyComment,
   reportArticle,
   reportComment,
-} from "../boardAPI";
+} from "../anonymousBoardAPI";
 import CommentList from "./commentList";
 import styled from "styled-components";
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import Tooltip from '@mui/material/Tooltip';
+import {
+  anonymousWriter,
+  confirmWriter,
+} from "../../../common/refineData/anonymousWriter";
+import Tooltip from "@mui/material/Tooltip";
+import TouchAppIcon from "@mui/icons-material/TouchApp";
+import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import { alertTitleClasses } from "@mui/material";
 import Swal from "sweetalert2";
 
 const Articles = styled.div`
@@ -135,30 +141,32 @@ const BtnCancle = styled(RightButton)`
   }
 `;
 
-const ArticleDetail = () => {
+const AnonymousArticleDetail = () => {
   const location = useLocation();
   const [article, setArticle] = useState([]);
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLike, setIsLike] = useState(false);
+  const [commentsMap, setCommentsMap] = useState({});
+  const [articleWriter, setArticleWriter] = useState("");
   const history = useHistory();
+  const [isLike, setIsLike] = useState(false);
 
   const backHandler = (event) => {
-    // history.go(-1);
-    history.push({ pathname: "/board/free" });
+    // history.go(-1)
+    history.push({ pathname: "/board/anonymous" });
   };
   // 요청설개할것, 수정페이지에서 넘길때 새로운정보 필요
 
   const modifyHandler = (event) => {
-    history.push({ pathname: "/board/free/form", state: article });
+    history.push({ pathname: "/board/anonymous/form", state: article });
   };
 
   const deleteHandler = async (event) => {
     const response = await deleteArticle(article._id);
     if (response.statusCode === 200) {
-      history.push("/board/free");
+      history.push("/board/anonymous");
     } else {
-      console.log("게시글 삭제");
+      console.log("게시글 삭제 에러");
     }
   };
 
@@ -168,6 +176,8 @@ const ArticleDetail = () => {
       const response1 = await fetchArticle(article._id);
       setArticle(response1);
       setComments(response1.comments);
+      setCommentsMap(anonymousWriter(response1.comments, response1.writer));
+      setArticleWriter(response1.writer);
     } else {
       console.log("댓글 삭제 에러");
     }
@@ -179,8 +189,10 @@ const ArticleDetail = () => {
       const response1 = await fetchArticle(location.state);
       setArticle(response1);
       setComments(response1.comments);
+      setCommentsMap(anonymousWriter(response1.comments, response1.writer));
+      setArticleWriter(response1.writer);
     } else {
-      console.log("댓글 수정 오류");
+      console.log("댓글 수정 에러");
     }
     // const newComments = [...comments];
     // const index = comments.findIndex((comment) => comment.id === commentId);
@@ -194,8 +206,10 @@ const ArticleDetail = () => {
       const response1 = await fetchArticle(location.state);
       setArticle(response1);
       setComments(response1.comments);
+      setCommentsMap(anonymousWriter(response1.comments, response1.writer));
+      setArticleWriter(response1.writer);
     } else {
-      console.log("댓글 생성 실패");
+      console.log("댓글 생성 에러");
     }
   };
 
@@ -206,6 +220,8 @@ const ArticleDetail = () => {
       const response1 = await fetchArticle(location.state);
       setArticle(response1);
       setComments(response1.comments);
+      setCommentsMap(anonymousWriter(response1.comments, response1.writer));
+      setArticleWriter(response1.writer);
       let tmpLike = Object.keys(response1.contributor).includes(
         localStorage.getItem("hashNickname")
       );
@@ -229,7 +245,7 @@ const ArticleDetail = () => {
         });
       }
     } else {
-      console.log("좋아요 실패");
+      console.log("좋아요 에러");
     }
   };
 
@@ -248,6 +264,8 @@ const ArticleDetail = () => {
         const response1 = await fetchArticle(location.state);
         setArticle(response1);
         setComments(response1.comments);
+        setCommentsMap(anonymousWriter(response1.comments, response1.writer));
+        setArticleWriter(response1.writer);
         Swal.fire({
           title: "게시글이 신고되었습니다.",
           icon: "success",
@@ -274,6 +292,8 @@ const ArticleDetail = () => {
         const response1 = await fetchArticle(location.state);
         setArticle(response1);
         setComments(response1.comments);
+        setCommentsMap(anonymousWriter(response1.comments, response1.writer));
+        setArticleWriter(response1.writer);
         Swal.fire({
           title: "선택한 댓글이 신고되었습니다.",
           icon: "success",
@@ -292,6 +312,8 @@ const ArticleDetail = () => {
         const response = await fetchArticle(location.state);
         setArticle(response);
         setComments(response.comments);
+        setCommentsMap(anonymousWriter(response.comments, response.writer));
+        setArticleWriter(response.writer);
         let tmpLike = Object.keys(response.contributor).includes(
           localStorage.getItem("hashNickname")
         );
@@ -303,13 +325,6 @@ const ArticleDetail = () => {
         } else {
           setIsLike(false);
         }
-      } else {
-        Swal.fire({
-          title: "잘못된 접근입니다.",
-          icon: "warning",
-          timer: 2000,
-        });
-        history.push("/index");
       }
       setIsLoading(false);
     })();
@@ -322,7 +337,7 @@ const ArticleDetail = () => {
         <Articles>
           <ArticleHead>
             <ArticleH2>{article.title}</ArticleH2>
-            <ArticleH3>{article.writer}</ArticleH3>
+            <ArticleH3>{"익명"}</ArticleH3>
             <ArticleTime>
               {article.createdAt}{" "}
               {article.createdAt !== article.modifiedAt && (
@@ -331,16 +346,19 @@ const ArticleDetail = () => {
             </ArticleTime>
             <Score>
               <Item>추천수 : {article.like}</Item>
-                <Tooltip title="추천!">
-                    {isLike ? <ThumbUpAltIcon onClick={likeHandler} /> : <ThumbUpOffAltIcon onClick={likeHandler} />}
-
-                </Tooltip>
+              <Tooltip title="추천!">
+                {isLike ? (
+                  <ThumbDownAltIcon onClick={likeHandler} />
+                ) : (
+                  <ThumbUpIcon onClick={likeHandler} />
+                )}
+              </Tooltip>
               <Item>조회수 : {article.hit}</Item>
               <Item>|</Item>
 
-                {localStorage.getItem('nickname') !== article.writer && <WarningAmberIcon onClick={reportHandler} />}
-
-
+              {localStorage.getItem("hashNickname") !== article.writer && (
+                <TouchAppIcon onClick={reportHandler} />
+              )}
             </Score>
             <ArticleHr />
           </ArticleHead>
@@ -349,8 +367,10 @@ const ArticleDetail = () => {
           </ArticleBody>
           <CommentList
             comments={comments}
+            commentsMap={commentsMap}
             setArticle={setArticle}
             setComments={setComments}
+            articleWriter={articleWriter}
             deleteCommentHandler={deleteCommentHandler}
             modifyCommentHandler={modifyCommentHandler}
             createCommentHandler={createCommentHandler}
@@ -359,10 +379,10 @@ const ArticleDetail = () => {
           <div>
             <StyledButton onClick={backHandler}>목록보기</StyledButton>
 
-            {article.writer === localStorage.getItem("nickname") && (
+            {article.writer === localStorage.getItem("hashNickname") && (
               <RightButton onClick={modifyHandler}>수정</RightButton>
             )}
-            {(article.writer === localStorage.getItem("nickname") ||
+            {(article.writer === localStorage.getItem("hashNickname") ||
               localStorage.getItem("flag")) && (
               <BtnCancle onClick={deleteHandler}>삭제</BtnCancle>
             )}
@@ -373,4 +393,4 @@ const ArticleDetail = () => {
   );
 };
 
-export default ArticleDetail;
+export default AnonymousArticleDetail;

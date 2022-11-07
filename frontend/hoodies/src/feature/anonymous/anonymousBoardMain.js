@@ -8,6 +8,7 @@ import PopularTexts from "./anonymousBoardComponent/popularTexts";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import "./boardMain.css";
+import Grid from "@mui/material/Grid";
 
 const Container = styled.div`
   display: grid;
@@ -55,24 +56,24 @@ const AnonymousBoardMain = () => {
   return !isLoading &&
   articles &&
   popularTexts && (
-    <div>
-      <Header />
-      <Container>
-        <div>
-          <BoardTable articles={articles} />
           <div>
-            <Pagination
-              activePage={activePage}
-              itemsCountPerPage={20}
-              totalItemsCount={totalItemsCount}
-              pageRangeDisplayed={5}
-              onChange={handlePageChange}
-            />
+            <Header />
+            <Grid container sx={{justifyContent: 'center'}}>
+              <Grid item sx={{padding:"10px!important"}} xs={12} md={6}>
+                <BoardTable articles={articles} />
+                <div>
+                  <Pagination
+                      activePage={activePage}
+                      itemsCountPerPage={20}
+                      totalItemsCount={totalItemsCount}
+                      pageRangeDisplayed={5}
+                      onChange={handlePageChange}
+                  />
+                </div>
+              </Grid>
+              <PopularTexts sx={{paddingTop: "0px!important", paddingLeft: "0px!important", padding:"10px!important", paddingRight: "10px"}} popularTexts={popularTexts} />
+            </Grid>
           </div>
-        </div>
-        <PopularTexts popularTexts={popularTexts} />
-      </Container>
-    </div>
   );
 };
 

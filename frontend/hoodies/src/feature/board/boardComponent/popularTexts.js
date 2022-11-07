@@ -1,16 +1,15 @@
 import { useHistory } from "react-router-dom";
 import { blockArticle } from "../../../common/refineData/blockArticle";
 import styled from "styled-components";
-import { changeAnnonymous, checkBoradType } from "../../../common/refineData/anonymousWriter";
+import { changeAnonymous, checkBoardType } from "../../../common/refineData/anonymousWriter";
 import { timeConventer } from "../../../common/refineData/refineTime";
 import Grid from '@mui/material/Grid';
 import { blockCnt } from "../../../common/api/url";
 import Swal from "sweetalert2";
+import { isAdmin } from "../../../common/api/isLogin";
 
 const RightArticles = styled.div`
   width: 100%;
-  padding-left: 0 !important;
-  padding-top: 0 !important;
   background-color: #F9F5EB;
 `
 const Article = styled.article`
@@ -96,9 +95,6 @@ const Score = styled.ul`
 const Item = styled.li`
   margin: 0;
   float: left;
-  margin-left: 0px;
-  padding: 0 2px;
-  padding-left: 2px;
   height: 20px;
   line-height: 20px;
   font-size: 12px;
@@ -120,7 +116,7 @@ const ArticleHr = styled.hr`
 const PopularTexts = (props) => {
   const history = useHistory();
   const detailPageHandler = (article) => {
-    if (article.reporter?.length > blockCnt){
+    if (article.reporter?.length > blockCnt && !isAdmin()){
       Swal.fire({
         title: '신고 누적된 게시글입니다.',
         icon: 'error',
@@ -130,12 +126,9 @@ const PopularTexts = (props) => {
     } else {
       if (article.type === 1){
         history.push({ pathname: "/board/free/detail", state: article._id });
-    
       } else {
-        history.push({ pathname: "/board/annoymous/detail", state: article._id });
+        history.push({ pathname: "/board/anonymous/detail", state: article._id });
       }
-    
-
     }
   };
 
@@ -148,7 +141,7 @@ const PopularTexts = (props) => {
   };
 
   return props.popularTexts.length ? (
-      <Grid item xs={12} md={3}>
+      <Grid item xs={12} md={3} sx={{margin:"10px"}}>
         <RightArticles>
           <Title>
             <H2>인기게시글</H2>
@@ -164,13 +157,13 @@ const PopularTexts = (props) => {
                       {isFilter(article) ?
                           <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
                           : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
-                      <ArticleH3 style={{color: "darkblue"}}>-{checkBoradType(article)}-</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
+                      <ArticleH3 style={{color: "darkblue"}}>-{checkBoardType(article)}-</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
                     </div>
                     <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
-                    <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
+                    <ArticleH3>{changeAnonymous(article)}</ArticleH3>
                     <Score style={{}}>
-                      <Item style={{fontSize: "2px"}}>조회수</Item><Item>{article.hit}</Item>
-                      <Item style={{color: "red", fontSize: "2px"}}>추천수</Item><Item style={{color: "red"}}>{article.like}</Item>
+                      <Item style={{fontSize: "2px"}}>조회수</Item><Item>&nbsp;{article.hit}&nbsp;</Item>
+                      <Item style={{color: "red", fontSize: "2px"}}>추천수</Item><Item style={{color: "red"}}>&nbsp;{article.like}</Item>
                     </Score>
                     <ArticleHr/>
                   </ArticleA>

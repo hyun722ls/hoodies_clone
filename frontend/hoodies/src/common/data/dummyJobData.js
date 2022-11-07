@@ -1,5 +1,14 @@
 export const tempJobInfo = [
     {
+        id: 7,
+        name: "윈스",
+        job: "솔루션 개발, 웹 개발",
+        period: "22.11.04(금) ~ 22.11.09(수) 24:00 까지",
+        method: "온라인 지원(https://wins21.recruiter.co.kr)",
+        favor: "우대 없음",
+        url: "https://www.wins21.com/"
+    },
+    {
         id: 4,
         name: "에이엠텔레콤",
         job: "SW Application 개발, SW Firmware 개발",
