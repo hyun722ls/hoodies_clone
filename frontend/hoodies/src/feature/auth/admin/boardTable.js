@@ -19,7 +19,7 @@ const Article = styled.article`
   cursor: pointer;
 `
 
-const ArticleA = styled.a`
+const ArticleDiv = styled.div`
   margin: 0;
   padding: 16px;
   display: block;
@@ -137,10 +137,6 @@ const ArticleHr = styled.hr`
 const BoardTable = (props) => {
   const history = useHistory();
 
-  const articleClick = (event) => {
-    event.preventDefault();
-  }
-
   return props.articles.length ? (
     <Articles>
       <Title>
@@ -149,14 +145,14 @@ const BoardTable = (props) => {
       {props.articles.map((article) => {
         return (
           <Article key={article._id}>
-            <ArticleA onClick={articleClick()}>
+            <ArticleDiv>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     <ArticleH2>{article.content}</ArticleH2>
                 </div>
                 <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
                 <ArticleH3>{article.writer}</ArticleH3>
                 <ArticleHr/>
-            </ArticleA>
+            </ArticleDiv>
           </Article>
         );
       })}
