@@ -156,7 +156,7 @@ const BoardTable = (props) => {
   return props.articles.length ? (
     <Articles>
       <Title>
-        <H1>내가 쓴 글</H1>
+        <H1>문의글 내역</H1>
       </Title>
       {props.articles.map((article) => {
         return (
@@ -165,17 +165,11 @@ const BoardTable = (props) => {
               detailPageHandler(article);
             }}>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
-                    {isFilter(article) ?
-                        <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
-                        : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
+                    <ArticleH2>{article.content}</ArticleH2>
                     <ArticleH3 style={{color: "darkblue"}}>-{checkBoardType(article)}-</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
                 </div>
                 <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
-                <ArticleH3>{changeAnonymous(article)}</ArticleH3>
-                <Score style={{}}>
-                    <Item style={{fontSize: "2px"}}>조회수</Item><Item>{article.hit}</Item>
-                    <Item style={{color: "red", fontSize: "2px"}}>추천수</Item><Item style={{color: "red"}}>{article.like}</Item>
-                </Score>
+                <ArticleH3>{article.email}</ArticleH3>
                 <ArticleHr/>
             </ArticleA>
           </Article>
