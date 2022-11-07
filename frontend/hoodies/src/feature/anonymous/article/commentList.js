@@ -24,6 +24,7 @@ const StyledContent = styled.div`
   float: left;
   font-size: 13px;
   width: 480px;
+  color: #ff5f5f;
 `;
 const Hr = styled.hr`
   margin: 0;
