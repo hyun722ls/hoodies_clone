@@ -64,3 +64,14 @@ export const deleteComment = async (proId, commentId) => {
         console.log(err)
     }
 }
+
+
+export const checkEvaluation = async (formData) => {
+    try {
+        const response = await axios1.post(API_URL + 'ai/comment')
+        return response.data
+    } catch (err) {
+        console.log(err)
+    }
+}
+}
