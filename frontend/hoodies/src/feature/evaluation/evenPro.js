@@ -143,7 +143,14 @@ const EvenPro = () => {
     if (response.statusCode === 200) {
       const response1 = await getStaff(staff._id);
       setStaff(response1);
-      setComments(response1.comments);
+      setComments(response1.evaluations);
+      if (response.type === "consultant") {
+          setStaffType("consultant");
+        } else if (response.type === "pro") {
+          setStaffType("pro");
+        } else {
+          setStaffType("coach");
+        }
     } else {
       console.log("댓글 삭제 에러");
     }
