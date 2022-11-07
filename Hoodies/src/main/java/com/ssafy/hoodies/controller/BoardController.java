@@ -31,6 +31,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -203,21 +204,12 @@ public class BoardController {
             SecurityContext context = SecurityContextHolder.getContext();
             Authentication authentication = context.getAuthentication();
             String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
-            boolean isAdmin = authentication.getAuthorities().contains("ROLE_ADMIN");
-
-
-            System.out.println("email : " + email);
-            System.out.println("isAdmin : " + isAdmin);
-
+            boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
             User user = userRepository.findById(email).get();
             String nickname = user.getNickname();
             String hashNickname = util.getEncryptPassword(nickname, salt);
             String writer = boardRepository.findById(id).get().getWriter();
-
-            System.out.println("nickname = " + nickname);
-            System.out.println("hashNickname = " + hashNickname);
-            System.out.println("writer = " + writer);
 
             // 관리자 또는 글 작성자가 아닌 경우
             if (!(isAdmin || nickname.equals(writer) || hashNickname.equals(writer))) {
@@ -384,17 +376,11 @@ public class BoardController {
             SecurityContext context = SecurityContextHolder.getContext();
             Authentication authentication = context.getAuthentication();
             String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
-            boolean isAdmin = authentication.getAuthorities().contains("ROLE_ADMIN");
-
-            System.out.println("email : " + email);
-            System.out.println("isAdmin : " + isAdmin);
+            boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
             User user = userRepository.findById(email).get();
             String nickname = user.getNickname();
             String hashNickname = util.getEncryptPassword(nickname, salt);
-
-            System.out.println("nickname = " + nickname);
-            System.out.println("hashNickname = " + hashNickname);
 
             for (Comment comment : boardRepository.findById(bid).get().getComments()) {
                 String getCid = comment.get_id();
