@@ -49,7 +49,6 @@ const AnonymousBoardMain = () => {
   };
 
   const handlePageChange = (pageNumber) => {
-    console.log(`active page is ${pageNumber}`);
     setActivePage(pageNumber);
   };
 

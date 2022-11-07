@@ -128,7 +128,6 @@ const EvaulationComment = (props) => {
   function handleLike(){
     //다 불켜짐
     setLike(!like)
-    console.log(like)
   }
 
   function average(array){

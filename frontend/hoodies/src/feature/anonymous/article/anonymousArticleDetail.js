@@ -224,7 +224,6 @@ const AnonymousArticleDetail = () => {
       let tmpLike = Object.keys(response1.contributor).includes(
         localStorage.getItem("hashNickname")
       );
-      console.log(response1.contributor[localStorage.getItem("hashNickname")]);
       if (
         tmpLike === true &&
         response1.contributor[localStorage.getItem("hashNickname")]
