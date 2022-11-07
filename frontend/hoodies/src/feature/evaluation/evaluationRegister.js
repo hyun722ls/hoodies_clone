@@ -23,16 +23,16 @@ const RateItem = styled.div`
 const CreateEvaluation = (props) => {
   const history = useHistory();
   const [id, setId] = useState(props.id);
-  const [personality, setPersonality] = useState(1);
-  const [atmosphere, setAtmosphere] = useState(2);
-  const [project, setProject] = useState(3);
-  const [lecture, setLecture] = useState(4);
+  const [enthusiasm, setEnthusiasm] = useState(5);
+  const [atmosphere, setAtmosphere] = useState(5);
+  const [project, setProject] = useState(5);
+  const [lecture, setLecture] = useState(5);
   const [consultation, setConsultation] = useState(5);
   const [studentComment, setStudentComment] = useState("");
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const score = [personality, atmosphere, project, lecture, consultation];
+    const score = [enthusiasm, atmosphere, project, lecture, consultation];
     const formData = new FormData()
     formData.set('comment', studentComment)
     const checkStuduentData = await checkEvaluation(formData)
@@ -40,7 +40,7 @@ const CreateEvaluation = (props) => {
     
     console.log(checkStuduentData)
     if (checkStuduentData.commentResult !== 'clean'){
-      alert('부적절한 표현이 있습니다. 상대를 생각하세요.')
+      Swal.fire('부적절한 표현이 있습니다. 상대를 생각하세요.')
      } else {
        const response = await postEvaluation(id, score, studentComment);
        if (response.statusCode === 200) {
@@ -77,9 +77,9 @@ const CreateEvaluation = (props) => {
         <RateItem>
           <p style={{ margin: 0, fontSize: "large", fontWeight: 500 }}>인품:</p>
           <Rating
-            value={personality}
+            value={enthusiasm}
             onChange={(event, newValue) => {
-              setPersonality(newValue);
+              setEnthusiasm(newValue);
             }}
             icon={<StarRateRoundedIcon fontSize="large" />}
             emptyIcon={<StarOutlineRoundedIcon fontSize="large" />}
