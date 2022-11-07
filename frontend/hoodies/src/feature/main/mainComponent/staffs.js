@@ -76,69 +76,81 @@ const labels = {
   5: "최고의 PRO.",
 };
 
-const dataConverter = (staff) => {
-    if (staff.evaluations.length === 0) {
-        let data = [
-            {
-                "item": "열정",
-                "평균": staff.averageScores[0],
-            },
-            {
-                "item": "프로젝트 지도력",
-                "평균": staff.averageScores[1],
-            },
-            {
-                "item": "상담",
-                "평균": staff.averageScores[2],
-            },
-            {
-                "item": "강의 전달력",
-                "평균": staff.averageScores[3],
-            },
-            {
-                "item": "반 분위기",
-                "평균": staff.averageScores[4],
-            }
-        ]
-        return data
 
-    } else {
-        let data = [
-            {
-                "item": "열정",
-                "평균": staff.averageScores[0],
-                "작성자": staff.evaluations[0].score[0]
-            },
-            {
-                "item": "프로젝트 지도력",
-                "평균": staff.averageScores[1],
-                "작성자": staff.evaluations[0].score[1]
-            },
-            {
-                "item": "상담",
-                "평균": staff.averageScores[2],
-                "작성자": staff.evaluations[0].score[2]
-            },
-            {
-                "item": "강의 전달력",
-                "평균": staff.averageScores[3],
-                "작성자": staff.evaluations[0].score[3]
-            },
-            {
-                "item": "반 분위기",
-                "평균": staff.averageScores[4],
-                "작성자": staff.evaluations[0].score[4]
-            }
-        ]
-        return data
-    }
-}
 
 const Staffs = (props) => {
     const history = useHistory();
     const evaluationPageHandler = () => {history.push("/pro");
     };
+    const averageConventer = (staff) => {
+        if (staff.evaluations.length > 0){
+            const array = staff.evaluations[0].score
+            const average = arr => arr.reduce((p, c) => p + c, 0) / arr.length;
+            const value = Math.round(average(array))
+            return value
+        } else {
+            const value = 0
+            return value
+        }
 
+    }
+    const dataConverter = (staff) => {
+        if (staff.evaluations.length === 0) {
+            let data = [
+                {
+                    "item": "열정",
+                    "평균": staff.averageScores[0],
+                },
+                {
+                    "item": "프로젝트 지도력",
+                    "평균": staff.averageScores[1],
+                },
+                {
+                    "item": "상담",
+                    "평균": staff.averageScores[2],
+                },
+                {
+                    "item": "강의 전달력",
+                    "평균": staff.averageScores[3],
+                },
+                {
+                    "item": "반 분위기",
+                    "평균": staff.averageScores[4],
+                }
+            ]
+            return data
+
+        } else {
+            let data = [
+                {
+                    "item": "열정",
+                    "평균": staff.averageScores[0],
+                    "작성자": staff.evaluations[0].score[0]
+                },
+                {
+                    "item": "프로젝트 지도력",
+                    "평균": staff.averageScores[1],
+                    "작성자": staff.evaluations[0].score[1]
+                },
+                {
+                    "item": "상담",
+                    "평균": staff.averageScores[2],
+                    "작성자": staff.evaluations[0].score[2]
+                },
+                {
+                    "item": "강의 전달력",
+                    "평균": staff.averageScores[3],
+                    "작성자": staff.evaluations[0].score[3]
+                },
+                {
+                    "item": "반 분위기",
+                    "평균": staff.averageScores[4],
+                    "작성자": staff.evaluations[0].score[4]
+                }
+            ]
+            return data
+        }
+    }
     const detailPageHandler = (staff) => {
         history.push({ pathname: "/pro/detail", state: staff._id });
     };
@@ -146,13 +158,11 @@ const Staffs = (props) => {
         <Grid container>
             <Title className={staffs.spacing}>
                 <H1 className={staffs.title}>최신 평가&nbsp;&nbsp;&nbsp;</H1>
-                <PageviewIcon onClick={evaluationPageHandler} />
+                <PageviewIcon onClick={evaluationPagzeHandler} />
             </Title>
             <DIV>
                 {props.staffs.map((staff) => {
-                    const array = staff.evaluations[0].score
-                    const average = arr => arr.reduce((p, c) => p + c, 0) / arr.length;
-                    const value = Math.round(average(array))
+                   const value = averageConventer(staff)
 
                     return (
                         <Grid
