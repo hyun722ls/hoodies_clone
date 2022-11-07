@@ -333,7 +333,6 @@ const ArticleDetail = () => {
               <Item>추천수 : {article.like}</Item>
                 <Tooltip title="추천!">
                     {isLike ? <ThumbUpAltIcon onClick={likeHandler} /> : <ThumbUpOffAltIcon onClick={likeHandler} />}
-
                 </Tooltip>
               <Item>조회수 : {article.hit}</Item>
               <Item>|</Item>
