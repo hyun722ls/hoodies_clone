@@ -24,6 +24,7 @@
 .card {
   display: inline-grid;
   width: 320px;
+  height: 600px;
   text-align: center;
   margin: 3px 1rem;
   position: relative;

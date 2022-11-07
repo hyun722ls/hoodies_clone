@@ -175,7 +175,7 @@ const Staffs = (props) => {
                                     />
                                 </Grid>
 
-                                <H4>{staff.evaluations[0].writer}님의 한줄평 : {staff.evaluations[0].content}</H4>
+                                <H4>익명님의 한줄평 : {staff.evaluations[0].content}</H4>
                                 <br />
                                 <Box
                                     sx={{
