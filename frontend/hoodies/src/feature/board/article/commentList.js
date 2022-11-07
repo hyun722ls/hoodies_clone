@@ -24,11 +24,6 @@ const StyledContent = styled.div`
   font-size: 13px;
   width: 480px;
 `;
-
-const StyledContentFilter = styled.div`
-  color: #ff5f5f;
-`
-
 const Hr = styled.hr`
   margin: 0;
   padding: 0;
@@ -124,20 +119,20 @@ const CommentList = (props) => {
             <li key={comment._id}>
               <StyledComment>
                 <Nickname>{comment.writer}</Nickname>
+                <StyledContent>
                   {modifyForm && commentId === comment._id ? (
-                      <StyledContent>
-                        <form onSubmit={modifyHandler} id="Mod">
-                          <CommentInput
-                            type="text"
-                            value={modifyContent}
-                            onChange={modifyContentChangeHandler}
-                            placeholder="댓글을 입력하세요"
-                          />
-                        </form>
-                      </StyledContent>
+                    <form onSubmit={modifyHandler} id="Mod">
+                      <CommentInput
+                        type="text"
+                        value={modifyContent}
+                        onChange={modifyContentChangeHandler}
+                        placeholder="댓글을 입력하세요"
+                      />
+                    </form>
                   ) : (
-                      <StyledContentFilter>{blockComment(comment)}</StyledContentFilter>
+                    blockComment(comment)
                   )}
+                </StyledContent>
                 <ButtonList>
                   {modifyForm && commentId === comment._id && (
                     <StyledButton type="submit" form="Mod">

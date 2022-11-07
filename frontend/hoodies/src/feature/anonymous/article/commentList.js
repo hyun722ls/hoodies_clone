@@ -24,13 +24,7 @@ const StyledContent = styled.div`
   float: left;
   font-size: 13px;
   width: 480px;
-  color: #ff5f5f;
 `;
-
-const StyledContentFilter = styled.div`
-  color: #ff5f5f;
-`
-
 const Hr = styled.hr`
   margin: 0;
   padding: 0;
@@ -118,6 +112,10 @@ const CommentList = (props) => {
     setNewContent(event.target.value);
   };
 
+  // const isCommentFilter = (comment) => {
+  //   if (comment === )
+  // }
+
   return props.comments.length ? (
     <div>
       <StyledCommentList>
@@ -132,20 +130,20 @@ const CommentList = (props) => {
                     props.commentsMap
                   )}
                 </Nickname>
+                <StyledContent style={{color:comment === blockComment(comment)? 'black' : 'red'}}>
                   {modifyForm && commentId === comment._id ? (
-                      <StyledContent>
-                        <form onSubmit={modifyHandler} id="Mod">
-                          <CommentInput
-                            type="text"
-                            value={modifyContent}
-                            onChange={modifyContentChangeHandler}
-                            placeholder="댓글을 입력하세요"
-                          />
-                        </form>
-                      </StyledContent>
+                    <form onSubmit={modifyHandler} id="Mod">
+                      <CommentInput
+                        type="text"
+                        value={modifyContent}
+                        onChange={modifyContentChangeHandler}
+                        placeholder="댓글을 입력하세요"
+                      />
+                    </form>
                   ) : (
-                      <StyledContentFilter>{blockComment(comment)}</StyledContentFilter>
+                    blockComment(comment)
                   )}
+                </StyledContent>
                 <ButtonList>
                   {modifyForm && commentId === comment._id && (
                     <StyledButton type="submit" form="Mod">
