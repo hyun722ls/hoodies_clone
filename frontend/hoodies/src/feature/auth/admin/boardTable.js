@@ -137,21 +137,9 @@ const ArticleHr = styled.hr`
 const BoardTable = (props) => {
   const history = useHistory();
 
-  const detailPageHandler = (article) => {
-    if (article.type === 1){
-      history.push({ pathname: "/board/free/detail", state: article._id });
-    } else {
-      history.push({ pathname: "/board/anonymous/detail", state: article._id });
-    }
-  };
-
-  const isFilter = (article) => {
-      if (blockArticle(article, article.category) === article.title) {
-          return 1
-      } else {
-          return 0
-      }
-  };
+  const articleClick = (event) => {
+    event.preventDefault();
+  }
 
   return props.articles.length ? (
     <Articles>
@@ -161,15 +149,12 @@ const BoardTable = (props) => {
       {props.articles.map((article) => {
         return (
           <Article key={article._id}>
-            <ArticleA onClick={() => {
-              detailPageHandler(article);
-            }}>
+            <ArticleA onClick={articleClick()}>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     <ArticleH2>{article.content}</ArticleH2>
-                    <ArticleH3 style={{color: "darkblue"}}>-{checkBoardType(article)}-</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
                 </div>
                 <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
-                <ArticleH3>{article.email}</ArticleH3>
+                <ArticleH3>{article.writer}</ArticleH3>
                 <ArticleHr/>
             </ArticleA>
           </Article>
