@@ -232,8 +232,8 @@ public class BoardController {
     @ApiOperation(value = "최근 게시물 10개 조회")
     public List<Board> findRecentBoard() {
         Sort sort = Sort.by("createdAt").descending();
-        // 신고 횟수 2회 이하인 게시글만 조회
-        Query boardQuery = new Query(Criteria.where("reporter.2").exists(false));
+        // 신고 횟수 19회 이하인 게시글만 조회
+        Query boardQuery = new Query(Criteria.where("reporter.19").exists(false));
         boardQuery.with(sort);
         return mongoTemplate.find(boardQuery, Board.class).subList(0, 10);
     }
@@ -243,8 +243,8 @@ public class BoardController {
     @ApiOperation(value = "인기 게시물 10개 조회")
     public List<Board> findPopularBoard() {
         Sort sort = Sort.by("like").descending().and(Sort.by("createdAt").descending());
-        // 신고 횟수 2회 이하인 게시글만 조회
-        Query boardQuery = new Query(Criteria.where("reporter.2").exists(false));
+        // 신고 횟수 19회 이하인 게시글만 조회
+        Query boardQuery = new Query(Criteria.where("reporter.19").exists(false));
         boardQuery.with(sort);
         return mongoTemplate.find(boardQuery, Board.class).subList(0, 10);
     }
