@@ -100,6 +100,7 @@ const dataConverter = (staff) => {
                 "평균": staff.averageScores[4],
             }
         ]
+        return data
 
     } else {
         let data = [
@@ -129,8 +130,8 @@ const dataConverter = (staff) => {
                 "작성자": staff.evaluations[0].score[4]
             }
         ]
+        return data
     }
-    return data
 }
 
 const Staffs = (props) => {
@@ -216,7 +217,7 @@ const Staffs = (props) => {
                                     />
                                 </Grid>
 
-                                {staff.evaluations.length > 0 ? <H4>익명님의 한줄평 : {staff.evaluations[0].content}</H4> : <H4>한줄평를 기다리고 있어요👻</H4>}
+                                {staff.evaluations.length > 0 ? <H4>익명님의 한줄평 : {staff.evaluations[0].content}</H4> : <H4>한줄평을 기다리고 있어요!👻</H4>}
                                 <br />
                                 <Box
                                     sx={{
