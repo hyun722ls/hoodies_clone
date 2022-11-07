@@ -42,7 +42,9 @@ const Main = () => {
       setJobInfo(tempJobInfo)
       setArticles(response)
       setPopularText(response1)
-      setStaffs(DUMMY_STAFF)
+      setStaffs(responseStaffs)
+
+      // setStaffs(DUMMY_STAFF)
       // setStaffs(responseStaffs)
       // setStaffs(previewPros)
       setIsLoading(false);
