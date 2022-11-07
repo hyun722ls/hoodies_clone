@@ -28,6 +28,10 @@ const DIV = styled.div`
   margin-bottom: 3px;
 `
 
+const DIV2 = styled.div`
+  height: 15.2px;
+`
+
 const H1 = styled.h1`
   margin: 0;
 `
@@ -38,12 +42,12 @@ const H2 = styled.h2`
 `
 
 const H3 = styled.h3`
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2 (integer);
+  overflow: hidden;
   font-size: 3px;
   color: #0050ad;
-  height: 15.2px;
-  white-space: no-wrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `
 
 const H4 = styled.h4`
@@ -107,7 +111,9 @@ const Staffs = (props) => {
 
                             <Grid sx={{ minWidth: 275}}>
                                 <H2>{staff.writer}</H2>
-                                <H3>{staff.etc}</H3>
+                                <DIV2>
+                                    <H3>{staff.etc}</H3>
+                                </DIV2>
 
                                 {/*<Grid item sx={{ margin: '0px', marginRight: '0px'}} xs={12} md={6}>*/}
                                 <Grid style={{height:'200px', width: '25vw', position: 'relative', display: 'table', marginLeft: 'auto', marginRight: 'auto'}} xs={12} md={6}>
