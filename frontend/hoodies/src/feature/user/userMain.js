@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../../common/UI/header/header";
-import CustomModal from "../../common/UI/modal/customModal";
-import { checkNickname, updateNickname, updatePassword } from "../user/userApi"
+import { updatePassword } from "../user/userApi"
 import Swal from "sweetalert2";
 
 const StyledCard = styled.div`
@@ -37,14 +36,6 @@ const StyledH5 = styled.h5`
   padding: 0;
   margin: 0;
 `
-const StyledSmall = styled.div`
-  text-align: left;
-  font-size: smaller;
-`
-const StyledInput = styled.input`
-  margin: 0;
-`
-
 const UserMain = () => {
     const [nickname, setNickname] = useState('')
     const [email, setEmail] = useState('')

@@ -1,4 +1,3 @@
-import axios from "axios"
 import { API_URL } from "../../common/api/url"
 import axios1 from "../../common/customAxios/customAxios"
 
@@ -40,7 +39,7 @@ export const updatePassword = async (data) => {
     }
 }
 
-export const fetchArticles = async (page) => {
+export const fetchArticles = async () => {
     try {
         const response = await axios1.get(API_URL + `user/article/${localStorage.getItem('nickname')}`, {headers: {
             'accessToken': localStorage.getItem('token')
