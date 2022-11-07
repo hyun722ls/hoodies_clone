@@ -94,8 +94,8 @@ const EvaluationMain = () => {
               }}
             >
               <h3>{staff.writer}</h3>
-              {staff.email ? <p>{staff.email}</p> : <p>E-mail N/A</p>}
-              <EllipsisP>{staff.etc}</EllipsisP>
+              {staff.email ? <p>{staff.email}</p> : <p>등록된 이메일이 없습니다.</p>}
+              {staff.etc? <EllipsisP>{staff.etc}</EllipsisP> : <p>등록된 설명이 없습니다.</p>}
             </div>
           );
         })}
