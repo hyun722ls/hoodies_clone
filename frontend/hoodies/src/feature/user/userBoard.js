@@ -9,7 +9,6 @@ import styled from "styled-components";
 import "./userBoard.css";
 
 const Container = styled.div`
-  display: raletive;
   margin: 24px;
 `
 

@@ -4,7 +4,7 @@ import { blockArticle } from "../../../common/refineData/blockArticle";
 import { timeConventer } from "../../../common/refineData/refineTime";
 import Grid from '@mui/material/Grid';
 import styled from "styled-components";
-import { changeAnnonymous, checkBoradType } from "../../../common/refineData/anonymousWriter";
+import { changeAnonymous, checkBoardType } from "../../../common/refineData/anonymousWriter";
 import { blockCnt } from "../../../common/api/url";
 import Swal from "sweetalert2";
 
@@ -48,7 +48,7 @@ const ArticleH2 = styled.h2`
   font-weight: normal;
 `
 const ArticleH2_filter = styled.h2`
-  margin: 0;
+  margin: 0px;
   margin-bottom: 5px;
   line-height: 18px;
   white-space: nowrap;
@@ -60,8 +60,8 @@ const ArticleH2_filter = styled.h2`
 `
 
 const ArticleH3 = styled.h3`
-  margin: 0;
-  padding: 0;
+  margin: 0px;
+  padding: 0px;
   float: left;
   max-width: 90px;
   height: 15px;
@@ -75,8 +75,8 @@ const ArticleH3 = styled.h3`
 `
 
 const ArticleTime = styled.time`
-  margin: 0;
-  padding: 0;
+  margin: 0px;
+  padding: 0px;
   float: left;
   margin-right: 5px;
   height: 15px;
@@ -86,14 +86,14 @@ const ArticleTime = styled.time`
 `
 
 const Score = styled.ul`
-  margin: 0;
-  padding: 0;
+  margin: 0px;
+  padding: 0px;
   float: right;
   list-style: none;
 `
 
 const Item = styled.li`
-  margin: 0;
+  margin: 0px;
   float: left;
   margin-left: 0px;
   padding: 0 2px;
@@ -135,7 +135,7 @@ const detailPageHandler = (article) => {
       history.push({ pathname: "/board/free/detail", state: article._id });
   
     } else {
-      history.push({ pathname: "/board/annoymous/detail", state: article._id });
+      history.push({ pathname: "/board/anonymous/detail", state: article._id });
     }
   
 
@@ -173,10 +173,10 @@ return props.articles.length ? (
                       {isFilter(article) ?
                           <ArticleH2>{blockArticle(article, article.category)}</ArticleH2>
                           : <ArticleH2_filter>{blockArticle(article, article.category)}</ArticleH2_filter>}
-                      <ArticleH3 style={{color: "darkblue"}}>-{checkBoradType(article)}-</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
+                      <ArticleH3 style={{color: "darkblue"}}>-{checkBoardType(article)}-</ArticleH3> {/*여기에 게시판 이름 넣기!*/}
                       </div>
                       <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
-                      <ArticleH3>{changeAnnonymous(article)}</ArticleH3>
+                      <ArticleH3>{changeAnonymous(article)}</ArticleH3>
                       <Score style={{}}>
                           <Item style={{fontSize: "2px"}}>조회수</Item><Item>{article.hit}</Item>
                           <Item style={{color: "red", fontSize: "2px"}}>추천수</Item><Item style={{color: "red"}}>{article.like}</Item>

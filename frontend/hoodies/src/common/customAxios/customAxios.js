@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_URL } from "../api/url";
+import Swal from "sweetalert2";
 
 const axios1 = axios.create({
   baseUrl: "",
@@ -55,6 +56,10 @@ axios1.interceptors.response.use(
           })
           .catch((err) => {
             console.log("reissue 마무리");
+            Swal.fire({
+              title: '로그아웃 되었습니다.',
+              icon: "warning"
+            });
             localStorage.clear();
             window.location.href = "/login";
           });
