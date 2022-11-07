@@ -33,34 +33,38 @@ const CreateEvaluation = (props) => {
   async function handleSubmit(event) {
     event.preventDefault();
     const score = [enthusiasm, atmosphere, project, lecture, consultation];
-    const formData = new FormData()
-    formData.set('comment', studentComment)
-    const checkStuduentData = await checkEvaluation(formData)
-    
-    
-    if (checkStuduentData.commentResult !== 'clean'){
-      Swal.fire('부적절한 표현이 있습니다. 상대를 생각하세요.')
-     } else {
-       const response = await postEvaluation(id, score, studentComment);
-       if (response.statusCode === 200) {
-         const response1 = await getStaff(id);
-         props.setStaff(response1);
-         props.setComments(response1.evaluations);
-         Swal.fire({
-           title: "게시",
-           icon: "success",
-           timer: 2000,
-           timerProgressBar: true,
-         });
+    if (studentComment.trim()) {
+      const formData = new FormData()
+      formData.set('comment', studentComment)
+      const checkStuduentData = await checkEvaluation(formData)
+      
+      
+      if (checkStuduentData.commentResult !== 'clean'){
+        Swal.fire('부적절한 표현이 있습니다. 상대를 생각하세요.')
        } else {
-         Swal.fire({
-           title: "이미 평가글을 올렸습니다.",
-           icon: "warning",
-           timer: 2000,
-           timerProgressBar: true,
-         });
-       }
-
+         const response = await postEvaluation(id, score, studentComment);
+         if (response.statusCode === 200) {
+           const response1 = await getStaff(id);
+           props.setStaff(response1);
+           props.setComments(response1.evaluations);
+           Swal.fire({
+             title: "게시",
+             icon: "success",
+             timer: 2000,
+             timerProgressBar: true,
+           });
+         } else {
+           Swal.fire({
+             title: "이미 평가글을 올렸습니다.",
+             icon: "warning",
+             timer: 2000,
+             timerProgressBar: true,
+           });
+         }
+  
+      }
+    } else {
+      Swal.fire('내용을 입력해주세요!')
     }
 
   }
@@ -149,8 +153,6 @@ const CreateEvaluation = (props) => {
           }}
           label="한줄평을 입력해주세요."
           variant="outlined"
-          error={studentComment.trim ? true: false}
-          helperText='한줄평을 입력해주세요.'
           required
         ></TextField>
         <div style={{ color: "red" }}>*게시 후 삭제, 수정이 불가합니다!</div>
