@@ -4,10 +4,19 @@ import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../common/UI/header/header";
 import EvaulationComment from "./evaluationComment";
 import EvaluationPentagon from "./evaluationPentagon";
-// import styled from "styled-components";
+import styled from "styled-components";
 import CreateEvaluation from "./evaluationRegister";
 import Swal from "sweetalert2";
 import { deleteComment, getStaff, postEvaluation } from "./evaluationAPI";
+
+const Ellipsis = styled.div`
+-webkit-box-orient: vertical;
+text-overflow: ellipsis;
+overflow: hidden;
+-webkit-line-clamp: 3;
+display: -webkit-box;
+word-break: break-word;
+`
 
 const EvenPro = () => {
   const dummyData = {
@@ -210,10 +219,10 @@ const EvenPro = () => {
                   {staff.writer}
                 </h4>
                 <p>직책: {staffType}</p>
-                <p>이메일 : {staff.email}</p>
-                <pre style={{ fontFamily: "IBM Plex Sans KR" }}>
-                  설명 : {staff.etc}
-                </pre>
+                {staff.email ? <p>이메일 : {staff.email}</p> : <p>이메일 : N/A</p>}
+                <p>설명 :</p>
+                <Ellipsis>{staff.etc}</Ellipsis>
+                {/* <p style={{textOverflow:'ellipsis', overflow:'hidden', WebkitLineClamp:3, display:'-webkit-box', wordBreak:'break-all',webkitBoxOrient:'vertical'}}>{staff.etc}</p> */}
                 <p>{comments.length}명의 평가</p>
               </div>
             </Grid>
