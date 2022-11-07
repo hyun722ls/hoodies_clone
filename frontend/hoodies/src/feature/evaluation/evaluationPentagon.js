@@ -44,7 +44,7 @@ const evaluationPentagon = (props) => {
             <ResponsiveRadar
                 data={[
                     {
-                        "criteria": "인품",
+                        "criteria": "열정",
                         [`${name}`]: averageScores[0]
                     },
                     {
