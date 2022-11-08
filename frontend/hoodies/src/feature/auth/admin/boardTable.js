@@ -22,12 +22,10 @@ const ArticleH2 = styled.h2`
   margin: 0;
   margin-bottom: 5px;
   line-height: 18px;
-  white-space: nowrap;
+  white-space: break-spaces;
   overflow: hidden;
-  text-overflow: ellipsis;
   font-size: 14px;
   font-weight: normal;
-  word-wrap: break-word;
 `
 const Title = styled.div`
   margin-bottom: -20px;
