@@ -26,7 +26,6 @@ const StyledContent = styled.div`
   float: left;
   font-size: 13px;
   width: 480px;
-  color: #ff5f5f;
 `;
 
 const StyledContentFilter = styled.div`
@@ -135,7 +134,7 @@ const CommentList = (props) => {
                   )}
                 </Nickname>
                   {modifyForm && commentId === comment._id ? (
-                      <StyledContent>
+                      <StyledContent style={comment.content === blockComment(comment) ? {color:'black'} : {color:'#ff5f5f'}}>
                         <form onSubmit={modifyHandler} id="Mod">
                           <CommentInput
                             type="text"
@@ -146,7 +145,7 @@ const CommentList = (props) => {
                         </form>
                       </StyledContent>
                   ) : (
-                      <StyledContentFilter>{isAdmin() ? `${comment.content}`  : blockComment(comment)}</StyledContentFilter>
+                      <StyledContentFilter style={comment.content === blockComment(comment) ? {color:'black'} : {color:'#ff5f5f'}}>{isAdmin() ? `${comment.content}`  : blockComment(comment)}</StyledContentFilter>
                   )}
                 <ButtonList>
                   {modifyForm && commentId === comment._id && (

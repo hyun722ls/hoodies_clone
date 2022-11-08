@@ -125,7 +125,7 @@ const CommentList = (props) => {
               <StyledComment>
                 <Nickname>{comment.writer}</Nickname>
                   {modifyForm && commentId === comment._id ? (
-                      <StyledContent>
+                      <StyledContent style={comment.content === blockComment(comment) ? {color:'black'} : {color:'#ff5f5f'}}>
                         <form onSubmit={modifyHandler} id="Mod">
                           <CommentInput
                             type="text"
@@ -136,7 +136,7 @@ const CommentList = (props) => {
                         </form>
                       </StyledContent>
                   ) : (
-                      <StyledContentFilter>{blockComment(comment)}</StyledContentFilter>
+                      <StyledContentFilter style={comment.content === blockComment(comment) ? {color:'black'} : {color:'#ff5f5f'}}>{blockComment(comment)}</StyledContentFilter>
                   )}
                 <ButtonList>
                   {modifyForm && commentId === comment._id && (
