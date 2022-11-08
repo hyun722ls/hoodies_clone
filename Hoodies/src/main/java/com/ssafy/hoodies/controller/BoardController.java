@@ -54,6 +54,7 @@ public class BoardController {
     @Value("${nickname.salt}")
     private String salt;
 
+    private final String URL = "https://seoulhoodies.s3.ap-northeast-2.amazonaws.com/";
 
 //    private static final int PAGE_SIZE = 10; // 한 페이지의 게시물 수
 
@@ -276,6 +277,32 @@ public class BoardController {
     @PostMapping("/file/{id}")
     @ApiOperation(value = "파일 업로드")
     public JSONObject uploadFile(@PathVariable String id, MultipartFile file) {
+//    public JSONObject uploadFile(@PathVariable String id, List<MultipartFile> files) {
+
+        /*
+        // 기존 업로드 파일 삭제
+        List<String> filePaths = boardRepository.findById(id).get().getFilePaths();
+        for (String path : filePaths) {
+            fileService.deleteFile(path);
+        }
+
+        // 파일 재업로드
+        List<String> filePath = new ArrayList<>();
+        List<Integer> filteredIdx = new ArrayList<>();
+        for (int i = 0; i < files.size(); i++) {
+            String path = fileService.upload(files.get(i));
+            // upload에 실패한 경우
+            if (path.equals("fail")) {
+                filteredIdx.add(i + 1);
+                continue;
+            }
+            filePath.add(path);
+        }
+
+        json.put("filePath", filePath);
+        json.put("filteredIdx", filteredIdx);
+        */
+
         String filePath = fileService.upload(file);
         JSONObject json = new JSONObject();
         int statusCode = 400;

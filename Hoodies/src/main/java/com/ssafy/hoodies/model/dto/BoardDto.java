@@ -34,6 +34,7 @@ public class BoardDto {
     private int type;
     private Map<String, Boolean> contributor;
     private Set<String> reporter;
+    private List<String> filePaths;
 
     public Board toEntity() {
         String now = util.getTimeStamp();
@@ -49,6 +50,7 @@ public class BoardDto {
                         .type(type)
                         .contributor(new HashMap<String, Boolean>())
                         .reporter(new HashSet<>())
+                        .filePaths(new ArrayList<>())
                         .build();
         return board;
     }

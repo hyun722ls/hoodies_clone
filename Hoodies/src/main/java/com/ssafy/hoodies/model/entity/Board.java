@@ -38,7 +38,7 @@ public class Board {
 
     private Map<String, Boolean> contributor;
 
-    private String filePath;
+    private List<String> filePaths;
 
     private Set<String> reporter;
 
