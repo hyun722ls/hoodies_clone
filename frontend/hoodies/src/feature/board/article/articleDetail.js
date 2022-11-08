@@ -384,7 +384,10 @@ const ArticleDetail = () => {
               <Item>조회수 : {article.hit}</Item>
               <Item>|</Item>
 
-                {localStorage.getItem('nickname') !== article.writer && <WarningAmberIcon onClick={reportHandler} />}
+                {localStorage.getItem('nickname') !== article.writer && 
+                    <Tooltip title="신고!">
+                      <WarningAmberIcon onClick={reportHandler} />
+                    </Tooltip>}
 
 
             </Score>
