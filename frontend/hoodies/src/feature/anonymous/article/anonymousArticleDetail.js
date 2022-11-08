@@ -356,6 +356,9 @@ const AnonymousArticleDetail = () => {
     (async () => {
       if (location.state) {
         const response = await fetchArticle(location.state);
+        if(!response){
+          history.push('/404')
+        }
         setArticle(response);
         setComments(response.comments);
         setCommentsMap(anonymousWriter(response.comments, response.writer));
