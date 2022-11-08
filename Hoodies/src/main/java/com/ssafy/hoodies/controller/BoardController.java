@@ -193,7 +193,7 @@ public class BoardController {
 
             statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
             json.put("statusCode", statusCode);
-        } catch (Exception e){
+        } catch (Exception e) {
             json.put("statusCode", statusCode);
         }
         return json;
@@ -247,7 +247,9 @@ public class BoardController {
         // 신고 횟수 19회 이하인 게시글만 조회
         Query boardQuery = new Query(Criteria.where("reporter.19").exists(false));
         boardQuery.with(sort);
-        return mongoTemplate.find(boardQuery, Board.class).subList(0, 10);
+
+        List<Board> list = mongoTemplate.find(boardQuery, Board.class);
+        return list.subList(0, Math.min(list.size(), 10));
     }
 
     // 인기 게시물 조회
@@ -258,7 +260,9 @@ public class BoardController {
         // 신고 횟수 19회 이하인 게시글만 조회
         Query boardQuery = new Query(Criteria.where("reporter.19").exists(false));
         boardQuery.with(sort);
-        return mongoTemplate.find(boardQuery, Board.class).subList(0, 10);
+
+        List<Board> list = mongoTemplate.find(boardQuery, Board.class);
+        return list.subList(0, Math.min(list.size(), 10));
     }
 
     @PostMapping("/file/{id}")
