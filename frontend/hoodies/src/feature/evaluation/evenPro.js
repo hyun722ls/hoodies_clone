@@ -54,9 +54,9 @@ const EvenPro = () => {
       const response1 = await getStaff(staff._id);
       setStaff(response1);
       setComments(response1.evaluations);
-      if (response.type === "consultant") {
+      if (response.type === 1) {
           setStaffType("consultant");
-        } else if (response.type === "pro") {
+        } else if (response.type === 2) {
           setStaffType("pro");
         } else {
           setStaffType("coach");
@@ -72,9 +72,9 @@ const EvenPro = () => {
         const response = await getStaff(location.state);
         setStaff(response);
         setComments(response.evaluations);
-        if (response.type === "consultant") {
+        if (response.type === 1) {
           setStaffType("consultant");
-        } else if (response.type === "pro") {
+        } else if (response.type === 2) {
           setStaffType("pro");
         } else {
           setStaffType("coach");
