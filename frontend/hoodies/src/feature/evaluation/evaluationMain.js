@@ -76,7 +76,7 @@ const EvaluationMain = () => {
           ))}
         </Tabs>
       </Box>
-      <h4 style={{ display: "flex", justifyContent: "center" }}>PRO 페이지</h4>
+ 
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {selectedData.map((staff) => {
           return (

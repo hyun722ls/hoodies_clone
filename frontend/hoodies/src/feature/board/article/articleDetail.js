@@ -232,6 +232,7 @@ const ArticleDetail = () => {
     const response = await fetchLike(location.state);
     if (response.statusCode === 200) {
       const response1 = await fetchArticle(location.state);
+   
       setArticle(response1);
       setComments(response1.comments);
       let tmpLike = Object.keys(response1.contributor).includes(
@@ -337,6 +338,9 @@ const ArticleDetail = () => {
     (async () => {
       if (location.state) {
         const response = await fetchArticle(location.state);
+        if(!response){
+          history.push('/404')
+        }
         setArticle(response);
         setComments(response.comments);
         let tmpLike = Object.keys(response.contributor).includes(
