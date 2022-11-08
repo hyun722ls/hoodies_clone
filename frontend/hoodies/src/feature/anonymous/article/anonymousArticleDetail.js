@@ -409,7 +409,7 @@ const AnonymousArticleDetail = () => {
             <ArticleHr />
           </ArticleHead>
           <ArticleBody>
-            <p>{article.content}</p>
+            <pre>{article.content}</pre>
           </ArticleBody>
           <CommentList
             comments={comments}
