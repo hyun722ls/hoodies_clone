@@ -31,7 +31,7 @@ function App() {
         <Switch>
           <PublicRoute restricted component={Login} exact path="/login" />
           <PublicRoute restricted component={Signup} exact path="/signup" />
-          <PublicRoute restricted component={ImageUpload} exact path="/test" />
+        
           <PrivateRoute component={RedirectComponent} exact path="/" />
           <PrivateRoute component={Main} exact path="/index" />
           <PrivateRoute component={BoardMain} exact path="/board/free" />
