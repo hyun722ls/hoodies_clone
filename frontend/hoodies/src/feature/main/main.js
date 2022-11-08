@@ -30,8 +30,14 @@ const Main = () => {
       const responseStaffs = await fetchStaffview()
 
       setJobInfo(tempJobInfo)
-      setArticles(response)
-      setPopularText(response1)
+      if (response){
+        setArticles(response)
+
+      }
+      if (response1){
+        setPopularText(response1)
+
+      }
       setStaffs(responseStaffs)
 
       // setStaffs(DUMMY_STAFF)
