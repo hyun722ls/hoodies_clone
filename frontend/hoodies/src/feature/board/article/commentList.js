@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { isAdmin } from "../../../common/api/isLogin";
 import { blockComment } from "../../../common/refineData/blockArticle";
 
 const StyledCommentList = styled.ul`
@@ -136,7 +137,7 @@ const CommentList = (props) => {
                         </form>
                       </StyledContent>
                   ) : (
-                      <StyledContentFilter style={comment.content === blockComment(comment) ? {color:'black'} : {color:'#ff5f5f'}}>{blockComment(comment)}</StyledContentFilter>
+                      <StyledContentFilter style={comment.content === blockComment(comment) ? {color:'black'} : {color:'#ff5f5f'}}>{isAdmin() ? `${comment.content}`  : blockComment(comment)}</StyledContentFilter>
                   )}
                 <ButtonList>
                   {modifyForm && commentId === comment._id && (
