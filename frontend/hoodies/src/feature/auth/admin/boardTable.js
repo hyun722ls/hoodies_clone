@@ -27,6 +27,7 @@ const ArticleH2 = styled.h2`
   text-overflow: ellipsis;
   font-size: 14px;
   font-weight: normal;
+  word-wrap: break-word;
 `
 const Title = styled.div`
   margin-bottom: -20px;
