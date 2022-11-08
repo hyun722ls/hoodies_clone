@@ -398,9 +398,10 @@ const AnonymousArticleDetail = () => {
               <Item>조회수 : {article.hit}</Item>
               <Item>|</Item>
 
-              {localStorage.getItem("hashNickname") !== article.writer && (
-                <WarningAmberIcon onClick={reportHandler} />
-              )}
+              {localStorage.getItem('hashNickname') !== article.writer && 
+                    <Tooltip title="신고!">
+                      <WarningAmberIcon onClick={reportHandler} />
+                    </Tooltip>}
             </Score>
             <ArticleHr />
           </ArticleHead>
