@@ -45,7 +45,7 @@ public class MentorController {
     @GetMapping("mentor")
     @ApiOperation(value = "전체 평가페이지 조회")
     public List<Mentor> findAllMentor(){
-        Sort sort = Sort.by("modifiedAt").descending();
+        Sort sort = Sort.by("modifiedAt").descending().and(Sort.by("_id").ascending());
         return mentorRepository.findAll(sort);
     }
 
@@ -53,7 +53,7 @@ public class MentorController {
     @GetMapping("mentor/{type}")
     @ApiOperation(value = "타입별 전체 평가 페이지 조회")
     public List<Mentor> findMentorByType(@PathVariable int type){
-        Sort sort = Sort.by("modifiedAt").descending();
+        Sort sort = Sort.by("modifiedAt").descending().and(Sort.by("_id").ascending());
         return mentorRepository.findAllByType(type, sort);
     }
 
@@ -74,7 +74,8 @@ public class MentorController {
     @GetMapping("preview/mentor")
     @ApiOperation(value = "최근 평가 8개 조회")
     public List<Mentor> findRecentBoard(){
-        return mentorRepository.findBy(PageRequest.of(0, 8, Sort.by("modifiedAt").descending()));
+        return mentorRepository.findBy(PageRequest.of(0, 8, Sort.by("modifiedAt").descending()
+                                                                 .and(Sort.by("_id").ascending())));
     }
 
     // 평가 등록
