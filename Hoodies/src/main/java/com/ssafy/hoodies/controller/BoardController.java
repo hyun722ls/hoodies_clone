@@ -68,16 +68,27 @@ public class BoardController {
     @PostMapping("/board")
     @ApiOperation(value = "게시물 작성")
     public Board writeBoard(@RequestBody BoardDto dto) {
-        ResponseEntity<String> res = util.checkExpression(dto.getTitle(), dto.getContent(), "article");
         Board board = dto.toEntity();
-        board.setCategory(res.getBody().trim());
-        switch (BoardType.convert(dto.getType())) {
-            case FREE: // 자유게시판
-                break;
-            case ANON: // 익명게시판
-                String ename = util.getEncryptStr(dto.getWriter(), salt);
-                board.setWriter(ename);
-                break;
+        try {
+            SecurityContext context = SecurityContextHolder.getContext();
+            Authentication authentication = context.getAuthentication();
+            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
+
+            User user = userRepository.findById(email).get();
+            String nickname = user.getNickname();
+
+            ResponseEntity<String> res = util.checkExpression(dto.getTitle(), dto.getContent(), "article");
+            board.setCategory(res.getBody().trim());
+            switch (BoardType.convert(dto.getType())) {
+                case FREE: // 자유게시판
+                    board.setWriter(nickname);
+                    break;
+                case ANON: // 익명게시판
+                    String ename = util.getEncryptStr(nickname, salt);
+                    board.setWriter(ename);
+                    break;
+            }
+        } catch (Exception e) {
         }
         return boardRepository.save(board);
     }
@@ -303,29 +314,41 @@ public class BoardController {
     @PostMapping("/board/{id}/comment")
     @ApiOperation(value = "댓글 등록")
     public JSONObject writeComment(@RequestBody CommentDto dto, @PathVariable String id) {
-        ResponseEntity<String> res = util.checkExpression("", dto.getContent(), "comment");
-        Comment comment = dto.toEntity();
-        comment.setCategory(res.getBody().trim());
-
-        switch (BoardType.convert(dto.getType())) {
-            case FREE: // 자유게시판
-                break;
-            case ANON: // 익명게시판
-                String ename = util.getEncryptStr(dto.getWriter(), salt);
-                comment.setWriter(ename);
-                break;
-        }
-
-        Query commentQuery = new Query(Criteria.where("_id").is(id));
-        Update commentUpdate = new Update();
-        commentUpdate.inc("hit", -1);
-        commentUpdate.push("comments", comment);
-
-        UpdateResult ur = mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
-
-        int statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
         JSONObject json = new JSONObject();
-        json.put("statusCode", statusCode);
+        int statusCode = 400;
+        try {
+            SecurityContext context = SecurityContextHolder.getContext();
+            Authentication authentication = context.getAuthentication();
+            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
+
+            User user = userRepository.findById(email).get();
+            String nickname = user.getNickname();
+
+            ResponseEntity<String> res = util.checkExpression("", dto.getContent(), "comment");
+            Comment comment = dto.toEntity();
+            comment.setCategory(res.getBody().trim());
+
+            switch (BoardType.convert(dto.getType())) {
+                case FREE: // 자유게시판
+                    comment.setWriter(nickname);
+                    break;
+                case ANON: // 익명게시판
+                    String ename = util.getEncryptStr(nickname, salt);
+                    comment.setWriter(ename);
+                    break;
+            }
+
+            Query commentQuery = new Query(Criteria.where("_id").is(id));
+            Update commentUpdate = new Update();
+            commentUpdate.inc("hit", -1);
+            commentUpdate.push("comments", comment);
+
+            UpdateResult ur = mongoTemplate.updateFirst(commentQuery, commentUpdate, "board");
+
+            statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
+            json.put("statusCode", statusCode);
+        } catch (Exception e) {
+        }
         return json;
     }
 
