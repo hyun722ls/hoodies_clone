@@ -24,7 +24,9 @@ const BoardMain = () => {
       const response1 = await fetchPopularArticles()
     setTotalItemCount(response.totalElements)
     setArticles(response.content);
-    setPopularTexts(response1);
+    if(response1){
+      setPopularTexts(response1)
+    }
     setIsLoading(false);
     })()
   }, [activePage]);
