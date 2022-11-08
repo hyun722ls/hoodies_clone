@@ -78,7 +78,7 @@ const CreateEvaluation = (props) => {
     >
       <Grid item xs={5} style={{ display: "flex", flexDirection: "column" }}>
         <RateItem>
-          <p style={{ margin: 0, fontSize: "large", fontWeight: 500 }}>인품:</p>
+          <p style={{ margin: 0, fontSize: "large", fontWeight: 500 }}>열정:</p>
           <Rating
             value={enthusiasm}
             onChange={(event, newValue) => {
