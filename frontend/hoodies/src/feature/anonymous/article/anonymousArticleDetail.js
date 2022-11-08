@@ -356,7 +356,7 @@ const AnonymousArticleDetail = () => {
     (async () => {
       if (location.state) {
         const response = await fetchArticle(location.state);
-        if(response){
+        if(!response){
           history.push('/404')
         }
         setArticle(response);
