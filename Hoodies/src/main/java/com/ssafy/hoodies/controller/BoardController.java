@@ -66,31 +66,6 @@ public class BoardController {
     // Create
     @PostMapping("/board")
     @ApiOperation(value = "게시물 작성")
-//    public Board writeBoard(@RequestBody BoardDto dto) {
-//        Board board = dto.toEntity();
-//        try {
-//            SecurityContext context = SecurityContextHolder.getContext();
-//            Authentication authentication = context.getAuthentication();
-//            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
-//
-//            User user = userRepository.findById(email).get();
-//            String nickname = user.getNickname();
-//
-//            ResponseEntity<String> res = util.checkExpression(dto.getTitle(), dto.getContent(), "article");
-//            board.setCategory(res.getBody().trim());
-//            switch (BoardType.convert(dto.getType())) {
-//                case FREE: // 자유게시판
-//                    board.setWriter(nickname);
-//                    break;
-//                case ANON: // 익명게시판
-//                    String ename = util.getEncryptStr(nickname, salt);
-//                    board.setWriter(ename);
-//                    break;
-//            }
-//        } catch (Exception e) {
-//        }
-//        return boardRepository.save(board);
-//    }
     public BoardDto boardAdd(@RequestBody BoardRequestDto requestDto){
         String email = securityService.findEmail();
         String writer = userService.findNickname(email);
@@ -105,16 +80,6 @@ public class BoardController {
     // 게시물 조회 --> https://~/api/board?page=0&size=5&sort=id.desc
     @GetMapping("/board/{type}")
     @ApiOperation(value = "유형별 전체 게시물 조회")
-//    public Page<Board> findAllBoard(Pageable pageable,
-//                                    @ApiParam(
-//                                            name = "type",
-//                                            type = "int",
-//                                            value = "게시물의 유형",
-//                                            required = true)
-//                                    @PathVariable int type) {
-//        Sort sort = Sort.by("createdAt").descending();
-//        return boardRepository.findAllByType(type, PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize(), sort));
-//    }
     public Page<BoardDto> boardList(Pageable pageable,
                                     @ApiParam(
                                             name = "type",
@@ -128,18 +93,6 @@ public class BoardController {
     // 특정 게시물 조회
     @GetMapping("/board/detail/{id}")
     @ApiOperation(value = "id로 특정 게시물 조회")
-//    public Board boardDetail(
-//            @ApiParam(
-//                    name = "id",
-//                    type = "String",
-//                    value = "게시물의 DB상 id",
-//                    required = true)
-//            @PathVariable String id) {
-//        FindAndModifyOptions findAndModifyOptions = FindAndModifyOptions.options().returnNew(true);
-//        Query boardQuery = new Query(Criteria.where("_id").is(id));
-//        Update boardUpdate = new Update().inc("hit", 1);
-//        return mongoTemplate.findAndModify(boardQuery, boardUpdate, findAndModifyOptions, Board.class);
-//    }
     public BoardDto boardDetail(
             @ApiParam(
                     name = "id",
@@ -153,47 +106,32 @@ public class BoardController {
     // Update
     @PutMapping("/board/detail/{id}")
     @ApiOperation(value = "id로 특정 게시물 수정")
-    public JSONObject updateBoard(@RequestBody BoardDto dto,
+    public JSONObject boardModify(@RequestBody BoardRequestDto requestDto,
                                   @ApiParam(
                                           name = "id",
                                           type = "String",
                                           value = "게시물의 DB상 id",
                                           required = true)
-                                  @PathVariable String id) {
+                                  @PathVariable String id){
         JSONObject json = new JSONObject();
-        int statusCode = 400;
-        try {
-            SecurityContext context = SecurityContextHolder.getContext();
-            Authentication authentication = context.getAuthentication();
-            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
 
-            User user = userRepository.findById(email).get();
-            String nickname = user.getNickname();
-            String hashNickname = util.getEncryptStr(nickname, salt);
-            String writer = boardRepository.findById(id).get().getWriter();
+        // Token 상의 닉네임 조회
+        String email = securityService.findEmail();
+        String nickname = userService.findNickname(email);
 
-            // 글 작성자가 아닌 경우
-            if (!(nickname.equals(writer) || hashNickname.equals(writer))) {
-                json.put("statusCode", statusCode);
-                return json;
-            }
+        String category = filterService.filterBoth(requestDto.getTitle(), requestDto.getContent());
+        BoardDto dto = requestDto.toDto();
+        dto.setCategory(category);
+        dto.set_id(id);
+        dto.setWriter(nickname);
 
-            ResponseEntity<String> res = util.checkExpression(dto.getTitle(), dto.getContent(), "article");
-            Query boardQuery = new Query(Criteria.where("_id").is(id));
-            Update boardUpdate = new Update();
-            boardUpdate.set("title", dto.getTitle());
-            boardUpdate.set("content", dto.getContent());
-            boardUpdate.set("category", res.getBody().trim());
-            boardUpdate.set("modifiedAt", util.getTimeStamp());
-            UpdateResult ur = mongoTemplate.updateFirst(boardQuery, boardUpdate, "board");
+        int statusCode = boardService.modifyBoard(dto) > 0 ? 200 : 400;
 
-            statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
-            json.put("statusCode", statusCode);
-        } catch (Exception e) {
-            json.put("statusCode", statusCode);
-        }
+        json.put("statusCode", statusCode);
         return json;
     }
+    
+    /////////////////////////////////////////// 내일부터 작업할 영역
 
     @PatchMapping("/board/detail/{id}/like")
     @ApiOperation(value = "id로 특정 게시물 좋아요 등록/해제")

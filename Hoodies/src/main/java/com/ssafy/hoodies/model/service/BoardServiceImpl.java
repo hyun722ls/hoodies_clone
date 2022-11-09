@@ -19,6 +19,8 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static com.ssafy.hoodies.model.dto.BoardDto.fromEntity;
 
 @Service
@@ -49,8 +51,7 @@ public class BoardServiceImpl implements BoardService{
     public Page<BoardDto> findBoards(int type, Pageable pageable){
         Sort sort = Sort.by("createdAt").descending();
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(), sort);
-        return boardRepository.findAllByType(type, pageRequest)
-                              .map(BoardDto::fromEntity);
+        return boardRepository.findAllByType(type, pageRequest).map(BoardDto::fromEntity);
     }
 
     @Transactional
@@ -59,5 +60,41 @@ public class BoardServiceImpl implements BoardService{
         Query boardQuery = new Query(Criteria.where("_id").is(id));
         Update boardUpdate = new Update().inc("hit", 1);
         return fromEntity(mongoTemplate.findAndModify(boardQuery, boardUpdate, findAndModifyOptions, Board.class));
+    }
+
+    @Transactional
+    public int modifyBoard(BoardDto boardDto){
+        String id = boardDto.get_id();
+        String nickname = boardDto.getWriter(); // Token 상의 닉네임
+
+        Optional<BoardDto> dto = boardRepository.findById(id).map(BoardDto::fromEntity);
+        if(!dto.isPresent()) return 0; // DB에서 게시글 작성자를 찾지 못함
+
+        String writer = dto.get().getWriter(); // DB 상의 게시글 작성자
+
+        // 잘못된 요청
+        if(writer == null || nickname == null) return 0;
+
+        String encodedNickname = util.getEncryptStr(nickname, salt);
+
+        // 권한이 없는 수정 요청
+        if(! (writer.equals(nickname) || writer.equals(encodedNickname)) ) return 0;
+
+        Query boardQuery = new Query(Criteria.where("_id").is(id));
+        Update boardUpdate = new Update();
+
+        boardUpdate.set("title", boardDto.getTitle());
+        boardUpdate.set("content", boardDto.getContent());
+        boardUpdate.set("category", boardDto.getCategory());
+        boardUpdate.set("modifiedAt", util.getTimeStamp());
+        return Long.valueOf(mongoTemplate.updateFirst(boardQuery, boardUpdate, Board.class)
+                                         .getModifiedCount())
+                                         .intValue();
+    }
+
+    @Transactional
+    public int removeBoard(String id){
+
+        return 0;
     }
 }
