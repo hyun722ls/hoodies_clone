@@ -15,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -157,8 +158,9 @@ public class UserServiceImpl implements UserService {
     }
 
     public String findNickname(String email){
-        User user = userRepository.findById(email).get();
-        return user.getNickname();
+        User user = userRepository.findById(email).orElse(null);
+        if(user == null) return "";
+        else return user.getNickname();
     }
 
 }
