@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.Entity;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,11 +17,15 @@ public class Board {
     @Id
     private String _id;
 
-    private String title;
-
     private String writer;
 
+    private String title;
+
     private String content;
+
+    private String category;
+
+    private int type;
 
     private int hit;
 
@@ -32,14 +37,9 @@ public class Board {
 
     private List<Comment> comments;
 
-    private String category;
-
-    private int type;
-
     private Map<String, Boolean> contributor;
-
-    private String filePath;
 
     private Set<String> reporter;
 
+    private String filePath;
 }

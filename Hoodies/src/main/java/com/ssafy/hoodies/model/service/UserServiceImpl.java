@@ -1,6 +1,9 @@
 package com.ssafy.hoodies.model.service;
 
+import com.ssafy.hoodies.model.entity.User;
+import com.ssafy.hoodies.model.repository.UserRepository;
 import com.ssafy.hoodies.util.util;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -14,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     @Value("${external.mattermost.login_id}")
     private String login_id;
@@ -25,6 +29,8 @@ public class UserServiceImpl implements UserService {
     private static final String POST = "POST";
     private static final String CONTENT_TYPE = "applicaiton/json;utf-8";
     private static final String Accept_TYPE = "application/json";
+
+    private final UserRepository userRepository;
 
     HttpURLConnection connInit(String subURL, String token) throws IOException {
         URL loginUrl = new URL(URL + subURL);
@@ -148,6 +154,11 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             return "fail";
         }
+    }
+
+    public String findNickname(String email){
+        User user = userRepository.findById(email).get();
+        return user.getNickname();
     }
 
 }
