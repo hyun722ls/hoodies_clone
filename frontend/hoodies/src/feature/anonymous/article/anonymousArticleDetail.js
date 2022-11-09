@@ -354,27 +354,30 @@ const AnonymousArticleDetail = () => {
 
   useEffect(() => {
     (async () => {
-      if (location.state) {
-        const response = await fetchArticle(location.state);
-        if(!response){
-          history.push('/404')
-        }
-        setArticle(response);
-        setComments(response.comments);
-        setCommentsMap(anonymousWriter(response.comments, response.writer));
-        setArticleWriter(response.writer);
-        let tmpLike = Object.keys(response.contributor).includes(
-          localStorage.getItem("hashNickname")
-        );
-        if (
-          tmpLike === true &&
-          response.contributor[localStorage.getItem("hashNickname")]
-        ) {
-          setIsLike(response.contributor[localStorage.getItem("hashNickname")]);
-        } else {
-          setIsLike(false);
-        }
-      }
+      // 배포용
+      // if (location.state) {
+      //   const response = await fetchArticle(location.state);
+      //   if(!response){
+      //     history.push('/404')
+      //   }
+      //   setArticle(response);
+      //   setComments(response.comments);
+      //   setCommentsMap(anonymousWriter(response.comments, response.writer));
+      //   setArticleWriter(response.writer);
+      //   let tmpLike = Object.keys(response.contributor).includes(
+      //     localStorage.getItem("hashNickname")
+      //   );
+      //   if (
+      //     tmpLike === true &&
+      //     response.contributor[localStorage.getItem("hashNickname")]
+      //   ) {
+      //     setIsLike(response.contributor[localStorage.getItem("hashNickname")]);
+      //   } else {
+      //     setIsLike(false);
+      //   }
+      // }
+      setArticle(location.state)
+      setComments(location.state.comments);
       setIsLoading(false);
     })();
   }, []);

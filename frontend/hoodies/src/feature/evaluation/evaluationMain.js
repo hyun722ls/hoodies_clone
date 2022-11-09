@@ -12,6 +12,7 @@ import { getStaff, getStaffList, getStaffListByType } from "./evaluationAPI";
 import classes from "./evaluation.module.css";
 import { Box } from "@mui/material";
 import styled from "styled-components";
+import { coachMentor, consultantMentor, proMentor, totalMentor } from "../../common/data/styleData";
 
 const EllipsisP = styled.p`
 -webkit-box-orient: vertical;
@@ -30,9 +31,12 @@ const EvaluationMain = () => {
 
   useEffect(() => {
     (async () => {
-      const fullList = await getStaffList();
-      setData(fullList);
-      setSelectedData(fullList);
+      // 배포용
+      // const fullList = await getStaffList();
+      // setData(fullList);
+      // setSelectedData(fullList);
+      setData(totalMentor);
+      setSelectedData(totalMentor);
     })();
   }, []);
 
@@ -40,17 +44,32 @@ const EvaluationMain = () => {
     event.preventDefault();
     const flag = newValue;
     setSelectedTab(newValue);
-    if (flag === 0) {
-      setSelectedData(data);
-    } else {
-      const selectedList = await getStaffListByType(flag);
-      setSelectedData(selectedList);
+    // 배포용
+    // if (flag === 0) {
+    //   setSelectedData(data);
+    // } else {
+    //   const selectedList = await getStaffListByType(flag);
+    //   setSelectedData(selectedList);
+    // }
+
+    if (flag === 0){
+      setSelectedData(totalMentor)
+    } else if (flag === 1){
+      setSelectedData(consultantMentor)
+    } else if (flag === 2){
+      setSelectedData(proMentor)
+    } else{
+      setSelectedData(coachMentor)
     }
-    // setSelectedDropValue(data.filter((data) => data.flag === value)[0].id);
+  
   };
+  // 배포용
+  // const detailPageHandler = (staff) => {
+  //   history.push({ pathname: "/pro/detail", state: staff._id });
+  // };
 
   const detailPageHandler = (staff) => {
-    history.push({ pathname: "/pro/detail", state: staff._id });
+    history.push({ pathname: "/pro/detail", state: staff });
   };
 
   return (

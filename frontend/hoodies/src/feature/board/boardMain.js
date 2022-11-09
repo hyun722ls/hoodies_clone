@@ -6,6 +6,7 @@ import BoardTable from "./boardComponent/boardTable";
 import PopularTexts from "./boardComponent/popularTexts";
 import { useHistory } from "react-router-dom";
 import Grid from '@mui/material/Grid';
+import { freeBoard, popularData } from "../../common/data/styleData";
 
 
 const BoardMain = () => {
@@ -20,13 +21,18 @@ const BoardMain = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await fetchArticles(activePage)
-      const response1 = await fetchPopularArticles()
-    setTotalItemCount(response.totalElements)
-    setArticles(response.content);
-    if(response1){
-      setPopularTexts(response1)
-    }
+      // 배포용
+    //   const response = await fetchArticles(activePage)
+    //   const response1 = await fetchPopularArticles()
+    // setTotalItemCount(response.totalElements)
+    // setArticles(response.content);
+    // if(response1){
+    //   setPopularTexts(response1)
+    // }
+    // setIsLoading(false);
+    setArticles(freeBoard.content)
+    setPopularTexts(popularData)
+    setTotalItemCount(freeBoard.totalElements)
     setIsLoading(false);
     })()
   }, [activePage]);

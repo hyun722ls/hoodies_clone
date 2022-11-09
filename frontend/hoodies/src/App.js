@@ -32,7 +32,7 @@ function App() {
           <PublicRoute restricted component={Login} exact path="/login" />
           <PublicRoute restricted component={Signup} exact path="/signup" />
         
-          <PrivateRoute component={RedirectComponent} exact path="/" />
+          {/* 배포용 <PrivateRoute component={RedirectComponent} exact path="/" />
           <PrivateRoute component={Main} exact path="/index" />
           <PrivateRoute component={BoardMain} exact path="/board/free" />
           <PrivateRoute component={ArticleDetail} exact path="/board/free/detail" />
@@ -48,7 +48,27 @@ function App() {
           <PrivateRoute component={UserMain} exact path="/user" />
           <PrivateRoute component={UserBoard} exact path="/user/board" />
           <AdminRoute component={AdminPage} exact path="/admin" />
-          <PrivateRoute component={ErrorPage} path="*" />
+          <PrivateRoute component={ErrorPage} path="*" /> */}
+
+          {/* 스타일용 */}
+          <PublicRoute component={RedirectComponent} exact path="/" />
+          <PublicRoute component={Main} exact path="/index" />
+          <PublicRoute component={BoardMain} exact path="/board/free" />
+          <PublicRoute component={ArticleDetail} exact path="/board/free/detail" />
+          <PublicRoute component={ArticleForm} exact path="/board/free/form" />
+          <PublicRoute component={AnonymousBoardMain} exact path="/board/anonymous" />
+          <PublicRoute component={AnonymousArticleDetail} exact path="/board/anonymous/detail" />
+          <PublicRoute component={AnonymousArticleForm} exact path="/board/anonymous/form" />
+          <PublicRoute component={EvaluationMain} exact path="/pro" />
+
+          <PublicRoute  component={EvaluationNewMain} exact path="/pro/new" />
+
+          <PublicRoute component={EvenPro} exact path="/pro/detail" />
+          <PublicRoute component={UserMain} exact path="/user" />
+          <PublicRoute component={UserBoard} exact path="/user/board" />
+          <PublicRoute component={AdminPage} exact path="/admin" />
+          <PublicRoute component={ErrorPage} path="*" />
+
         </Switch>
       </BrowserRouter>
     </div>
