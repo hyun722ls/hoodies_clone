@@ -3,6 +3,7 @@ package com.ssafy.hoodies.model;
 import org.springframework.security.core.parameters.P;
 
 public enum BoardType {
+    NONE(0),
     FREE(1),  // 1: 자유게시판
     ANON(2);  // 2: 익명게시판
 
@@ -16,6 +17,6 @@ public enum BoardType {
         for(BoardType boardType : BoardType.values()){
             if(boardType.type == type) return boardType;
         }
-        throw new RuntimeException();
+        return NONE;
     }
 }
