@@ -20,7 +20,7 @@ const StyledComment = styled.div`
 const Nickname = styled.div`
   display: block;
   font-size: 12px;
-  width: 132px;
+  min-width: 132px;
 `;
 const StyledContent = styled.div`
   font-size: 13px;
