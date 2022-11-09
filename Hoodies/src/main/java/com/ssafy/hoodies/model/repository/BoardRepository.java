@@ -1,6 +1,7 @@
 package com.ssafy.hoodies.model.repository;
 
 
+import com.ssafy.hoodies.model.dto.BoardDto;
 import com.ssafy.hoodies.model.entity.Board;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,5 @@ import java.util.List;
 
 public interface BoardRepository extends MongoRepository<Board, String> {
     List<Board> findBy(Pageable pageable);
-
     Page<Board> findAllByType(int type, Pageable pageable);
 }

@@ -2,9 +2,7 @@ package com.ssafy.hoodies.controller;
 
 import com.mongodb.client.result.UpdateResult;
 import com.ssafy.hoodies.model.BoardType;
-import com.ssafy.hoodies.model.dto.BoardDto;
-import com.ssafy.hoodies.model.dto.CommentDto;
-import com.ssafy.hoodies.model.dto.FeedbackDto;
+import com.ssafy.hoodies.model.dto.*;
 import com.ssafy.hoodies.model.entity.Board;
 import com.ssafy.hoodies.model.entity.Comment;
 import com.ssafy.hoodies.model.entity.Feedback;
@@ -12,7 +10,7 @@ import com.ssafy.hoodies.model.entity.User;
 import com.ssafy.hoodies.model.repository.BoardRepository;
 import com.ssafy.hoodies.model.repository.FeedbackRepository;
 import com.ssafy.hoodies.model.repository.UserRepository;
-import com.ssafy.hoodies.model.service.FileService;
+import com.ssafy.hoodies.model.service.*;
 import com.ssafy.hoodies.util.util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -54,11 +52,15 @@ public class BoardController {
     private final UserRepository userRepository;
     private final FeedbackRepository feedbackRepository;
 
+    //-----------------------------------------
     @Value("${nickname.salt}")
     private String salt;
 
+    private final BoardService boardService;
+    private final FilterService filterService;
+    private final SecurityService securityService;
+    private final UserService userService;
 
-//    private static final int PAGE_SIZE = 10; // 한 페이지의 게시물 수
 
     /****************
      *  게시물 CRUD  *
@@ -67,61 +69,88 @@ public class BoardController {
     // Create
     @PostMapping("/board")
     @ApiOperation(value = "게시물 작성")
-    public Board writeBoard(@RequestBody BoardDto dto) {
-        Board board = dto.toEntity();
-        try {
-            SecurityContext context = SecurityContextHolder.getContext();
-            Authentication authentication = context.getAuthentication();
-            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
-
-            User user = userRepository.findById(email).get();
-            String nickname = user.getNickname();
-
-            ResponseEntity<String> res = util.checkExpression(dto.getTitle(), dto.getContent(), "article");
-            board.setCategory(res.getBody().trim());
-            switch (BoardType.convert(dto.getType())) {
-                case FREE: // 자유게시판
-                    board.setWriter(nickname);
-                    break;
-                case ANON: // 익명게시판
-                    String ename = util.getEncryptStr(nickname, salt);
-                    board.setWriter(ename);
-                    break;
-            }
-        } catch (Exception e) {
-        }
-        return boardRepository.save(board);
+//    public Board writeBoard(@RequestBody BoardDto dto) {
+//        Board board = dto.toEntity();
+//        try {
+//            SecurityContext context = SecurityContextHolder.getContext();
+//            Authentication authentication = context.getAuthentication();
+//            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
+//
+//            User user = userRepository.findById(email).get();
+//            String nickname = user.getNickname();
+//
+//            ResponseEntity<String> res = util.checkExpression(dto.getTitle(), dto.getContent(), "article");
+//            board.setCategory(res.getBody().trim());
+//            switch (BoardType.convert(dto.getType())) {
+//                case FREE: // 자유게시판
+//                    board.setWriter(nickname);
+//                    break;
+//                case ANON: // 익명게시판
+//                    String ename = util.getEncryptStr(nickname, salt);
+//                    board.setWriter(ename);
+//                    break;
+//            }
+//        } catch (Exception e) {
+//        }
+//        return boardRepository.save(board);
+//    }
+    public BoardDto boardAdd(@RequestBody BoardRequestDto requestDto){
+        String email = securityService.findEmail();
+        String writer = userService.findNickname(email);
+        String category = filterService.filterBoth(requestDto.getTitle(), requestDto.getContent());
+        BoardDto dto = requestDto.toDto();
+        dto.setWriter(writer);
+        dto.setCategory(category);
+        return boardService.addBoard(dto);
     }
 
     // Retrieve
     // 게시물 조회 --> https://~/api/board?page=0&size=5&sort=id.desc
     @GetMapping("/board/{type}")
     @ApiOperation(value = "유형별 전체 게시물 조회")
-    public Page<Board> findAllBoard(Pageable pageable,
+//    public Page<Board> findAllBoard(Pageable pageable,
+//                                    @ApiParam(
+//                                            name = "type",
+//                                            type = "int",
+//                                            value = "게시물의 유형",
+//                                            required = true)
+//                                    @PathVariable int type) {
+//        Sort sort = Sort.by("createdAt").descending();
+//        return boardRepository.findAllByType(type, PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize(), sort));
+//    }
+    public Page<BoardDto> boardList(Pageable pageable,
                                     @ApiParam(
                                             name = "type",
                                             type = "int",
                                             value = "게시물의 유형",
                                             required = true)
-                                    @PathVariable int type) {
-        Sort sort = Sort.by("createdAt").descending();
-        return boardRepository.findAllByType(type, PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize(), sort));
+                                    @PathVariable int type){
+        return boardService.findBoards(type, pageable);
     }
 
     // 특정 게시물 조회
     @GetMapping("/board/detail/{id}")
     @ApiOperation(value = "id로 특정 게시물 조회")
-    public Board findCertainBoard(
+//    public Board boardDetail(
+//            @ApiParam(
+//                    name = "id",
+//                    type = "String",
+//                    value = "게시물의 DB상 id",
+//                    required = true)
+//            @PathVariable String id) {
+//        FindAndModifyOptions findAndModifyOptions = FindAndModifyOptions.options().returnNew(true);
+//        Query boardQuery = new Query(Criteria.where("_id").is(id));
+//        Update boardUpdate = new Update().inc("hit", 1);
+//        return mongoTemplate.findAndModify(boardQuery, boardUpdate, findAndModifyOptions, Board.class);
+//    }
+    public BoardDto boardDetail(
             @ApiParam(
                     name = "id",
                     type = "String",
                     value = "게시물의 DB상 id",
                     required = true)
-            @PathVariable String id) {
-        FindAndModifyOptions findAndModifyOptions = FindAndModifyOptions.options().returnNew(true);
-        Query boardQuery = new Query(Criteria.where("_id").is(id));
-        Update boardUpdate = new Update().inc("hit", 1);
-        return mongoTemplate.findAndModify(boardQuery, boardUpdate, findAndModifyOptions, Board.class);
+            @PathVariable String id){
+        return boardService.findBoard(id);
     }
 
     // Update
