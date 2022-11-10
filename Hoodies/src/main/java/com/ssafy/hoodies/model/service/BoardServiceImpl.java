@@ -19,7 +19,11 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.ssafy.hoodies.model.dto.BoardDto.fromEntity;
 
@@ -110,5 +114,92 @@ public class BoardServiceImpl implements BoardService{
         boardRepository.deleteById(id);
 
         return 1;
+    }
+
+    @Transactional(readOnly = true)
+    public List<BoardDto> findRecentBoard(){
+        Sort sort = Sort.by("createdAt").descending();
+
+        // 신고 횟수 19회 이하인 게시글만 조회
+        Query boardQuery = new Query(Criteria.where("reporter.19").exists(false));
+        boardQuery.with(sort);
+
+        List<BoardDto> list = mongoTemplate.find(boardQuery, Board.class)
+                                           .stream()
+                                           .map(BoardDto::fromEntity)
+                                           .collect(Collectors.toList());
+        return list.subList(0, Math.min(list.size(), 10));
+    }
+
+    @Transactional(readOnly = true)
+    public List<BoardDto> findPopularBoard(){
+        Sort sort = Sort.by("like").descending().and(Sort.by("createdAt").descending());
+
+        // 신고 횟수 19회 이하인 게시글만 조회
+        Query boardQuery = new Query(Criteria.where("reporter.19").exists(false));
+        boardQuery.with(sort);
+
+        List<BoardDto> list = mongoTemplate.find(boardQuery, Board.class)
+                                           .stream()
+                                           .map(BoardDto::fromEntity)
+                                           .collect(Collectors.toList());
+        return list.subList(0, Math.min(list.size(), 10));
+    }
+
+    @Transactional
+    public int reportBoard(String id, String nickname){
+        Optional<BoardDto> dto = boardRepository.findById(id).map(BoardDto::fromEntity);
+        if(!dto.isPresent()) return 0; // DB에서 게시글을 찾지 못함
+
+        Set<String> reporter = dto.get().getReporter();
+
+        // 잘못된 요청
+        if(reporter == null || nickname == null) return 0;
+
+        String encodedNickname = util.getEncryptStr(nickname, salt);
+
+        boolean newRequest = reporter.add(encodedNickname);
+
+        // 이미 신고했던 사용자
+        if(!newRequest) return 0;
+
+        Query boardQuery = new Query(Criteria.where("_id").is(id));
+        Update boardUpdate = new Update();
+
+        boardUpdate.set("reporter", reporter);
+        boardUpdate.inc("hit", -1);
+
+        return Long.valueOf(mongoTemplate.updateFirst(boardQuery, boardUpdate, Board.class)
+                                         .getModifiedCount())
+                                         .intValue();
+    }
+
+    @Transactional
+    public int likeBoard(String id, String nickname){
+        Optional<BoardDto> dto = boardRepository.findById(id).map(BoardDto::fromEntity);
+        if(!dto.isPresent()) return 0; // DB에서 해당하는 게시글을 찾지 못함
+
+        Map<String, Boolean> contributor = dto.get().getContributor();
+
+        // 잘못된 요청
+        if(contributor == null || nickname == null) return 0;
+
+        String encodedNickname = util.getEncryptStr(nickname, salt);
+
+        // 목록에 있으면 -1, 목록에 없거나 취소한 인원이면 +1
+        boolean isContribute = contributor.getOrDefault(encodedNickname, false);
+        int diff = isContribute ? -1 : +1;
+        contributor.put(encodedNickname, !isContribute);
+
+        Query boardQuery = new Query(Criteria.where("_id").is(id));
+        Update boardUpdate = new Update();
+
+        boardUpdate.set("contributor", contributor);
+        boardUpdate.inc("like", diff);
+        boardUpdate.inc("hit", -1);
+
+        return Long.valueOf(mongoTemplate.updateFirst(boardQuery, boardUpdate, Board.class)
+                                         .getModifiedCount())
+                                         .intValue();
     }
 }

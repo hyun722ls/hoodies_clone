@@ -133,47 +133,40 @@ public class BoardController {
         json.put("statusCode", statusCode);
         return json;
     }
-    
-    /////////////////////////////////////////// 내일부터 작업할 영역
 
     @PatchMapping("/board/detail/{id}/like")
     @ApiOperation(value = "id로 특정 게시물 좋아요 등록/해제")
-    public JSONObject likeBoard(@ApiParam(
+    public JSONObject boardLike(@ApiParam(
             name = "id",
             type = "String",
             value = "게시물의 DB상 id",
             required = true)
                                 @PathVariable String id) {
-        // 목록에 있으면 -1, 목록에 없거나 취소한 인원이면 +1
-        // 작성자 인코딩 필요
         JSONObject json = new JSONObject();
-        int statusCode = 400;
-        try {
-            Map<String, Boolean> contributor = boardRepository.findById(id).get().getContributor();
 
-            SecurityContext context = SecurityContextHolder.getContext();
-            Authentication authentication = context.getAuthentication();
-            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
+        // Token 상의 닉네임 조회
+        String email = securityService.findEmail();
+        String nickname = userService.findNickname(email);
 
-            User user = userRepository.findById(email).get();
+        int statusCode = boardService.likeBoard(id, nickname) > 0 ? 200 : 400;
 
-            String euser = util.getEncryptStr(user.getNickname(), salt);
-            boolean value = contributor.getOrDefault(euser, false);
-            int diff = value ? -1 : +1;
-            contributor.put(euser, !value);
+        json.put("statusCode", statusCode);
+        return json;
+    }
 
-            Query boardQuery = new Query(Criteria.where("_id").is(id));
-            Update boardUpdate = new Update();
-            boardUpdate.set("contributor", contributor);
-            boardUpdate.inc("like", diff);
-            boardUpdate.inc("hit", -1);
-            UpdateResult ur = mongoTemplate.updateFirst(boardQuery, boardUpdate, "board");
+    // 게시물 신고
+    @PutMapping("/board/detail/{id}/report")
+    @ApiOperation(value = "id로 특정 게시물 신고")
+    public JSONObject boardReport(@PathVariable String id) {
+        JSONObject json = new JSONObject();
 
-            statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
-            json.put("statusCode", statusCode);
-        } catch (Exception e) {
-            json.put("statusCode", statusCode);
-        }
+        // Token 상의 닉네임 조회
+        String email = securityService.findEmail();
+        String nickname = userService.findNickname(email);
+
+        int statusCode = boardService.reportBoard(id, nickname) > 0 ? 200 : 400;
+
+        json.put("statusCode", statusCode);
         return json;
     }
 
@@ -187,33 +180,6 @@ public class BoardController {
                     value = "게시물의 DB상 id",
                     required = true)
             @PathVariable String id) {
-//        JSONObject json = new JSONObject();
-//        int statusCode = 400;
-//        try {
-//            SecurityContext context = SecurityContextHolder.getContext();
-//            Authentication authentication = context.getAuthentication();
-//            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
-//            boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
-//
-//            User user = userRepository.findById(email).get();
-//            String nickname = user.getNickname();
-//            String hashNickname = util.getEncryptStr(nickname, salt);
-//            String writer = boardRepository.findById(id).get().getWriter();
-//
-//            // 관리자 또는 글 작성자가 아닌 경우
-//            if (!(isAdmin || nickname.equals(writer) || hashNickname.equals(writer))) {
-//                json.put("statusCode", statusCode);
-//                return json;
-//            }
-//
-//            boolean isExist = boardRepository.existsById(id);
-//            boardRepository.deleteById(id);
-//            statusCode = isExist ? 200 : 400;
-//            json.put("statusCode", statusCode);
-//        } catch (Exception e) {
-//            json.put("statusCode", statusCode);
-//        }
-//        return json;
         JSONObject json = new JSONObject();
 
         // Token 상의 닉네임 조회
@@ -230,29 +196,17 @@ public class BoardController {
     // 최근 게시물 조회
     @GetMapping("/preview/free")
     @ApiOperation(value = "최근 게시물 10개 조회")
-    public List<Board> findRecentBoard() {
-        Sort sort = Sort.by("createdAt").descending();
-        // 신고 횟수 19회 이하인 게시글만 조회
-        Query boardQuery = new Query(Criteria.where("reporter.19").exists(false));
-        boardQuery.with(sort);
-
-        List<Board> list = mongoTemplate.find(boardQuery, Board.class);
-        return list.subList(0, Math.min(list.size(), 10));
+    public List<BoardDto> boardRecent() {
+        return boardService.findRecentBoard();
     }
 
     // 인기 게시물 조회
     @GetMapping("/preview/popular")
     @ApiOperation(value = "인기 게시물 10개 조회")
-    public List<Board> findPopularBoard() {
-        Sort sort = Sort.by("like").descending().and(Sort.by("createdAt").descending());
-        // 신고 횟수 19회 이하인 게시글만 조회
-        Query boardQuery = new Query(Criteria.where("reporter.19").exists(false));
-        boardQuery.with(sort);
-
-        List<Board> list = mongoTemplate.find(boardQuery, Board.class);
-        return list.subList(0, Math.min(list.size(), 10));
+    public List<BoardDto> boardPopular() {
+        return boardService.findPopularBoard();
     }
-
+//////////////////////////////////////파일 분리 필요////////////////////////////////////
     @PostMapping("/file/{id}")
     @ApiOperation(value = "파일 업로드")
     public JSONObject uploadFile(@PathVariable String id, MultipartFile file) {
@@ -425,36 +379,6 @@ public class BoardController {
         } catch (Exception e) {
             json.put("statusCode", statusCode);
         }
-        return json;
-    }
-
-    // 게시물 신고
-    @PutMapping("/board/detail/{id}/report")
-    @ApiOperation(value = "게시물 신고")
-    public JSONObject reportBoard(@PathVariable String id) {
-        JSONObject json = new JSONObject();
-        int statusCode = 400;
-        try {
-            Set<String> reporter = boardRepository.findById(id).get().getReporter();
-
-            SecurityContext context = SecurityContextHolder.getContext();
-            Authentication authentication = context.getAuthentication();
-            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
-
-            User user = userRepository.findById(email).get();
-
-            String euser = util.getEncryptStr(user.getNickname(), salt);
-            reporter.add(euser);
-
-            Query boardQuery = new Query(Criteria.where("_id").is(id));
-            Update boardUpdate = new Update();
-            boardUpdate.set("reporter", reporter);
-            boardUpdate.inc("hit", -1);
-            UpdateResult ur = mongoTemplate.updateFirst(boardQuery, boardUpdate, "board");
-            statusCode = ur.getModifiedCount() > 0 ? 200 : 400;
-        } catch (Exception e) {
-        }
-        json.put("statusCode", statusCode);
         return json;
     }
 
