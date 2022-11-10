@@ -93,8 +93,22 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Transactional
-    public int removeBoard(String id){
+    public int removeBoard(String id, String nickname, boolean isAdmin){
+        Optional<BoardDto> dto = boardRepository.findById(id).map(BoardDto::fromEntity);
+        if(!dto.isPresent()) return 0; // DB에서 게시글 작성자를 찾지 못함
 
-        return 0;
+        String writer = dto.get().getWriter(); // DB 상의 게시글 작성자
+
+        // 잘못된 요청
+        if(writer == null || nickname == null) return 0;
+
+        String encodedNickname = util.getEncryptStr(nickname, salt);
+
+        // 권한이 없는 수정 요청
+        if(! (isAdmin || writer.equals(nickname) || writer.equals(encodedNickname)) ) return 0;
+
+        boardRepository.deleteById(id);
+
+        return 1;
     }
 }

@@ -180,39 +180,49 @@ public class BoardController {
     // Delete
     @DeleteMapping("/board/detail/{id}")
     @ApiOperation(value = "id로 특정 게시물 삭제")
-    public JSONObject deleteBoard(
+    public JSONObject boardRemove(
             @ApiParam(
                     name = "id",
                     type = "String",
                     value = "게시물의 DB상 id",
                     required = true)
             @PathVariable String id) {
+//        JSONObject json = new JSONObject();
+//        int statusCode = 400;
+//        try {
+//            SecurityContext context = SecurityContextHolder.getContext();
+//            Authentication authentication = context.getAuthentication();
+//            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
+//            boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
+//
+//            User user = userRepository.findById(email).get();
+//            String nickname = user.getNickname();
+//            String hashNickname = util.getEncryptStr(nickname, salt);
+//            String writer = boardRepository.findById(id).get().getWriter();
+//
+//            // 관리자 또는 글 작성자가 아닌 경우
+//            if (!(isAdmin || nickname.equals(writer) || hashNickname.equals(writer))) {
+//                json.put("statusCode", statusCode);
+//                return json;
+//            }
+//
+//            boolean isExist = boardRepository.existsById(id);
+//            boardRepository.deleteById(id);
+//            statusCode = isExist ? 200 : 400;
+//            json.put("statusCode", statusCode);
+//        } catch (Exception e) {
+//            json.put("statusCode", statusCode);
+//        }
+//        return json;
         JSONObject json = new JSONObject();
-        int statusCode = 400;
-        try {
-            SecurityContext context = SecurityContextHolder.getContext();
-            Authentication authentication = context.getAuthentication();
-            String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
-            boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
-            User user = userRepository.findById(email).get();
-            String nickname = user.getNickname();
-            String hashNickname = util.getEncryptStr(nickname, salt);
-            String writer = boardRepository.findById(id).get().getWriter();
+        // Token 상의 닉네임 조회
+        String email = securityService.findEmail();
+        String nickname = userService.findNickname(email);
+        boolean isAdmin = securityService.isAdmin();
+        int statusCode = boardService.removeBoard(id, nickname, isAdmin) > 0 ? 200 : 400;
 
-            // 관리자 또는 글 작성자가 아닌 경우
-            if (!(isAdmin || nickname.equals(writer) || hashNickname.equals(writer))) {
-                json.put("statusCode", statusCode);
-                return json;
-            }
-
-            boolean isExist = boardRepository.existsById(id);
-            boardRepository.deleteById(id);
-            statusCode = isExist ? 200 : 400;
-            json.put("statusCode", statusCode);
-        } catch (Exception e) {
-            json.put("statusCode", statusCode);
-        }
+        json.put("statusCode", statusCode);
         return json;
     }
 

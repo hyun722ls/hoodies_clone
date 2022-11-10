@@ -9,5 +9,5 @@ public interface BoardService {
     public Page<BoardDto> findBoards(int type, Pageable pageable);
     public BoardDto findBoard(String id);
     public int modifyBoard(BoardDto dto);
-    public int removeBoard(String id);
+    public int removeBoard(String id, String nickname, boolean isAdmin);
 }
