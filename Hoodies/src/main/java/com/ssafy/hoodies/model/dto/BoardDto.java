@@ -6,7 +6,6 @@ import com.ssafy.hoodies.util.util;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +16,7 @@ import java.util.*;
 @Builder
 @ApiModel
 public class BoardDto {
+    @ApiModelProperty(value="게시글 id")
     private String _id;
     @ApiModelProperty(value="제목")
     private String title;
@@ -24,22 +24,30 @@ public class BoardDto {
     private String writer;
     @ApiModelProperty(value="내용")
     private String content;
-    @ApiModelProperty(value="게시글 유형", accessMode = ApiModelProperty.AccessMode.READ_ONLY)
+    @ApiModelProperty(value="게시판 유형")
     private int type;
-    @ApiModelProperty(value="필터 결과", accessMode = ApiModelProperty.AccessMode.READ_ONLY)
+    @ApiModelProperty(value="필터 결과")
     private String category;
 
+    @ApiModelProperty(value="조회수")
     private int hit;
 
+    @ApiModelProperty(value="좋아요 수")
     private int like;
 
+    @ApiModelProperty(value="작성시간")
     private String createdAt;
 
+    @ApiModelProperty(value="수정시간")
     private String modifiedAt;
 
+    @ApiModelProperty(value="댓글목록")
     private List<Comment> comments;
 
+    @ApiModelProperty(value="좋아요 목록")
     private Map<String, Boolean> contributor;
+
+    @ApiModelProperty(value="신고자 목록")
     private Set<String> reporter;
 
     public Board toEntity() {
