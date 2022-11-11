@@ -8,19 +8,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @ApiModel
-public class BoardRequestDto {
-    @ApiModelProperty(value="제목")
-    private String title;
-
+public class CommentRequestDto {
     @ApiModelProperty(value="내용")
     private String content;
 
     @ApiModelProperty(value="게시글 유형", accessMode = ApiModelProperty.AccessMode.READ_ONLY)
     private int type;
 
-    public BoardDto toDto(){
-        return BoardDto.builder()
-                .title(title)
+    public CommentDto toDto(){
+        return CommentDto.builder()
                 .content(content)
                 .type(type)
                 .build();
