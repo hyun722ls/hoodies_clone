@@ -151,12 +151,14 @@ app = Flask(__name__)
 CORS(app)
 app.config['JSON_AS_ASCII'] = False
 
+
+
 @app.route('/comment', methods=['POST'])
 def commentCheck():
     
     if request.method == 'POST':
         comment = request.form['comment']
-        print(comment)
+    
         pipe = TextClassificationPipeline(
             model=model,
             tokenizer=tokenizer,
@@ -177,7 +179,11 @@ def commentCheck():
                 maxidx = idx
                 maxComment = val['score']
                 maxLabel = val['label']
-            
+        if (maxLabel != 'clean' and maxComment < 0.5):
+            maxLabel = 'clean'
+
+        
+        
         return {'commentResult': maxLabel}
 
 @app.route('/article', methods=['POST'])
@@ -209,12 +215,18 @@ def articleCheck():
                 maxTitle = val['score']
                 maxTitleLabel = val['label']
 
+        if (maxTitleLabel != 'clean' and maxTitle < 0.5):
+            maxTitleLabel = 'clean'
+
         maxContent = 0
         maxContentLabel = '' 
         for idx, val in enumerate(contentList):
             if maxContent < val['score']:
                 maxContent = val['score']
                 maxContentLabel = val['label']
+        
+        if (maxContentLabel != 'clean' and maxContent < 0.5):
+            maxContentLabel = 'clean'
             
         
         return {'contentResult': maxContentLabel, 'titleResuit': maxTitleLabel}
