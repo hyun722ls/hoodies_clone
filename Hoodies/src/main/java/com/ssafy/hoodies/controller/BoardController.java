@@ -236,4 +236,48 @@ public class BoardController {
         Sort sort = Sort.by("createdAt").descending();
         return feedbackRepository.findAll(sort);
     }
+
+    @PostMapping("/test/onefile")
+    @ApiOperation(value = "파일 업로드 테스트")
+    public JSONObject uploadFileTest(MultipartFile file) {
+        String filePath = fileService.upload(file);
+        JSONObject json = new JSONObject();
+        int statusCode = 400;
+
+        // upload에 실패한 경우
+        if (filePath.equals("fail")) {
+            json.put("statusCode", statusCode);
+            return json;
+        }
+
+        json.put("filePath", filePath);
+        statusCode = 200;
+        json.put("statusCode", statusCode);
+        return json;
+    }
+
+    @PostMapping("/test/miltifile")
+    @ApiOperation(value = "다중 파일 업로드 테스트")
+    public JSONObject uploadMultiFileTest(List<MultipartFile> files) {
+        List<String> filePath = new ArrayList<>();
+        List<Integer> filteredIdx = new ArrayList<>();
+        for (int i = 0; i < files.size(); i++) {
+            String path = fileService.upload(files.get(i));
+            // upload에 실패한 경우
+            if (path.equals("fail")) {
+                filteredIdx.add(i + 1);
+                continue;
+            }
+            filePath.add(path);
+        }
+
+        JSONObject json = new JSONObject();
+        int statusCode = 200;
+
+        json.put("filePath", filePath);
+        json.put("filteredIdx", filteredIdx);
+        json.put("statusCode", statusCode);
+        return json;
+    }
+
 }
