@@ -26,24 +26,24 @@ const Main = () => {
     (async () => {
    
       // 배포용
-      // const response = await fetchPreview()
-      // const response1 = await fetchPopularview()
-      // const responseStaffs = await fetchStaffview()
+      const response = await fetchPreview()
+      const response1 = await fetchPopularview()
+      const responseStaffs = await fetchStaffview()
 
-      // if (response){
-      //   setArticles(response)
+      if (response){
+        setArticles(response)
 
-      // }
-      // if (response1){
-      //   setPopularText(response1)
+      }
+      if (response1){
+        setPopularText(response1)
 
-      // }
-      // setStaffs(responseStaffs)
+      }
+      setStaffs(responseStaffs)
       
-      setJobInfo(tempJobInfo)
-      setArticles(freeData)
-      setPopularText(popularData)
-      setStaffs(mentorPreview)
+      // setJobInfo(tempJobInfo)
+      // setArticles(freeData)
+      // setPopularText(popularData)
+      // setStaffs(mentorPreview)
       
 
       
