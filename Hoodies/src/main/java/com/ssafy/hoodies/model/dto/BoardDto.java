@@ -49,6 +49,7 @@ public class BoardDto {
 
     @ApiModelProperty(value="신고자 목록")
     private Set<String> reporter;
+    private List<String> filePaths;
 
     public Board toEntity() {
         String now = util.getTimeStamp();
@@ -65,6 +66,7 @@ public class BoardDto {
                     .comments(new ArrayList<>())
                     .contributor(new HashMap<String, Boolean>())
                     .reporter(new HashSet<>())
+                    .filePaths(new ArrayList<>())
                     .build();
     }
 
@@ -83,6 +85,7 @@ public class BoardDto {
                        .comments(board.getComments())
                        .contributor(board.getContributor())
                        .reporter(board.getReporter())
+                       .filePaths(board.getFilePaths())
                        .build();
     }
 }
