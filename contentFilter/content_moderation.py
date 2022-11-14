@@ -6,7 +6,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 app.config['JSON_AS_ASCII'] = False
-enum = {'adult': '노골적인 선정성 묘사로 불쾌감을 줄 수 있는 이미지로 업로드에 실패했습니다.', 'medical': '의학적으로 과하게 상세하여 불쾌감을 줄 수 있는 이미지로 업로드에 실패했습니다.', 'violence': '노골적인 폭력 묘사로 불쾌감을 줄 수 있는 이미지로 업로드에 실패했습니다.', 'clean': False}
+enum = {'adult': '선정성', 'medical': '의학', 'violence': '폭력성', 'clean': False}
 
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'winter-alliance-368105-8cf0b5f21e09.json'
@@ -57,10 +57,14 @@ def detect_safe_search(path):
 def imagefilter():
     if request.method == 'POST':
         
-        file = request.files['file']
-        result = detect_safe_search(file)
+        files = request.files.getlist("files")
+        resultList = []
+        print(files)
+        for file in files:
+            result = detect_safe_search(file)
+            resultList.append(enum[result])
        
-        return  {'result': enum[result]}
+        return  {'result': resultList}
         # return {'id': student_id}
 
 if __name__ == '__main__':
