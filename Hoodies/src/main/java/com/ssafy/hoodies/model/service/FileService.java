@@ -66,10 +66,13 @@ public class FileService {
 
             byte[] bytes = IOUtils.toByteArray(getFileInputStream);
             ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(bytes.length);
+            objectMetadata.setContentType(file.getContentType());
+//            objectMetadata.setContentLength(bytes.length);
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 
-            amazonS3.putObject(new PutObjectRequest(bucket, fileName.toString(), byteArrayInputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+//            amazonS3.putObject(new PutObjectRequest(bucket, fileName.toString(), byteArrayInputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+            amazonS3.putObject(new PutObjectRequest(bucket, fileName.toString(), getFileInputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+
             uploadResult = fileName.toString();
         } catch (Exception e) {
         }
