@@ -41,5 +41,5 @@ public class Board {
 
     private Set<String> reporter;
 
-    private String filePath;
+    private List<String> filePaths;
 }
