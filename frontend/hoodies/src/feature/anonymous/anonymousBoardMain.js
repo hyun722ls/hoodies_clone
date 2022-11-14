@@ -33,17 +33,17 @@ const AnonymousBoardMain = () => {
    
     (async () => {
        // 배포용
-      const response = await fetchArticles(activePage)
-      const response1 = await fetchPopularArticles()
-    setTotalItemCount(response.totalElements)
-    setArticles(response.content);
-    if (response1){
-      setPopularTexts(response1);
+    //   const response = await fetchArticles(activePage)
+    //   const response1 = await fetchPopularArticles()
+    // setTotalItemCount(response.totalElements)
+    // setArticles(response.content);
+    // if (response1){
+    //   setPopularTexts(response1);
 
-    }
-    // setArticles(anonymousData.content)
-    // setPopularTexts(popularData)
-    // setTotalItemCount(anonymousData.totalElements)
+    // }
+    setArticles(anonymousData.content)
+    setPopularTexts(popularData)
+    setTotalItemCount(anonymousData.totalElements)
      setIsLoading(false);
     })()
   }, [activePage]);
