@@ -256,7 +256,7 @@ public class BoardController {
         return json;
     }
 
-    @PostMapping("/test/miltifile")
+    @PostMapping("/test/multifile")
     @ApiOperation(value = "다중 파일 업로드 테스트")
     public JSONObject uploadMultiFileTest(List<MultipartFile> files) {
         List<String> filePath = new ArrayList<>();
