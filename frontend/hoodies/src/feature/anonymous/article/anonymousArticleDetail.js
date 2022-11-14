@@ -378,7 +378,7 @@ const AnonymousArticleDetail = () => {
       }
       // setArticle(location.state)
       // setComments(location.state.comments);
-      // setIsLoading(false);
+      setIsLoading(false);
     })();
   }, []);
   return (
