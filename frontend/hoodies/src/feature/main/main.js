@@ -40,7 +40,8 @@ const Main = () => {
       }
       setStaffs(responseStaffs)
       
-      // setJobInfo(tempJobInfo)
+      setJobInfo(tempJobInfo)
+      
       // setArticles(freeData)
       // setPopularText(popularData)
       // setStaffs(mentorPreview)
