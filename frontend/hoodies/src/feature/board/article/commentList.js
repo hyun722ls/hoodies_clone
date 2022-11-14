@@ -9,25 +9,26 @@ const StyledCommentList = styled.ul`
   list-style: none;
 `;
 const StyledComment = styled.div`
+  display: flex;
   padding: 8px 4px;
   box-sizing: border-box;
   border-bottom: 1px solid #f9f5eb;
   background-color: #fff;
 `;
 const Nickname = styled.div`
-  float: left;
   display: block;
   font-size: 12px;
-  width: 132px;
+  min-width: 132px;
 `;
 const StyledContent = styled.div`
-  float: left;
   font-size: 13px;
-  width: 480px;
+  width: 100%;
+  word-break: keep-all;
 `;
 
 const StyledContentFilter = styled.div`
   color: #ff5f5f;
+  width: 100%;
 `
 
 const Hr = styled.hr`
@@ -38,10 +39,13 @@ const Hr = styled.hr`
   border: 0;
 `;
 const ButtonList = styled.div`
-  float: right;
+  display: flex;
+  justify-content: end;
+  width: 88px;
 `;
 const StyledButton = styled.button`
   margin: 0 4px;
+  min-width: 40px;
   border: 0;
   background-color: inherit;
   font-size: 12px;
@@ -53,20 +57,18 @@ const StyledButton = styled.button`
 const CommentForm = styled.form`
   width: 100%;
   margin: 8px auto;
+  display: flex;
 `;
 const CommentInput = styled.input`
-  width: 480px;
+  width: 100%;
 `;
 const CommentArea = styled.textarea`
-  float: left;
   margin: 8px 0 8px 0;
-  width: 660px;
+  width: 780px;
   resize: none;
 `;
 const CommentButton = styled.button`
-  float: right;
-  margin-top: 8px;
-  margin-right: 8px;
+  margin: 8px;
   top: 0;
   min-width: 80px;
   height: 76px;
@@ -75,6 +77,7 @@ const CommentButton = styled.button`
   color: #1d3979;
   border-radius: 8px;
   font-weight: bold;
+  word-break: keep-all;
   &:hover {
     background-color: #d9d2c3;
     cursor: pointer;
@@ -142,7 +145,7 @@ const CommentList = (props) => {
                 <ButtonList>
                   {modifyForm && commentId === comment._id && (
                     <StyledButton type="submit" form="Mod">
-                      댓글 수정
+                      확인
                     </StyledButton>
                   )}
                   {/*<button onClick={() => props.deleteCommentHandler(comment._id)}>*/}

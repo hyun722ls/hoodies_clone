@@ -12,6 +12,7 @@ import {tempJobInfo} from "../../common/data/dummyJobData";
 import axios from "axios";
 import { API_URL } from "../../common/api/url";
 import GRID from "./main.module.css";
+import { freeData, mentorPreview, popularData } from "../../common/data/styleData";
 
 const Main = () => {
   // const [weeklyMenu, setWeeklyMenu] = useState([]);
@@ -23,13 +24,12 @@ const Main = () => {
 
   useEffect(() => {
     (async () => {
-      // const info = await fetchWeeklyMenu()
-      // const info1 = await fetchJobInfo()
+   
+      // 배포용
       const response = await fetchPreview()
       const response1 = await fetchPopularview()
       const responseStaffs = await fetchStaffview()
 
-      setJobInfo(tempJobInfo)
       if (response){
         setArticles(response)
 
@@ -39,10 +39,14 @@ const Main = () => {
 
       }
       setStaffs(responseStaffs)
+      
+      // setJobInfo(tempJobInfo)
+      // setArticles(freeData)
+      // setPopularText(popularData)
+      // setStaffs(mentorPreview)
+      
 
-      // setStaffs(DUMMY_STAFF)
-      // setStaffs(responseStaffs)
-      // setStaffs(previewPros)
+      
       setIsLoading(false);
       })()
     }, []);
