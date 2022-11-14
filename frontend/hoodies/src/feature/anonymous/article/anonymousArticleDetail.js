@@ -27,9 +27,9 @@ import Swal from "sweetalert2";
 const Articles = styled.div`
   position: relative;
   float: none;
-  left: 24px;
   margin: 24px auto;
-  width: 780px;
+  padding: 0 24px;
+  max-width: 780px;
 `;
 const ArticleHead = styled.div`
   margin-bottom: -1px;
@@ -354,6 +354,7 @@ const AnonymousArticleDetail = () => {
 
   useEffect(() => {
     (async () => {
+      // 배포용
       if (location.state) {
         const response = await fetchArticle(location.state);
         if(!response){
@@ -375,7 +376,9 @@ const AnonymousArticleDetail = () => {
           setIsLike(false);
         }
       }
-      setIsLoading(false);
+      // setArticle(location.state)
+      // setComments(location.state.comments);
+      // setIsLoading(false);
     })();
   }, []);
   return (

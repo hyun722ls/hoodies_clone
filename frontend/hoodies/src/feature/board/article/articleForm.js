@@ -9,9 +9,8 @@ import Swal from "sweetalert2";
 
 const Articles = styled.div`
   position: relative;
-  grid-column: 1/3;
-  grid-row: 1;
   margin: 24px auto;
+  padding: 0 24px;
   max-width: 720px;
 `
 
@@ -33,6 +32,7 @@ const Textarea= styled.textarea`
 `
 const Input = styled.input`
   width: 45%;
+  min-width: 200px;
   margin: 4px;
   height: 24px;
   border: 2px solid #EAE3D2;

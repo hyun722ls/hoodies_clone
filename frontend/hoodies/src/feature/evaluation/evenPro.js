@@ -68,6 +68,7 @@ const EvenPro = () => {
 
   useEffect(() => {
     (async () => {
+      // 배포용
       if (location.state) {
         const response = await getStaff(location.state);
         setStaff(response);
@@ -87,8 +88,12 @@ const EvenPro = () => {
         });
         history.push("/index");
       }
+
+      // 로컬용
+      // setStaff(location.state)
+      // setComments(location.state.evaluations)
+      setIsLoading(false);
     })();
-    setIsLoading(false);
   }, []);
 
   return (

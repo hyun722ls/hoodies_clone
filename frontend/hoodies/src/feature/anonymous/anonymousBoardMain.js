@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import "./boardMain.css";
 import Grid from "@mui/material/Grid";
+import { anonymousData, popularData } from "../../common/data/styleData";
 
 const Container = styled.div`
   display: grid;
@@ -29,11 +30,9 @@ const AnonymousBoardMain = () => {
 
 
   useEffect(() => {
-    // const response = 요청(게시글 20개가 한 페이지 = 제목, 닉네임, 시간, 조회수, 추천)
-    // const response1 = 인기 게시글(제목, 날짜)
-    // setArticles(response)
-    // setPopularText(response1
+   
     (async () => {
+       // 배포용
       const response = await fetchArticles(activePage)
       const response1 = await fetchPopularArticles()
     setTotalItemCount(response.totalElements)
@@ -42,7 +41,10 @@ const AnonymousBoardMain = () => {
       setPopularTexts(response1);
 
     }
-    setIsLoading(false);
+    // setArticles(anonymousData.content)
+    // setPopularTexts(popularData)
+    // setTotalItemCount(anonymousData.totalElements)
+    // setIsLoading(false);
     })()
   }, [activePage]);
 

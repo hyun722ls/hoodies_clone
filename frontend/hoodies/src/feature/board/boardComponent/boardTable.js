@@ -140,6 +140,7 @@ const ArticleHr = styled.hr`
 
 const BoardTable = (props) => {
   const history = useHistory();
+  // 배포용
   const detailPageHandler = (article) => {
     if (article.reporter?.length > blockCnt && !isAdmin()){
       Swal.fire({
@@ -157,6 +158,16 @@ const BoardTable = (props) => {
       }
     }
   };
+
+  // 로컬용
+  // const detailPageHandler = (article) => {
+  //   if (article.type === 1){
+  //       history.push({ pathname: "/board/free/detail", state: article });
+    
+  //     } else {
+  //       history.push({ pathname: "/board/anonymous/detail", state: article });
+  //     }
+  // }
 
   const isFilter = (article) => {
       if (blockArticle(article, article.category) === article.title) {
@@ -194,6 +205,7 @@ const BoardTable = (props) => {
                     <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
                     <ArticleH3>{changeAnonymous(article)}</ArticleH3>
                     <Score>
+                        <Item style={{fontSize: "2px"}}>댓글수</Item><Item>{article.comments.length}</Item>
                         <Item style={{fontSize: "2px"}}>조회수</Item><Item>{article.hit}</Item>
                         <Item style={{color: "red", fontSize: "2px"}}>추천수</Item><Item style={{color: "red"}}>{article.like}</Item>
                     </Score>
