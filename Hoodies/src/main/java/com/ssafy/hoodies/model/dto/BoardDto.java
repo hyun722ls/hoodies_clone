@@ -66,6 +66,7 @@ public class BoardDto {
                     .comments(new ArrayList<>())
                     .contributor(new HashMap<String, Boolean>())
                     .reporter(new HashSet<>())
+                    .filePaths(new ArrayList<>())
                     .build();
     }
 
@@ -84,6 +85,7 @@ public class BoardDto {
                        .comments(board.getComments())
                        .contributor(board.getContributor())
                        .reporter(board.getReporter())
+                       .filePaths(board.getFilePaths())
                        .build();
     }
 }

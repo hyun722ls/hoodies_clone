@@ -185,10 +185,9 @@ public class BoardController {
 //////////////////////////////////////파일 분리 필요////////////////////////////////////
     @PostMapping("/file/{id}")
     @ApiOperation(value = "파일 업로드")
-    public JSONObject uploadFile(@PathVariable String id, MultipartFile file) {
-//    public JSONObject uploadFile(@PathVariable String id, List<MultipartFile> files) {
-
-        /*
+    public JSONObject uploadFile(@PathVariable String id, List<MultipartFile> files) {
+        /* 게시판에 파일 첨부 가능한 이후에 진행 예정
+        
         // 기존 업로드 파일 삭제
         List<String> filePaths = boardRepository.findById(id).get().getFilePaths();
         for (String path : filePaths) {
@@ -212,30 +211,29 @@ public class BoardController {
         json.put("filteredIdx", filteredIdx);
         */
 
-        String filePath = fileService.upload(file);
-        JSONObject json = new JSONObject();
-        int statusCode = 400;
+        List<String> filePaths = new ArrayList<>();
+        List<Integer> filteredIdx = new ArrayList<>();
 
-        // upload에 실패한 경우
-        if (filePath.equals("fail")) {
-            json.put("statusCode", statusCode);
-            return json;
+        for (int i = 0; i < files.size(); i++) {
+            String path = fileService.upload(files.get(i));
+            // upload에 실패한 경우
+            if (path.equals("fail")) {
+                filteredIdx.add(i + 1);
+                continue;
+            }
+            filePaths.add(path);
         }
+
+        JSONObject json = new JSONObject();
+        int statusCode = 200;
 
         Query boardQuery = new Query(Criteria.where("_id").is(id));
         Update boardUpdate = new Update();
-        boardUpdate.set("filePath", filePath);
+        boardUpdate.set("filePaths", filePaths);
         UpdateResult ur = mongoTemplate.updateFirst(boardQuery, boardUpdate, "board");
 
-        // 파일 경로 추가에 실패한 경우
-        if (ur.getModifiedCount() == 0) {
-            fileService.deleteFile(filePath);
-            json.put("statusCode", statusCode);
-            return json;
-        }
-
-        json.put("filePath", filePath);
-        statusCode = 200;
+        json.put("filePaths", filePaths);
+        json.put("filteredIdx", filteredIdx);
         json.put("statusCode", statusCode);
         return json;
     }
@@ -261,49 +259,6 @@ public class BoardController {
     public List<Feedback> findAllFeedback() {
         Sort sort = Sort.by("createdAt").descending();
         return feedbackRepository.findAll(sort);
-    }
-
-    @PostMapping("/test/onefile")
-    @ApiOperation(value = "파일 업로드 테스트")
-    public JSONObject uploadFileTest(MultipartFile file) {
-        String filePath = fileService.upload(file);
-        JSONObject json = new JSONObject();
-        int statusCode = 400;
-
-        // upload에 실패한 경우
-        if (filePath.equals("fail")) {
-            json.put("statusCode", statusCode);
-            return json;
-        }
-
-        json.put("filePath", filePath);
-        statusCode = 200;
-        json.put("statusCode", statusCode);
-        return json;
-    }
-
-    @PostMapping("/test/multifile")
-    @ApiOperation(value = "다중 파일 업로드 테스트")
-    public JSONObject uploadMultiFileTest(List<MultipartFile> files) {
-        List<String> filePath = new ArrayList<>();
-        List<Integer> filteredIdx = new ArrayList<>();
-        for (int i = 0; i < files.size(); i++) {
-            String path = fileService.upload(files.get(i));
-            // upload에 실패한 경우
-            if (path.equals("fail")) {
-                filteredIdx.add(i + 1);
-                continue;
-            }
-            filePath.add(path);
-        }
-
-        JSONObject json = new JSONObject();
-        int statusCode = 200;
-
-        json.put("filePath", filePath);
-        json.put("filteredIdx", filteredIdx);
-        json.put("statusCode", statusCode);
-        return json;
     }
 
 }
