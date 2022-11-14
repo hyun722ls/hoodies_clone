@@ -5,10 +5,10 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.internal.Mimetypes;
+import com.amazonaws.services.s3.model.*;
+import com.amazonaws.services.s3.transfer.TransferManager;
+import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 import com.amazonaws.util.IOUtils;
 import com.j256.simplemagic.ContentInfo;
 import com.j256.simplemagic.ContentInfoUtil;
@@ -19,7 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.UUID;
@@ -52,26 +54,37 @@ public class FileService {
 
     public String upload(MultipartFile file) {
         String uploadResult = "fail";
-        try {
+        try (InputStream getFileInputStream = file.getInputStream()){
             StringBuilder fileName = new StringBuilder().append(UUID.randomUUID()).append("_").append(file.getOriginalFilename());
-            InputStream getFileInputStream = file.getInputStream();
 
-            ContentInfoUtil contentInfoUtil = new ContentInfoUtil();
-            ContentInfo fileInfo = contentInfoUtil.findMatch(getFileInputStream);
-            String fileExtension = fileInfo.getName();
-            // 업로드할 수 없는 확장자일 경우
-            if (!availableExtensions.contains(fileExtension)) {
-                return uploadResult;
-            }
+//            ContentInfoUtil contentInfoUtil = new ContentInfoUtil();
+//            ContentInfo fileInfo = contentInfoUtil.findMatch(getFileInputStream);
+//            String fileExtension = fileInfo.getName();
+//            // 업로드할 수 없는 확장자일 경우
+//            if (!availableExtensions.contains(fileExtension)) {
+//                return uploadResult;
+//            }
 
-            byte[] bytes = IOUtils.toByteArray(getFileInputStream);
             ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(bytes.length);
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+            objectMetadata.setContentType(file.getContentType());
+            objectMetadata.setContentLength(file.getSize());
+            PutObjectRequest objectRequest = new PutObjectRequest(bucket, fileName.toString(), file.getInputStream(), objectMetadata)
+                                                .withCannedAcl(CannedAccessControlList.PublicRead);
+            amazonS3.putObject(objectRequest);
 
-            amazonS3.putObject(new PutObjectRequest(bucket, fileName.toString(), byteArrayInputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+//            byte[] bytes = IOUtils.toByteArray(getFileInputStream);
+//            ObjectMetadata objectMetadata = new ObjectMetadata();
+//            objectMetadata.setContentLength(bytes.length);
+//            objectMetadata.setContentType(file.getContentType());
+//
+//            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+//
+//            amazonS3.putObject(new PutObjectRequest(bucket, fileName.toString(), byteArrayInputStream, objectMetadata)
+//                    .withCannedAcl(CannedAccessControlList.PublicRead)
+//            );
             uploadResult = fileName.toString();
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
         return uploadResult;
     }
