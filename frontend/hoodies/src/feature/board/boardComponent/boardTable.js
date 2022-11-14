@@ -205,6 +205,7 @@ const BoardTable = (props) => {
                     <ArticleTime>{timeConventer(article.createdAt)}</ArticleTime>
                     <ArticleH3>{changeAnonymous(article)}</ArticleH3>
                     <Score>
+                        <Item style={{fontSize: "2px"}}>댓글수</Item><Item>{article.comments.length}</Item>
                         <Item style={{fontSize: "2px"}}>조회수</Item><Item>{article.hit}</Item>
                         <Item style={{color: "red", fontSize: "2px"}}>추천수</Item><Item style={{color: "red"}}>{article.like}</Item>
                     </Score>
