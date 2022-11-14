@@ -44,7 +44,7 @@ const AnonymousBoardMain = () => {
     // setArticles(anonymousData.content)
     // setPopularTexts(popularData)
     // setTotalItemCount(anonymousData.totalElements)
-    // setIsLoading(false);
+     setIsLoading(false);
     })()
   }, [activePage]);
 
