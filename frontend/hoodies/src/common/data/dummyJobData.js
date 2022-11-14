@@ -1,21 +1,21 @@
 export const tempJobInfo = [
     {
-        id: 7,
-        name: "윈스",
-        job: "솔루션 개발, 웹 개발",
-        period: "22.11.04(금) ~ 22.11.09(수) 24:00 까지",
-        method: "온라인 지원(https://wins21.recruiter.co.kr)",
-        favor: "우대 없음",
-        url: "https://www.wins21.com/"
+        id: 4,
+        name: "삼양데이타시스템",
+        job: "삼양그룹 공장시스템외 프로그램개발 및 운영",
+        period: " 22.11.10(목) ~ 22.11.16(수) 까지",
+        method: "이메일 지원(haeruong.ji@samyang.com)",
+        favor: "특별전형",
+        url: "https://www.syds.com/"
     },
     {
-        id: 4,
-        name: "에이엠텔레콤",
-        job: "SW Application 개발, SW Firmware 개발",
-        period: " 22.10.26(수) ~ 22.11.13(일) 24:00 까지",
-        method: "이메일 지원(hwchoi@amtel.co.kr)",
+        id: 7,
+        name: "섹타나인",
+        job: "BackEnd 정산 플랫폼 개발, 인트라넷시스템 운영/유지보수",
+        period: "22.11.08(화) ~ 22.11.17(목) 23:59 까지",
+        method: "온라인 지원(https://han.gl/SuCJb)",
         favor: "서류가점",
-        url: "http://amtel.co.kr/"
+        url: "http://www.secta9ine.com/"
     },
     {
         id: 2,
