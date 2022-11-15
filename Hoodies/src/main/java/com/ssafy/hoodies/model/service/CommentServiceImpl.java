@@ -58,6 +58,7 @@ public class CommentServiceImpl implements CommentService{
                                          .intValue();
     }
 
+    @Transactional
     public int modifyComment(CommentDto commentDto, String id) {
         Optional<BoardDto> bDto = boardRepository.findById(id).map(BoardDto::fromEntity);
         if(!bDto.isPresent()) return 0; // DB에서 게시글을 찾지 못함
@@ -100,6 +101,7 @@ public class CommentServiceImpl implements CommentService{
                                          .intValue();
     }
 
+    @Transactional
     public int removeComment(String bid, String cid, String nickname, boolean isAdmin) {
         Optional<BoardDto> bDto = boardRepository.findById(bid).map(BoardDto::fromEntity);
         if(!bDto.isPresent()) return 0; // DB에서 게시글을 찾지 못함
@@ -138,6 +140,7 @@ public class CommentServiceImpl implements CommentService{
                                          .intValue();
     }
 
+    @Transactional
     public int reportComment(String bid, String cid, String nickname) {
         Optional<BoardDto> bDto = boardRepository.findById(bid).map(BoardDto::fromEntity);
         if(!bDto.isPresent()) return 0; // DB에서 게시글을 찾지 못함

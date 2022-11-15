@@ -182,6 +182,12 @@ public class BoardController {
     public List<BoardDto> boardPopular() {
         return boardService.findPopularBoard();
     }
+
+    @GetMapping("/board/{type}/search")
+    @ApiOperation(value = "게시판 내 검색")
+    public List<BoardDto> boardSearch(@PathVariable int type, @RequestParam int option, @RequestParam String keyword){
+        return boardService.searchBoard(type, option, keyword);
+    }
 //////////////////////////////////////파일 분리 필요////////////////////////////////////
     @PostMapping("/file/{id}")
     @ApiOperation(value = "파일 업로드")
