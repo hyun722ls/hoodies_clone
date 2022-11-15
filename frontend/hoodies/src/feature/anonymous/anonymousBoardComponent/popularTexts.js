@@ -127,8 +127,10 @@ const PopularTexts = (props) => {
     } else {
       if (article.type === 1){
         history.push({ pathname: "/board/free/detail", state: article._id });
-      } else {
+      } else if(article.type === 2) {
         history.push({ pathname: "/board/anonymous/detail", state: article._id });
+      } else {
+        history.push({ pathname: "/board/coding/detail", state: article._id });
       }
     }
   };
