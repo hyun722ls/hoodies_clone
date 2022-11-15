@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Pagination from "react-js-pagination";
-import { fetchArticles, fetchPopularArticles, fetchSearch } from "./boardAPI";
+import { fetchArticles, fetchPopularArticles, fetchSearch } from "./codingBoardAPI";
 import Header from "../../common/UI/header/header";
 import BoardTable from "./boardComponent/boardTable";
 import PopularTexts from "./boardComponent/popularTexts";
@@ -9,7 +9,7 @@ import Grid from '@mui/material/Grid';
 import { freeBoard, popularData } from "../../common/data/styleData";
 
 
-const BoardMain = () => {
+const CodeBoardMain = () => {
   const [articles, setArticles] = useState([]);
   const [activePage, setActivePage] = useState(1);
   const [popularTexts, setPopularTexts] = useState([]);
@@ -114,4 +114,4 @@ const BoardMain = () => {
   );
 };
 
-export default BoardMain;
+export default CodeBoardMain;
