@@ -57,14 +57,14 @@ const BoardMain = () => {
   }
 
   const searchHandler = async (event) => {
-    event.preventDefault();
+   
     if(searchText.trim()){
       const tmpOption = parseInt(selected)
       setOption(tmpOption)
       const tmpKeyword = searchText
-      setKeyword(tmpKeyword) 
-      const response = await fetchSearch(option, keyword, 1)
+      const response = await fetchSearch(option, searchText, 1)
       if (response){
+        setKeyword(tmpKeyword) 
         setArticles(response.content)
         setActivePage(1)
         setTotalItemCount(response.totalElements)
