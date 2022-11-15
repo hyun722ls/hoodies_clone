@@ -161,3 +161,14 @@ export const reportComment = async (articleId, commentId) => {
     }
 }
 
+
+export const fetchSearch = async (option, keyword, page) => {
+    try {
+        const response = await axios.get(API_URL + `board/1/search?option=${option}&keyword=${keyword}&page=${page}&size=20`, {headers: {
+            'accessToken': localStorage.getItem('token')
+        }})
+        return response.data
+    } catch (err) {
+        console.log(err)
+    }
+}
