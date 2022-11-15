@@ -7,10 +7,7 @@ import com.ssafy.hoodies.model.repository.BoardRepository;
 import com.ssafy.hoodies.util.util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -202,7 +199,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Transactional
-    public List<BoardDto> searchBoard(int type, int option, String keyword){
+    public Page<BoardDto> searchBoard(int type, int option, String keyword, Pageable pageable){
         Set<String> keywords = new HashSet<>(Arrays.asList(keyword.trim().split("\\s+"))); // 키워드 공백으로 분리
         Predicate<BoardDto> expression = o -> false;
         switch(option){
@@ -218,11 +215,18 @@ public class BoardServiceImpl implements BoardService{
             default:
                 break;
         }
-        return boardRepository.findAllByType(type)
-                .stream()
-                .map(BoardDto::fromEntity)
-                .filter(expression)
-                .sorted(Comparator.comparing(BoardDto::getCreatedAt).reversed())
-                .collect(Collectors.toList());
+        List<BoardDto> boardDtoList =  boardRepository.findAllByType(type)
+                                                      .stream()
+                                                      .map(BoardDto::fromEntity)
+                                                      .filter(expression)
+                                                      .sorted(Comparator.comparing(BoardDto::getCreatedAt).reversed())
+                                                      .collect(Collectors.toList());
+
+        int page = pageable.getPageNumber()-1;
+        int size = pageable.getPageSize();
+        long start =  PageRequest.of(page, size).getOffset();
+        long end = (start + size) > boardDtoList.size() ? boardDtoList.size() : (start + size);
+
+        return new PageImpl<BoardDto>(boardDtoList.subList((int)start, (int)end), PageRequest.of(page, size), boardDtoList.size());
     }
 }

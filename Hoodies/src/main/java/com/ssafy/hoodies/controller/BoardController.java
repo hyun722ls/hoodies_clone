@@ -185,8 +185,8 @@ public class BoardController {
 
     @GetMapping("/board/{type}/search")
     @ApiOperation(value = "게시판 내 검색")
-    public List<BoardDto> boardSearch(@PathVariable int type, @RequestParam int option, @RequestParam String keyword){
-        return boardService.searchBoard(type, option, keyword);
+    public Page<BoardDto> boardSearch(@PathVariable int type, @RequestParam int option, @RequestParam String keyword, Pageable pageable){
+        return boardService.searchBoard(type, option, keyword, pageable);
     }
 //////////////////////////////////////파일 분리 필요////////////////////////////////////
     @PostMapping("/file/{id}")
