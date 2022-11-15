@@ -70,14 +70,14 @@ const Header = () => {
             </Link>
           </li>
           <li>
-            <Link to="/board/free" className={classes.navbar__item}>
+            <a href="/board/free" className={classes.navbar__item}>
               자유 게시판
-            </Link>
+            </a>
           </li>
           <li>
-            <Link to="/board/anonymous" className={classes.navbar__item}>
+            <a href="/board/anonymous" className={classes.navbar__item}>
               익명 게시판
-            </Link>
+            </a>
           </li>
           <li>
             <Link to="/pro" className={classes.navbar__item}>
