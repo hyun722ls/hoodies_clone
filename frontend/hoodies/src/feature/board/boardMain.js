@@ -15,9 +15,9 @@ const BoardMain = () => {
   const [popularTexts, setPopularTexts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchText, setSearchText] = useState("");
-  const [selected, setSelected] = useState("")
+  const [selected, setSelected] = useState("1")
   const [totalItemsCount, setTotalItemCount] = useState(0)
-  const [keyword, setKeyword] = useState('1')
+  const [keyword, setKeyword] = useState('')
   const [option, setOption] = useState(1)
   const [pageControl, setPageControl] = useState(false)
   const history = useHistory();
