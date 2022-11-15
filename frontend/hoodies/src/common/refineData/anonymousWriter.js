@@ -53,5 +53,7 @@ export const checkBoardType = (article) => {
         return '익명게시판'
     } else if(article.type === 1){
         return '자유게시판'
+    } else{
+        return '코딩게시판'
     }
 }
