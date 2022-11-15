@@ -32,11 +32,11 @@ const EvaluationMain = () => {
   useEffect(() => {
     (async () => {
       // 배포용
-      // const fullList = await getStaffList();
-      // setData(fullList);
-      // setSelectedData(fullList);
-      setData(totalMentor);
-      setSelectedData(totalMentor);
+      const fullList = await getStaffList();
+      setData(fullList);
+      setSelectedData(fullList);
+      // setData(totalMentor);
+      // setSelectedData(totalMentor);
     })();
   }, []);
 
@@ -63,6 +63,7 @@ const EvaluationMain = () => {
     // }
   
   };
+
   // 배포용
   const detailPageHandler = (staff) => {
     history.push({ pathname: "/pro/detail", state: staff._id });
