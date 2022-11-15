@@ -24,12 +24,23 @@ const BoardMain = () => {
   useEffect(() => {
     (async () => {
       // 배포용
-      const response = await fetchArticles(activePage)
+      if (!pageControl ){
+        const response = await fetchArticles(activePage)
+        const response1 = await fetchPopularArticles()
+      setTotalItemCount(response.totalElements)
+      setArticles(response.content);
+      if(response1){
+        setPopularTexts(response1)
+      }
+    } else {
+      const option = parseInt(selected) 
+      const response = await fetchSearch(option, searchText, activePage)
       const response1 = await fetchPopularArticles()
-    setTotalItemCount(response.totalElements)
-    setArticles(response.content);
-    if(response1){
-      setPopularTexts(response1)
+      setTotalItemCount(response.totalElements)
+      setArticles(response.content);
+      if(response1){
+        setPopularTexts(response1)
+      }
     }
     setIsLoading(false);
     // setArticles(freeBoard.content)
@@ -47,12 +58,12 @@ const BoardMain = () => {
   const searchHandler = async (event) => {
     event.preventDefault();
     if(searchText.trim()){
-      const option = selected * 1
+      const option = parseInt(selected) 
       const response = await fetchSearch(option, searchText, 1)
       if (response){
-        setArticles(response)
+        setArticles(response.content)
         setActivePage(1)
-        setTotalItemCount(response.length)
+        setTotalItemCount(response.totalElements)
         setPageControl(true)
       }
     }
