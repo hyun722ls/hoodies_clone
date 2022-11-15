@@ -16,4 +16,6 @@ public interface BoardService {
     public List<BoardDto> findPopularBoard();
     public int reportBoard(String id, String nickname);
     public int likeBoard(String id, String nickname);
+
+    public List<BoardDto> searchBoard(int type, int option, String keyword);
 }
