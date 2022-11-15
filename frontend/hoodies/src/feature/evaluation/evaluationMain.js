@@ -36,9 +36,9 @@ const EvaluationMain = () => {
       const fullList = await getStaffList();
       setData(fullList);
       setSelectedData(fullList);
-      setIsLoading(false)      
       // setData(totalMentor);
       // setSelectedData(totalMentor);
+      setIsLoading(false)      
     })();
   }, []);
 
