@@ -47,7 +47,8 @@ const BoardMain = () => {
   const searchHandler = async (event) => {
     event.preventDefault();
     if(searchText.trim()){
-      const response = await fetchSearch(selected, searchText, 1)
+      const option = selected * 1
+      const response = await fetchSearch(option, searchText, 1)
       if (response){
         setArticles(response)
         setActivePage(1)
