@@ -57,7 +57,7 @@ const BoardMain = () => {
   }
 
   const searchHandler = async (event) => {
-   
+    event.preventDefault()
     if(searchText.trim()){
       const tmpOption = parseInt(selected)
       setOption(tmpOption)
