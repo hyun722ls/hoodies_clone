@@ -62,7 +62,7 @@ const BoardMain = () => {
       const tmpOption = parseInt(selected)
       setOption(tmpOption)
       const tmpKeyword = searchText
-      const response = await fetchSearch(option, searchText, 1)
+      const response = await fetchSearch(parseInt(selected), searchText, 1)
       if (response){
         setKeyword(tmpKeyword) 
         setArticles(response.content)
