@@ -27,6 +27,7 @@ const EvaluationMain = () => {
   const [selectedData, setSelectedData] = useState([]);
   const [data, setData] = useState([]);
   const [selectedTab, setSelectedTab] = useState(0);
+  const [isLoading, setIsLoading] = useState(true)
   const history = useHistory();
 
   useEffect(() => {
@@ -35,6 +36,7 @@ const EvaluationMain = () => {
       const fullList = await getStaffList();
       setData(fullList);
       setSelectedData(fullList);
+      setIsLoading(false)      
       // setData(totalMentor);
       // setSelectedData(totalMentor);
     })();
@@ -73,7 +75,7 @@ const EvaluationMain = () => {
   //   history.push({ pathname: "/pro/detail", state: staff });
   // };
 
-  return (
+  return !isLoading && (
     <div>
       <Header />
       <Box sx={{ width: "100%", borderBottom: 1, borderColor: "gray" }}>
