@@ -150,21 +150,20 @@ const BoardTable = (props) => {
         timerProgressBar: true,
       })
     } else {
-      if (article.type === 1){
-        history.push({ pathname: "/board/free/detail", state: article._id });
-    
-      } else if(article.type === 2){
-        history.push({ pathname: "/board/anonymous/detail", state: article._id });
-      } else {
-         history.push({ pathname: "/board/coding/detail", state: article._id });
-        }
+    if (article.type === 1){
+      history.push({ pathname: "/board/free/detail", state: article._id });
+    } else if(article.type === 2) {
+      history.push({ pathname: "/board/anonymous/detail", state: article._id });
+    } else {
+      history.push({ pathname: "/board/coding/detail", state: article._id });
+    }
     }
   };
 
   // 로컬용
   // const detailPageHandler = (article) => {
   //   if (article.type === 1){
-  //       history.push({ pathname: "/board/free/detail", state: article });
+  //       history.push({ pathname: "/board/coding/detail", state: article });
     
   //     } else {
   //       history.push({ pathname: "/board/anonymous/detail", state: article });
@@ -180,14 +179,14 @@ const BoardTable = (props) => {
   };
 
   const createArticle = () => {
-    history.push("free/form");
+    history.push("coding/form");
   };
 
   return props.articles.length ? (
       <Grid>
         <Articles>
           <Title>
-            <H1>자유 게시판</H1>
+            <H1>코딩 게시판</H1>
           </Title>
           <NewArticle onClick={createArticle}>
             새로운 게시글 작성

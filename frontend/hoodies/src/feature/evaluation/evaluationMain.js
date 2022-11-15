@@ -33,11 +33,11 @@ const EvaluationMain = () => {
   useEffect(() => {
     (async () => {
       // 배포용
-      // const fullList = await getStaffList();
-      // setData(fullList);
-      // setSelectedData(fullList);
-      setData(totalMentor);
-      setSelectedData(totalMentor);
+      const fullList = await getStaffList();
+      setData(fullList);
+      setSelectedData(fullList);
+      // setData(totalMentor);
+      // setSelectedData(totalMentor);
       setIsLoading(false)      
     })();
   }, []);
@@ -47,33 +47,33 @@ const EvaluationMain = () => {
     const flag = newValue;
     setSelectedTab(newValue);
     // 배포용
-    // if (flag === 0) {
-    //   setSelectedData(data);
-    // } else {
-    //   const selectedList = await getStaffListByType(flag);
-    //   setSelectedData(selectedList);
-    // }
-
-    if (flag === 0){
-      setSelectedData(totalMentor)
-    } else if (flag === 1){
-      setSelectedData(consultantMentor)
-    } else if (flag === 2){
-      setSelectedData(proMentor)
-    } else{
-      setSelectedData(coachMentor)
+    if (flag === 0) {
+      setSelectedData(data);
+    } else {
+      const selectedList = await getStaffListByType(flag);
+      setSelectedData(selectedList);
     }
+
+    // if (flag === 0){
+    //   setSelectedData(totalMentor)
+    // } else if (flag === 1){
+    //   setSelectedData(consultantMentor)
+    // } else if (flag === 2){
+    //   setSelectedData(proMentor)
+    // } else{
+    //   setSelectedData(coachMentor)
+    // }
   
   };
 
   // 배포용
-  // const detailPageHandler = (staff) => {
-  //   history.push({ pathname: "/pro/detail", state: staff._id });
-  // };
-
   const detailPageHandler = (staff) => {
-    history.push({ pathname: "/pro/detail", state: staff });
+    history.push({ pathname: "/pro/detail", state: staff._id });
   };
+
+  // const detailPageHandler = (staff) => {
+  //   history.push({ pathname: "/pro/detail", state: staff });
+  // };
 
   return !isLoading && (
     <div>

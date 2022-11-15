@@ -22,6 +22,9 @@ import UserMain from "./feature/user/userMain";
 import UserBoard from "./feature/user/userBoard";
 import AdminRoute from "./common/routes/adminRoute";
 import AdminPage from "./feature/auth/admin/adminPage";
+import CodeBoardMain from "./feature/coding/codingBoardMain";
+import CodeArticleDetail from "./feature/coding/article/codingArticleDetail";
+import CodeArticleForm from "./feature/coding/article/codingArticleForm";
 
 
 function App() {
@@ -33,7 +36,7 @@ function App() {
           <PublicRoute restricted component={Signup} exact path="/signup" />
         
           {/* 배포용  */}
-          {/* <PrivateRoute component={RedirectComponent} exact path="/" />
+          <PrivateRoute component={RedirectComponent} exact path="/" />
           <PrivateRoute component={Main} exact path="/index" />
           <PrivateRoute component={BoardMain} exact path="/board/free" />
           <PrivateRoute component={ArticleDetail} exact path="/board/free/detail" />
@@ -44,15 +47,18 @@ function App() {
           <PrivateRoute component={EvaluationMain} exact path="/pro" />
 
           <PrivateRoute component={EvaluationNewMain} exact path="/pro/new" />
+          <PrivateRoute component={CodeBoardMain} exact path="/board/coding" />
+          <PrivateRoute component={CodeArticleDetail} exact path="/board/coding/detail" />
+          <PrivateRoute component={CodeArticleForm} exact path="/board/coding/form" />
 
           <PrivateRoute component={EvenPro} exact path="/pro/detail" />
           <PrivateRoute component={UserMain} exact path="/user" />
           <PrivateRoute component={UserBoard} exact path="/user/board" />
           <AdminRoute component={AdminPage} exact path="/admin" />
-          <PrivateRoute component={ErrorPage} path="*" /> */}
+          <PrivateRoute component={ErrorPage} path="*" />
 
           {/* 스타일용 */}
-          <PublicRoute component={RedirectComponent} exact path="/" />
+          {/* <PublicRoute component={RedirectComponent} exact path="/" />
           <PublicRoute component={Main} exact path="/index" />
           <PublicRoute component={BoardMain} exact path="/board/free" />
           <PublicRoute component={ArticleDetail} exact path="/board/free/detail" />
@@ -60,6 +66,9 @@ function App() {
           <PublicRoute component={AnonymousBoardMain} exact path="/board/anonymous" />
           <PublicRoute component={AnonymousArticleDetail} exact path="/board/anonymous/detail" />
           <PublicRoute component={AnonymousArticleForm} exact path="/board/anonymous/form" />
+          <PublicRoute component={CodeBoardMain} exact path="/board/coding" />
+          <PublicRoute component={CodeArticleDetail} exact path="/board/coding/detail" />
+          <PublicRoute component={CodeArticleForm} exact path="/board/coding/form" />
           <PublicRoute component={EvaluationMain} exact path="/pro" />
 
           <PublicRoute  component={EvaluationNewMain} exact path="/pro/new" />
@@ -68,7 +77,7 @@ function App() {
           <PublicRoute component={UserMain} exact path="/user" />
           <PublicRoute component={UserBoard} exact path="/user/board" />
           <PublicRoute component={AdminPage} exact path="/admin" />
-          <PublicRoute component={ErrorPage} path="*" />
+          <PublicRoute component={ErrorPage} path="*" /> */}
 
         </Switch>
       </BrowserRouter>
