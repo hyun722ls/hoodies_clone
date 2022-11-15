@@ -22,6 +22,9 @@ import UserMain from "./feature/user/userMain";
 import UserBoard from "./feature/user/userBoard";
 import AdminRoute from "./common/routes/adminRoute";
 import AdminPage from "./feature/auth/admin/adminPage";
+import CodeBoardMain from "./feature/coding/codingBoardMain";
+import CodeArticleDetail from "./feature/coding/article/codingArticleDetail";
+import CodeArticleForm from "./feature/coding/article/codingArticleForm";
 
 
 function App() {
@@ -44,6 +47,9 @@ function App() {
           <PrivateRoute component={EvaluationMain} exact path="/pro" />
 
           <PrivateRoute component={EvaluationNewMain} exact path="/pro/new" />
+          <PrivateRoute component={CodeBoardMain} exact path="/board/coding" />
+          <PrivateRoute component={CodeArticleDetail} exact path="/board/coding/detail" />
+          <PrivateRoute component={CodeArticleForm} exact path="/board/coding/form" />
 
           <PrivateRoute component={EvenPro} exact path="/pro/detail" />
           <PrivateRoute component={UserMain} exact path="/user" />
@@ -60,6 +66,9 @@ function App() {
           <PublicRoute component={AnonymousBoardMain} exact path="/board/anonymous" />
           <PublicRoute component={AnonymousArticleDetail} exact path="/board/anonymous/detail" />
           <PublicRoute component={AnonymousArticleForm} exact path="/board/anonymous/form" />
+          <PublicRoute component={CodeBoardMain} exact path="/board/coding" />
+          <PublicRoute component={CodeArticleDetail} exact path="/board/coding/detail" />
+          <PublicRoute component={CodeArticleForm} exact path="/board/coding/form" />
           <PublicRoute component={EvaluationMain} exact path="/pro" />
 
           <PublicRoute  component={EvaluationNewMain} exact path="/pro/new" />

@@ -80,6 +80,11 @@ const Header = () => {
             </a>
           </li>
           <li>
+            <a href="/board/coding" className={classes.navbar__item}>
+              코딩 게시판
+            </a>
+          </li>
+          <li>
             <Link to="/pro" className={classes.navbar__item}>
               평가 게시판
             </Link>
