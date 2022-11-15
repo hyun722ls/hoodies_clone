@@ -19,10 +19,8 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.ssafy.hoodies.model.dto.BoardDto.fromEntity;
@@ -201,5 +199,30 @@ public class BoardServiceImpl implements BoardService{
         return Long.valueOf(mongoTemplate.updateFirst(boardQuery, boardUpdate, Board.class)
                                          .getModifiedCount())
                                          .intValue();
+    }
+
+    @Transactional
+    public List<BoardDto> searchBoard(int type, int option, String keyword){
+        Set<String> keywords = new HashSet<>(Arrays.asList(keyword.trim().split("\\s+"))); // 키워드 공백으로 분리
+        Predicate<BoardDto> expression = o -> false;
+        switch(option){
+            case 1: // 제목만 조회
+                expression = boardDto -> keywords.stream().allMatch(boardDto.getTitle()::contains);
+                break;
+            case 2: // 작성자만 조회
+                expression = boardDto -> boardDto.getWriter().equals(keyword);
+                break;
+            case 3: // 내용만 조회
+                expression = boardDto -> keywords.stream().allMatch(boardDto.getContent()::contains);
+                break;
+            default:
+                break;
+        }
+        return boardRepository.findAllByType(type)
+                .stream()
+                .map(BoardDto::fromEntity)
+                .filter(expression)
+                .sorted(Comparator.comparing(BoardDto::getCreatedAt).reversed())
+                .collect(Collectors.toList());
     }
 }
