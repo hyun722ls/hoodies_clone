@@ -17,6 +17,8 @@ const BoardMain = () => {
   const [searchText, setSearchText] = useState("");
   const [selected, setSelected] = useState("")
   const [totalItemsCount, setTotalItemCount] = useState(0)
+  const [keyword, setKeyword] = useState('1')
+  const [option, setOption] = useState(1)
   const [pageControl, setPageControl] = useState(false)
   const history = useHistory();
 
@@ -33,8 +35,7 @@ const BoardMain = () => {
         setPopularTexts(response1)
       }
     } else {
-      const option = parseInt(selected) 
-      const response = await fetchSearch(option, searchText, activePage)
+      const response = await fetchSearch(option, keyword, activePage)
       const response1 = await fetchPopularArticles()
       setTotalItemCount(response.totalElements)
       setArticles(response.content);
@@ -58,8 +59,10 @@ const BoardMain = () => {
   const searchHandler = async (event) => {
     event.preventDefault();
     if(searchText.trim()){
-      const option = parseInt(selected) 
-      const response = await fetchSearch(option, searchText, 1)
+      const tmpOption = parseInt(selected)
+      setOption(tmpOption)
+      setKeyword(searchText) 
+      const response = await fetchSearch(option, keyword, 1)
       if (response){
         setArticles(response.content)
         setActivePage(1)
@@ -87,7 +90,7 @@ const BoardMain = () => {
             <BoardTable articles={articles} />
             <div>
               <form onSubmit={searchHandler}>
-              <select onChange={handleSelect}>
+              <select onChange={handleSelect} value={selected}>
 			          <option key="1" value="1">제목</option>
 			          <option key="2" value="2">작성자</option>
 			          <option key="3" value="3">내용</option>
