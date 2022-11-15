@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../../common/UI/header/header";
+import '@toast-ui/editor/dist/toastui-editor-viewer.css';
+import { Viewer } from '@toast-ui/react-editor';
 import {
   createComment,
   deleteArticle,
@@ -10,7 +12,7 @@ import {
   modifyComment,
   reportArticle,
   reportComment,
-} from "../boardAPI";
+} from "../codingBoardAPI";
 import CommentList from "./commentList";
 import styled from "styled-components";
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
@@ -135,7 +137,7 @@ const BtnCancle = styled(RightButton)`
   }
 `;
 
-const ArticleDetail = () => {
+const CodeArticleDetail = () => {
   const location = useLocation();
   const [article, setArticle] = useState([]);
   const [comments, setComments] = useState([]);
@@ -145,12 +147,12 @@ const ArticleDetail = () => {
 
   const backHandler = (event) => {
     // history.go(-1);
-    history.push({ pathname: "/board/free" });
+    history.push({ pathname: "/board/coding" });
   };
   // 요청설개할것, 수정페이지에서 넘길때 새로운정보 필요
 
   const modifyHandler = (event) => {
-    history.push({ pathname: "/board/free/form", state: article });
+    history.push({ pathname: "/board/coding/form", state: article });
   };
 
   const deleteHandler = async (event) => {
@@ -164,7 +166,7 @@ const ArticleDetail = () => {
       if (result.isConfirmed) {
         const response = await deleteArticle(article._id);
         if (response.statusCode === 200) {
-          history.push("/board/free");
+          history.push("/board/coding");
         } else {
           console.log("게시글 삭제");
         }
@@ -402,7 +404,7 @@ const ArticleDetail = () => {
             <ArticleHr />
           </ArticleHead>
           <ArticleBody>
-            <pre>{article.content}</pre>
+            <Viewer initialValue={article.content} />
           </ArticleBody>
           <CommentList
             comments={comments}
@@ -430,4 +432,4 @@ const ArticleDetail = () => {
   );
 };
 
-export default ArticleDetail;
+export default CodeArticleDetail;
