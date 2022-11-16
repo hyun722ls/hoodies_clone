@@ -283,12 +283,21 @@ const ArticleForm = () => {
       })
     }
     const censoredImg = imageLists.filter((file,idx) => !censored.includes(idx))
-    let imageUrlLists = [...imgSrc];
-    censoredImg.forEach((file) => {
-      imageUrlLists.push(URL.createObjectURL(file))
-    })
-    setImgSrc(imageUrlLists)
-    setImgList((prev) => [...prev, ...censoredImg])  
+    if (censoredImg.length + imgList.length < 5){
+      let imageUrlLists = [...imgSrc];
+      censoredImg.forEach((file) => {
+        imageUrlLists.push(URL.createObjectURL(file))
+      })
+      setImgSrc(imageUrlLists)
+      setImgList((prev) => [...prev, ...censoredImg])  
+
+    } else {
+      Swal.fire({
+        title: '이미지는 5장 까지만 업로드 가능합니다',
+        icon: 'warning',
+        timer: '2000'
+      })
+    }
   }
 
   const deleteImageHandler = (id) => {
