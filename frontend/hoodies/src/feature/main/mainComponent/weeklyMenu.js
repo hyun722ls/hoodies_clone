@@ -58,9 +58,9 @@ const WeeklyMenu = () => {
     return (
         <div className={weekly.container}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label="20F" {...a11yProps(0)} />
-                    <Tab label="10F" {...a11yProps(1)} />
+                <Tabs fullWidth sx={{"& .Mui-selected": { color: "#1D3979" }, "& .MuiTabs-indicator": { backgroundColor: "#1D3979" }}} value={value} onChange={handleChange}>
+                    <Tab label="20층 식당" {...a11yProps(0)} />
+                    <Tab label="10층 공존" {...a11yProps(1)} />
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>

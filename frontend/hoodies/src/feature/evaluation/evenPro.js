@@ -9,22 +9,29 @@ import CreateEvaluation from "./evaluationRegister";
 import Swal from "sweetalert2";
 import { deleteComment, getStaff, postEvaluation } from "./evaluationAPI";
 
+const CommentGrid = styled(Grid)`
+  && {
+    background-color: #F9F5EB;
+    &::-webkit-scrollbar {display:none};
+  }
+`
+
 const EvenPro = () => {
 
   const history = useHistory();
   const location = useLocation();
-  // const ellipsisRef = useRef<HTMLDivElement>(null);
   const [staff, setStaff] = useState([]);
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [staffType, setStaffType] = useState("");
-  const [longerText, setLongerText] = useState(3)
+  const [longerText, setLongerText] = useState(3);
+  const [isOverflown, setIsOverflown] = useState(false);
 
   // function isOverflown(element) {
   //   const {scrollHeight, clientHeight} = element;
   //   return scrollHeight > clientHeight
   // }
-
+  const ellipsisRef = useRef()
   const longerTextHandler = (event) => {
     event.preventDefault();
     if (longerText < 50) {
@@ -66,6 +73,14 @@ const EvenPro = () => {
     }
   };
 
+  useEffect(()=>{
+    if (ellipsisRef.current){
+      if(ellipsisRef.current.clientHeight >= ellipsisRef.current.scrollHeight) {
+        setIsOverflown(true)
+      }
+      // console.log(ellipsisRef.current.clientHeight)
+    }
+  }, [staff])
   useEffect(() => {
     (async () => {
       // 배포용
@@ -93,8 +108,11 @@ const EvenPro = () => {
       // setStaff(location.state)
       // setComments(location.state.evaluations)
       setIsLoading(false);
+      
     })();
   }, []);
+
+  
 
   return (
     !isLoading &&
@@ -105,34 +123,35 @@ const EvenPro = () => {
           container
           sx={{ height: "auto", width: "auto" }}
         >
-          <Grid container sx={{ height: "auto" }} item xs={8}>
+          <Grid container sx={{ height: "auto" }} item md={8} xs={12}>
             <Grid
               style={{
                 border: "1px solid #EAE3D2",
                 backgroundColor: "#F9F5EB",
               }}
               item
-              xs={4}
+              xs={12}
+              md={4}
             >
               <div style={{ paddingLeft: "10px" }}>
-                <h4
+                <h2
                   style={{
                     color: "#1D3979",
                     borderBottom: "2px solid #1D3979",
                   }}
                 >
                   {staff.writer}
-                </h4>
-                <p>직책: {staffType}</p>
-                {staff.email ? <p>이메일 : {staff.email}</p> : <p>이메일 : N/A</p>}
-                <p>설명 :</p>
+                </h2>
+                <p><b>직책: </b> {staffType}</p>
+                {staff.email ? <p><b>이메일 : </b>{staff.email}</p> : <p>이메일 : N/A</p>}
+                <p style={{fontWeight:600}}>설명 :</p>
                 <div>
-                  <Ellipsis>{staff.etc}</Ellipsis>
-                  <div style={{fontSize:'10px', color:'grey'}} onClick={longerTextHandler}>더보기</div>
-                  {/* {isOverflown(ellipsisRef.current) ? <div style={{fontSize:'10px', color:'grey'}} onClick={longerTextHandler}>더보기</div> : <div></div>} */}
+                  <Ellipsis ref={ellipsisRef}>{staff.etc}</Ellipsis>
+                  {!isOverflown ? <div style={{fontSize:'10px', color:'grey', cursor:'pointer'}} onClick={longerTextHandler}>더보기</div> : <div></div>}
+                  {/* <div style={{fontSize:'10px', color:'grey', cursor:'pointer'}} onClick={longerTextHandler}>더보기</div> */}
                 </div>
                 {/* <p style={{textOverflow:'ellipsis', overflow:'hidden', WebkitLineClamp:3, display:'-webkit-box', wordBreak:'break-all',webkitBoxOrient:'vertical'}}>{staff.etc}</p> */}
-                <p>{comments.length}명의 평가</p>
+                <p><b>{comments.length}</b>명의 평가</p>
               </div>
             </Grid>
             <Grid
@@ -144,7 +163,8 @@ const EvenPro = () => {
                 backgroundColor: "#F9F5EB",
               }}
               item
-              xs={8}
+              xs={12}
+              md={8}
             >
               <div
                 style={{
@@ -160,7 +180,7 @@ const EvenPro = () => {
                 style={{
                   display: "flex",
                   justifyContent: "center",
-                  height: "40vh",
+                  height: "35vh",
                   width: "70%",
                 }}
               >
@@ -184,18 +204,18 @@ const EvenPro = () => {
               ></CreateEvaluation>
             </Grid>
           </Grid>
-          <Grid
+          <CommentGrid
             item
-            xs={4}
+            md={4}
+            xs={12}
             style={{
               height: "inherit",
               overflowY: "scroll",
               overflowX: "hidden",
-              backgroundColor:'#F9F5EB'
             }}
           >
             <EvaulationComment comments={comments} deleteCommentHandler={deleteCommentHandler} />
-          </Grid>
+          </CommentGrid>
         </Grid>
         {/* <div>
           <button onClick={backHandler}>뒤로 가기</button>

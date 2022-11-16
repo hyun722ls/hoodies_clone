@@ -74,12 +74,13 @@ const CreateEvaluation = (props) => {
       container
       items
       spacing={1}
-      style={{ marginTop: "5px", marginLeft: "10px" }}
+      style={{ marginTop: "5px", paddingLeft: "20px", marginBottom:'15px' }}
     >
-      <Grid item xs={5} style={{ display: "flex", flexDirection: "column" }}>
+      <Grid item md={5} xs={12} style={{ width:'90%', display: "flex", flexDirection: "column" }}>
         <RateItem>
           <p style={{ margin: 0, fontSize: "large", fontWeight: 500 }}>열정:</p>
           <Rating
+            sx={{width:'80%'}}
             value={enthusiasm}
             onChange={(event, newValue) => {
               setEnthusiasm(newValue);
@@ -139,13 +140,15 @@ const CreateEvaluation = (props) => {
           ></Rating>
         </RateItem>
       </Grid>
-      <Grid item xs={6.6} style={{ display: "flex", flexDirection: "column" }}>
+      <Grid item md={7} xs={12} style={{ display: "flex", flexDirection: "column" }}>
         <TextField
           sx={{
+            width:'95%',
             "& .MuiOutlinedInput-input": {
               height: "100px",
               backgroundColor: "white",
             },
+            fontFamily:'IBM Plex Sans KR'
           }}
           value={studentComment || ""}
           onChange={(event) => {
@@ -153,14 +156,14 @@ const CreateEvaluation = (props) => {
           }}
           label="한줄평을 입력해주세요."
           variant="outlined"
-          required
+          inputProps={{maxLength: 140}}
           multiline
         ></TextField>
-        <div style={{ color: "red" }}>*게시 후 삭제, 수정이 불가합니다!</div>
+        <div style={{ fontWeight:600, color: "red", fontSize:'small' }}>*게시 후 삭제, 수정이 불가합니다!</div>
         <Button
-          style={{ marginTop: "10px" }}
+          style={{ backgroundColor:'#1D3979', fontWeight:700, color:'white', marginTop: "10px", width:'95%' }}
           onClick={handleSubmit}
-          variant="contained"
+          disabled
         >
           등록
         </Button>
