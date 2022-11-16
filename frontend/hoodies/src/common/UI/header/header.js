@@ -59,9 +59,27 @@ const Header = () => {
   const freeBoardHandler = (event) => {
     event.preventDefault()
     if(location.pathname === '/board/free'){
-      window.location.reload()
+      location.reload()
     } else {
       history.push('/board/free')
+    }
+  }
+
+  const anonymousBoardHandler = (event) => {
+    event.preventDefault()
+    if(location.pathname === 'board/anonymous'){
+      location.reload()
+    } else {
+      history.push('/board/anonymous')
+    }
+  }
+
+  const codingBoardHandler = (event) => {
+    event.preventDefault()
+    if(location.pathname === '/board/coding'){
+      location.reload()
+    } else {
+      history.push('/board/coding')
     }
   }
 
@@ -85,14 +103,14 @@ const Header = () => {
             </p>
           </li>
           <li>
-            <a href="/board/anonymous" className={classes.navbar__item}>
+            <p onClick={anonymousBoardHandler} className={classes.navbar__item}>
               익명 게시판
-            </a>
+            </p>
           </li>
           <li>
-            <a href="/board/coding" className={classes.navbar__item}>
+            <p onClick={codingBoardHandler} className={classes.navbar__item}>
               코딩 게시판
-            </a>
+            </p>
           </li>
           <li>
             <Link to="/pro" className={classes.navbar__item}>
