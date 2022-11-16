@@ -1,11 +1,12 @@
 import classes from "./header.module.css";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { Fragment } from "react";
 import { logOut, postInquiry } from "../../../feature/auth/authApi";
 import Swal from "sweetalert2";
 
 const Header = () => {
   const history = useHistory()
+  const location = useLocation()
   const logout = async (event) => {
     event.preventDefault()
     const response = await logOut()
@@ -55,6 +56,15 @@ const Header = () => {
     })
   }
 
+  const freeBoardHandler = (event) => {
+    event.preventDefault()
+    if(location.pathname === '/board/free'){
+      window.location.reload()
+    } else {
+      history.push('/board/free')
+    }
+  }
+
   return (
     <Fragment>
       <div className={classes.navbar__wrapper}>
@@ -70,9 +80,9 @@ const Header = () => {
             </Link>
           </li>
           <li>
-            <a href="/board/free" className={classes.navbar__item}>
+            <p onClick={freeBoardHandler} className={classes.navbar__item}>
               자유 게시판
-            </a>
+            </p>
           </li>
           <li>
             <a href="/board/anonymous" className={classes.navbar__item}>
