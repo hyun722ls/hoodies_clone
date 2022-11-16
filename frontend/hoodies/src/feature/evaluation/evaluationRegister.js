@@ -163,7 +163,7 @@ const CreateEvaluation = (props) => {
         <Button
           style={{ backgroundColor:'#1D3979', fontWeight:700, color:'white', marginTop: "10px", width:'95%' }}
           onClick={handleSubmit}
-          disabled
+          
         >
           등록
         </Button>
