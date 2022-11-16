@@ -69,29 +69,29 @@ const EvenPro = () => {
   useEffect(() => {
     (async () => {
       // 배포용
-      if (location.state) {
-        const response = await getStaff(location.state);
-        setStaff(response);
-        setComments(response.evaluations);
-        if (response.type === 1) {
-          setStaffType("consultant");
-        } else if (response.type === 2) {
-          setStaffType("pro");
-        } else {
-          setStaffType("coach");
-        }
-      } else {
-        Swal.fire({
-          title: "잘못된 접근입니다.",
-          icon: "warning",
-          timer: 2000,
-        });
-        history.push("/index");
-      }
+      // if (location.state) {
+      //   const response = await getStaff(location.state);
+      //   setStaff(response);
+      //   setComments(response.evaluations);
+      //   if (response.type === 1) {
+      //     setStaffType("consultant");
+      //   } else if (response.type === 2) {
+      //     setStaffType("pro");
+      //   } else {
+      //     setStaffType("coach");
+      //   }
+      // } else {
+      //   Swal.fire({
+      //     title: "잘못된 접근입니다.",
+      //     icon: "warning",
+      //     timer: 2000,
+      //   });
+      //   history.push("/index");
+      // }
 
       // 로컬용
-      // setStaff(location.state)
-      // setComments(location.state.evaluations)
+      setStaff(location.state)
+      setComments(location.state.evaluations)
       setIsLoading(false);
     })();
   }, []);
