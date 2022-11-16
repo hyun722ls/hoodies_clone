@@ -177,10 +177,11 @@ const AnonymousArticleForm = () => {
           formData.append('files', file)
         })
       } else{
-        formData.append('files', [])
+        const test = null
+        formData.append('files', test)
       }      
       const imgResponse = await uploadImg(id,formData)
-      if (imgResponse) {
+      if (imgResponse?.statusCode === 200) {
         Swal.fire({
           title: '수정완료',
           icon: 'success',
