@@ -62,6 +62,7 @@ const AnonymousBoardMain = () => {
 
 
   const searchTextHandler = (event) => {
+    event.preventDefault()
     setSearchText(event.target.value)
   }
 
@@ -83,6 +84,7 @@ const AnonymousBoardMain = () => {
   };
 
   const handleSelect = (event) => {
+    event.preventDefault()
     setSelected(event.target.value);
   };
 
