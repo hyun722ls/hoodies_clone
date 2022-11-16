@@ -125,27 +125,27 @@ const Staffs = (props) => {
                 {
                     "item": "열정",
                     "평균": staff.averageScores[0],
-                    "작성자": staff.evaluations[0].score[0]
+                    "작성자": staff.evaluations[staff.evaluations.length-1].score[0]
                 },
                 {
                     "item": "프로젝트 지도력",
                     "평균": staff.averageScores[1],
-                    "작성자": staff.evaluations[0].score[1]
+                    "작성자": staff.evaluations[staff.evaluations.length-1].score[1]
                 },
                 {
                     "item": "상담",
                     "평균": staff.averageScores[2],
-                    "작성자": staff.evaluations[0].score[2]
+                    "작성자": staff.evaluations[staff.evaluations.length-1].score[2]
                 },
                 {
                     "item": "강의 전달력",
                     "평균": staff.averageScores[3],
-                    "작성자": staff.evaluations[0].score[3]
+                    "작성자": staff.evaluations[staff.evaluations.length-1].score[3]
                 },
                 {
                     "item": "반 분위기",
                     "평균": staff.averageScores[4],
-                    "작성자": staff.evaluations[0].score[4]
+                    "작성자": staff.evaluations[staff.evaluations.length-1].score[4]
                 }
             ]
             return data
@@ -226,7 +226,7 @@ const Staffs = (props) => {
                                     />
                                 </Grid>
 
-                                {staff.evaluations.length > 0 ? <H4>익명님의 한줄평 : {staff.evaluations[0].content}</H4> : <H4>한줄평을 기다리고 있어요!😺</H4>}
+                                {staff.evaluations.length > 0 ? <H4>익명님의 한줄평 : {staff.evaluations[staff.evaluations.length-1].content}</H4> : <H4>한줄평을 기다리고 있어요!😺</H4>}
                                 <br />
                                 <Box
                                     sx={{
@@ -243,7 +243,7 @@ const Staffs = (props) => {
                                         emptyIcon={<StarRateRoundedIcon style={{ opacity: 0.45 }} fontSize="large" />}
                                     />
                                     <H5>{labels[value]}</H5>
-                                    {staff.evaluations.length > 0 ? <H6>{staff.evaluations[0].createdAt}</H6> : <H6></H6>}
+                                    {staff.evaluations.length > 0 ? <H6>{staff.evaluations[staff.evaluations.length-1].createdAt}</H6> : <H6></H6>}
                                 </Box>
                             </Grid>
                         </Grid>

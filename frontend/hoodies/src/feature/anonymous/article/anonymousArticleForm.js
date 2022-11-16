@@ -170,7 +170,7 @@ const AnonymousArticleForm = () => {
     event.preventDefault();
     const id = location.state?._id
     const response = await modifyArticle(title, content, id)
-    if (imgList.length > 0) {
+    if (response){
       const formData = new FormData()
       imgList.forEach((file) => {
         formData.append('files', file)
@@ -195,27 +195,10 @@ const AnonymousArticleForm = () => {
           timerProgressBar: true,
         })
       }
-    } else {
-      if (response) {
-        Swal.fire({
-          title: '수정완료',
-          icon: 'success',
-          timer: 2000,
-          timerProgressBar: true,
-          showConfirmButton: false,
-        })
-        history.push({ pathname: "/board/anonymous/detail", state: article._id });
-        
-  
-      } else {
-        Swal.fire({
-          title: '수정실패',
-          icon: 'error',
-          timer: 2000,
-          timerProgressBar: true,
-        })
-      }
+
+
     }
+
   };
 
   const createRequestHandler = async (event) => {
