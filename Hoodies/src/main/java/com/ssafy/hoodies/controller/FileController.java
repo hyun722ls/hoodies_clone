@@ -67,8 +67,9 @@ public class FileController {
 
             // 파일 업로드
             List<String> filePaths = new ArrayList<>();
-            if(files != null) {
-                for (MultipartFile file : files) {
+            if (files != null) {
+                for (int i = 0; i < Math.min(files.size(), 5); i++) {
+                    MultipartFile file = files.get(i);
                     boolean randomFilenameFlag = true;
                     if (getFilePaths != null && getFilePaths.contains(file.getOriginalFilename()))
                         randomFilenameFlag = false;
