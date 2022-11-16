@@ -48,10 +48,13 @@ public class FileService {
         amazonS3 = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion(this.region).build();
     }
 
-    public String upload(MultipartFile file) {
+    public String upload(MultipartFile file, boolean randomFilenameFlag) {
         String uploadResult = "fail";
         try (InputStream getFileInputStream = file.getInputStream()) {
-            StringBuilder fileName = new StringBuilder().append(UUID.randomUUID()).append("_").append(file.getOriginalFilename());
+            StringBuilder filename = new StringBuilder();
+            if (randomFilenameFlag)
+                filename.append(UUID.randomUUID()).append("_");
+            filename.append(file.getOriginalFilename());
 
             ContentInfoUtil contentInfoUtil = new ContentInfoUtil();
             ContentInfo fileInfo = contentInfoUtil.findMatch(getFileInputStream);
@@ -65,10 +68,10 @@ public class FileService {
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentType(file.getContentType());
             objectMetadata.setContentLength(file.getSize());
-            PutObjectRequest objectRequest = new PutObjectRequest(bucket, fileName.toString(), file.getInputStream(), objectMetadata)
+            PutObjectRequest objectRequest = new PutObjectRequest(bucket, filename.toString(), file.getInputStream(), objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead);
             amazonS3.putObject(objectRequest);
-            uploadResult = fileName.toString();
+            uploadResult = filename.toString();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
