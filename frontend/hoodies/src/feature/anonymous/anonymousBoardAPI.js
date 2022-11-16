@@ -171,3 +171,26 @@ export const fetchSearch = async (option, keyword, page) => {
         console.log(err)
     }
 }
+
+export const previewImg = async (formData) => {
+    try {
+        const response = await axios.post('https://k7a402.p.ssafy.io/cm/image/filter', formData, {headers: {
+            'Content-Type': 'multipart/form-data'
+        }})
+        return response.data.result
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+export const uploadImg = async (id,formData) => {
+    try {
+        const response = await axios.post(API_URL + `file/${id}`, formData, {headers: {
+            'accessToken': localStorage.getItem('token')
+            
+        }})
+        return response.data
+    } catch (err) {
+        console.log(err)
+    }
+}

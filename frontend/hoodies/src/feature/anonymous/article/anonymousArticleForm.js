@@ -2,10 +2,13 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Header from "../../../common/UI/header/header";
-import { createArticle, modifyArticle } from "../anonymousBoardAPI";
+import { createArticle, modifyArticle, uploadImg, previewImg } from "../anonymousBoardAPI";
 import styled from "styled-components";
 import { style } from "@mui/system";
 import Swal from "sweetalert2";
+import CloseIcon from '@mui/icons-material/Close';
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import { IMAGE_URL } from "../../../common/api/url";
 
 const Articles = styled.div`
   position: relative;
@@ -69,12 +72,49 @@ const BtnCancle = styled(Btn)`
     background-color: #EAE3D2;
   }
 `
+const ImageList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 4px;
+`
+const ImageInput = styled.input`
+  display: none;
+`
+const ImageCard = styled.div`
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin: 4px;
+  padding: 4px;
+  height: 200px;
+  border: 1px solid #EAE3D2;
+`
+const StyledCloseIcon = styled(CloseIcon)`
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+`
+const StyledImg = styled.img`
+  max-height: 200px;
+  max-width: 200px;
+`
+const ImgName = styled.pre`
+  margin-right: 4px;
+`
+const ImageIcon = styled(AddAPhotoIcon)`
+  cursor: pointer;
+  margin: 4px;
+`
 
 const AnonymousArticleForm = () => {
   const [article, setArticle] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [imgSrc, setImgSrc] = useState([]);
+  const [imgList, setImgList] = useState([]);
   const history = useHistory();
   const location = useLocation();
 
@@ -83,9 +123,33 @@ const AnonymousArticleForm = () => {
       setArticle(location.state);
       setTitle(location.state.title);
       setContent(location.state.content);
+      if (location.state.filePaths) {
+        const imgUrl = location.state.filePaths.map((filePath) => {
+          return IMAGE_URL + filePath
+        })
+        location.state.filePaths.forEach(async (filePath) => {
+          const url = IMAGE_URL + filePath
+          const response = await fetch(url, {
+            mode: 'cors',
+          });
+          const data = await response.blob();
+          const ext = url.split('.').pop();
+          const filename = url.split('/').pop();
+          const metadata = { type: `image/${ext}` };
+          
+          const file = new File([data], filename, metadata);
+          setImgList((prev)=> [...prev, file])
+          
+        })
+       
+        setImgSrc(imgUrl)
+        
+      }
     }
     setIsLoading(false);
   }, []);
+
+  useEffect(() => {}, [imgSrc])
 
   const backHandler = (event) => {
     history.go(-1);
@@ -107,49 +171,142 @@ const AnonymousArticleForm = () => {
     const id = location.state?._id
     const response = await modifyArticle(title, content, id)
     if (response){
-      Swal.fire({
-        title: '등록완료',
-        icon: 'success',
-        timer: 2000,
-        timerProgressBar: true,
-        showConfirmButton: false,
-      })
-      history.push({ pathname: "/board/anonymous/detail", state: article._id });
-      
-    } else {
-      Swal.fire({
-        title: '등록실패',
-        icon: 'error',
-        timer: 2000,
-        timerProgressBar: true,
-      })
+      const formData = new FormData()
+      if(imgList.length > 0){
+        imgList.forEach((file) => {
+          formData.append('files', file)
+        })
+      } else{
+        const test = null
+        formData.append('files', test)
+      }      
+      const imgResponse = await uploadImg(id,formData)
+      if (imgResponse?.statusCode === 200) {
+        Swal.fire({
+          title: '수정완료',
+          icon: 'success',
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        })
+        history.push({ pathname: "/board/anonymous/detail", state: article._id });
+        
+  
+      } else {
+        Swal.fire({
+          title: '수정실패',
+          icon: 'error',
+          timer: 2000,
+          timerProgressBar: true,
+        })
+      }
+
+
     }
-   
+
   };
 
   const createRequestHandler = async (event) => {
     event.preventDefault();
     const response = await createArticle(title, content)
-    if (response) {
-      Swal.fire({
-        title: '등록완료',
-        icon: 'success',
-        timer: 2000,
-        timerProgressBar: true,
-        showConfirmButton: false,
+    if (imgList.length > 0) {
+      const formData = new FormData()
+      imgList.forEach((file) => {
+        formData.append('files', file)
       })
-      history.push("/board/anonymous");
-      
+      const imgResponse = await uploadImg(response._id,formData)
+      if (imgResponse) {
+        Swal.fire({
+          title: '등록완료',
+          icon: 'success',
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        })
+        history.push("/board/anonymous");
+        
+  
+      } else {
+        Swal.fire({
+          title: '등록실패',
+          icon: 'error',
+          timer: 2000,
+          timerProgressBar: true,
+        })
+      }
+    } else {
+      if (response) {
+        Swal.fire({
+          title: '등록완료',
+          icon: 'success',
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        })
+        history.push("/board/anonymous");
+        
+  
+      } else {
+        Swal.fire({
+          title: '등록실패',
+          icon: 'error',
+          timer: 2000,
+          timerProgressBar: true,
+        })
+      }
+    }
+  };
+
+  const handleAddImages = async (event) => {
+    const imageLists = Array.from(event.target.files).map(file => file);
+    const formData = new FormData()
+    document.querySelector('#imgUpload').value = ''
+
+    imageLists.forEach((file)=> {
+      formData.append('files', file)
+    })
+    const response = await previewImg(formData)
+    const message = []
+    const censored = []
+    response.forEach((str,index) => {
+      if (str !== false) {
+        if (!message.includes(str)) {
+          message.push(str)
+        }
+        censored.push(index)
+      }
+    })
+    if (message.length > 0) {
+      Swal.fire({
+        title: `${[...message]} 이미지가 감지되었습니다.`,
+        icon: 'warning'
+      })
+    }
+    const censoredImg = imageLists.filter((file,idx) => !censored.includes(idx))
+    if (censoredImg.length + imgList.length < 5){
+      let imageUrlLists = [...imgSrc];
+      censoredImg.forEach((file) => {
+        imageUrlLists.push(URL.createObjectURL(file))
+      })
+      setImgSrc(imageUrlLists)
+      setImgList((prev) => [...prev, ...censoredImg])  
 
     } else {
       Swal.fire({
-        title: '등록실패',
-        icon: 'error',
-        timer: 2000,
-        timerProgressBar: true,
+        title: '이미지는 4장 까지만 업로드 가능합니다',
+        icon: 'warning',
+        timer: '2000'
       })
     }
-  };
+  }
+
+  const deleteImageHandler = (id) => {
+    const newImgList = imgList.filter((_,idx) => idx !== id)
+    const newImgSrc = imgSrc.filter((_,idx) => idx !== id)
+    setImgSrc(newImgSrc)
+    setImgList(newImgList)
+  }
+
   return (
     !isLoading &&
     (article ? (
@@ -179,6 +336,19 @@ const AnonymousArticleForm = () => {
                 required
               />
             </div>
+            <ImageList>
+                {imgSrc.map((img, id) => (
+                  <ImageCard key={id} >
+                    <StyledImg src={img} alt={`${img}`} />
+                    {/* <ImgName>{imgList[id].name}</ImgName> */}
+                    <StyledCloseIcon onClick={() => deleteImageHandler(id)}/>
+                  </ImageCard>
+                ))}
+            </ImageList>
+            <label htmlFor="imgUpload" onChange={handleAddImages}>
+              <ImageIcon fontSize="large" />
+              <ImageInput type="file" id="imgUpload" multiple></ImageInput>
+            </label>
           </ArticleBody>
           </form>
           <BtnBox>
@@ -212,6 +382,19 @@ const AnonymousArticleForm = () => {
                 rows="15"
                 required
               />
+              <ImageList>
+                {imgSrc.map((img, id) => (
+                  <ImageCard key={id} >
+                    <StyledImg src={img} alt={`${img}`} />
+                    {/* <ImgName>{imgList[id].name}</ImgName> */}
+                    <StyledCloseIcon onClick={() => deleteImageHandler(id)}/>
+                  </ImageCard>
+                ))}
+              </ImageList>
+              <label htmlFor="imgUpload" onChange={handleAddImages}>
+                <ImageIcon fontSize="large" />
+                <ImageInput type="file" id="imgUpload" multiple></ImageInput>
+              </label>
           </ArticleBody>
           </form>
           <BtnBox>
