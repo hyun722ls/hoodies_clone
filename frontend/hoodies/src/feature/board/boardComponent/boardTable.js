@@ -141,35 +141,35 @@ const ArticleHr = styled.hr`
 const BoardTable = (props) => {
   const history = useHistory();
   // 배포용
-  const detailPageHandler = (article) => {
-    if (article.reporter?.length > blockCnt && !isAdmin()){
-      Swal.fire({
-        title: '신고 누적된 게시글입니다.',
-        icon: 'error',
-        timer: 2000,
-        timerProgressBar: true,
-      })
-    } else {
-      if (article.type === 1){
-        history.push({ pathname: "/board/free/detail", state: article._id });
+  // const detailPageHandler = (article) => {
+  //   if (article.reporter?.length > blockCnt && !isAdmin()){
+  //     Swal.fire({
+  //       title: '신고 누적된 게시글입니다.',
+  //       icon: 'error',
+  //       timer: 2000,
+  //       timerProgressBar: true,
+  //     })
+  //   } else {
+  //     if (article.type === 1){
+  //       history.push({ pathname: "/board/free/detail", state: article._id });
     
-      } else if(article.type === 2){
-        history.push({ pathname: "/board/anonymous/detail", state: article._id });
-      } else {
-         history.push({ pathname: "/board/coding/detail", state: article._id });
-        }
-    }
-  };
+  //     } else if(article.type === 2){
+  //       history.push({ pathname: "/board/anonymous/detail", state: article._id });
+  //     } else {
+  //        history.push({ pathname: "/board/coding/detail", state: article._id });
+  //       }
+  //   }
+  // };
 
   // 로컬용
-  // const detailPageHandler = (article) => {
-  //   if (article.type === 1){
-  //       history.push({ pathname: "/board/free/detail", state: article });
+  const detailPageHandler = (article) => {
+    if (article.type === 1){
+        history.push({ pathname: "/board/free/detail", state: article });
     
-  //     } else {
-  //       history.push({ pathname: "/board/anonymous/detail", state: article });
-  //     }
-  // }
+      } else {
+        history.push({ pathname: "/board/anonymous/detail", state: article });
+      }
+  }
 
   const isFilter = (article) => {
       if (blockArticle(article, article.category) === article.title) {
