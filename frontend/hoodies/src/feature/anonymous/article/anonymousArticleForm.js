@@ -175,10 +175,10 @@ const AnonymousArticleForm = () => {
       imgList.forEach((file) => {
         formData.append('files', file)
       })
-      const imgResponse = await uploadImg(response._id,formData)
+      const imgResponse = await uploadImg(id,formData)
       if (imgResponse) {
         Swal.fire({
-          title: '등록완료',
+          title: '수정완료',
           icon: 'success',
           timer: 2000,
           timerProgressBar: true,
@@ -189,7 +189,7 @@ const AnonymousArticleForm = () => {
   
       } else {
         Swal.fire({
-          title: '등록실패',
+          title: '수정실패',
           icon: 'error',
           timer: 2000,
           timerProgressBar: true,
@@ -198,7 +198,7 @@ const AnonymousArticleForm = () => {
     } else {
       if (response) {
         Swal.fire({
-          title: '등록완료',
+          title: '수정완료',
           icon: 'success',
           timer: 2000,
           timerProgressBar: true,
@@ -209,7 +209,7 @@ const AnonymousArticleForm = () => {
   
       } else {
         Swal.fire({
-          title: '등록실패',
+          title: '수정실패',
           icon: 'error',
           timer: 2000,
           timerProgressBar: true,
