@@ -40,7 +40,7 @@ const evaluationPentagon = (props) => {
     return (
         ////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////// 선물 두고 가유 /////////////////////////////////
-        <Grid style={{height:'200px', width: '25vw', position: 'relative', display: 'table'}} xs={12} md={6}>
+        <Grid item style={{height:'200px', display: 'table'}} xs={12} md={6}>
             <ResponsiveRadar
                 data={[
                     {
@@ -48,7 +48,7 @@ const evaluationPentagon = (props) => {
                         [`${name}`]: averageScores[0]
                     },
                     {
-                        "criteria": "프로젝트 지도력",
+                        "criteria": "지도력",
                         [`${name}`]: averageScores[1]
                     },
                     {
@@ -67,10 +67,10 @@ const evaluationPentagon = (props) => {
                 keys={[ `${name}` ]}
                 indexBy="criteria"
                 animate={false}
-                height={340}
-                width={500}
+                height={300}
+                width={340}
                 valueFormat=">-.2f"
-                margin={{ top: 40, bottom: 100, right: 60, left: 65 }}
+                margin={{ top: 40, bottom: 60}}
                 gridShape='linear'
                 maxValue={5}
                 borderColor={{ from: 'color' }}

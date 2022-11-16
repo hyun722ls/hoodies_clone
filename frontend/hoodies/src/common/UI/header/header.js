@@ -59,7 +59,7 @@ const Header = () => {
   const freeBoardHandler = (event) => {
     event.preventDefault()
     if(location.pathname === '/board/free'){
-      location.reload()
+      history.go(0)
     } else {
       history.push('/board/free')
     }
@@ -68,7 +68,7 @@ const Header = () => {
   const anonymousBoardHandler = (event) => {
     event.preventDefault()
     if(location.pathname === 'board/anonymous'){
-      location.reload()
+      history.go(0)
     } else {
       history.push('/board/anonymous')
     }
@@ -77,7 +77,7 @@ const Header = () => {
   const codingBoardHandler = (event) => {
     event.preventDefault()
     if(location.pathname === '/board/coding'){
-      location.reload()
+      history.go(0)
     } else {
       history.push('/board/coding')
     }
