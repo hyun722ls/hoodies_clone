@@ -80,11 +80,12 @@ const EvaluationMain = () => {
       <Header />
       <Box sx={{ width: "100%", borderBottom: 1, borderColor: "gray" }}>
         <Tabs
+          variant="fullWidth"
           value={selectedTab}
           onChange={handleDropProduct}
           centered
           sx={{
-            "& .Mui-selected": { color: "#1D3979" },
+            "& .MuiTab-root.Mui-selected": { fontWeight:700, color: "#1D3979" },
             "& .MuiTabs-indicator": { backgroundColor: "#1D3979" },
           }}
         >
@@ -111,8 +112,8 @@ const EvaluationMain = () => {
               }}
             >
               <h3>{staff.writer}</h3>
-              {staff.email ? <p>{staff.email}</p> : <p>등록된 이메일이 없습니다.</p>}
-              {staff.etc? <EllipsisP>{staff.etc}</EllipsisP> : <p>등록된 설명이 없습니다.</p>}
+              {staff.email ? <EllipsisP>{staff.email}</EllipsisP> : <EllipsisP>등록된 이메일이 없습니다.</EllipsisP>}
+              {staff.etc? <EllipsisP>{staff.etc}</EllipsisP> : <EllipsisP>등록된 설명이 없습니다.</EllipsisP>}
             </div>
           );
         })}
