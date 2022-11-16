@@ -59,8 +59,10 @@ public class FileController {
 
             // 기존 업로드 파일 삭제
             List<String> getFilePaths = board.getFilePaths();
-            for (String path : getFilePaths) {
-                fileService.deleteFile(path);
+            if (getFilePaths != null) {
+                for (String path : getFilePaths) {
+                    fileService.deleteFile(path);
+                }
             }
 
             // 파일 업로드
