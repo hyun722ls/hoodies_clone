@@ -67,15 +67,17 @@ public class FileController {
 
             // 파일 업로드
             List<String> filePaths = new ArrayList<>();
-            for (MultipartFile file : files) {
-                boolean randomFilenameFlag = true;
-                if (getFilePaths != null && getFilePaths.contains(file.getOriginalFilename()))
-                    randomFilenameFlag = false;
-                String path = fileService.upload(file, randomFilenameFlag);
-                // upload에 실패한 경우
-                if (path.equals("fail"))
-                    continue;
-                filePaths.add(path);
+            if(files != null) {
+                for (MultipartFile file : files) {
+                    boolean randomFilenameFlag = true;
+                    if (getFilePaths != null && getFilePaths.contains(file.getOriginalFilename()))
+                        randomFilenameFlag = false;
+                    String path = fileService.upload(file, randomFilenameFlag);
+                    // upload에 실패한 경우
+                    if (path.equals("fail"))
+                        continue;
+                    filePaths.add(path);
+                }
             }
 
             Query boardQuery = new Query(Criteria.where("_id").is(id));
