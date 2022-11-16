@@ -187,6 +187,7 @@ export const uploadImg = async (id,formData) => {
     try {
         const response = await axios.post(API_URL + `file/${id}`, formData, {headers: {
             'accessToken': localStorage.getItem('token')
+            
         }})
         return response.data
     } catch (err) {

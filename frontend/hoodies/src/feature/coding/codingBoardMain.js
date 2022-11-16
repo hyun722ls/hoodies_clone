@@ -53,6 +53,7 @@ const CodeBoardMain = () => {
 
 
   const searchTextHandler = (event) => {
+    event.preventDefault()
     setSearchText(event.target.value)
   }
 
@@ -74,6 +75,7 @@ const CodeBoardMain = () => {
   };
 
   const handleSelect = (event) => {
+    event.preventDefault()
     setSelected(event.target.value);
   };
 
