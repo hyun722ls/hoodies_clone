@@ -31,6 +31,8 @@ public class BoardServiceImpl implements BoardService{
     private final BoardRepository boardRepository;
     private final MongoTemplate mongoTemplate;
 
+    private final FileService fileService;
+
     @Transactional
     public BoardDto addBoard(BoardDto dto){
         switch(BoardType.convert(dto.getType())){
@@ -107,6 +109,12 @@ public class BoardServiceImpl implements BoardService{
         if(! (isAdmin || writer.equals(nickname) || writer.equals(encodedNickname)) ) return 0;
 
         boardRepository.deleteById(id);
+
+        // 기존 업로드 파일 삭제
+        List<String> getFilePaths = dto.get().getFilePaths();
+        for (String path : getFilePaths) {
+            fileService.deleteFile(path);
+        }
 
         return 1;
     }
