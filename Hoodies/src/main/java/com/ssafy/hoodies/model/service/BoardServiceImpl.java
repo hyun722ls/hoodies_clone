@@ -112,10 +112,11 @@ public class BoardServiceImpl implements BoardService{
 
         // 기존 업로드 파일 삭제
         List<String> getFilePaths = dto.get().getFilePaths();
-        for (String path : getFilePaths) {
-            fileService.deleteFile(path);
+        if (getFilePaths != null) {
+            for (String path : getFilePaths) {
+                fileService.deleteFile(path);
+            }
         }
-
         return 1;
     }
 
