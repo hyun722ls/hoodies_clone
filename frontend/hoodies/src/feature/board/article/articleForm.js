@@ -8,6 +8,7 @@ import { style } from "@mui/system";
 import Swal from "sweetalert2";
 import CloseIcon from '@mui/icons-material/Close';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import { IMAGE_URL } from "../../../common/api/url";
 
 const Articles = styled.div`
   position: relative;
@@ -122,6 +123,28 @@ const ArticleForm = () => {
       setArticle(location.state);
       setTitle(location.state.title);
       setContent(location.state.content);
+      if (location.state.filePaths) {
+        const imgUrl = location.state.filePaths.map((filePath) => {
+          return IMAGE_URL + filePath
+        })
+        location.state.filePaths.forEach(async (filePath) => {
+          const url = IMAGE_URL + filePath
+          const response = await fetch(url, {
+            mode: 'cors',
+          });
+          const data = await response.blob();
+          const ext = url.split('.').pop();
+          const filename = url.split('/').pop();
+          const metadata = { type: `image/${ext}` };
+          
+          const file = new File([data], filename, metadata);
+          setImgList((prev)=> [...prev, file])
+          
+        })
+       
+        setImgSrc(imgUrl)
+        
+      }
     }
     setIsLoading(false);
   }, []);
@@ -143,29 +166,58 @@ const ArticleForm = () => {
     setContent(event.target.value);
   };
 
+ 
+
   const modifyRequestHandler = async (event) => {
     event.preventDefault();
     const id = location.state?._id
     const response = await modifyArticle(title, content, id)
-    if (response){
-      Swal.fire({
-        title: '등록완료',
-        icon: 'success',
-        timer: 2000,
-        timerProgressBar: true,
-        showConfirmButton: false,
+    if (imgList.length > 0) {
+      const formData = new FormData()
+      imgList.forEach((file) => {
+        formData.append('files', file)
       })
-      history.push({ pathname: "/board/free/detail", state: article._id });
-      
+      const imgResponse = await uploadImg(response._id,formData)
+      if (imgResponse) {
+        Swal.fire({
+          title: '등록완료',
+          icon: 'success',
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        })
+        history.push({ pathname: "/board/free/detail", state: article._id });
+        
+  
+      } else {
+        Swal.fire({
+          title: '등록실패',
+          icon: 'error',
+          timer: 2000,
+          timerProgressBar: true,
+        })
+      }
     } else {
-      Swal.fire({
-        title: '등록실패',
-        icon: 'error',
-        timer: 2000,
-        timerProgressBar: true,
-      })
+      if (response) {
+        Swal.fire({
+          title: '등록완료',
+          icon: 'success',
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        })
+        history.push({ pathname: "/board/free/detail", state: article._id });
+        
+  
+      } else {
+        Swal.fire({
+          title: '등록실패',
+          icon: 'error',
+          timer: 2000,
+          timerProgressBar: true,
+        })
+      }
     }
-   
   };
 
   const createRequestHandler = async (event) => {
@@ -260,12 +312,6 @@ const ArticleForm = () => {
     setImgList(newImgList)
   }
 
-  const detailImg = (img) => {
-    Swal.fire({
-      
-    })
-  }
-
   return (
     !isLoading &&
     (article ? (
@@ -286,15 +332,26 @@ const ArticleForm = () => {
               </div>          
           </ArticleHead>
           <ArticleBody>
-            <div>
-              <Textarea
-                value={content}
-                onChange={contentChangeHandler}
-                placeholder="내용을 입력하세요"
-                rows="15"
-                required
-              />
-            </div>
+            <Textarea
+              value={content}
+              onChange={contentChangeHandler}
+              placeholder="내용을 입력하세요"
+              rows="15"
+              required
+            />
+            <ImageList>
+                {imgSrc.map((img, id) => (
+                  <ImageCard key={id} >
+                    <StyledImg src={img} alt={`${img}`} />
+                    {/* <ImgName>{imgList[id].name}</ImgName> */}
+                    <StyledCloseIcon onClick={() => deleteImageHandler(id)}/>
+                  </ImageCard>
+                ))}
+            </ImageList>
+            <label htmlFor="imgUpload" onChange={handleAddImages}>
+              <ImageIcon fontSize="large" />
+              <ImageInput type="file" id="imgUpload" multiple></ImageInput>
+            </label>
           </ArticleBody>
           </form>
           <BtnBox>
@@ -330,7 +387,7 @@ const ArticleForm = () => {
               />
               <ImageList>
                 {imgSrc.map((img, id) => (
-                  <ImageCard key={id + img} >
+                  <ImageCard key={id} >
                     <StyledImg src={img} alt={`${img}`} />
                     {/* <ImgName>{imgList[id].name}</ImgName> */}
                     <StyledCloseIcon onClick={() => deleteImageHandler(id)}/>

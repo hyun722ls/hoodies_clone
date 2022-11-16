@@ -23,6 +23,7 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import Swal from "sweetalert2";
+import { IMAGE_URL } from "../../../common/api/url";
 
 const Articles = styled.div`
   position: relative;
@@ -139,6 +140,25 @@ const BtnCancle = styled(RightButton)`
     background-color: #eae3d2;
   }
 `;
+const StyledImg = styled.img`
+  max-height: 200px;
+  max-width: 200px;
+`;
+const ImageCard = styled.div`
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin: 4px;
+  padding: 4px;
+  height: 200px;
+  border: 1px solid #EAE3D2;
+`;
+const ImageList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 4px;
+`;
 
 const AnonymousArticleDetail = () => {
   const location = useLocation();
@@ -149,6 +169,7 @@ const AnonymousArticleDetail = () => {
   const [articleWriter, setArticleWriter] = useState("");
   const history = useHistory();
   const [isLike, setIsLike] = useState(false);
+  const [imgSrc, setImgSrc] = useState([]);
 
   const backHandler = (event) => {
     // history.go(-1)
@@ -375,6 +396,12 @@ const AnonymousArticleDetail = () => {
         } else {
           setIsLike(false);
         }
+        if (response.filePaths) {
+            const imgUrl = response.filePaths.map((filePath) => {
+              return IMAGE_URL + filePath
+            })
+            setImgSrc(imgUrl)
+          }
       }
       // setArticle(location.state)
       // setComments(location.state.comments);
@@ -411,6 +438,14 @@ const AnonymousArticleDetail = () => {
             </Score>
             <ArticleHr />
           </ArticleHead>
+          <ImageList>
+                {imgSrc.map((img, id) => (
+                  <ImageCard key={id} >
+                    <StyledImg src={img} alt={`${img}`} />
+                    {/* <ImgName>{imgList[id].name}</ImgName> */}
+                  </ImageCard>
+                ))}
+          </ImageList>
           <ArticleBody>
             <pre>{article.content}</pre>
           </ArticleBody>
