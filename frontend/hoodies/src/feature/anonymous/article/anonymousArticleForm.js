@@ -293,7 +293,7 @@ const AnonymousArticleForm = () => {
 
     } else {
       Swal.fire({
-        title: '이미지는 5장 까지만 업로드 가능합니다',
+        title: '이미지는 4장 까지만 업로드 가능합니다',
         icon: 'warning',
         timer: '2000'
       })
