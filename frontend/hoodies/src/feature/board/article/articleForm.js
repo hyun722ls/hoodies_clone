@@ -174,9 +174,13 @@ const ArticleForm = () => {
     const response = await modifyArticle(title, content, id)
     if (response){
       const formData = new FormData()
-      imgList.forEach((file) => {
-        formData.append('files', file)
-      })
+      if(imgList.length > 0){
+        imgList.forEach((file) => {
+          formData.append('files', file)
+        })
+      } else{
+        formData.append('files', [])
+      }      
       const imgResponse = await uploadImg(id, formData)
       if (imgResponse) {
         Swal.fire({
