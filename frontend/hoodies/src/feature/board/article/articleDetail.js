@@ -358,46 +358,46 @@ const ArticleDetail = () => {
   useEffect(() => {
     (async () => {
       // 배포용
-      if (location.state) {
-        const response = await fetchArticle(location.state);
-        if(!response){
-          history.push('/404')
-        }
-        setArticle(response);
-        setComments(response.comments);
-        let tmpLike = Object.keys(response.contributor).includes(
-          localStorage.getItem("hashNickname")
-        );
-        if (
-          tmpLike === true &&
-          response.contributor[localStorage.getItem("hashNickname")]
-        ) {
-          setIsLike(response.contributor[localStorage.getItem("hashNickname")]);
-        } else {
-          setIsLike(false);
-        }
-      if (response.filePaths) {
-        const imgUrl = response.filePaths.map((filePath) => {
-          return IMAGE_URL + filePath
-        })
-        setImgSrc(imgUrl)
-      }
-      } else {
-        Swal.fire({
-          title: "잘못된 접근입니다.",
-          icon: "warning",
-          timer: 2000,
-        });
-        history.push("/index");
-      }
-      // setArticle(location.state)
-      // if (location.state.filePaths) {
-      //   const imgUrl = location.state.filePaths.map((filePath) => {
+      // if (location.state) {
+      //   const response = await fetchArticle(location.state);
+      //   if(!response){
+      //     history.push('/404')
+      //   }
+      //   setArticle(response);
+      //   setComments(response.comments);
+      //   let tmpLike = Object.keys(response.contributor).includes(
+      //     localStorage.getItem("hashNickname")
+      //   );
+      //   if (
+      //     tmpLike === true &&
+      //     response.contributor[localStorage.getItem("hashNickname")]
+      //   ) {
+      //     setIsLike(response.contributor[localStorage.getItem("hashNickname")]);
+      //   } else {
+      //     setIsLike(false);
+      //   }
+      // if (response.filePaths) {
+      //   const imgUrl = response.filePaths.map((filePath) => {
       //     return IMAGE_URL + filePath
       //   })
       //   setImgSrc(imgUrl)
       // }
-      // setComments(location.state.comments);
+      // } else {
+      //   Swal.fire({
+      //     title: "잘못된 접근입니다.",
+      //     icon: "warning",
+      //     timer: 2000,
+      //   });
+      //   history.push("/index");
+      // }
+      setArticle(location.state)
+      if (location.state.filePaths) {
+        const imgUrl = location.state.filePaths.map((filePath) => {
+          return IMAGE_URL + filePath
+        })
+        setImgSrc(imgUrl)
+      }
+      setComments(location.state.comments);
 
       setIsLoading(false);
     })();
