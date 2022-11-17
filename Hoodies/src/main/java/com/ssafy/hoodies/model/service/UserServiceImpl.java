@@ -1,6 +1,8 @@
 package com.ssafy.hoodies.model.service;
 
 import com.ssafy.hoodies.model.entity.User;
+import com.ssafy.hoodies.model.entity.UserAuth;
+import com.ssafy.hoodies.model.repository.UserAuthRepository;
 import com.ssafy.hoodies.model.repository.UserRepository;
 import com.ssafy.hoodies.util.util;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +15,11 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +35,20 @@ public class UserServiceImpl implements UserService {
     private static final String CONTENT_TYPE = "applicaiton/json;utf-8";
     private static final String Accept_TYPE = "application/json";
 
+    private static final String SUCCESS = "success";
+    private static final String FAIL = "fail";
+
     private final UserRepository userRepository;
+    private final UserAuthRepository userAuthRepository;
+
+    @Override
+    public int checkNickname(String nickname) {
+        User user = userRepository.findByNickname(nickname);
+        int cnt = 1;
+        cnt = user == null ? 0 : 1;
+
+        return cnt;
+    }
 
     HttpURLConnection connInit(String subURL, String token) throws IOException {
         URL loginUrl = new URL(URL + subURL);
@@ -67,8 +84,6 @@ public class UserServiceImpl implements UserService {
 
             JSONParser parser = new JSONParser();
             JSONObject retData = (JSONObject) parser.parse(retStr);
-            String id = (String) retData.get("id");
-            String token = conn.getHeaderField("Token");
 
             Map<String, Object> response = new HashMap<>();
             response.put("conn", conn);
@@ -80,7 +95,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String sendMM(String emailId, int flag) {
+    public String sendMM(String email, int flag) {
+        String emailId = email.split("@")[0];
+
+        // 기존 user가 있는 경우
+        if (!userRepository.findByEmailStartsWith(emailId + "@").isEmpty())
+            return FAIL;
+
         try {
             // 1. 발신자 인증
             HttpURLConnection conn = connInit("users/login", null);
@@ -148,18 +169,47 @@ public class UserServiceImpl implements UserService {
             retData = (JSONObject) response.get("data");
             String response_message = (String) retData.get("message");
 
-            if (message.toString().equals(response_message))
-                return authcode;
-            else
-                return "fail";
+            if (message.toString().equals(response_message)) {
+                Timestamp expireTime = new Timestamp(System.currentTimeMillis());
+                expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
+                userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).authflag(false).build());
+                return SUCCESS;
+            } else
+                return FAIL;
         } catch (Exception e) {
-            return "fail";
+            return FAIL;
         }
     }
 
-    public String findNickname(String email){
+    @Override
+    public boolean authMM(String email, String authcode) {
+        String emailId = email.split("@")[0];
+
+        // 기존 user가 있는 경우
+        if (!userRepository.findByEmailStartsWith(emailId + "@").isEmpty())
+            return false;
+
+        UserAuth userAuth = userAuthRepository.findByEmailAndAuthcode(email, authcode);
+        if (userAuth == null)
+            return false;
+
+        Timestamp nowTime = new Timestamp(System.currentTimeMillis());
+        Timestamp time = userAuth.getTime();
+
+        // 제한시간이 만료되었을 경우
+        if (!nowTime.before(time))
+            return false;
+
+        // 인증 성공
+        userAuth.setAuthflag(true);
+        userAuthRepository.save(userAuth);
+
+        return true;
+    }
+
+    public String findNickname(String email) {
         User user = userRepository.findById(email).orElse(null);
-        if(user == null) return "";
+        if (user == null) return "";
         else return user.getNickname();
     }
 
