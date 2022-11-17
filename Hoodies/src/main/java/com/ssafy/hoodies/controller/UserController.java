@@ -49,11 +49,9 @@ public class UserController {
     @ApiOperation(value = "닉네임 중복 체크")
     @GetMapping("/check/{nickname}")
     public Map<String, Object> checkNickname(@PathVariable String nickname) {
-        User user = userRepository.findByNickname(nickname);
         Map<String, Object> resultMap = new HashMap<>();
 
-        int cnt = 1;
-        cnt = user == null ? 0 : 1;
+        int cnt = userService.checkNickname(nickname);
 
         resultMap.put("cnt", cnt);
         resultMap.put("statusCode", SUCCESS);
@@ -62,27 +60,16 @@ public class UserController {
 
     @ApiOperation(value = "회원가입 MM 인증 메시지 전송")
     @GetMapping("/auth/{email}")
-    public Map<String, Object> sendMM(@PathVariable String email) {
+    public Map<String, Object> sendSignUpMM(@PathVariable String email) {
         Map<String, Object> resultMap = new HashMap<>();
-        String emailId = email.split("@")[0];
 
-        // 기존 user가 있는 경우
-        if (!userRepository.findByEmailStartsWith(emailId + "@").isEmpty()) {
+        String authcode = userService.sendSignUpMM(email, 1);
+        if ("fail".equals(authcode)) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
 
-        String authcode = userService.sendMM(emailId, 1);
-        if (authcode.equals("fail")) {
-            resultMap.put("statusCode", FAIL);
-            return resultMap;
-        }
-
-        Timestamp expireTime = new Timestamp(System.currentTimeMillis());
-        expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
-        userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).authflag(false).build());
         resultMap.put("statusCode", SUCCESS);
-
         return resultMap;
     }
 
@@ -93,32 +80,13 @@ public class UserController {
         Map<String, Object> resultMap = new HashMap<>();
         String email = map.getOrDefault("email", "");
         String authcode = map.getOrDefault("authcode", "");
-        String emailId = email.split("@")[0];
 
-        // 기존 user가 있는 경우
-        if (!userRepository.findByEmailStartsWith(emailId + "@").isEmpty()) {
+        boolean authFlag = userService.authMM(email, authcode);
+        // 인증에 실패한 경우
+        if (!authFlag) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
-
-        UserAuth userAuth = userAuthRepository.findByEmailAndAuthcode(email, authcode);
-        if (userAuth == null) {
-            resultMap.put("statusCode", FAIL);
-            return resultMap;
-        }
-
-        Timestamp nowTime = new Timestamp(System.currentTimeMillis());
-        Timestamp time = userAuth.getTime();
-
-        // 제한시간이 만료되었을 경우
-        if (!nowTime.before(time)) {
-            resultMap.put("statusCode", FAIL);
-            return resultMap;
-        }
-
-        // 인증 성공
-        userAuth.setAuthflag(true);
-        userAuthRepository.save(userAuth);
 
         resultMap.put("statusCode", SUCCESS);
         return resultMap;
@@ -129,78 +97,32 @@ public class UserController {
     public Map<String, Object> sendResetPassword(@PathVariable String email) {
         Map<String, Object> resultMap = new HashMap<>();
 
-        // 기존 user가 없는 경우
-        if (!userRepository.findById(email).isPresent()) {
+        String authcode = userService.sendResetPassword(email, 1);
+        if ("fail".equals(authcode)) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
 
-        String emailId = email.split("@")[0];
-
-        String authcode = userService.sendMM(emailId, 1);
-        if (authcode.equals("fail")) {
-            resultMap.put("statusCode", FAIL);
-            return resultMap;
-        }
-
-        Timestamp expireTime = new Timestamp(System.currentTimeMillis());
-        expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
-        userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).authflag(false).build());
         resultMap.put("statusCode", SUCCESS);
-
         return resultMap;
     }
 
     @ApiOperation(value = "비밀번호 초기화 인증 메시지 검증")
     @PostMapping("/resetPassword")
     public Map<String, Object> authResetPassword(@RequestBody Map<String, String> map) {
+        Map<String, Object> resultMap = new HashMap<>();
+
         String email = map.getOrDefault("email", "");
         String authcode = map.getOrDefault("authcode", "");
 
-        Map<String, Object> resultMap = new HashMap<>();
-
-        // 기존 user가 없는 경우
-        if (!userRepository.findById(email).isPresent()) {
+        String password = userService.authResetPassword(email, authcode);
+        if ("fail".equals(password)) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
 
-        UserAuth userAuth = userAuthRepository.findByEmailAndAuthcode(email, authcode);
-        if (userAuth == null) {
-            resultMap.put("statusCode", FAIL);
-            return resultMap;
-        }
-
-        Timestamp nowTime = new Timestamp(System.currentTimeMillis());
-        Timestamp time = userAuth.getTime();
-
-        // 제한시간이 만료되었을 경우
-        if (!nowTime.before(time)) {
-            resultMap.put("statusCode", FAIL);
-            return resultMap;
-        }
-
-        try {
-            User user = userRepository.findById(email).get();
-            String emailId = email.split("@")[0];
-
-            String salt = user.getSalt();
-            String password = userService.sendMM(emailId, 2);
-            String encryptPassword = util.getEncryptStr(password, salt);
-
-            if (encryptPassword == null) {
-                resultMap.put("statusCode", FAIL);
-                return resultMap;
-            }
-
-            user.setPassword(encryptPassword);
-            userRepository.save(user);
-
-            resultMap.put("password", password);
-            resultMap.put("statusCode", SUCCESS);
-        } catch (Exception e) {
-            resultMap.put("statusCode", FAIL);
-        }
+        resultMap.put("password", password);
+        resultMap.put("statusCode", SUCCESS);
         return resultMap;
     }
 
