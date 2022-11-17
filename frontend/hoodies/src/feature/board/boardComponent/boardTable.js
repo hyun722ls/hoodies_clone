@@ -20,15 +20,20 @@ const Article = styled.article`
   box-sizing: border-box;
   border: 1px solid #F9F5EB;
   background-color: #fff;
-  cursor: pointer;
+
 `
 
 const ArticleA = styled.a`
   margin: 0;
   padding: 16px;
   display: block;
+  cursor: pointer;
 `
-
+const ArticleDiv = styled.div`
+  margin: 0;
+  padding: 16px;
+  display: block;
+`
 const ArticleH2 = styled.h2`
   margin: 0;
   margin-bottom: 5px;
@@ -221,12 +226,17 @@ const BoardTable = (props) => {
   ) : (
     <Articles>
       <Title>
-        <H1>작성된 글이 없습니다.</H1>
+        <H1>자유 게시판</H1>
       </Title>
       <NewArticle onClick={createArticle}>
         새로운 게시글 작성
         <NewIcon />
       </NewArticle>
+      <Article>
+        <ArticleDiv>
+          <H1>작성된 글이 없습니다.</H1>
+        </ArticleDiv>
+      </Article>
     </Articles>
   );
 };

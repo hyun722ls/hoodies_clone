@@ -25,7 +25,7 @@ function TabPanel(props) {
         >
             {value === index && (
                 <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
+                    <div>{children}</div>
                 </Box>
             )}
         </div>
@@ -58,7 +58,7 @@ const WeeklyMenu = () => {
     return (
         <div className={weekly.container}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs fullWidth sx={{"& .Mui-selected": { color: "#1D3979" }, "& .MuiTabs-indicator": { backgroundColor: "#1D3979" }}} value={value} onChange={handleChange}>
+                <Tabs sx={{"& .MuiTab-root.Mui-selected": { fontWeight:700, color: "#1D3979" }, "& .MuiTabs-indicator": { backgroundColor: "#1D3979" }}} value={value} onChange={handleChange}>
                     <Tab label="20층 식당" {...a11yProps(0)} />
                     <Tab label="10층 공존" {...a11yProps(1)} />
                 </Tabs>
