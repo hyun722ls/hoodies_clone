@@ -1,6 +1,8 @@
 package com.ssafy.hoodies.model.service;
 
 import com.ssafy.hoodies.model.entity.User;
+import com.ssafy.hoodies.model.entity.UserAuth;
+import com.ssafy.hoodies.model.repository.UserAuthRepository;
 import com.ssafy.hoodies.model.repository.UserRepository;
 import com.ssafy.hoodies.util.util;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +15,11 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +35,20 @@ public class UserServiceImpl implements UserService {
     private static final String CONTENT_TYPE = "applicaiton/json;utf-8";
     private static final String Accept_TYPE = "application/json";
 
+    private static final String SUCCESS = "success";
+    private static final String FAIL = "fail";
+
     private final UserRepository userRepository;
+    private final UserAuthRepository userAuthRepository;
+
+    @Override
+    public int checkNickname(String nickname) {
+        User user = userRepository.findByNickname(nickname);
+        int cnt = 1;
+        cnt = user == null ? 0 : 1;
+
+        return cnt;
+    }
 
     HttpURLConnection connInit(String subURL, String token) throws IOException {
         URL loginUrl = new URL(URL + subURL);
@@ -67,8 +84,6 @@ public class UserServiceImpl implements UserService {
 
             JSONParser parser = new JSONParser();
             JSONObject retData = (JSONObject) parser.parse(retStr);
-            String id = (String) retData.get("id");
-            String token = conn.getHeaderField("Token");
 
             Map<String, Object> response = new HashMap<>();
             response.put("conn", conn);
@@ -79,8 +94,7 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    @Override
-    public String sendMM(String emailId, int flag) {
+    public String sendMM(String email, String emailId, int flag) {
         try {
             // 1. 발신자 인증
             HttpURLConnection conn = connInit("users/login", null);
@@ -149,17 +163,115 @@ public class UserServiceImpl implements UserService {
             String response_message = (String) retData.get("message");
 
             if (message.toString().equals(response_message))
-                return authcode;
+                return SUCCESS;
             else
-                return "fail";
+                return FAIL;
         } catch (Exception e) {
-            return "fail";
+            return FAIL;
         }
     }
 
-    public String findNickname(String email){
+    @Override
+    public String sendSignUpMM(String email, int flag) {
+        String emailId = email.split("@")[0];
+
+        // 기존 user가 있는 경우
+        if (!userRepository.findByEmailStartsWith(emailId + "@").isEmpty())
+            return FAIL;
+
+        String authcode = sendMM(email, emailId, flag);
+
+        if (authcode.equals(SUCCESS)) {
+            Timestamp expireTime = new Timestamp(System.currentTimeMillis());
+            expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
+            userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).authflag(false).build());
+        }
+        return authcode;
+    }
+
+    @Override
+    public boolean authMM(String email, String authcode) {
+        String emailId = email.split("@")[0];
+
+        // 기존 user가 있는 경우
+        if (!userRepository.findByEmailStartsWith(emailId + "@").isEmpty())
+            return false;
+
+        UserAuth userAuth = userAuthRepository.findByEmailAndAuthcode(email, authcode);
+        if (userAuth == null)
+            return false;
+
+        Timestamp nowTime = new Timestamp(System.currentTimeMillis());
+        Timestamp time = userAuth.getTime();
+
+        // 제한시간이 만료되었을 경우
+        if (!nowTime.before(time))
+            return false;
+
+        // 인증 성공
+        userAuth.setAuthflag(true);
+        userAuthRepository.save(userAuth);
+
+        return true;
+    }
+
+    @Override
+    public String sendResetPassword(String email, int flag) {
+        // 기존 user가 없는 경우
+        if (!userRepository.findById(email).isPresent())
+            return FAIL;
+
+        String emailId = email.split("@")[0];
+        String authcode = sendMM(email, emailId, flag);
+
+        if (authcode.equals(SUCCESS)) {
+            Timestamp expireTime = new Timestamp(System.currentTimeMillis());
+            expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
+            userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).authflag(false).build());
+        }
+
+        return authcode;
+    }
+
+    @Override
+    public String authResetPassword(String email, String authcode) {
+        // 기존 user가 없는 경우
+        if (!userRepository.findById(email).isPresent())
+            return FAIL;
+
+        UserAuth userAuth = userAuthRepository.findByEmailAndAuthcode(email, authcode);
+        if (userAuth == null)
+            return FAIL;
+
+        Timestamp nowTime = new Timestamp(System.currentTimeMillis());
+        Timestamp time = userAuth.getTime();
+
+        // 제한시간이 만료되었을 경우
+        if (!nowTime.before(time))
+            return FAIL;
+
+        try {
+            User user = userRepository.findById(email).get();
+            String emailId = email.split("@")[0];
+
+            String salt = user.getSalt();
+            String password = sendMM(email, emailId, 2);
+            String encryptPassword = util.getEncryptStr(password, salt);
+
+            if (encryptPassword == null)
+                return FAIL;
+
+            user.setPassword(encryptPassword);
+            userRepository.save(user);
+            return password;
+        } catch (Exception e) {
+            return FAIL;
+        }
+    }
+
+    public String findNickname(String email) {
         User user = userRepository.findById(email).orElse(null);
-        if(user == null) return "";
+        if (user == null) return "";
         else return user.getNickname();
     }
 
