@@ -18,6 +18,35 @@ const Container = styled.div`
   position: relative;
   margin: 24px auto 24px auto;
 `
+const SearchDiv = styled.div`
+  margin: 8px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid #d6d6d6;
+  background-color: #fff;
+  display: inline-block;
+`
+const Input = styled.input`
+  margin: 4px;
+  padding: 0;
+  border: 1px solid #eae3d2;
+  height: 28px;
+  line-height: 28px;
+  font-size: 16px;
+  background-color: transparent;
+  vertical-align: middle;
+`
+const StyledSelect = styled.select`
+  height: 28px;
+  border: 1px solid #eae3d2;
+  cursor: pointer;
+`
+const StyledButton = styled.button`
+  height: 28px;
+  background-color: #eae3d2;
+  border: 1px solid #f9f5eb;
+  cursor: pointer;
+`
 
 const AnonymousBoardMain = () => {
   const [articles, setArticles] = useState([]);
@@ -101,14 +130,16 @@ const AnonymousBoardMain = () => {
               <Grid item sx={{padding:"10px!important"}} xs={12} md={6}>
                 <BoardTable articles={articles} />
                 <div>
-                <form onSubmit={searchHandler}>
-                  <select onChange={handleSelect} value={selected}>
-			              <option key="1" value="1">제목</option>
-			              <option key="3" value="3">내용</option>
-		              </select>
-                  <input type="text" onChange={searchTextHandler} />
-                  <button type="submit">검색</button>
-                </form>
+                  <SearchDiv>
+                    <form onSubmit={searchHandler}>
+                      <StyledSelect onChange={handleSelect} value={selected}>
+                        <option key="1" value="1">제목</option>
+                        <option key="3" value="3">내용</option>
+                      </StyledSelect>
+                      <Input type="text" onChange={searchTextHandler} />
+                      <StyledButton type="submit">검색</StyledButton>
+                    </form>
+                  </SearchDiv>
                   <Pagination
                       activePage={activePage}
                       itemsCountPerPage={20}
