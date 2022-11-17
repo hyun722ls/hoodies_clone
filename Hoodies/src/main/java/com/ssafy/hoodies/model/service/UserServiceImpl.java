@@ -1,5 +1,6 @@
 package com.ssafy.hoodies.model.service;
 
+import com.ssafy.hoodies.model.entity.Board;
 import com.ssafy.hoodies.model.entity.User;
 import com.ssafy.hoodies.model.entity.UserAuth;
 import com.ssafy.hoodies.model.repository.UserAuthRepository;
@@ -10,15 +11,18 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -37,9 +41,15 @@ public class UserServiceImpl implements UserService {
 
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
+    private static final String BAD = "bad";
+
+    private final MongoTemplate mongoTemplate;
 
     private final UserRepository userRepository;
     private final UserAuthRepository userAuthRepository;
+
+    @Value("${nickname.salt}")
+    private String salt;
 
     @Override
     public int checkNickname(String nickname) {
@@ -267,6 +277,95 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             return FAIL;
         }
+    }
+
+    @Override
+    public String updateNickname(String email, String nickname) {
+        try {
+            User user = userRepository.findById(email).get();
+            String writer = user.getNickname();
+
+            User nicknameUser = userRepository.findByNickname(nickname);
+            // 이미 닉네임이 있는 경우
+            if (nicknameUser != null)
+                return FAIL;
+
+            user.setNickname(nickname);
+            userRepository.save(user);
+
+            // 이전 닉네임으로 작성한 글이나 댓글의 작성자 변경
+            // 이전 닉네임으로 자유 게시판에 작성한 부분
+            // 이전 닉네임으로 자유 게시판에 작성한 글
+            Query query = new Query();
+            query.addCriteria(Criteria.where("writer").is(writer));
+            Update update = new Update();
+            update.set("writer", user.getNickname());
+            mongoTemplate.updateMulti(query, update, Board.class);
+
+            // 이전 닉네임으로 자유 게시판에 작성한 댓글
+            Update commentUpdate = new Update();
+            commentUpdate.set("comments.$[target].writer", user.getNickname());
+            commentUpdate.filterArray("target.writer", writer);
+
+            mongoTemplate.updateMulti(new Query(), commentUpdate, Board.class);
+
+            // 이전 닉네임으로 익명 게시판에 작성한 부분
+            // 이전 닉네임으로 익명 게시판에 작성한 글
+            String ewriter = util.getEncryptStr(writer, salt);
+            String enickname = util.getEncryptStr(user.getNickname(), salt);
+
+            Query equery = new Query();
+            equery.addCriteria(Criteria.where("writer").is(ewriter));
+            Update eupdate = new Update();
+            eupdate.set("writer", enickname);
+
+            mongoTemplate.updateMulti(equery, eupdate, Board.class);
+
+            // 이전 닉네임으로 익명 게시판에 작성한 댓글
+            Update ecommentUpdate = new Update();
+            ecommentUpdate.set("comments.$[target].writer", enickname);
+            ecommentUpdate.filterArray("target.writer", ewriter);
+
+            mongoTemplate.updateMulti(new Query(), ecommentUpdate, Board.class);
+            return enickname;
+        } catch (Exception e) {
+            return FAIL;
+        }
+    }
+
+    @Override
+    public String updatePassword(String email, String password) {
+        try {
+            User user = userRepository.findById(email).get();
+
+            String salt = user.getSalt();
+            String encryptPassword = util.getEncryptStr(password, salt);
+            String beforePassword = user.getPassword();
+
+            // 이전 비밀번호와 동일한 경우
+            if (encryptPassword == null || encryptPassword.equals(beforePassword))
+                return BAD;
+
+            user.setPassword(encryptPassword);
+            userRepository.save(user);
+            return SUCCESS;
+        } catch (Exception e) {
+            return FAIL;
+        }
+    }
+
+    @Override
+    public List<Board> findUserBoard(String writer) {
+        String ewriter = util.getEncryptStr(writer, salt);
+        List<String> names = new ArrayList<>();
+        names.add(writer);
+        names.add(ewriter);
+        Sort sort = Sort.by("createdAt").descending();
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("writer").in(names));
+        query.with(sort);
+        return mongoTemplate.find(query, Board.class);
     }
 
     public String findNickname(String email) {
