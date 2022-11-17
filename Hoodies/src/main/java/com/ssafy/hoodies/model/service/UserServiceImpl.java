@@ -163,7 +163,7 @@ public class UserServiceImpl implements UserService {
             String response_message = (String) retData.get("message");
 
             if (message.toString().equals(response_message))
-                return SUCCESS;
+                return authcode;
             else
                 return FAIL;
         } catch (Exception e) {
@@ -181,7 +181,7 @@ public class UserServiceImpl implements UserService {
 
         String authcode = sendMM(email, emailId, flag);
 
-        if (authcode.equals(SUCCESS)) {
+        if (!authcode.equals(FAIL)) {
             Timestamp expireTime = new Timestamp(System.currentTimeMillis());
             expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
             userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).authflag(false).build());
@@ -224,7 +224,7 @@ public class UserServiceImpl implements UserService {
         String emailId = email.split("@")[0];
         String authcode = sendMM(email, emailId, flag);
 
-        if (authcode.equals(SUCCESS)) {
+        if (!authcode.equals(FAIL)) {
             Timestamp expireTime = new Timestamp(System.currentTimeMillis());
             expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
             userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).authflag(false).build());
