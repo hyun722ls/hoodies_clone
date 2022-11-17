@@ -5,6 +5,7 @@ import com.ssafy.hoodies.model.entity.User;
 import com.ssafy.hoodies.model.entity.UserAuth;
 import com.ssafy.hoodies.model.repository.UserAuthRepository;
 import com.ssafy.hoodies.model.repository.UserRepository;
+import com.ssafy.hoodies.model.service.SecurityService;
 import com.ssafy.hoodies.model.service.UserService;
 import com.ssafy.hoodies.util.util;
 import io.swagger.annotations.Api;
@@ -39,12 +40,9 @@ public class UserController {
     private static final String FAIL = "403";
     private static final String BAD_REQUEST = "400";
     private final UserService userService;
-    private final UserRepository userRepository;
-    private final UserAuthRepository userAuthRepository;
     private final MongoTemplate mongoTemplate;
 
-    @Value("${nickname.salt}")
-    private String salt;
+    private final SecurityService securityService;
 
     @ApiOperation(value = "닉네임 중복 체크")
     @GetMapping("/check/{nickname}")
@@ -129,117 +127,42 @@ public class UserController {
     @ApiOperation(value = "닉네임 변경")
     @PutMapping("/nickname")
     public Map<String, Object> updateNickname(@RequestBody Map<String, String> map) {
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
+        Map<String, Object> resultMap = new HashMap<>();
+
+        String email = securityService.findEmail();
         String nickname = map.getOrDefault("nickname", "");
 
-        Map<String, Object> resultMap = new HashMap<>();
-        try {
-            User user = userRepository.findById(email).get();
-            String writer = user.getNickname();
-
-            User nicknameUser = userRepository.findByNickname(nickname);
-            // 이미 닉네임이 있는 경우
-            if (nicknameUser != null) {
-                resultMap.put("statusCode", FAIL);
-                return resultMap;
-            }
-
-            user.setNickname(nickname);
-            userRepository.save(user);
-
-            // 이전 닉네임으로 작성한 글이나 댓글의 작성자 변경
-            // 이전 닉네임으로 자유 게시판에 작성한 부분
-            // 이전 닉네임으로 자유 게시판에 작성한 글
-            Query query = new Query();
-            query.addCriteria(Criteria.where("writer").is(writer));
-            Update update = new Update();
-            update.set("writer", user.getNickname());
-            mongoTemplate.updateMulti(query, update, Board.class);
-
-            // 이전 닉네임으로 자유 게시판에 작성한 댓글
-            Update commentUpdate = new Update();
-            commentUpdate.set("comments.$[target].writer", user.getNickname());
-            commentUpdate.filterArray("target.writer", writer);
-
-            mongoTemplate.updateMulti(new Query(), commentUpdate, Board.class);
-
-            // 이전 닉네임으로 익명 게시판에 작성한 부분
-            // 이전 닉네임으로 익명 게시판에 작성한 글
-            String ewriter = util.getEncryptStr(writer, salt);
-            String enickname = util.getEncryptStr(user.getNickname(), salt);
-
-            Query equery = new Query();
-            equery.addCriteria(Criteria.where("writer").is(ewriter));
-            Update eupdate = new Update();
-            eupdate.set("writer", enickname);
-
-            mongoTemplate.updateMulti(equery, eupdate, Board.class);
-
-            // 이전 닉네임으로 익명 게시판에 작성한 댓글
-            Update ecommentUpdate = new Update();
-            ecommentUpdate.set("comments.$[target].writer", enickname);
-            ecommentUpdate.filterArray("target.writer", ewriter);
-
-            mongoTemplate.updateMulti(new Query(), ecommentUpdate, Board.class);
-
-            resultMap.put("statusCode", SUCCESS);
-            resultMap.put("hashNickname", enickname);
-        } catch (Exception e) {
+        String enickname = userService.updateNickname(email, nickname);
+        if ("fail".equals(enickname)) {
             resultMap.put("statusCode", FAIL);
+            return resultMap;
         }
+        resultMap.put("hashNickname", enickname);
+        resultMap.put("statusCode", SUCCESS);
         return resultMap;
     }
 
     @ApiOperation(value = "비밀번호 변경")
     @PutMapping("/password")
     public Map<String, Object> updatePassword(@RequestBody Map<String, String> map) {
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
+        Map<String, Object> resultMap = new HashMap<>();
+
+        String email = securityService.findEmail();
         String password = map.getOrDefault("password", "");
 
-        Map<String, Object> resultMap = new HashMap<>();
-        try {
-            User user = userRepository.findById(email).get();
-
-            String salt = user.getSalt();
-            String encryptPassword = util.getEncryptStr(password, salt);
-            String beforePassword = user.getPassword();
-
-            // 이전 비밀번호와 동일한 경우
-            if (encryptPassword == null || encryptPassword.equals(beforePassword)) {
-                resultMap.put("statusCode", BAD_REQUEST);
-                return resultMap;
-            }
-
-            user.setPassword(encryptPassword);
-            userRepository.save(user);
-
-            resultMap.put("statusCode", SUCCESS);
-        } catch (Exception e) {
+        String result = userService.updatePassword(email, password);
+        if (result.equals("fail"))
+            resultMap.put("statusCode", BAD_REQUEST);
+        else if (result.equals("bad"))
             resultMap.put("statusCode", FAIL);
-        }
+        else
+            resultMap.put("statusCode", SUCCESS);
         return resultMap;
     }
 
     @GetMapping("/article/{writer}")
     @ApiOperation(value = "사용자가 쓴 글 조회")
-    public List<Board> findUserBoard(@ApiParam(
-            name = "writer",
-            type = "String",
-            value = "게시물의 DB상 writer, 닉네임",
-            required = true) @PathVariable String writer) {
-        String ewriter = util.getEncryptStr(writer, salt);
-        List<String> names = new ArrayList<>();
-        names.add(writer);
-        names.add(ewriter);
-        Sort sort = Sort.by("createdAt").descending();
-
-        Query query = new Query();
-        query.addCriteria(Criteria.where("writer").in(names));
-        query.with(sort);
-        return mongoTemplate.find(query, Board.class);
+    public List<Board> findUserBoard(@ApiParam(name = "writer", type = "String", value = "게시물의 DB상 writer, 닉네임", required = true) @PathVariable String writer) {
+        return userService.findUserBoard(writer);
     }
 }
