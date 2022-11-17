@@ -285,7 +285,7 @@ const Signup = () => {
             value={password}
             onChange={passwordChangeHandler}
             type="password"
-            placeholder="패스워드"
+            placeholder="비밀번호"
           />
         </InputDiv>
         <InputDiv>
@@ -293,7 +293,7 @@ const Signup = () => {
             value={confirmPassword}
             onChange={confirmPasswordChangeHandler}
             type="password"
-            placeholder="패스워드 확인"
+            placeholder="비밀번호 확인"
           />
         </InputDiv>
         <EmptyDiv>
