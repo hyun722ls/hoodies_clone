@@ -108,7 +108,7 @@ const Login = () => {
         history.push("/index");
       } else {
         Swal.fire({
-          title: '올바르지 않은 이메일 혹은 패스워드입니다',
+          title: '올바르지 않은 이메일 혹은 비밀번호입니다',
           icon: 'error'
         })
       }
@@ -210,7 +210,7 @@ const Login = () => {
             onChange={passwordChangeHandler}
             type="password"
             required
-            placeholder="패스워드"
+            placeholder="비밀번호"
           />
         </InputDiv>
         <div>
