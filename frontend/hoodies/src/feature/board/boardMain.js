@@ -58,28 +58,28 @@ const BoardMain = () => {
   useEffect(() => {
     (async () => {
       // 배포용
-    //   if (!pageControl ){
-    //     const response = await fetchArticles(activePage)
-    //     const response1 = await fetchPopularArticles()
-    //   setTotalItemCount(response.totalElements)
-    //   setArticles(response.content);
-    //   if(response1){
-    //     setPopularTexts(response1)
-    //   }
-    // } else {
-    //   const response = await fetchSearch(option, keyword, activePage)
-    //   const response1 = await fetchPopularArticles()
-    //   setTotalItemCount(response.totalElements)
-    //   setArticles(response.content);
-    //   if(response1){
-    //     setPopularTexts(response1)
-    //   }
-    // }
-    // setIsLoading(false);
-    setArticles(freeBoard.content)
-    setPopularTexts(popularData)
-    setTotalItemCount(freeBoard.totalElements)
+      if (!pageControl ){
+        const response = await fetchArticles(activePage)
+        const response1 = await fetchPopularArticles()
+      setTotalItemCount(response.totalElements)
+      setArticles(response.content);
+      if(response1){
+        setPopularTexts(response1)
+      }
+    } else {
+      const response = await fetchSearch(option, keyword, activePage)
+      const response1 = await fetchPopularArticles()
+      setTotalItemCount(response.totalElements)
+      setArticles(response.content);
+      if(response1){
+        setPopularTexts(response1)
+      }
+    }
     setIsLoading(false);
+    // setArticles(freeBoard.content)
+    // setPopularTexts(popularData)
+    // setTotalItemCount(freeBoard.totalElements)
+    // setIsLoading(false);
     })()
   }, [activePage]);
 
