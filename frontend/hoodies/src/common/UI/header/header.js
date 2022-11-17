@@ -2,9 +2,16 @@ import classes from "./header.module.css";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { Fragment } from "react";
 import { logOut, postInquiry } from "../../../feature/auth/authApi";
+import {useMediaQuery} from 'react-responsive';
 import Swal from "sweetalert2";
 
 const Header = () => {
+  const isPc = useMediaQuery({
+    query : "(min-width:1024px)"
+  });
+  const isMobile = useMediaQuery({
+    query: "(max-width:767px)"
+  });
   const history = useHistory()
   const location = useLocation()
   const logout = async (event) => {
@@ -85,59 +92,101 @@ const Header = () => {
 
   return (
     <Fragment>
-      <div className={classes.navbar__wrapper}>
-        <Link to='/index' className={classes.navbar__logo}>
-          Hoodies
-        </Link>
-      </div>
-      <nav className={classes.navbar}>
-        <ul className={classes.navbar__menu}>
-          <li>
-            <Link to="/user" className={classes.navbar__item}>
-              내 정보
-            </Link>
-          </li>
-          <li>
-            <p onClick={freeBoardHandler} className={classes.navbar__item}>
-              자유 게시판
-            </p>
-          </li>
-          <li>
-            <p onClick={anonymousBoardHandler} className={classes.navbar__item}>
-              익명 게시판
-            </p>
-          </li>
-          <li>
-            <p onClick={codingBoardHandler} className={classes.navbar__item}>
-              코딩 게시판
-            </p>
-          </li>
-          <li>
-            <Link to="/pro" className={classes.navbar__item}>
-              평가 게시판
-            </Link>
-          </li>
-          {/* <Link to="/admin/form" state={null} className={classes. navbar__item}>
-            Create
-          </Link> */}
-          {localStorage.getItem('flag') &&  <Link to="/admin" className={classes.navbar__item}>
-              문의 결과
-            </Link>}
-          {!localStorage.getItem('flag') && 
-          <li>
-            <span onClick={inquiryHandler} className={classes.navbar__item}>
-              문의 보내기
-            </span>
-          </li>}
+      {isPc && 
+      <Fragment>
+        <div className={classes.navbar__wrapper}>
+          <Link to='/index' className={classes.navbar__logo}>
+            Hoodies
+          </Link>
+        </div>
+        <nav className={classes.navbar}>
+          <ul className={classes.navbar__menu}>
+            <li>
+              <Link to="/user" className={classes.navbar__item}>
+                내 정보
+              </Link>
+            </li>
+            <li>
+              <p onClick={freeBoardHandler} className={classes.navbar__item}>
+                자유 게시판
+              </p>
+            </li>
+            <li>
+              <p onClick={anonymousBoardHandler} className={classes.navbar__item}>
+                익명 게시판
+              </p>
+            </li>
+            <li>
+              <p onClick={codingBoardHandler} className={classes.navbar__item}>
+                코딩 게시판
+              </p>
+            </li>
+            <li>
+              <Link to="/pro" className={classes.navbar__item}>
+                평가 게시판
+              </Link>
+            </li>
+            {/* <Link to="/admin/form" state={null} className={classes. navbar__item}>
+              Create
+            </Link> */}
+            {localStorage.getItem('flag') &&  <Link to="/admin" className={classes.navbar__item}>
+                문의 결과
+              </Link>}
+            {!localStorage.getItem('flag') && 
+            <li>
+              <span onClick={inquiryHandler} className={classes.navbar__item}>
+                문의 보내기
+              </span>
+            </li>}
 
-          <li>
-            <span onClick={logout} className={classes.navbar__item}>
-              Logout
-            </span>
-          </li>
-          
-        </ul>
-      </nav>
+            <li>
+              <span onClick={logout} className={classes.navbar__item}>
+                Logout
+              </span>
+            </li>
+            
+          </ul>
+        </nav>
+      </Fragment>}
+      {isMobile && 
+      <Fragment>
+        <div className={classes.navbar__wrapper}>
+          <div className="hamburger-menu" style={{position:'relative', right:'25%'}}>
+              <input id={classes.menu__toggle} type="checkbox" />
+              <label className={classes.menu__btn} htmlFor={classes.menu__toggle}>
+                <span></span>
+              </label>
+
+              <ul className={classes.menu__box}>
+                <li>
+                  <Link to="/user" className={classes.menu__item}>
+                    내 정보
+                  </Link>
+                </li>               
+                <li><span onClick={freeBoardHandler} className={classes.menu__item} >자유 게시판</span></li>
+                <li><span onClick={anonymousBoardHandler} className={classes.menu__item} >익명 게시판</span></li>
+                <li>
+                  <span onClick={codingBoardHandler} className={classes.menu__item}>
+                    코딩 게시판
+                  </span>
+                </li>
+                <li>
+                  <Link to="/pro" className={classes.menu__item}>
+                    평가 게시판
+                  </Link>
+                </li>
+                {localStorage.getItem('flag') &&  <Link to="/admin" className={classes.menu__item}>
+                문의 결과
+              </Link>}
+                {!localStorage.getItem('flag') && <li><span className={classes.menu__item} onClick={inquiryHandler} >문의 보내기</span></li>}
+                <li><span className={classes.menu__item} onClick={logout}>Logout</span></li>
+              </ul>
+          </div>
+          <Link to='/index' className={classes.navbar__logo} style={{marginTop:'6px'}}>
+            Hoodies
+          </Link>
+        </div>
+      </Fragment>}
     </Fragment>
   );
 };
