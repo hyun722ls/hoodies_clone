@@ -6,6 +6,7 @@ import BoardTable from "./boardComponent/boardTable";
 import PopularTexts from "./boardComponent/popularTexts";
 import { useHistory } from "react-router-dom";
 import Grid from '@mui/material/Grid';
+import './boardMain.css'
 import { freeBoard, popularData } from "../../common/data/styleData";
 
 
