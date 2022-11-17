@@ -443,7 +443,7 @@ const ArticleDetail = () => {
                 ))}
           </ImageList>
           <ArticleBody>
-            <pre>{article.content}</pre>
+            <pre style={{fontFamily:'IBM Plex Sans KR'}}>{article.content}</pre>
           </ArticleBody>
           <CommentList
             comments={comments}

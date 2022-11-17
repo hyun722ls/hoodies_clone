@@ -178,10 +178,10 @@ const EvenPro = () => {
               </div>
               <div
                 style={{
-                  display: "flex",
+                  display: "inline-flex",
                   justifyContent: "center",
-                  height: "35vh",
-                  width: "70%",
+                  height: "40vh",
+                  width: "90%",
                 }}
               >
                 <EvaluationPentagon staff={staff}></EvaluationPentagon>
@@ -191,7 +191,7 @@ const EvenPro = () => {
               item
               xs={12}
               style={{
-                zIndex: 100,
+                zIndex: 80,
                 backgroundColor: "#F9F5EB",
                 border: "1px solid #EAE3D2",
               }}

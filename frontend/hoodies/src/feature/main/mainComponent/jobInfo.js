@@ -55,7 +55,7 @@ const JobInfo = (props) => {
 
     return (
         <Paper sx={{ margin: '10px'}}>
-            <TableContainer sx={{ maxHeight: 440 }}>
+            <TableContainer sx={{ maxHeight: 500 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>

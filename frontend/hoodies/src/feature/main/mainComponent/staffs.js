@@ -26,6 +26,9 @@ const Title = styled.div`
 
 const DIV = styled.div`
   margin-bottom: 3px;
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: center;
 `;
 
 const DIV2 = styled.div`
@@ -181,7 +184,7 @@ const Staffs = (props) => {
                                 </DIV2>
 
                                 {/*<Grid item sx={{ margin: '0px', marginRight: '0px'}} xs={12} md={6}>*/}
-                                <Grid style={{height:'200px', width: '25vw', position: 'relative', display: 'table', marginLeft: 'auto', marginRight: 'auto'}} xs={12} md={6}>
+                                <Grid item style={{height:'200px', width: '25vw', position: 'relative', display: 'table', marginLeft: 'auto', marginRight: 'auto'}} xs={12} md={6}>
                                     <ResponsiveRadar
                                         data={dataConverter(staff)}
                                         keys={[ '작성자' ]}

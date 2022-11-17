@@ -153,7 +153,7 @@ const isFilter = (article) => {
 }
 
 return props.articles.length ? (
-  <Grid item sx={{ margin: '0px', marginRight: '0px'}} xs={12} md={6}>
+  <Grid item xs={12} md={6}>
     <div>
         <Title>
             <H1 item>최신글</H1>
