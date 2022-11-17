@@ -94,14 +94,7 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    @Override
-    public String sendMM(String email, int flag) {
-        String emailId = email.split("@")[0];
-
-        // 기존 user가 있는 경우
-        if (!userRepository.findByEmailStartsWith(emailId + "@").isEmpty())
-            return FAIL;
-
+    public String sendMM(String email, String emailId, int flag) {
         try {
             // 1. 발신자 인증
             HttpURLConnection conn = connInit("users/login", null);
@@ -169,16 +162,31 @@ public class UserServiceImpl implements UserService {
             retData = (JSONObject) response.get("data");
             String response_message = (String) retData.get("message");
 
-            if (message.toString().equals(response_message)) {
-                Timestamp expireTime = new Timestamp(System.currentTimeMillis());
-                expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
-                userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).authflag(false).build());
+            if (message.toString().equals(response_message))
                 return SUCCESS;
-            } else
+            else
                 return FAIL;
         } catch (Exception e) {
             return FAIL;
         }
+    }
+
+    @Override
+    public String sendSignUpMM(String email, int flag) {
+        String emailId = email.split("@")[0];
+
+        // 기존 user가 있는 경우
+        if (!userRepository.findByEmailStartsWith(emailId + "@").isEmpty())
+            return FAIL;
+
+        String authcode = sendMM(email, emailId, flag);
+
+        if (authcode.equals(SUCCESS)) {
+            Timestamp expireTime = new Timestamp(System.currentTimeMillis());
+            expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
+            userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).authflag(false).build());
+        }
+        return authcode;
     }
 
     @Override
@@ -205,6 +213,60 @@ public class UserServiceImpl implements UserService {
         userAuthRepository.save(userAuth);
 
         return true;
+    }
+
+    @Override
+    public String sendResetPassword(String email, int flag) {
+        // 기존 user가 없는 경우
+        if (!userRepository.findById(email).isPresent())
+            return FAIL;
+
+        String emailId = email.split("@")[0];
+        String authcode = sendMM(email, emailId, flag);
+
+        if (authcode.equals(SUCCESS)) {
+            Timestamp expireTime = new Timestamp(System.currentTimeMillis());
+            expireTime.setTime(expireTime.getTime() + TimeUnit.MINUTES.toMillis(3));
+            userAuthRepository.save(UserAuth.builder().email(email).authcode(authcode).time(expireTime).authflag(false).build());
+        }
+
+        return authcode;
+    }
+
+    @Override
+    public String authResetPassword(String email, String authcode) {
+        // 기존 user가 없는 경우
+        if (!userRepository.findById(email).isPresent())
+            return FAIL;
+
+        UserAuth userAuth = userAuthRepository.findByEmailAndAuthcode(email, authcode);
+        if (userAuth == null)
+            return FAIL;
+
+        Timestamp nowTime = new Timestamp(System.currentTimeMillis());
+        Timestamp time = userAuth.getTime();
+
+        // 제한시간이 만료되었을 경우
+        if (!nowTime.before(time))
+            return FAIL;
+
+        try {
+            User user = userRepository.findById(email).get();
+            String emailId = email.split("@")[0];
+
+            String salt = user.getSalt();
+            String password = sendMM(email, emailId, 2);
+            String encryptPassword = util.getEncryptStr(password, salt);
+
+            if (encryptPassword == null)
+                return FAIL;
+
+            user.setPassword(encryptPassword);
+            userRepository.save(user);
+            return password;
+        } catch (Exception e) {
+            return FAIL;
+        }
     }
 
     public String findNickname(String email) {
