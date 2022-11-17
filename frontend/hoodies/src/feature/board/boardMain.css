@@ -1,4 +1,4 @@
-.pagination {
+/* .pagination {
     display: flex;
     justify-content: center;
     margin-top: 15px;
@@ -25,15 +25,20 @@
   
   ul.pagination li:last-child {
     border-radius: 0 5px 5px 0;
-  }
+  } */
   
   ul.pagination li a {
+    font-family: 'IBM Plex Sans KR';
     text-decoration: none;
-    color: #337ab7;
+    font-weight: 600;
+    color: #617EAA;
     font-size: 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;    
   }
   
-  ul.pagination li.active a {
+  /* ul.pagination li.active a {
     color: white;
   }
   
@@ -54,4 +59,4 @@
 
   .marge {
     margin-top: 0 !important;
-  }
+  } */
