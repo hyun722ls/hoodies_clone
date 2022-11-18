@@ -10,7 +10,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 
 
-@Getter
+@Builder
+@Data
 @Document(collection = "mentor")
 public class Mentor {
     @Id
