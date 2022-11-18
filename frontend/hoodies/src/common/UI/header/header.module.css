@@ -63,8 +63,10 @@
   left: 0 !important;
 }
 
-#menu__toggle:checked + .root {
+#menu__toggle:checked + .menu__btn {
   position:fixed;
+  left: 5%;
+  top: 5%;
 }
 
 .menu__btn {
