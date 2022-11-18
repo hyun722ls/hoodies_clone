@@ -60,7 +60,7 @@ const CommentForm = styled.form`
   display: flex;
 `;
 const CommentInput = styled.input`
-  width: 100%;
+  width: 95%;
 `;
 const CommentArea = styled.textarea`
   margin: 8px 0 8px 0;
