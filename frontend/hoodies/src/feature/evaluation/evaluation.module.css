@@ -1,0 +1,47 @@
+.title {
+  font-weight: bold;
+  font-size: larger;
+}
+
+.card {
+  width: 25%;
+  text-align: center;
+  margin: 0 1rem;
+  position: relative;
+  cursor: pointer;
+  padding: 2rem 1.5rem;
+  overflow: hidden;
+  border-radius: 2rem;
+}
+
+.card h2 {
+  margin-bottom: 1rem;
+}
+.card p {
+  opacity: 0.8;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background-color: #EAE3D2;
+  height: 120px;
+  width: 120px;
+  -webkit-font-smoothing: antialiased;
+  transition: all 600ms ease-out;
+  z-index: -1;
+}
+.card:hover {
+  color: white;
+}
+.card:hover i {
+  transform: scale(1.5);
+}
+.card:hover::before {
+  transform: translateX(-50%) translateY(30%) scale(8);
+  background-color: #617EAA;
+}
