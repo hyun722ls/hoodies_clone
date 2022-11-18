@@ -447,7 +447,7 @@ const AnonymousArticleDetail = () => {
                 ))}
           </ImageList>
           <ArticleBody>
-            <pre>{article.content}</pre>
+            <pre style={{fontFamily:'IBM Plex Sans KR', whiteSpace:'pre-wrap'}}>{article.content}</pre>
           </ArticleBody>
           <CommentList
             comments={comments}

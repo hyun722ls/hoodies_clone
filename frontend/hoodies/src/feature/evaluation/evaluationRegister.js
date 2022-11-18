@@ -72,7 +72,7 @@ const CreateEvaluation = (props) => {
   return (
     <Grid
       container
-      items
+      item
       spacing={1}
       style={{ marginTop: "5px", paddingLeft: "20px", marginBottom:'15px' }}
     >
