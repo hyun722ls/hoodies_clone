@@ -40,7 +40,7 @@ const CreateEvaluation = (props) => {
       
       
       if (checkStuduentData.commentResult !== 'clean'){
-        Swal.fire('부적절한 표현이 있습니다. 상대를 생각하세요.')
+        Swal.fire('부적절한 표현이 있습니다. 상대방을 고려하여 댓글을 작성해주세요!😂')
        } else {
          const response = await postEvaluation(id, score, studentComment);
          if (response.statusCode === 200) {
