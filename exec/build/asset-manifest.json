@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/static/css/main.e1fc1497.css",
+    "main.js": "/static/js/main.7dad88dd.js",
+    "static/media/meme6.gif": "/static/media/meme6.c8142dc84b076718d342.gif",
+    "static/media/IBMPlexSansKR-Medium.woff2": "/static/media/IBMPlexSansKR-Medium.214f730fa08b9aea5e7a.woff2",
+    "static/media/IBMPlexSansKR-SemiBold.woff2": "/static/media/IBMPlexSansKR-SemiBold.651ef7f0c05b38bac357.woff2",
+    "static/media/IBMPlexSansKR-Regular.woff2": "/static/media/IBMPlexSansKR-Regular.2deee9f198c35abc37c1.woff2",
+    "static/media/IBMPlexSansKR-ExtraLight.woff2": "/static/media/IBMPlexSansKR-ExtraLight.27f47db6c9329b9538f1.woff2",
+    "static/media/IBMPlexSansKR-Light.woff2": "/static/media/IBMPlexSansKR-Light.e54dc6c92384851bf9f4.woff2",
+    "static/media/IBMPlexSansKR-Bold.woff2": "/static/media/IBMPlexSansKR-Bold.26b0330fc136970ba943.woff2",
+    "static/media/hoody2.png": "/static/media/hoody2.0688c62b50a14c837d42.png",
+    "static/media/IBMPlexSansKR-Thin.woff2": "/static/media/IBMPlexSansKR-Thin.29c7fc27378d329592f7.woff2",
+    "static/media/index.cjs": "/static/media/index.b599194a631d76b49328.cjs",
+    "static/media/10th.png": "/static/media/10th.57863a7821dd6eeaf875.png",
+    "static/media/20th.png": "/static/media/20th.21db8605f0acf06fea49.png",
+    "static/media/after.gif": "/static/media/after.773cf4bf8467bab2625e.gif",
+    "static/media/Milky Honey.woff2": "/static/media/Milky Honey.f031bb204278ced5ce0c.woff2",
+    "index.html": "/index.html",
+    "static/media/user-home-symbolic.svg": "/static/media/user-home-symbolic.e4f674da4027db268b39e9852b488b95.svg",
+    "main.e1fc1497.css.map": "/static/css/main.e1fc1497.css.map",
+    "main.7dad88dd.js.map": "/static/js/main.7dad88dd.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e1fc1497.css",
+    "static/js/main.7dad88dd.js"
+  ]
+}
