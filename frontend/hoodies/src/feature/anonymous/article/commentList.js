@@ -62,7 +62,7 @@ const CommentForm = styled.form`
   display: flex;
 `;
 const CommentInput = styled.input`
-  width: 100%;
+  width: 95%;
 `;
 const CommentArea = styled.textarea`
   margin: 8px 0 8px 0;
@@ -153,7 +153,7 @@ const CommentList = (props) => {
                 <ButtonList>
                   {modifyForm && commentId === comment._id && (
                     <StyledButton type="submit" form="Mod">
-                      댓글 수정
+                      확인
                     </StyledButton>
                   )}
                   {/*<button onClick={() => props.deleteCommentHandler(comment._id)}>*/}
