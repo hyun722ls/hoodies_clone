@@ -8,6 +8,8 @@ import com.ssafy.hoodies.model.entity.UserAuth;
 import com.ssafy.hoodies.model.repository.TokenRepository;
 import com.ssafy.hoodies.model.repository.UserAuthRepository;
 import com.ssafy.hoodies.model.repository.UserRepository;
+import com.ssafy.hoodies.model.service.SecurityService;
+import com.ssafy.hoodies.model.service.SignService;
 import com.ssafy.hoodies.model.service.UserService;
 import com.ssafy.hoodies.util.util;
 import io.swagger.annotations.Api;
@@ -35,77 +37,50 @@ public class SignController {
     private static final String SUCCESS = "200";
     private static final String FAIL = "403";
     private static final String EXPIRED = "400";
-    private final JwtTokenProvider jwtTokenProvider;
-    private final UserService userService;
+
     private final UserRepository userRepository;
     private final UserAuthRepository userAuthRepository;
     private final TokenRepository tokenRepository;
 
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserService userService;
+    private final SignService signService;
+    private final SecurityService securityService;
+
     @Value("${nickname.salt}")
     private String nicknameSalt;
 
-    private final String ADMIN_EMAIL = "admin";
+    private final String ADMIN_ROLE = "ROLE_ADMIN";
 
     @ApiOperation(value = "회원가입")
     @PostMapping
     public Map<String, Object> signup(@RequestBody User user, HttpServletResponse response) {
         Map<String, Object> resultMap = new HashMap<>();
-        String emailId = user.getEmail().split("@")[0];
 
-        // 기존 user가 있는 경우
-        if (!userRepository.findByEmailStartsWith(emailId + "@").isEmpty()) {
+        String result = signService.signup(user);
+        if ("fail".equals(result)) {
             resultMap.put("statusCode", FAIL);
             return resultMap;
         }
 
-        // 기존 닉네임이 있는 경우
-        if (userRepository.findByNickname(user.getNickname()) != null) {
-            resultMap.put("statusCode", FAIL);
-            return resultMap;
-        }
+        Token tokenInfo = jwtTokenProvider.generateToken("email", user.getEmail(), "token", user.getRole());
+        String accessToken = tokenInfo.getAccessToken();
+        String refreshToken = tokenInfo.getRefreshToken();
 
-        try {
-            UserAuth userAuth = userAuthRepository.findById(user.getEmail()).get();
+        // refresh token response 설정
+        Cookie cookie = new Cookie("refreshToken", refreshToken);
+        cookie.setMaxAge(24 * 60 * 60); // 1 day
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        response.addCookie(cookie);
 
-            // 인증되지 않은 경우
-            if (!userAuth.isAuthflag()) {
-                resultMap.put("statusCode", FAIL);
-                return resultMap;
-            }
+        tokenRepository.save(Token.builder().email(user.getEmail()).accessToken(accessToken).refreshToken(refreshToken).build());
 
-            String salt = util.getRandomGenerateString(8);
-            String encryptPassword = util.getEncryptStr(user.getPassword(), salt);
-            if (encryptPassword == null) {
-                resultMap.put("statusCode", FAIL);
-                return resultMap;
-            }
-
-            user.setSalt(salt);
-            user.setPassword(encryptPassword);
-            user.setRole(Role.ROLE_USER);
-            userRepository.save(user);
-
-            Token tokenInfo = jwtTokenProvider.generateToken("email", user.getEmail(), "token", user.getRole());
-            String accessToken = tokenInfo.getAccessToken();
-            String refreshToken = tokenInfo.getRefreshToken();
-
-            // refresh token response 설정
-            Cookie cookie = new Cookie("refreshToken", refreshToken);
-            cookie.setMaxAge(24 * 60 * 60); // 1 day
-            cookie.setSecure(true);
-            cookie.setHttpOnly(true);
-            cookie.setPath("/");
-            response.addCookie(cookie);
-
-            tokenRepository.save(Token.builder().email(user.getEmail()).accessToken(accessToken).refreshToken(refreshToken).build());
-
-            resultMap.put("nickname", user.getNickname());
-            resultMap.put("hashNickname", util.getEncryptStr(user.getNickname(), nicknameSalt));
-            resultMap.put("accessToken", accessToken);
-            resultMap.put("statusCode", SUCCESS);
-        } catch (Exception e) {
-            resultMap.put("statusCode", FAIL);
-        }
+        resultMap.put("nickname", user.getNickname());
+        resultMap.put("hashNickname", util.getEncryptStr(user.getNickname(), nicknameSalt));
+        resultMap.put("accessToken", accessToken);
+        resultMap.put("statusCode", SUCCESS);
         return resultMap;
     }
 
@@ -139,7 +114,7 @@ public class SignController {
             tokenRepository.save(Token.builder().email(user.getEmail()).accessToken(accessToken).refreshToken(refreshToken).build());
 
             // 관리자일 경우
-            if (getUser.getEmail().equals(ADMIN_EMAIL))
+            if (getUser.getRole().equals(ADMIN_ROLE))
                 resultMap.put("isAdmin", true);
 
             resultMap.put("nickname", getUser.getNickname());
@@ -154,12 +129,10 @@ public class SignController {
 
     @ApiOperation(value = "로그아웃")
     @GetMapping("/logout")
-    public Map<String, Object> login() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        String email = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
-
+    public Map<String, Object> logout() {
         Map<String, Object> resultMap = new HashMap<>();
+
+        String email = securityService.findEmail();
         try {
             tokenRepository.deleteById(email);
             resultMap.put("statusCode", SUCCESS);
