@@ -6,7 +6,6 @@ import weekly from "../main/mainComponent/weeklyMenu.module.css";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Grid from "@mui/material/Grid";
-import weeklyMenuPNG from "../../common/data/Nov_1_WeeklyMenu.PNG";
 import hoody from "../../common/data/hoody2.png";
 import weeklyMenu10PNG from "../../common/data/10th.png";
 import {getStaffListByType} from "./evaluationAPI";
