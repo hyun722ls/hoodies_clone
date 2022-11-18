@@ -14,7 +14,7 @@ const ErrorPage = () => {
         query : "(min-width:1024px)"
       });
       const isMobile = useMediaQuery({
-        query: "(max-width:767px)"
+        query: "(max-width:1023px)"
       });
 
     const Pingu = styled.div`
@@ -63,9 +63,9 @@ const ErrorPage = () => {
             {isMobile &&
             <div>
                 <Header></Header>
-                <div style={{marginTop:'35%', display:'flex', flexDirection:'column', alignItems:'center'}}>
+                <div style={{backgroundColor:'#FCFCFC', marginTop:'35%', display:'flex', flexDirection:'column', alignItems:'center'}}>
                     <div style={{fontFamily:'Milky Honey', fontWeight:600, fontSize:'7rem'}}>404</div>
-                    <div style={{marginTop:'10%', fontFamily:'Milky Honey', fontWeight:600, fontSize:'2rem'}}><a style={{textDecoration:'none', cursor:'pointer', color:'black'}} href='/index'>Take Me Home,</a></div>
+                    <div style={{marginTop:'10%', fontFamily:'Milky Honey', fontWeight:600, fontSize:'2rem'}}><a style={{zIndex:50, textDecoration:'none', cursor:'pointer', color:'black'}} href='/index'>Take Me Home</a></div>
                 </div>
                 <div style={{position:'fixed', bottom:0}}><img src={nootnoot} alt='nootnoot'></img></div>
             </div>
