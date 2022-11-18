@@ -1,30 +1,30 @@
 export const tempJobInfo = [
     {
         id: 4,
-        name: "삼양데이타시스템",
-        job: "삼양그룹 공장시스템외 프로그램개발 및 운영",
-        period: " 22.11.10(목) ~ 22.11.16(수) 까지",
-        method: "이메일 지원(haeruong.ji@samyang.com)",
-        favor: "특별전형",
-        url: "https://www.syds.com/"
+        name: "인지소프트",
+        job: "응용SW엔지니어링",
+        period: "22.11.07(월) ~ 22.11.21(월) 까지",
+        method: "이메일 지원(recruit@inzisoft.com)",
+        favor: "서류가점",
+        url: "http://inzisoft.com/"
     },
     {
         id: 7,
-        name: "섹타나인",
-        job: "BackEnd 정산 플랫폼 개발, 인트라넷시스템 운영/유지보수",
-        period: "22.11.08(화) ~ 22.11.17(목) 23:59 까지",
-        method: "온라인 지원(https://han.gl/SuCJb)",
-        favor: "서류가점",
-        url: "http://www.secta9ine.com/"
+        name: "파수",
+        job: "SW 컨설턴트(기술지원), 애플리케이션 보안 연구, QA 테스터, SW개발",
+        period: "22.11.14(화) ~ 22.11.27(일) 23:59 까지",
+        method: "온라인 지원(https://recruit.fasoo.com)",
+        favor: "우대 없음",
+        url: "https://recruit.fasoo.com"
     },
     {
         id: 2,
-        name: "이지자산평가",
-        job: "DB, 백엔드, 프론트엔드, AI개발",
-        period: "22.10.21(금) ~ 22.11.20(일) 까지",
-        method: " 이메일 지원(recruit@egap.co.kr)",
-        favor: "특별전형",
-        url: "https://www.egap.co.kr/"
+        name: "다우기술",
+        job: "채용확정형 금융IT 개발자 육성과정",
+        period: "22.11.15(화) ~ 22.11.23(목) 18:00 까지",
+        method: "온라인 지원(recruit.daou.co.kr)",
+        favor: "우대 없음",
+        url: "https://recruit.daou.co.kr"
     },
     {
         id: 1,
