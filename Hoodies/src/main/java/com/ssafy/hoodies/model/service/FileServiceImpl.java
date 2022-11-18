@@ -93,6 +93,7 @@ public class FileServiceImpl implements FileService {
         return uploadResult;
     }
 
+    @Override
     public void deleteFile(String fileName) {
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
