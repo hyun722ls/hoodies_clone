@@ -50,8 +50,6 @@ public class SignController {
     @Value("${nickname.salt}")
     private String nicknameSalt;
 
-    private final String ADMIN_ROLE = "ROLE_ADMIN";
-
     @ApiOperation(value = "회원가입")
     @PostMapping
     public Map<String, Object> signup(@RequestBody User user, HttpServletResponse response) {
@@ -114,7 +112,7 @@ public class SignController {
             tokenRepository.save(Token.builder().email(user.getEmail()).accessToken(accessToken).refreshToken(refreshToken).build());
 
             // 관리자일 경우
-            if (getUser.getRole().equals(ADMIN_ROLE))
+            if (getUser.getRole().equals(Role.ROLE_ADMIN))
                 resultMap.put("isAdmin", true);
 
             resultMap.put("nickname", getUser.getNickname());
