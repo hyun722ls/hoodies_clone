@@ -1,5 +1,5 @@
 import * as React from 'react';
-import weeklyMenuPNG from '../../../common/data/Nov_1_WeeklyMenu.PNG'
+import weeklyMenuPNG from '../../../common/data/20th.png'
 import weeklyMenu10PNG from '../../../common/data/10th.png'
 import hoody from '../../../common/data/hoody2.png'
 import weekly from './weeklyMenu.module.css'
