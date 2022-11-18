@@ -1,12 +1,21 @@
-import { useEffect, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
 import Header from '../header/header'
 import styled from "styled-components";
 import nootnoot from './meme6.gif'
 import nootnootAfter from './after.gif'
+import { useMediaQuery } from "react-responsive";
 
 const ErrorPage = () => {
+
     const [imageDisplayed, setImageDisplayed] = useState(nootnoot);
+
+    const isPc = useMediaQuery({
+        query : "(min-width:1024px)"
+      });
+      const isMobile = useMediaQuery({
+        query: "(max-width:767px)"
+      });
 
     const Pingu = styled.div`
     background-image: url(${nootnoot});
@@ -37,16 +46,30 @@ const ErrorPage = () => {
         setTimeout(handleImageDisplayed, 4000)
     }, [])
     return (
-        <div style={{position:'relative'}}>
-            <Header></Header>
-            <Pingu></Pingu>
-            <ErrorText>404</ErrorText>
-            <ErrorText style={{fontSize:'2rem', top:'80%', left:'15%'}}>
-                <a style={{textDecoration:'none', color:'black'}} href="/index">Take Me Home, Country Road</a>
-            </ErrorText>
-            {/* <div style={{display:'relative'}}>
-                <img src={nootnoot} style={{display:'absolute', height:'300%', width:'81%'}} alt='nootnoot'></img>
-            </div> */}
+        <div style={{position:'relative', height:'100%'}}>
+            {isPc && 
+            <Fragment>
+                <Header></Header>
+                <Pingu></Pingu>
+                <ErrorText>404</ErrorText>
+                <ErrorText style={{fontSize:'2rem', top:'80%', left:'15%'}}>
+                    <a style={{textDecoration:'none', color:'black'}} href="/index">Take Me Home, Country Road</a>
+                </ErrorText>
+                {/* <div style={{display:'relative'}}>
+                    <img src={nootnoot} style={{display:'absolute', height:'300%', width:'81%'}} alt='nootnoot'></img>
+                </div> */}
+            </Fragment>
+            }
+            {isMobile &&
+            <div>
+                <Header></Header>
+                <div style={{marginTop:'35%', display:'flex', flexDirection:'column', alignItems:'center'}}>
+                    <div style={{fontFamily:'Milky Honey', fontWeight:600, fontSize:'7rem'}}>404</div>
+                    <div style={{marginTop:'10%', fontFamily:'Milky Honey', fontWeight:600, fontSize:'2rem'}}><a style={{textDecoration:'none', cursor:'pointer', color:'black'}} href='/index'>Take Me Home,</a></div>
+                </div>
+                <div style={{position:'fixed', bottom:0}}><img src={nootnoot} alt='nootnoot'></img></div>
+            </div>
+            }
         </div>
     )
 }
