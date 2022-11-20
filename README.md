@@ -116,6 +116,10 @@
 
 ![user.png](images/user.png)
 
+### 404 페이지
+
+![ezgif-3-d6219dbf9f](https://user-images.githubusercontent.com/97646070/202891580-d4b28bf3-0395-43d8-87ba-36684007b740.gif)
+
 ## 👨‍👩‍👧 Notion
 
 ---
