@@ -3,7 +3,6 @@ package com.ssafy.hoodies.model.service;
 import com.ssafy.hoodies.model.dto.MentorDto;
 import com.ssafy.hoodies.model.repository.MentorRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;

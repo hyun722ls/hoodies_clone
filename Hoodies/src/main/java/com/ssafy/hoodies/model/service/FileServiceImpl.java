@@ -109,7 +109,7 @@ public class FileServiceImpl implements FileService {
 
             // 권한이 없는 요청
             if (!(writer.equals(nickname) || writer.equals(encodedNickname)))
-                return Collections.EMPTY_LIST;
+                return Collections.emptyList();
 
             // 기존 업로드 파일 삭제
             List<String> getFilePaths = board.getFilePaths();
@@ -142,7 +142,7 @@ public class FileServiceImpl implements FileService {
 
             return filePaths;
         } catch (Exception e) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
     }
 }

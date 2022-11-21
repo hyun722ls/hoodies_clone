@@ -26,7 +26,7 @@ public class BoardController {
     private final FilterService filterService;
     private final SecurityService securityService;
     private final UserService userService;
-    private final String STATUS_CODE = "statusCode";
+    private final static String STATUS_CODE = "statusCode";
 
     /****************
      *  게시물 CRUD  *

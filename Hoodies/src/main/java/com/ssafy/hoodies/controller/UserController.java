@@ -24,7 +24,7 @@ public class UserController {
     private static final String BAD_REQUEST = "400";
     private final UserService userService;
     private final SecurityService securityService;
-    private final String STATUS_CODE = "statusCode";
+    private final static String STATUS_CODE = "statusCode";
 
     @ApiOperation(value = "닉네임 중복 체크")
     @GetMapping("/check/{nickname}")

@@ -44,7 +44,7 @@ public class CommentDto {
 
     public Comment toEntity(){
         String now = util.getTimeStamp();
-        Comment comment = Comment.builder()
+        return Comment.builder()
                         ._id(String.valueOf(new ObjectId()))
                         .writer(writer)
                         .content(content)
@@ -55,7 +55,6 @@ public class CommentDto {
                         .replies(new ArrayList<>())
                         .reporter(new HashSet<>())
                         .build();
-        return comment;
     }
 
     public static CommentDto fromEntity(Comment comment){

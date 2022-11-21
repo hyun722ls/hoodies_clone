@@ -26,7 +26,7 @@ public class EvaluationDto {
 
     public Evaluation toEntity(){
         String now = util.getTimeStamp();
-        Evaluation evaluation = Evaluation.builder()
+        return Evaluation.builder()
                 ._id(String.valueOf(new ObjectId()))
                 .writer(writer)
                 .content(content)
@@ -36,6 +36,5 @@ public class EvaluationDto {
                 .score(score)
                 .category(category)
                 .build();
-        return evaluation;
     }
 }

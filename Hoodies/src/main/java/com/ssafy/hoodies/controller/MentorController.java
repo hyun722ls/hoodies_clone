@@ -21,7 +21,7 @@ public class MentorController {
     private final SecurityService securityService;
     private final UserService userService;
     private final FilterService filterService;
-    private final String STATUS_CODE = "statusCode";
+    private final static String STATUS_CODE = "statusCode";
 
     // 전체 평가 페이지 조회
     @GetMapping("mentor")

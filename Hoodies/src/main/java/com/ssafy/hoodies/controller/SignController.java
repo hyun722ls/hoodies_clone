@@ -42,10 +42,10 @@ public class SignController {
     private final UserService userService;
     private final SignService signService;
     private final SecurityService securityService;
-    private final String STATUS_CODE = "statusCode";
-    private final String EMAIL = "email";
-    private final String TOKEN = "token";
-    private final String ACCESS_TOKEN = "accessToken";
+    private final static String STATUS_CODE = "statusCode";
+    private final static String EMAIL = "email";
+    private final static String TOKEN = "token";
+    private final static String ACCESS_TOKEN = "accessToken";
 
     @Value("${nickname.salt}")
     private String nicknameSalt;
