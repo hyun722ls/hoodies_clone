@@ -11,7 +11,6 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.j256.simplemagic.ContentInfo;
 import com.j256.simplemagic.ContentInfoUtil;
-import com.mongodb.client.result.UpdateResult;
 import com.ssafy.hoodies.model.entity.Board;
 import com.ssafy.hoodies.model.repository.BoardRepository;
 import com.ssafy.hoodies.util.util;
@@ -110,7 +109,7 @@ public class FileServiceImpl implements FileService {
 
             // 권한이 없는 요청
             if (!(writer.equals(nickname) || writer.equals(encodedNickname)))
-                return null;
+                return Collections.EMPTY_LIST;
 
             // 기존 업로드 파일 삭제
             List<String> getFilePaths = board.getFilePaths();
@@ -139,11 +138,11 @@ public class FileServiceImpl implements FileService {
             Query boardQuery = new Query(Criteria.where("_id").is(id));
             Update boardUpdate = new Update();
             boardUpdate.set("filePaths", filePaths);
-            UpdateResult ur = mongoTemplate.updateFirst(boardQuery, boardUpdate, "board");
+            mongoTemplate.updateFirst(boardQuery, boardUpdate, Board.class);
 
             return filePaths;
         } catch (Exception e) {
-            return null;
+            return Collections.EMPTY_LIST;
         }
     }
 }

@@ -17,6 +17,7 @@ public class CommentController {
     private final FilterService filterService;
     private final SecurityService securityService;
     private final UserService userService;
+    private final String STATUS_CODE = "statusCode";
 
     /************
      * 댓글 CRUD *
@@ -38,7 +39,7 @@ public class CommentController {
 
         int statusCode = commentService.addComment(dto, id) > 0 ? 200 : 400;
 
-        json.put("statusCode", statusCode);
+        json.put(STATUS_CODE, statusCode);
         return json;
     }
 
@@ -60,7 +61,7 @@ public class CommentController {
 
         int statusCode = commentService.modifyComment(dto, bid) > 0 ? 200 : 400;
 
-        json.put("statusCode", statusCode);
+        json.put(STATUS_CODE, statusCode);
         return json;
     }
 
@@ -77,7 +78,7 @@ public class CommentController {
 
         int statusCode = commentService.removeComment(bid, cid, nickname, isAdmin) > 0 ? 200 : 400;
 
-        json.put("statusCode", statusCode);
+        json.put(STATUS_CODE, statusCode);
         return json;
     }
 
@@ -93,7 +94,7 @@ public class CommentController {
 
         int statusCode = commentService.reportComment(bid, cid, nickname) > 0 ? 200 : 400;
 
-        json.put("statusCode", statusCode);
+        json.put(STATUS_CODE, statusCode);
         return json;
     }
 }

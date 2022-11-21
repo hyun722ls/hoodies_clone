@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
             // response 수신
             JSONObject retData = (JSONObject) response.get("data");
             String myId = (String) retData.get("id");
-            String token = (String) conn.getHeaderField("Token");
+            String token = conn.getHeaderField("Token");
 
 
             // 2. 수신자 정보 조회

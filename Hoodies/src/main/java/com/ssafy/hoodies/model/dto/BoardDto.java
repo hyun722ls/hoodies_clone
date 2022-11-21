@@ -64,7 +64,7 @@ public class BoardDto {
                     .createdAt(now)
                     .modifiedAt(now)
                     .comments(new ArrayList<>())
-                    .contributor(new HashMap<String, Boolean>())
+                    .contributor(new HashMap<>())
                     .reporter(new HashSet<>())
                     .filePaths(new ArrayList<>())
                     .build();

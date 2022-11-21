@@ -21,6 +21,7 @@ public class MentorController {
     private final SecurityService securityService;
     private final UserService userService;
     private final FilterService filterService;
+    private final String STATUS_CODE = "statusCode";
 
     // 전체 평가 페이지 조회
     @GetMapping("mentor")
@@ -73,7 +74,7 @@ public class MentorController {
 
         int statusCode = evaluationService.addEvaluation(dto, id) > 0 ? 200 : 400;
 
-        json.put("statusCode", statusCode);
+        json.put(STATUS_CODE, statusCode);
         return json;
     }
 
@@ -86,10 +87,10 @@ public class MentorController {
         boolean isAdmin = securityService.isAdmin();
 
         if(!isAdmin){
-            json.put("statusCode", 400);
+            json.put(STATUS_CODE, 400);
         }else {
             int statusCode = evaluationService.removeEvaluation(mid, eid) > 0 ? 200 : 400;
-            json.put("statusCode", statusCode);
+            json.put(STATUS_CODE, statusCode);
         }
         return json;
     }

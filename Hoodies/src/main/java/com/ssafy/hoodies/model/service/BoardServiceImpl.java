@@ -30,7 +30,6 @@ public class BoardServiceImpl implements BoardService{
     private String salt;
     private final BoardRepository boardRepository;
     private final MongoTemplate mongoTemplate;
-
     private final FileService fileService;
 
     @Transactional
@@ -236,6 +235,6 @@ public class BoardServiceImpl implements BoardService{
         long start =  PageRequest.of(page, size).getOffset();
         long end = (start + size) > boardDtoList.size() ? boardDtoList.size() : (start + size);
 
-        return new PageImpl<BoardDto>(boardDtoList.subList((int)start, (int)end), PageRequest.of(page, size), boardDtoList.size());
+        return new PageImpl<>(boardDtoList.subList((int)start, (int)end), PageRequest.of(page, size), boardDtoList.size());
     }
 }

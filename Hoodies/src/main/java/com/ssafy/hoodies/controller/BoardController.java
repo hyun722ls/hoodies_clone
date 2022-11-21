@@ -1,6 +1,5 @@
 package com.ssafy.hoodies.controller;
 
-import com.mongodb.client.result.UpdateResult;
 import com.ssafy.hoodies.model.dto.*;
 import com.ssafy.hoodies.model.entity.Feedback;
 import com.ssafy.hoodies.model.repository.FeedbackRepository;
@@ -13,12 +12,7 @@ import org.json.simple.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -28,12 +22,11 @@ import java.util.*;
 @CrossOrigin(origins = "*")
 public class BoardController {
     private final FeedbackRepository feedbackRepository;
-
     private final BoardService boardService;
     private final FilterService filterService;
     private final SecurityService securityService;
     private final UserService userService;
-
+    private final String STATUS_CODE = "statusCode";
 
     /****************
      *  게시물 CRUD  *
@@ -103,7 +96,7 @@ public class BoardController {
 
         int statusCode = boardService.modifyBoard(dto) > 0 ? 200 : 400;
 
-        json.put("statusCode", statusCode);
+        json.put(STATUS_CODE, statusCode);
         return json;
     }
 
@@ -123,7 +116,7 @@ public class BoardController {
 
         int statusCode = boardService.likeBoard(id, nickname) > 0 ? 200 : 400;
 
-        json.put("statusCode", statusCode);
+        json.put(STATUS_CODE, statusCode);
         return json;
     }
 
@@ -139,7 +132,7 @@ public class BoardController {
 
         int statusCode = boardService.reportBoard(id, nickname) > 0 ? 200 : 400;
 
-        json.put("statusCode", statusCode);
+        json.put(STATUS_CODE, statusCode);
         return json;
     }
 
@@ -161,7 +154,7 @@ public class BoardController {
         boolean isAdmin = securityService.isAdmin();
         int statusCode = boardService.removeBoard(id, nickname, isAdmin) > 0 ? 200 : 400;
 
-        json.put("statusCode", statusCode);
+        json.put(STATUS_CODE, statusCode);
         return json;
     }
 
@@ -198,7 +191,7 @@ public class BoardController {
         feedback.setWriter(email);
         feedbackRepository.save(feedback);
 
-        json.put("statusCode", statusCode);
+        json.put(STATUS_CODE, statusCode);
         return json;
     }
 

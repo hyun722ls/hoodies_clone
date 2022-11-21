@@ -4,7 +4,6 @@ import com.ssafy.hoodies.config.security.JwtTokenProvider;
 import com.ssafy.hoodies.model.Role;
 import com.ssafy.hoodies.model.entity.Token;
 import com.ssafy.hoodies.model.entity.User;
-import com.ssafy.hoodies.model.entity.UserAuth;
 import com.ssafy.hoodies.model.repository.TokenRepository;
 import com.ssafy.hoodies.model.repository.UserAuthRepository;
 import com.ssafy.hoodies.model.repository.UserRepository;
@@ -18,9 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -46,6 +42,10 @@ public class SignController {
     private final UserService userService;
     private final SignService signService;
     private final SecurityService securityService;
+    private final String STATUS_CODE = "statusCode";
+    private final String EMAIL = "email";
+    private final String TOKEN = "token";
+    private final String ACCESS_TOKEN = "accessToken";
 
     @Value("${nickname.salt}")
     private String nicknameSalt;
@@ -57,11 +57,11 @@ public class SignController {
 
         String result = signService.signup(user);
         if ("fail".equals(result)) {
-            resultMap.put("statusCode", FAIL);
+            resultMap.put(STATUS_CODE, FAIL);
             return resultMap;
         }
 
-        Token tokenInfo = jwtTokenProvider.generateToken("email", user.getEmail(), "token", user.getRole());
+        Token tokenInfo = jwtTokenProvider.generateToken(EMAIL, user.getEmail(), TOKEN, user.getRole());
         String accessToken = tokenInfo.getAccessToken();
         String refreshToken = tokenInfo.getRefreshToken();
 
@@ -77,8 +77,8 @@ public class SignController {
 
         resultMap.put("nickname", user.getNickname());
         resultMap.put("hashNickname", util.getEncryptStr(user.getNickname(), nicknameSalt));
-        resultMap.put("accessToken", accessToken);
-        resultMap.put("statusCode", SUCCESS);
+        resultMap.put(ACCESS_TOKEN, accessToken);
+        resultMap.put(STATUS_CODE, SUCCESS);
         return resultMap;
     }
 
@@ -93,11 +93,11 @@ public class SignController {
             // 비밀번호가 다른 경우
             String hashPassword = util.getEncryptStr(user.getPassword(), getUser.getSalt());
             if (!hashPassword.equals(getUser.getPassword())) {
-                resultMap.put("statusCode", FAIL);
+                resultMap.put(STATUS_CODE, FAIL);
                 return resultMap;
             }
 
-            Token tokenInfo = jwtTokenProvider.generateToken("email", user.getEmail(), "token", getUser.getRole());
+            Token tokenInfo = jwtTokenProvider.generateToken(EMAIL, user.getEmail(), TOKEN, getUser.getRole());
             String accessToken = tokenInfo.getAccessToken();
             String refreshToken = tokenInfo.getRefreshToken();
 
@@ -117,10 +117,10 @@ public class SignController {
 
             resultMap.put("nickname", getUser.getNickname());
             resultMap.put("hashNickname", util.getEncryptStr(getUser.getNickname(), nicknameSalt));
-            resultMap.put("accessToken", accessToken);
-            resultMap.put("statusCode", SUCCESS);
+            resultMap.put(ACCESS_TOKEN, accessToken);
+            resultMap.put(STATUS_CODE, SUCCESS);
         } catch (Exception e) {
-            resultMap.put("statusCode", FAIL);
+            resultMap.put(STATUS_CODE, FAIL);
         }
         return resultMap;
     }
@@ -133,9 +133,9 @@ public class SignController {
         String email = securityService.findEmail();
         try {
             tokenRepository.deleteById(email);
-            resultMap.put("statusCode", SUCCESS);
+            resultMap.put(STATUS_CODE, SUCCESS);
         } catch (Exception e) {
-            resultMap.put("statusCode", FAIL);
+            resultMap.put(STATUS_CODE, FAIL);
         }
         return resultMap;
     }
@@ -151,32 +151,32 @@ public class SignController {
         try {
             Token tokenInfo = tokenRepository.findByRefreshToken(refreshToken);
             if (tokenInfo == null) {
-                resultMap.put("statusCode", FAIL);
+                resultMap.put(STATUS_CODE, FAIL);
                 status = HttpStatus.BAD_REQUEST;
-                return new ResponseEntity<Map<String, Object>>(resultMap, status);
+                return new ResponseEntity<>(resultMap, status);
             }
             String email = tokenInfo.getEmail();
 
             // refreshToken이 만료되었을 경우
             if (!jwtTokenProvider.validateToken(refreshToken)) {
-                resultMap.put("statusCode", EXPIRED);
+                resultMap.put(STATUS_CODE, EXPIRED);
                 status = HttpStatus.BAD_REQUEST;
-                return new ResponseEntity<Map<String, Object>>(resultMap, status);
+                return new ResponseEntity<>(resultMap, status);
             }
 
             Role role = userRepository.findById(email).get().getRole();
 
-            String newAccessToken = jwtTokenProvider.generateAccessToken("email", email, "token", role);
+            String newAccessToken = jwtTokenProvider.generateAccessToken(EMAIL, email, TOKEN, role);
 
             tokenRepository.save(Token.builder().email(email).accessToken(newAccessToken).refreshToken(refreshToken).build());
 
-            resultMap.put("accessToken", newAccessToken);
-            resultMap.put("statusCode", SUCCESS);
+            resultMap.put(ACCESS_TOKEN, newAccessToken);
+            resultMap.put(STATUS_CODE, SUCCESS);
         } catch (Exception e) {
-            resultMap.put("statusCode", FAIL);
+            resultMap.put(STATUS_CODE, FAIL);
             status = HttpStatus.BAD_REQUEST;
         }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<>(resultMap, status);
     }
 
 }

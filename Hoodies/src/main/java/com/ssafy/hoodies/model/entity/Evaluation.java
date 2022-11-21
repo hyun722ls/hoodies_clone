@@ -3,7 +3,6 @@ package com.ssafy.hoodies.model.entity;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Map;
 
 @Data

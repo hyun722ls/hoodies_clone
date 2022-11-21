@@ -1,7 +1,5 @@
 package com.ssafy.hoodies.model.repository;
 
-
-import com.ssafy.hoodies.model.dto.BoardDto;
 import com.ssafy.hoodies.model.entity.Board;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

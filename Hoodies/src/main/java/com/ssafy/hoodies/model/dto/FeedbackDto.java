@@ -21,12 +21,11 @@ public class FeedbackDto {
 
     public Feedback toEntity() {
         String now = util.getTimeStamp();
-        Feedback feedback = Feedback.builder()
+        return Feedback.builder()
                 ._id(String.valueOf(new ObjectId()))
                 .writer(writer)
                 .content(content)
                 .createdAt(now)
                 .build();
-        return feedback;
     }
 }
